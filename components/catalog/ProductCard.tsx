@@ -185,12 +185,8 @@ export default function ProductCard({
             </div>
           )}
 
-          {/* Promo badge */}
-          {product.is_promo && product.price_promo && product.price_promo > 0 && (
-            <div className="absolute top-3 left-3 bg-danger text-white text-xs font-bold px-2.5 py-1 rounded-lg z-[2]">
-              {promoBadge}
-            </div>
-          )}
+          {/* Feature badges — overlay stickers on image */}
+          <ProductBadges badges={badges} max={3} overlay />
 
           {/* Availability badge */}
           <div
@@ -237,13 +233,6 @@ export default function ProductCard({
             </div>
           )}
         </div>
-
-        {/* Badges row */}
-        {badges.length > 0 && (
-          <div className="px-3 sm:px-5 pt-2.5">
-            <ProductBadges badges={badges} max={3} />
-          </div>
-        )}
 
         {/* Content */}
         <div className="p-3 sm:p-5">

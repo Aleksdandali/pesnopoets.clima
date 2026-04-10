@@ -68,15 +68,15 @@ function t(key: string, locale: Locale): string {
 // ---------------------------------------------------------------------------
 
 const badgeColors: Record<BadgeType, string> = {
-  energy: "bg-emerald-50 text-emerald-600",
-  silent: "bg-slate-100 text-slate-500",
-  wifi: "bg-blue-50 text-blue-500",
-  inverter: "bg-cyan-50 text-cyan-600",
-  eco: "bg-green-50 text-green-500",
-  area: "bg-slate-50 text-slate-500",
-  btu: "bg-slate-50 text-slate-500",
+  energy: "bg-emerald-500 text-white",
+  silent: "bg-slate-600 text-white",
+  wifi: "bg-blue-500 text-white",
+  inverter: "bg-cyan-600 text-white",
+  eco: "bg-green-500 text-white",
+  area: "bg-primary text-white",
+  btu: "bg-primary-dark text-white",
   promo: "bg-red-500 text-white",
-  low_stock: "bg-amber-50 text-amber-600",
+  low_stock: "bg-amber-500 text-white",
 };
 
 // ---------------------------------------------------------------------------
@@ -161,14 +161,14 @@ export function generateBadges(
       badges.push({
         type: "energy",
         label: "A+++",
-        color: "bg-emerald-50 text-emerald-700",
+        color: "bg-emerald-500 text-white",
         priority: 3,
       });
     } else if (raw.includes("A++")) {
       badges.push({
         type: "energy",
         label: "A++",
-        color: "bg-emerald-50 text-emerald-600",
+        color: "bg-emerald-400 text-white",
         priority: 4,
       });
     }
