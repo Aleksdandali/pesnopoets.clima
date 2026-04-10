@@ -7,6 +7,7 @@ import InquiryForm from "@/components/forms/InquiryForm";
 import OneClickOrder from "@/components/product/OneClickOrder";
 import SimilarProducts from "@/components/product/SimilarProducts";
 import StickyMobileCTA from "@/components/product/StickyMobileCTA";
+import ProductDescription from "@/components/product/ProductDescription";
 import { generateProductJsonLd, generateBreadcrumbJsonLd } from "@/lib/seo/jsonld";
 import {
   Zap,
@@ -15,6 +16,7 @@ import {
   Snowflake,
   ShieldCheck,
   CheckCircle2,
+  Leaf,
 } from "lucide-react";
 
 interface ProductPageProps {
@@ -91,6 +93,19 @@ const installmentLabels: Record<string, { prefix: string; suffix: string }> = {
   ua: { prefix: "або 12 x", suffix: "лв./міс." },
 };
 
+// Energy class color mapping
+function getEnergyClassColor(energyClass: string): string {
+  const cls = energyClass.toUpperCase().replace(/\s/g, "");
+  if (cls.includes("A+++")) return "bg-emerald-500 text-white";
+  if (cls.includes("A++")) return "bg-emerald-400 text-white";
+  if (cls.includes("A+")) return "bg-green-500 text-white";
+  if (cls === "A") return "bg-lime-500 text-white";
+  if (cls === "B") return "bg-yellow-400 text-foreground";
+  if (cls === "C") return "bg-orange-400 text-white";
+  if (cls === "D") return "bg-red-500 text-white";
+  return "bg-success text-white";
+}
+
 export default async function ProductPage({ params }: ProductPageProps) {
   const { locale, slug } = await params;
   const product = await getProduct(slug);
@@ -143,6 +158,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
     Неналичен: "bg-danger-light text-danger",
   };
 
+  // Count available highlight specs for grid sizing
+  const hasHighlightBtu = !!product.btu;
+  const hasHighlightArea = !!product.area_m2;
+  const hasHighlightEnergy = !!product.energy_class;
+  const hasHighlightNoise = !!product.noise_db_indoor;
+  const highlightCount = [hasHighlightBtu, hasHighlightArea, hasHighlightEnergy, hasHighlightNoise].filter(Boolean).length;
+
   return (
     <>
       <script
@@ -156,18 +178,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24 lg:pb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 pb-24 lg:pb-8">
         {/* Breadcrumb */}
-        <nav className="text-sm text-muted-foreground mb-6" role="navigation" aria-label="Breadcrumb">
+        <nav className="text-sm text-muted-foreground mb-5" role="navigation" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-0">
             <li className="flex items-center">
-              <a href={`/${locale}`} className="hover:text-primary">
+              <a href={`/${locale}`} className="hover:text-primary transition-colors">
                 {bcHome}
               </a>
               <span className="mx-2" aria-hidden="true">/</span>
             </li>
             <li className="flex items-center">
-              <a href={`/${locale}/klimatici`} className="hover:text-primary">
+              <a href={`/${locale}/klimatici`} className="hover:text-primary transition-colors">
                 {bcCatalog}
               </a>
               <span className="mx-2" aria-hidden="true">/</span>
@@ -190,30 +212,50 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </ol>
         </nav>
 
+        {/* ============================================================ */}
+        {/* MAIN TWO-COLUMN LAYOUT                                       */}
+        {/* Mobile order is controlled via order-* classes                */}
+        {/* ============================================================ */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10">
-          {/* Left: Gallery */}
-          <ProductGallery
-            images={product.gallery || []}
-            title={displayTitle}
-          />
 
-          {/* Right: Info */}
-          <div>
-            <p className="text-sm font-medium text-primary uppercase tracking-wider mb-2">
+          {/* LEFT COLUMN: Gallery */}
+          <div className="order-1">
+            <ProductGallery
+              images={product.gallery || []}
+              title={displayTitle}
+            />
+          </div>
+
+          {/* RIGHT COLUMN: Product Info (conversion-optimized order) */}
+          <div className="order-2 flex flex-col">
+
+            {/* 1. Manufacturer */}
+            <p className="text-sm font-medium text-primary uppercase tracking-wider mb-1.5">
               {product.manufacturer}
             </p>
 
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-4 leading-tight">
+            {/* 2. Product Title (h1) */}
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3 leading-tight">
               {displayTitle}
             </h1>
 
-            {/* Availability */}
-            <div className="mb-6">
+            {/* 3. Availability Badge (prominent) */}
+            <div className="mb-4">
               <span
-                className={`inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium ${
+                className={`inline-flex items-center px-3.5 py-1.5 rounded-full text-sm font-semibold ${
                   availColors[product.availability] || availColors["Неналичен"]
                 }`}
               >
+                <span
+                  className={`w-2 h-2 rounded-full mr-2 ${
+                    product.availability === "Наличен"
+                      ? "bg-success animate-pulse"
+                      : product.availability === "Ограничена наличност"
+                      ? "bg-warning"
+                      : "bg-danger"
+                  }`}
+                  aria-hidden="true"
+                />
                 {availLabels[product.availability]?.[locale] || product.availability}
                 {product.stock_size && product.stock_size <= 5 && (
                   <span className="ml-1.5">
@@ -223,18 +265,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </span>
             </div>
 
-            {/* Price */}
-            <div className="bg-muted rounded-xl p-4 sm:p-6 mb-6">
+            {/* 4. Price Block (large, prominent) */}
+            <div className="bg-muted rounded-xl p-4 sm:p-5 mb-4">
               <div className="flex items-baseline gap-3">
-                <span className="text-3xl font-bold text-foreground">
+                <span className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
                   {priceBGN} {dictionary.common.currency.bgn}
                 </span>
-                <span className="text-lg text-muted-foreground">
+                <span className="text-base text-muted-foreground">
                   ({displayPrice.toFixed(2)} &euro;)
                 </span>
               </div>
-              {/* Installment display */}
-              <p className="text-sm text-muted-foreground mt-1.5">
+              <p className="text-sm text-muted-foreground mt-1">
                 {instLabels.prefix}{" "}
                 <span className="font-semibold text-foreground">
                   {installmentMonthly}
@@ -242,97 +283,87 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 {instLabels.suffix}
               </p>
               {product.is_promo && product.price_promo > 0 && (
-                <p className="text-sm text-danger font-medium mt-1">
+                <p className="text-sm text-danger font-semibold mt-1">
                   {dictionary.common.promoPrice}
                 </p>
               )}
-              <p className="text-xs text-muted-foreground mt-2">
+              <p className="text-xs text-muted-foreground mt-1.5">
                 {t?.priceVat}
               </p>
             </div>
 
-            {/* Quick specs */}
-            <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-6">
+            {/* 5. Key Specs Grid (2 columns, compact) */}
+            <div className="grid grid-cols-2 gap-2 mb-4">
               {product.btu && (
-                <div className="flex items-center gap-2.5 p-3 bg-white border border-border rounded-lg">
-                  <Zap className="w-5 h-5 text-primary shrink-0" aria-hidden="true" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">BTU</p>
-                    <p className="text-sm font-semibold">
-                      {product.btu.toLocaleString()}
+                <div className="flex items-center gap-2.5 p-2.5 bg-white border border-border rounded-lg">
+                  <Zap className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
+                  <div className="min-w-0">
+                    <p className="text-[11px] text-muted-foreground leading-none mb-0.5">{t?.power || "BTU"}</p>
+                    <p className="text-sm font-semibold leading-tight truncate">
+                      {product.btu.toLocaleString()} BTU
                     </p>
                   </div>
                 </div>
               )}
               {product.area_m2 && (
-                <div className="flex items-center gap-2.5 p-3 bg-white border border-border rounded-lg">
-                  <Maximize className="w-5 h-5 text-primary shrink-0" aria-hidden="true" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">
-                      {t?.area}
-                    </p>
-                    <p className="text-sm font-semibold">
+                <div className="flex items-center gap-2.5 p-2.5 bg-white border border-border rounded-lg">
+                  <Maximize className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
+                  <div className="min-w-0">
+                    <p className="text-[11px] text-muted-foreground leading-none mb-0.5">{t?.area}</p>
+                    <p className="text-sm font-semibold leading-tight truncate">
                       {dictionary.common.upTo} {product.area_m2} {dictionary.common.sqm}
                     </p>
                   </div>
                 </div>
               )}
               {product.energy_class && (
-                <div className="flex items-center gap-2.5 p-3 bg-white border border-border rounded-lg">
-                  <ShieldCheck className="w-5 h-5 text-success shrink-0" aria-hidden="true" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">
-                      {t?.energyClass}
-                    </p>
-                    <p className="text-sm font-semibold">
-                      {product.energy_class}
-                    </p>
+                <div className="flex items-center gap-2.5 p-2.5 bg-white border border-border rounded-lg">
+                  <Leaf className="w-4 h-4 text-success shrink-0" aria-hidden="true" />
+                  <div className="min-w-0">
+                    <p className="text-[11px] text-muted-foreground leading-none mb-0.5">{t?.energyClass}</p>
+                    <p className="text-sm font-semibold leading-tight">{product.energy_class}</p>
                   </div>
                 </div>
               )}
               {product.noise_db_indoor && (
-                <div className="flex items-center gap-2.5 p-3 bg-white border border-border rounded-lg">
-                  <Volume2 className="w-5 h-5 text-accent shrink-0" aria-hidden="true" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">
-                      {t?.noise}
-                    </p>
-                    <p className="text-sm font-semibold">
-                      {product.noise_db_indoor} dB
-                    </p>
+                <div className="flex items-center gap-2.5 p-2.5 bg-white border border-border rounded-lg">
+                  <Volume2 className="w-4 h-4 text-accent shrink-0" aria-hidden="true" />
+                  <div className="min-w-0">
+                    <p className="text-[11px] text-muted-foreground leading-none mb-0.5">{t?.noise}</p>
+                    <p className="text-sm font-semibold leading-tight">{product.noise_db_indoor} dB</p>
                   </div>
                 </div>
               )}
               {product.refrigerant && (
-                <div className="flex items-center gap-2.5 p-3 bg-white border border-border rounded-lg">
-                  <Snowflake className="w-5 h-5 text-primary shrink-0" aria-hidden="true" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">
-                      {t?.refrigerant}
-                    </p>
-                    <p className="text-sm font-semibold">
-                      {product.refrigerant}
-                    </p>
+                <div className="flex items-center gap-2.5 p-2.5 bg-white border border-border rounded-lg">
+                  <Snowflake className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
+                  <div className="min-w-0">
+                    <p className="text-[11px] text-muted-foreground leading-none mb-0.5">{t?.refrigerant}</p>
+                    <p className="text-sm font-semibold leading-tight">{product.refrigerant}</p>
                   </div>
                 </div>
               )}
               {product.warranty_months && (
-                <div className="flex items-center gap-2.5 p-3 bg-white border border-border rounded-lg">
-                  <ShieldCheck className="w-5 h-5 text-primary shrink-0" aria-hidden="true" />
-                  <div>
-                    <p className="text-xs text-muted-foreground">
-                      {t?.warranty}
-                    </p>
-                    <p className="text-sm font-semibold">
-                      {product.warranty_months}{" "}
-                      {t?.months}
+                <div className="flex items-center gap-2.5 p-2.5 bg-white border border-border rounded-lg">
+                  <ShieldCheck className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
+                  <div className="min-w-0">
+                    <p className="text-[11px] text-muted-foreground leading-none mb-0.5">{t?.warranty}</p>
+                    <p className="text-sm font-semibold leading-tight">
+                      {product.warranty_months} {t?.months}
                     </p>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Trust block */}
+            {/* 6. 1-Click Order */}
+            <OneClickOrder
+              locale={locale}
+              productId={product.id}
+              productTitle={displayTitle}
+            />
+
+            {/* 7. Trust Block (between CTA and inquiry form) */}
             <div className="grid grid-cols-2 gap-2 mb-6">
               <div className="flex items-center gap-2 p-2.5 rounded-lg bg-success-light/30">
                 <CheckCircle2 className="w-4 h-4 text-success shrink-0" aria-hidden="true" />
@@ -352,21 +383,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </div>
             </div>
 
-            {/* 1-Click Order */}
-            <OneClickOrder
-              locale={locale}
-              productId={product.id}
-              productTitle={displayTitle}
-            />
-
-            {/* Inquiry form */}
+            {/* 8. Full Inquiry Form */}
             <div
               id="inquiry-form-section"
               className="bg-white border border-border rounded-xl p-4 sm:p-6"
             >
-              <h2 className="text-lg font-bold text-foreground mb-4">
+              <h2 className="text-lg font-bold text-foreground mb-1">
                 {dictionary.inquiry?.title || t?.inquiryButton}
               </h2>
+              {dictionary.inquiry?.subtitle && (
+                <p className="text-sm text-muted-foreground mb-4">
+                  {dictionary.inquiry.subtitle}
+                </p>
+              )}
               <InquiryForm
                 locale={locale}
                 productId={product.id}
@@ -377,26 +406,109 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
         </div>
 
-        {/* Description */}
+        {/* ============================================================ */}
+        {/* BELOW THE FOLD CONTENT                                       */}
+        {/* ============================================================ */}
+
+        {/* Product Highlights — large visual cards for key specs */}
+        {highlightCount > 0 && (
+          <section className="mt-12">
+            <h2 className="text-xl font-bold text-foreground mb-6">
+              {t?.highlights}
+            </h2>
+            <div
+              className={`grid gap-4 ${
+                highlightCount === 1
+                  ? "grid-cols-1"
+                  : highlightCount === 2
+                  ? "grid-cols-2"
+                  : highlightCount === 3
+                  ? "grid-cols-2 sm:grid-cols-3"
+                  : "grid-cols-2 sm:grid-cols-4"
+              }`}
+            >
+              {hasHighlightBtu && (
+                <div className="relative overflow-hidden bg-gradient-to-br from-primary-light to-white border border-primary/10 rounded-2xl p-5 sm:p-6 text-center">
+                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <Zap className="w-6 h-6 text-primary" aria-hidden="true" />
+                  </div>
+                  <p className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                    {product.btu.toLocaleString()}
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    BTU — {t?.power || "BTU"}
+                  </p>
+                </div>
+              )}
+              {hasHighlightArea && (
+                <div className="relative overflow-hidden bg-gradient-to-br from-accent-light to-white border border-accent/10 rounded-2xl p-5 sm:p-6 text-center">
+                  <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <Maximize className="w-6 h-6 text-accent" aria-hidden="true" />
+                  </div>
+                  <p className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                    {dictionary.common.upTo} {product.area_m2}
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {dictionary.common.sqm} — {t?.area}
+                  </p>
+                </div>
+              )}
+              {hasHighlightEnergy && (
+                <div className="relative overflow-hidden bg-gradient-to-br from-success-light to-white border border-success/10 rounded-2xl p-5 sm:p-6 text-center">
+                  <div className="w-12 h-12 bg-success/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <Leaf className="w-6 h-6 text-success" aria-hidden="true" />
+                  </div>
+                  <span
+                    className={`inline-block text-lg sm:text-xl font-extrabold px-4 py-1 rounded-full ${getEnergyClassColor(
+                      product.energy_class
+                    )}`}
+                  >
+                    {product.energy_class}
+                  </span>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    {t?.energyClass}
+                  </p>
+                </div>
+              )}
+              {hasHighlightNoise && (
+                <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 to-white border border-blue-100 rounded-2xl p-5 sm:p-6 text-center">
+                  <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <Volume2 className="w-6 h-6 text-blue-500" aria-hidden="true" />
+                  </div>
+                  <p className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                    {product.noise_db_indoor} <span className="text-lg font-bold">dB</span>
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {t?.noiseLevel || t?.noise}
+                  </p>
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* Description (collapsible, smart-hidden if empty/duplicate) */}
         {displayDescription && (
-          <div className="mt-12">
+          <section className="mt-12">
             <h2 className="text-xl font-bold text-foreground mb-4">
               {t?.description}
             </h2>
-            <div
-              className="prose prose-sm max-w-none text-muted-foreground"
-              dangerouslySetInnerHTML={{ __html: displayDescription }}
+            <ProductDescription
+              html={displayDescription}
+              title={displayTitle}
+              readMoreLabel={t?.readMore}
+              readLessLabel={t?.readLess}
             />
-          </div>
+          </section>
         )}
 
-        {/* Specs */}
-        <div className="mt-12">
+        {/* Specs Table */}
+        <section className="mt-12">
           <h2 className="text-xl font-bold text-foreground mb-6">
             {t?.specifications}
           </h2>
           <SpecsTable features={product.features} locale={locale} />
-        </div>
+        </section>
 
         {/* Similar Products */}
         <SimilarProducts

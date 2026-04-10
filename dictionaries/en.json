@@ -94,7 +94,12 @@
     "energyClass": "Energy Class",
     "refrigerant": "Refrigerant",
     "warranty": "Warranty",
-    "months": "mo."
+    "months": "mo.",
+    "highlights": "Key Specifications",
+    "readMore": "Read more",
+    "readLess": "Show less",
+    "power": "Power",
+    "noiseLevel": "Noise Level"
   },
   "inquiry": {
     "title": "Make an Inquiry",

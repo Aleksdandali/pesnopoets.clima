@@ -94,7 +94,12 @@
     "energyClass": "Енергиен клас",
     "refrigerant": "Хладилен агент",
     "warranty": "Гаранция",
-    "months": "мес."
+    "months": "мес.",
+    "highlights": "Основни характеристики",
+    "readMore": "Покажи повече",
+    "readLess": "Скрий",
+    "power": "Мощност",
+    "noiseLevel": "Ниво на шум"
   },
   "inquiry": {
     "title": "Направете запитване",

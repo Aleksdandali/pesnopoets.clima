@@ -94,7 +94,12 @@
     "energyClass": "Енергоклас",
     "refrigerant": "Холодоагент",
     "warranty": "Гарантія",
-    "months": "міс."
+    "months": "міс.",
+    "highlights": "Основні характеристики",
+    "readMore": "Показати більше",
+    "readLess": "Сховати",
+    "power": "Потужність",
+    "noiseLevel": "Рівень шуму"
   },
   "inquiry": {
     "title": "Залишити заявку",

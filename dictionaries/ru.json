@@ -94,7 +94,12 @@
     "energyClass": "Энергокласс",
     "refrigerant": "Хладагент",
     "warranty": "Гарантия",
-    "months": "мес."
+    "months": "мес.",
+    "highlights": "Основные характеристики",
+    "readMore": "Показать больше",
+    "readLess": "Скрыть",
+    "power": "Мощность",
+    "noiseLevel": "Уровень шума"
   },
   "inquiry": {
     "title": "Оставить заявку",
