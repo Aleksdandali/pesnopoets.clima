@@ -50,6 +50,13 @@ const locationLabels: Record<string, string> = {
   ua: "Болгарія",
 };
 
+const dealerLine: Record<string, string> = {
+  bg: "Официален дилър на Daikin, Mitsubishi, Toshiba и Gree в България",
+  en: "Authorized dealer of Daikin, Mitsubishi, Toshiba and Gree in Bulgaria",
+  ru: "Официальный дилер Daikin, Mitsubishi, Toshiba и Gree в Болгарии",
+  ua: "Офіційний дилер Daikin, Mitsubishi, Toshiba та Gree в Болгарії",
+};
+
 export default function Footer({ locale, dictionary }: FooterProps) {
   const t = dictionary.common;
   const year = new Date().getFullYear();
@@ -162,8 +169,13 @@ export default function Footer({ locale, dictionary }: FooterProps) {
           </div>
         </div>
 
+        {/* Dealer trust line */}
+        <div className="mt-14 pt-6 border-t border-white/8 text-center">
+          <p className="text-xs text-white/40">{dealerLine[locale] || dealerLine.bg}</p>
+        </div>
+
         {/* Bottom bar */}
-        <div className="mt-14 pt-8 border-t border-white/8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-4 pt-4 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-white/30">
             &copy; {year} {t.siteName}. {t.footer.rights}
           </p>

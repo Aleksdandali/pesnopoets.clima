@@ -39,6 +39,13 @@ interface InquiryFormProps {
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
+const reassurance: Record<string, string> = {
+  bg: "Без ангажимент. Ще ви се обадим в рамките на 1 час.",
+  en: "No commitment. We'll call you within 1 hour.",
+  ru: "Без обязательств. Перезвоним в течение 1 часа.",
+  ua: "Без зобов'язань. Зателефонуємо протягом 1 години.",
+};
+
 export default function InquiryForm({
   locale,
   productId,
@@ -244,7 +251,8 @@ export default function InquiryForm({
         )}
       </button>
 
-      {/* Privacy notice */}
+      {/* Reassurance + Privacy notice */}
+      <p className="text-xs text-muted-foreground text-center font-medium">{reassurance[locale] || reassurance.bg}</p>
       <p className="text-xs text-muted-foreground text-center">{t.privacy}</p>
     </form>
   );
