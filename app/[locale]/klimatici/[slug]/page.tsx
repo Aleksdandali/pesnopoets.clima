@@ -199,12 +199,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </li>
             {categoryName && (
               <li className="flex items-center shrink-0">
-                <span className="text-muted-foreground py-1 capitalize-first">{categoryName.toLowerCase()}</span>
+                <a href={`/${locale}/klimatici?category=${product.category_id}`} className="hover:text-primary transition-colors py-1">{categoryName.toLowerCase()}</a>
                 <svg className="w-3.5 h-3.5 mx-1 sm:mx-1.5 text-muted-foreground/40 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
               </li>
             )}
             <li>
-              <span className="text-foreground py-1" aria-current="page">{product.manufacturer}</span>
+              <span className="text-foreground font-medium py-1 truncate max-w-[200px] inline-block align-bottom" aria-current="page">{product.manufacturer}</span>
             </li>
           </ol>
         </nav>

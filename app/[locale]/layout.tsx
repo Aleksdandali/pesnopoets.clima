@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import CookieConsent from "@/components/CookieConsent";
+import PageProgress from "@/components/PageProgress";
 
 const locales = ["bg", "en", "ru", "ua"] as const;
 type Locale = (typeof locales)[number];
@@ -77,6 +79,9 @@ export default async function LocaleLayout({
 
   return (
     <>
+      <Suspense fallback={null}>
+        <PageProgress />
+      </Suspense>
       <Header locale={locale} dictionary={dictionary} />
       <main className="flex-1">{children}</main>
       <Footer locale={locale} dictionary={dictionary} />

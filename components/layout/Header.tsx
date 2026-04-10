@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, Globe, Phone } from "lucide-react";
 
 interface HeaderProps {
@@ -53,6 +54,15 @@ export default function Header({ locale, dictionary }: HeaderProps) {
   const callLabel = t.callUs || "Call us";
   const inquiryLabel = t.inquiry || "Inquiry";
   const deliveryBanner = t.deliveryBanner || "Delivery and installation across Bulgaria";
+  const pathname = usePathname();
+
+  // Build locale-switched URL preserving current path
+  function getLocaleSwitchUrl(targetLocale: string): string {
+    if (!pathname) return `/${targetLocale}`;
+    // Replace /bg/ or /en/ or /ru/ or /ua/ at the start with target locale
+    const pathWithoutLocale = pathname.replace(/^\/(bg|en|ru|ua)/, "");
+    return `/${targetLocale}${pathWithoutLocale || ""}`;
+  }
 
   useEffect(() => {
     function handleScroll() {
@@ -179,7 +189,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
                     {Object.entries(localeNames).map(([code, name]) => (
                       <Link
                         key={code}
-                        href={`/${code}`}
+                        href={getLocaleSwitchUrl(code)}
                         className={`block px-4 py-3 text-sm transition-colors ${
                           code === locale
                             ? "bg-primary-light text-primary font-medium"
