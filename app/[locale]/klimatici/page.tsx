@@ -198,7 +198,7 @@ export default async function CatalogPage({
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 overflow-x-hidden">
       {/* Breadcrumb */}
       <nav className="text-sm text-muted-foreground mb-4">
         <a href={`/${locale}`} className="hover:text-primary">{labels.home}</a>
@@ -227,9 +227,9 @@ export default async function CatalogPage({
         {showingLabels[locale] || showingLabels.bg}
       </p>
 
-      {/* Layout: Sidebar + Content */}
-      <div className="flex gap-4 sm:gap-6 lg:gap-8">
-        {/* Category Sidebar */}
+      {/* Layout: On mobile — full width. On desktop — sidebar + content */}
+      <div className="lg:flex lg:gap-8">
+        {/* Category Sidebar — button on mobile, sidebar on desktop */}
         <CategorySidebar
           locale={locale}
           categories={categoryGroups}
@@ -253,7 +253,7 @@ export default async function CatalogPage({
 
           {/* Product Grid */}
           {products && products.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
               {products.map((product) => (
                 <ProductCard
                   key={product.id}

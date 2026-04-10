@@ -64,7 +64,7 @@ export default function ProductCard({
   return (
     <Link
       href={`/${locale}/klimatici/${product.slug}`}
-      className="group block bg-white rounded-2xl border border-border/80 hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0_0_0/0.04)] transition-all duration-300"
+      className="group block bg-white rounded-2xl border border-border shadow-[0_2px_8px_rgb(0_0_0/0.04)] hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0_0_0/0.08)] transition-all duration-300"
     >
       {/* Image */}
       <div className="relative aspect-[4/3] overflow-hidden rounded-t-2xl bg-[#fafbfc]">
@@ -143,8 +143,8 @@ export default function ProductCard({
         </div>
 
         {/* Price */}
-        <div className="flex items-baseline gap-1.5 sm:gap-2 pt-3 sm:pt-4 border-t border-border/60">
-          <span className="text-base sm:text-xl font-bold text-foreground">
+        <div className="flex items-baseline gap-1.5 sm:gap-2 pt-3 sm:pt-4 border-t border-border">
+          <span className="text-lg sm:text-xl font-extrabold text-foreground">
             {formatPrice(displayPrice, currency)}
           </span>
           {product.is_promo && product.price_promo && product.price_promo > 0 && (
