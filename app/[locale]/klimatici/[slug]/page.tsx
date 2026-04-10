@@ -79,13 +79,23 @@ export async function generateMetadata({
   };
 }
 
+// Breadcrumb labels from dictionary
+const breadcrumbLabels: Record<string, { home: string; catalog: string }> = {
+  bg: { home: "Начало", catalog: "Климатици" },
+  en: { home: "Home", catalog: "Air Conditioners" },
+  ru: { home: "Главная", catalog: "Кондиционеры" },
+  ua: { home: "Головна", catalog: "Кондиціонери" },
+};
+
 export default async function ProductPage({ params }: ProductPageProps) {
   const { locale, slug } = await params;
   const product = await getProduct(slug);
   if (!product) notFound();
 
   const dictionary = await getDictionary(locale);
+  const t = dictionary.product;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const bc = breadcrumbLabels[locale] || breadcrumbLabels.bg;
 
   const displayTitle = product.title_override || product.title;
   const displayDescription =
@@ -97,11 +107,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const breadcrumbJsonLd = generateBreadcrumbJsonLd(
     [
       {
-        name: locale === "bg" ? "Начало" : "Home",
+        name: bc.home,
         url: `/${locale}`,
       },
       {
-        name: locale === "bg" ? "Климатици" : "Air Conditioners",
+        name: bc.catalog,
         url: `/${locale}/klimatici`,
       },
       { name: displayTitle, url: `/${locale}/klimatici/${slug}` },
@@ -138,11 +148,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
         {/* Breadcrumb */}
         <nav className="text-sm text-muted-foreground mb-6">
           <a href={`/${locale}`} className="hover:text-primary">
-            {locale === "bg" ? "Начало" : locale === "ru" ? "Главная" : locale === "ua" ? "Головна" : "Home"}
+            {bc.home}
           </a>
           <span className="mx-2">/</span>
           <a href={`/${locale}/klimatici`} className="hover:text-primary">
-            {locale === "bg" ? "Климатици" : locale === "ru" ? "Кондиционеры" : locale === "ua" ? "Кондиціонери" : "Air Conditioners"}
+            {bc.catalog}
           </a>
           <span className="mx-2">/</span>
           <span className="text-foreground">{product.manufacturer}</span>
@@ -189,22 +199,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   {priceBGN} лв.
                 </span>
                 <span className="text-lg text-muted-foreground">
-                  ({displayPrice.toFixed(2)} €)
+                  ({displayPrice.toFixed(2)} &euro;)
                 </span>
               </div>
               {product.is_promo && product.price_promo > 0 && (
                 <p className="text-sm text-danger font-medium mt-1">
-                  {locale === "bg" ? "Промоционална цена!" : "Promo price!"}
+                  {locale === "bg" ? "Промоционална цена!" : locale === "en" ? "Promo price!" : locale === "ru" ? "Акционная цена!" : "Акційна ціна!"}
                 </p>
               )}
               <p className="text-xs text-muted-foreground mt-2">
-                {locale === "bg"
-                  ? "Цената е с включен ДДС"
-                  : locale === "ru"
-                    ? "Цена с НДС"
-                    : locale === "ua"
-                      ? "Ціна з ПДВ"
-                      : "Price includes VAT"}
+                {t?.priceVat || "Цената е с включен ДДС"}
               </p>
             </div>
 
@@ -226,7 +230,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <Maximize className="w-5 h-5 text-primary shrink-0" />
                   <div>
                     <p className="text-xs text-muted-foreground">
-                      {locale === "bg" ? "Площ" : locale === "ru" || locale === "ua" ? "Площадь" : "Area"}
+                      {t?.area || "Area"}
                     </p>
                     <p className="text-sm font-semibold">
                       {locale === "en" ? `up to ${product.area_m2} sq.m` : `до ${product.area_m2} кв.м`}
@@ -239,7 +243,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <ShieldCheck className="w-5 h-5 text-success shrink-0" />
                   <div>
                     <p className="text-xs text-muted-foreground">
-                      {locale === "bg" ? "Енергиен клас" : locale === "ru" ? "Энергокласс" : locale === "ua" ? "Енергоклас" : "Energy Class"}
+                      {t?.energyClass || "Energy Class"}
                     </p>
                     <p className="text-sm font-semibold">
                       {product.energy_class}
@@ -252,7 +256,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <Volume2 className="w-5 h-5 text-accent shrink-0" />
                   <div>
                     <p className="text-xs text-muted-foreground">
-                      {locale === "bg" ? "Шум" : locale === "ru" || locale === "ua" ? "Шум" : "Noise"}
+                      {t?.noise || "Noise"}
                     </p>
                     <p className="text-sm font-semibold">
                       {product.noise_db_indoor} dB
@@ -265,7 +269,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <Snowflake className="w-5 h-5 text-primary shrink-0" />
                   <div>
                     <p className="text-xs text-muted-foreground">
-                      {locale === "bg" ? "Хладилен агент" : locale === "ru" ? "Хладагент" : locale === "ua" ? "Холодоагент" : "Refrigerant"}
+                      {t?.refrigerant || "Refrigerant"}
                     </p>
                     <p className="text-sm font-semibold">
                       {product.refrigerant}
@@ -278,11 +282,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <ShieldCheck className="w-5 h-5 text-primary shrink-0" />
                   <div>
                     <p className="text-xs text-muted-foreground">
-                      {locale === "bg" ? "Гаранция" : locale === "ru" ? "Гарантия" : locale === "ua" ? "Гарантія" : "Warranty"}
+                      {t?.warranty || "Warranty"}
                     </p>
                     <p className="text-sm font-semibold">
                       {product.warranty_months}{" "}
-                      {locale === "bg" ? "мес." : locale === "en" ? "mo." : "мес."}
+                      {t?.months || "mo."}
                     </p>
                   </div>
                 </div>
@@ -292,14 +296,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {/* Inquiry form */}
             <div className="bg-white border border-border rounded-xl p-6">
               <h2 className="text-lg font-bold text-foreground mb-4">
-                {dictionary.inquiry?.title ||
-                  (locale === "bg"
-                    ? "Направете запитване"
-                    : locale === "ru"
-                      ? "Оставить заявку"
-                      : locale === "ua"
-                        ? "Залишити заявку"
-                        : "Make an Inquiry")}
+                {dictionary.inquiry?.title || t?.inquiryButton || "Make an Inquiry"}
               </h2>
               <InquiryForm
                 locale={locale}
@@ -315,7 +312,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         {displayDescription && (
           <div className="mt-12">
             <h2 className="text-xl font-bold text-foreground mb-4">
-              {locale === "bg" ? "Описание" : locale === "ru" ? "Описание" : locale === "ua" ? "Опис" : "Description"}
+              {t?.description || "Description"}
             </h2>
             <div
               className="prose prose-sm max-w-none text-muted-foreground"
@@ -327,13 +324,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         {/* Specs */}
         <div className="mt-12">
           <h2 className="text-xl font-bold text-foreground mb-6">
-            {locale === "bg"
-              ? "Технически характеристики"
-              : locale === "ru"
-                ? "Технические характеристики"
-                : locale === "ua"
-                  ? "Технічні характеристики"
-                  : "Technical Specifications"}
+            {t?.specifications || "Technical Specifications"}
           </h2>
           <SpecsTable features={product.features} locale={locale} />
         </div>
