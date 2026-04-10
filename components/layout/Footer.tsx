@@ -202,8 +202,8 @@ export default function Footer({ locale, dictionary }: FooterProps) {
                 <line x1="27" y1="18" x2="32" y2="14" stroke="#06060A" strokeWidth="4" strokeLinecap="round"/>
                 <line x1="37" y1="18" x2="32" y2="14" stroke="#06060A" strokeWidth="4" strokeLinecap="round"/>
               </svg>
-              <span className="text-[10px] text-white/30">by</span>
-              <span className="text-[10px] font-extrabold text-white/50 tracking-wide">DAN<span className="text-[#CCFF00]/70">GROW</span></span>
+              <span className="text-[10px] text-white/35">powered by</span>
+              <span className="text-[10px] font-extrabold text-white tracking-wide">DAN<span className="text-[#CCFF00]">GROW</span></span>
             </a>
           </div>
         </div>
