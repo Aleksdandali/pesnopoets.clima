@@ -345,13 +345,13 @@ export default async function HomePage({ params }: HomePageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden min-h-[520px] sm:min-h-[600px] lg:min-h-[680px]">
+      <section className="relative overflow-hidden min-h-[560px] sm:min-h-[640px] lg:min-h-[740px]">
         {/* Background image */}
         <Image
           src="/hero-bg.jpg"
           alt=""
           fill
-          className="object-cover"
+          className="object-cover object-bottom"
           sizes="100vw"
           priority
           quality={85}
