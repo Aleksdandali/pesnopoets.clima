@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { Zap, Thermometer, Volume2, Maximize } from "lucide-react";
+import { useState, useCallback, useRef } from "react";
+import { Zap, Thermometer, Volume2, Maximize, ChevronLeft, ChevronRight } from "lucide-react";
 import OneClickCardButton from "@/components/catalog/OneClickCardButton";
 
 interface ProductCardProps {
@@ -71,17 +74,23 @@ const availabilityStyles: Record<string, { bg: string; text: string; dictKey: "i
   },
 };
 
+const SWIPE_THRESHOLD = 50;
+
 export default function ProductCard({
   product,
   locale,
   currency,
   dictionary,
 }: ProductCardProps) {
-  // Use translated title for non-bg locales
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const touchStartX = useRef<number | null>(null);
+
   const localeTitle = locale === "en" ? product.title_en : locale === "ru" ? product.title_ru : locale === "ua" ? product.title_ua : null;
   const displayTitle = product.title_override || localeTitle || product.title;
   const displayPrice = product.price_override || product.price_client;
-  const imageUrl = product.gallery?.[0];
+  const gallery = product.gallery || [];
+  const hasMultipleImages = gallery.length > 1;
+  const imageUrl = gallery[currentIndex] || gallery[0];
   const avail = availabilityStyles[product.availability] || availabilityStyles["Неналичен"];
 
   const availLabel = dictionary
@@ -93,14 +102,71 @@ export default function ProductCard({
   const promoBadge = dictionary?.common.promoBadge || "PROMO";
   const currencyLabel = dictionary?.common.currency.bgn;
 
+  const goToPrev = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setCurrentIndex((i) => (i === 0 ? gallery.length - 1 : i - 1));
+    },
+    [gallery.length]
+  );
+
+  const goToNext = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setCurrentIndex((i) => (i === gallery.length - 1 ? 0 : i + 1));
+    },
+    [gallery.length]
+  );
+
+  const handleDotClick = useCallback(
+    (e: React.MouseEvent, index: number) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setCurrentIndex(index);
+    },
+    []
+  );
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      if (touchStartX.current === null) return;
+      const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+      if (Math.abs(deltaX) > SWIPE_THRESHOLD) {
+        e.preventDefault();
+        if (deltaX < 0) {
+          // Swiped left — next image
+          setCurrentIndex((i) => (i === gallery.length - 1 ? 0 : i + 1));
+        } else {
+          // Swiped right — prev image
+          setCurrentIndex((i) => (i === 0 ? gallery.length - 1 : i - 1));
+        }
+      }
+      touchStartX.current = null;
+    },
+    [gallery.length]
+  );
+
+  // Preload next image
+  const nextIndex = gallery.length > 1 ? (currentIndex + 1) % gallery.length : -1;
+
   return (
     <div className="relative group block bg-white rounded-2xl border border-border shadow-[0_2px_8px_rgb(0_0_0/0.04)] hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0_0_0/0.08)] transition-all duration-300 overflow-hidden">
       <Link
         href={`/${locale}/klimatici/${product.slug}`}
         className="block"
       >
-        {/* Image */}
-        <div className="relative aspect-[4/3] overflow-hidden rounded-t-2xl bg-[#fafbfc]">
+        {/* Image area with carousel */}
+        <div
+          className="relative aspect-[4/3] overflow-hidden rounded-t-2xl bg-[#fafbfc]"
+          onTouchStart={hasMultipleImages ? handleTouchStart : undefined}
+          onTouchEnd={hasMultipleImages ? handleTouchEnd : undefined}
+        >
           {imageUrl ? (
             <Image
               src={imageUrl}
@@ -115,19 +181,69 @@ export default function ProductCard({
             </div>
           )}
 
+          {/* Preload next image (hidden) */}
+          {nextIndex >= 0 && gallery[nextIndex] && (
+            <Image
+              src={gallery[nextIndex]}
+              alt=""
+              fill
+              className="sr-only"
+              sizes="1px"
+              aria-hidden="true"
+            />
+          )}
+
           {/* Promo badge */}
           {product.is_promo && product.price_promo && product.price_promo > 0 && (
-            <div className="absolute top-3 left-3 bg-danger text-white text-xs font-bold px-2.5 py-1 rounded-lg">
+            <div className="absolute top-3 left-3 bg-danger text-white text-xs font-bold px-2.5 py-1 rounded-lg z-[2]">
               {promoBadge}
             </div>
           )}
 
           {/* Availability badge */}
           <div
-            className={`absolute top-3 right-3 ${avail.bg} ${avail.text} text-xs font-medium px-2.5 py-1 rounded-lg`}
+            className={`absolute top-3 right-3 ${avail.bg} ${avail.text} text-xs font-medium px-2.5 py-1 rounded-lg z-[2]`}
           >
             {availLabel}
           </div>
+
+          {/* Arrow buttons — visible on desktop hover only */}
+          {hasMultipleImages && (
+            <>
+              <button
+                onClick={goToPrev}
+                className="absolute left-1.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 shadow-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-white hover:shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-[3] hidden sm:flex"
+                aria-label="Previous image"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={goToNext}
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 shadow-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-white hover:shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-[3] hidden sm:flex"
+                aria-label="Next image"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </>
+          )}
+
+          {/* Dot indicators */}
+          {hasMultipleImages && (
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-[3]">
+              {gallery.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={(e) => handleDotClick(e, i)}
+                  className={`rounded-full transition-all duration-200 ${
+                    i === currentIndex
+                      ? "w-2 h-2 bg-primary"
+                      : "w-1.5 h-1.5 bg-foreground/25 hover:bg-foreground/40"
+                  }`}
+                  aria-label={`Image ${i + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Content */}
