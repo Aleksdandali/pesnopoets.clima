@@ -26,10 +26,10 @@ export async function generateMetadata({
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
   const titles: Record<string, string> = {
-    bg: "Clima — Климатици за вашия дом",
-    en: "Clima — Air Conditioners for Your Home",
-    ru: "Clima — Кондиционеры для вашего дома",
-    ua: "Clima — Кондиціонери для вашого дому",
+    bg: "Песнопоец Клима — Климатици с монтаж | Daikin, Mitsubishi, Gree",
+    en: "Pesnopoets Clima — Air Conditioners | Daikin, Mitsubishi, Gree",
+    ru: "Песнопоец Клима — Кондиционеры с монтажом | Daikin, Mitsubishi, Gree",
+    ua: "Піснопоєць Кліма — Кондиціонери з монтажем | Daikin, Mitsubishi, Gree",
   };
 
   const descriptions: Record<string, string> = {

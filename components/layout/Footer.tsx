@@ -28,11 +28,14 @@ interface FooterProps {
 
 const brands = [
   "Daikin",
-  "Mitsubishi Electric",
+  "Gree",
+  "Mitsubishi Heavy",
+  "Mitsubishi",
+  "AUX",
   "Toshiba",
   "Nippon",
-  "Carmen",
-  "Panasonic",
+  "HITACHI",
+  "LG",
 ];
 
 export default function Footer({ locale, dictionary }: FooterProps) {
@@ -106,7 +109,7 @@ export default function Footer({ locale, dictionary }: FooterProps) {
               {brands.map((brand) => (
                 <li key={brand}>
                   <Link
-                    href={`/${locale}/brands/${brand.toLowerCase().replace(/\s+/g, "-")}`}
+                    href={`/${locale}/klimatici?brand=${encodeURIComponent(brand)}`}
                     className="text-sm text-white/50 hover:text-white transition-colors duration-200"
                   >
                     {brand}

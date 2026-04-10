@@ -14,11 +14,14 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Clima — Климатици за вашия дом",
-    template: "%s | Clima",
+    default: "Песнопоец Клима — Климатици с монтаж в България",
+    template: "%s | Песнопоец Клима",
   },
   description:
-    "Климатици от водещи марки — Daikin, Mitsubishi, Toshiba, Nippon. Доставка и монтаж в цяла България.",
+    "Климатици от водещи марки — Daikin, Mitsubishi, Toshiba, Gree. Продажба, доставка и монтаж в цяла България.",
+  openGraph: {
+    images: ["/hero-bg.jpg"],
+  },
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
   ),
