@@ -356,10 +356,10 @@ export default async function HomePage({ params }: HomePageProps) {
           priority
           quality={85}
         />
-        {/* Dark overlay — only left side, keeps AC unit visible on right */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0f172a]/85 via-[#0f172a]/60 to-[#0f172a]/10 sm:to-transparent" />
-        {/* Bottom gradient fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
+        {/* Dark overlay — stronger left for text, transparent right for AC */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/90 via-[#0a1628]/70 to-[#0a1628]/5" />
+        {/* Bottom fade to white */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white via-white/50 to-transparent" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-36">
           <div className="max-w-2xl">
@@ -389,10 +389,31 @@ export default async function HomePage({ params }: HomePageProps) {
             <h1 className="text-2xl sm:text-4xl lg:text-[3.5rem] font-bold text-white leading-[1.1] drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)]">
               {hero.title}
             </h1>
-            <p className="mt-4 sm:mt-6 text-sm sm:text-lg text-white/80 leading-relaxed max-w-lg">
+            <p className="mt-4 sm:mt-6 text-sm sm:text-lg text-white/70 leading-relaxed max-w-lg">
               {hero.subtitle}
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-3.5">
+
+            {/* Service pills */}
+            <div className="mt-6 flex flex-wrap gap-2 sm:gap-3">
+              {(locale === "bg"
+                ? ["Продажба", "Професионален монтаж", "Сервиз и поддръжка"]
+                : locale === "en"
+                  ? ["Sales", "Professional installation", "Service & maintenance"]
+                  : locale === "ru"
+                    ? ["Продажа", "Профессиональный монтаж", "Сервис и обслуживание"]
+                    : ["Продаж", "Професійний монтаж", "Сервіс та обслуговування"]
+              ).map((service) => (
+                <span
+                  key={service}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/15 rounded-lg text-xs sm:text-sm font-medium text-white/90"
+                >
+                  <span className="w-1.5 h-1.5 bg-primary rounded-full" />
+                  {service}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3.5">
               <Link
                 href={`/${locale}/klimatici`}
                 className="inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-[0_4px_20px_0_rgb(2_132_199/0.4)] hover:shadow-[0_6px_24px_0_rgb(2_132_199/0.5)] hover:-translate-y-0.5"
