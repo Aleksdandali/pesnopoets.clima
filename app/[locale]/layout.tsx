@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import CookieConsent from "@/components/CookieConsent";
 
 const locales = ["bg", "en", "ru", "ua"] as const;
 type Locale = (typeof locales)[number];
@@ -79,6 +80,7 @@ export default async function LocaleLayout({
       <Header locale={locale} dictionary={dictionary} />
       <main className="flex-1">{children}</main>
       <Footer locale={locale} dictionary={dictionary} />
+      <CookieConsent locale={locale} />
     </>
   );
 }

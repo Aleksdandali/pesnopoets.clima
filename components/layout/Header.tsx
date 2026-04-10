@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
-import { Menu, X, ChevronDown, Globe } from "lucide-react";
+import { Menu, X, ChevronDown, Globe, Phone } from "lucide-react";
 
 interface HeaderProps {
   locale: string;
@@ -21,6 +21,15 @@ interface HeaderProps {
     };
   };
 }
+
+const PHONE_NUMBER = "+359 888 123 456";
+
+const callLabels: Record<string, string> = {
+  bg: "Обадете се",
+  en: "Call us",
+  ru: "Позвоните нам",
+  ua: "Зателефонуйте",
+};
 
 const localeLabels: Record<string, string> = {
   bg: "BG",
@@ -70,147 +79,192 @@ export default function Header({ locale, dictionary }: HeaderProps) {
   ];
 
   return (
-    <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/98 backdrop-blur-xl shadow-[0_1px_3px_0_rgb(0_0_0/0.04)]"
-          : "bg-white/95 backdrop-blur-md"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-[72px]">
-          {/* Logo */}
-          <Link
-            href={`/${locale}`}
-            className="flex items-center gap-2.5 shrink-0 group"
+    <header>
+      {/* Top bar with phone — desktop only */}
+      <div className="hidden lg:block bg-[#0c1425] text-white/70">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-9">
+          <p className="text-xs text-white/50">
+            {locale === "bg"
+              ? "Доставка и монтаж в цяла България"
+              : locale === "ru"
+                ? "Доставка и монтаж по всей Болгарии"
+                : locale === "ua"
+                  ? "Доставка та монтаж по всій Болгарії"
+                  : "Delivery and installation across Bulgaria"}
+          </p>
+          <a
+            href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
+            className="flex items-center gap-1.5 text-xs text-white/80 hover:text-white transition-colors font-medium"
           >
-            <Image
-              src="/logo.png"
-              alt="Песнопоец Клима"
-              width={44}
-              height={44}
-              className="rounded-lg group-hover:scale-105 transition-transform duration-200"
-            />
-            <div className="flex flex-col">
-              <span className="text-base font-bold text-foreground tracking-tight leading-none">
-                Песнопоец
-              </span>
-              <span className="text-[10px] text-primary font-semibold tracking-widest uppercase leading-none mt-0.5">
-                Клима
-              </span>
-            </div>
-          </Link>
+            <Phone className="w-3 h-3" />
+            {PHONE_NUMBER}
+          </a>
+        </div>
+      </div>
 
-          {/* Desktop nav */}
-          <nav className="hidden lg:flex items-center gap-0.5">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg transition-colors duration-200"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-
-          {/* Right side: lang + CTA + mobile */}
-          <div className="flex items-center gap-2">
-            {/* Language switcher */}
-            <div className="relative" ref={langRef}>
-              <button
-                onClick={() => setLangMenuOpen(!langMenuOpen)}
-                className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted transition-colors"
-                aria-label="Change language"
-              >
-                <Globe className="w-4 h-4" />
-                <span>{localeLabels[locale]}</span>
-                <ChevronDown
-                  className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                    langMenuOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-              {langMenuOpen && (
-                <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-lg border border-border/80 py-1.5 min-w-[160px] z-50">
-                  {Object.entries(localeNames).map(([code, name]) => (
-                    <Link
-                      key={code}
-                      href={`/${code}`}
-                      className={`block px-4 py-2.5 text-sm transition-colors ${
-                        code === locale
-                          ? "bg-primary-light text-primary font-medium"
-                          : "text-foreground hover:bg-muted"
-                      }`}
-                      onClick={() => setLangMenuOpen(false)}
-                    >
-                      {name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* CTA */}
+      {/* Main nav */}
+      <div
+        className={`sticky top-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "bg-white/98 backdrop-blur-xl shadow-[0_1px_3px_0_rgb(0_0_0/0.04)]"
+            : "bg-white/95 backdrop-blur-md"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-[72px]">
+            {/* Logo */}
             <Link
-              href={`/${locale}/inquiry`}
-              className="hidden sm:inline-flex items-center px-5 py-2.5 bg-primary text-primary-foreground text-sm font-semibold rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-sm hover:shadow-md"
+              href={`/${locale}`}
+              className="flex items-center gap-2.5 shrink-0 group"
             >
-              {locale === "bg"
-                ? "Запитване"
-                : locale === "ru"
-                  ? "Запрос"
-                  : locale === "ua"
-                    ? "Запит"
-                    : "Inquiry"}
+              <Image
+                src="/logo.png"
+                alt="Песнопоец Клима"
+                width={44}
+                height={44}
+                className="rounded-lg group-hover:scale-105 transition-transform duration-200"
+              />
+              <div className="flex flex-col">
+                <span className="text-base font-bold text-foreground tracking-tight leading-none">
+                  Песнопоец
+                </span>
+                <span className="text-[10px] text-primary font-semibold tracking-widest uppercase leading-none mt-0.5">
+                  Клима
+                </span>
+              </div>
             </Link>
 
-            {/* Mobile menu button */}
-            <button
-              className="lg:hidden p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Menu"
-            >
-              {mobileMenuOpen ? (
-                <X className="w-5 h-5" />
-              ) : (
-                <Menu className="w-5 h-5" />
-              )}
-            </button>
-          </div>
-        </div>
+            {/* Desktop nav */}
+            <nav className="hidden lg:flex items-center gap-0.5">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="relative px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg transition-colors duration-200"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
 
-        {/* Mobile menu */}
-        <div
-          className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            mobileMenuOpen ? "max-h-[400px] opacity-100" : "max-h-0 opacity-0"
-          }`}
-        >
-          <nav className="flex flex-col pb-5 pt-2 border-t border-border/60">
-            {navLinks.map((link) => (
+            {/* Right side: lang + CTA + mobile */}
+            <div className="flex items-center gap-2">
+              {/* Phone link — visible on mobile as icon */}
+              <a
+                href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
+                className="lg:hidden p-2 text-muted-foreground hover:text-primary hover:bg-muted rounded-lg transition-colors"
+                aria-label={callLabels[locale] || "Call us"}
+              >
+                <Phone className="w-5 h-5" />
+              </a>
+
+              {/* Language switcher */}
+              <div className="relative" ref={langRef}>
+                <button
+                  onClick={() => setLangMenuOpen(!langMenuOpen)}
+                  className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted transition-colors"
+                  aria-label="Change language"
+                >
+                  <Globe className="w-4 h-4" />
+                  <span>{localeLabels[locale]}</span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                      langMenuOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                {langMenuOpen && (
+                  <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-lg border border-border/80 py-1.5 min-w-[160px] z-50">
+                    {Object.entries(localeNames).map(([code, name]) => (
+                      <Link
+                        key={code}
+                        href={`/${code}`}
+                        className={`block px-4 py-2.5 text-sm transition-colors ${
+                          code === locale
+                            ? "bg-primary-light text-primary font-medium"
+                            : "text-foreground hover:bg-muted"
+                        }`}
+                        onClick={() => setLangMenuOpen(false)}
+                      >
+                        {name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* CTA */}
               <Link
-                key={link.href}
-                href={link.href}
-                className="px-4 py-3 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-lg transition-colors"
+                href={`/${locale}/inquiry`}
+                className="hidden sm:inline-flex items-center px-5 py-2.5 bg-primary text-primary-foreground text-sm font-semibold rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-sm hover:shadow-md"
+              >
+                {locale === "bg"
+                  ? "Запитване"
+                  : locale === "ru"
+                    ? "Запрос"
+                    : locale === "ua"
+                      ? "Запит"
+                      : "Inquiry"}
+              </Link>
+
+              {/* Mobile menu button */}
+              <button
+                className="lg:hidden p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label="Menu"
+              >
+                {mobileMenuOpen ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile menu */}
+          <div
+            className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+              mobileMenuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+            }`}
+          >
+            <nav className="flex flex-col pb-5 pt-2 border-t border-border/60">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="px-4 py-3 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-lg transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
+
+              {/* Call us button in mobile menu */}
+              <a
+                href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
+                className="mx-4 mt-3 flex items-center justify-center gap-2 px-5 py-3 border border-border text-foreground font-semibold rounded-xl hover:bg-muted transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {link.label}
+                <Phone className="w-4 h-4" />
+                {callLabels[locale] || "Call us"}: {PHONE_NUMBER}
+              </a>
+
+              <Link
+                href={`/${locale}/inquiry`}
+                className="mx-4 mt-2 text-center px-5 py-3 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary-dark transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {locale === "bg"
+                  ? "Запитване"
+                  : locale === "ru"
+                    ? "Запрос"
+                    : locale === "ua"
+                      ? "Запит"
+                      : "Inquiry"}
               </Link>
-            ))}
-            <Link
-              href={`/${locale}/inquiry`}
-              className="mx-4 mt-3 text-center px-5 py-3 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary-dark transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {locale === "bg"
-                ? "Запитване"
-                : locale === "ru"
-                  ? "Запрос"
-                  : locale === "ua"
-                    ? "Запит"
-                    : "Inquiry"}
-            </Link>
-          </nav>
+            </nav>
+          </div>
         </div>
       </div>
     </header>

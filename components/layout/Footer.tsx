@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, MapPin } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 
 interface FooterProps {
   locale: string;
@@ -25,6 +25,8 @@ interface FooterProps {
     };
   };
 }
+
+const PHONE_NUMBER = "+359 888 123 456";
 
 const brands = [
   "Daikin",
@@ -125,6 +127,15 @@ export default function Footer({ locale, dictionary }: FooterProps) {
               {t.footer.contactUs}
             </h3>
             <ul className="space-y-3.5">
+              <li>
+                <a
+                  href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
+                  className="flex items-center gap-2.5 text-sm text-white/50 hover:text-white transition-colors duration-200"
+                >
+                  <Phone className="w-4 h-4 shrink-0 text-white/30" />
+                  <span>{PHONE_NUMBER}</span>
+                </a>
+              </li>
               <li>
                 <a
                   href="mailto:info@clima.bg"

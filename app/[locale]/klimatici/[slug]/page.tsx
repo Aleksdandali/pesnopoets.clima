@@ -4,6 +4,9 @@ import { createClient } from "@/lib/supabase/server";
 import ProductGallery from "@/components/product/ProductGallery";
 import SpecsTable from "@/components/product/SpecsTable";
 import InquiryForm from "@/components/forms/InquiryForm";
+import OneClickOrder from "@/components/product/OneClickOrder";
+import SimilarProducts from "@/components/product/SimilarProducts";
+import StickyMobileCTA from "@/components/product/StickyMobileCTA";
 import { generateProductJsonLd, generateBreadcrumbJsonLd } from "@/lib/seo/jsonld";
 import {
   Zap,
@@ -19,6 +22,7 @@ interface ProductPageProps {
 }
 
 const EUR_TO_BGN = 1.95583;
+const PHONE_NUMBER = "+359 888 123 456";
 
 async function getDictionary(locale: string) {
   try {
@@ -87,6 +91,14 @@ const breadcrumbLabels: Record<string, { home: string; catalog: string }> = {
   ua: { home: "Головна", catalog: "Кондиціонери" },
 };
 
+// Installment labels
+const installmentLabels: Record<string, { prefix: string; suffix: string }> = {
+  bg: { prefix: "или 12 x", suffix: "лв./мес." },
+  en: { prefix: "or 12 x", suffix: "BGN/mo." },
+  ru: { prefix: "или 12 x", suffix: "лв./мес." },
+  ua: { prefix: "або 12 x", suffix: "лв./міс." },
+};
+
 export default async function ProductPage({ params }: ProductPageProps) {
   const { locale, slug } = await params;
   const product = await getProduct(slug);
@@ -102,6 +114,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
     product.description_override || product.description;
   const displayPrice = product.price_override || product.price_client;
   const priceBGN = (displayPrice * EUR_TO_BGN).toFixed(0);
+  const installmentMonthly = Math.ceil((displayPrice * EUR_TO_BGN) / 12);
+  const instLabels = installmentLabels[locale] || installmentLabels.bg;
 
   const jsonLd = generateProductJsonLd(product, locale, siteUrl);
   const breadcrumbJsonLd = generateBreadcrumbJsonLd(
@@ -144,7 +158,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24 lg:pb-8">
         {/* Breadcrumb */}
         <nav className="text-sm text-muted-foreground mb-6">
           <a href={`/${locale}`} className="hover:text-primary">
@@ -202,6 +216,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   ({displayPrice.toFixed(2)} &euro;)
                 </span>
               </div>
+              {/* Installment display */}
+              <p className="text-sm text-muted-foreground mt-1.5">
+                {instLabels.prefix}{" "}
+                <span className="font-semibold text-foreground">
+                  {installmentMonthly}
+                </span>{" "}
+                {instLabels.suffix}
+              </p>
               {product.is_promo && product.price_promo > 0 && (
                 <p className="text-sm text-danger font-medium mt-1">
                   {locale === "bg" ? "Промоционална цена!" : locale === "en" ? "Promo price!" : locale === "ru" ? "Акционная цена!" : "Акційна ціна!"}
@@ -293,8 +315,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
               )}
             </div>
 
+            {/* 1-Click Order — prominent, ABOVE the full form */}
+            <OneClickOrder
+              locale={locale}
+              productId={product.id}
+              productTitle={displayTitle}
+            />
+
             {/* Inquiry form */}
-            <div className="bg-white border border-border rounded-xl p-4 sm:p-6">
+            <div
+              id="inquiry-form-section"
+              className="bg-white border border-border rounded-xl p-4 sm:p-6"
+            >
               <h2 className="text-lg font-bold text-foreground mb-4">
                 {dictionary.inquiry?.title || t?.inquiryButton || "Make an Inquiry"}
               </h2>
@@ -328,7 +360,22 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </h2>
           <SpecsTable features={product.features} locale={locale} />
         </div>
+
+        {/* Similar Products */}
+        <SimilarProducts
+          currentProductId={product.id}
+          categoryId={product.category_id}
+          manufacturer={product.manufacturer}
+          locale={locale}
+        />
       </div>
+
+      {/* Sticky mobile CTA */}
+      <StickyMobileCTA
+        locale={locale}
+        priceBGN={priceBGN}
+        phoneNumber={PHONE_NUMBER}
+      />
     </>
   );
 }
