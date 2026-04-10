@@ -11,7 +11,7 @@ import {
   Wind,
   ChevronRight,
   Phone,
-  Maximize,
+  Headphones,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import ProductCard from "@/components/catalog/ProductCard";
@@ -20,42 +20,19 @@ interface HomePageProps {
   params: Promise<{ locale: string }>;
 }
 
-// Hero content per locale
-const heroContent: Record<
-  string,
-  { title: string; subtitle: string; cta: string; ctaSecondary: string }
-> = {
-  bg: {
-    title: "Климатици от водещи световни марки",
-    subtitle:
-      "Daikin, Mitsubishi Electric, Toshiba, Nippon — с доставка и професионален монтаж в цяла България. Безплатна консултация.",
-    cta: "Разгледай каталога",
-    ctaSecondary: "Безплатна консултация",
-  },
-  en: {
-    title: "Air Conditioners from World-Leading Brands",
-    subtitle:
-      "Daikin, Mitsubishi Electric, Toshiba, Nippon — with delivery and professional installation across Bulgaria. Free consultation.",
-    cta: "Browse Catalog",
-    ctaSecondary: "Free Consultation",
-  },
-  ru: {
-    title: "Кондиционеры ведущих мировых брендов",
-    subtitle:
-      "Daikin, Mitsubishi Electric, Toshiba, Nippon — с доставкой и профессиональным монтажом по всей Болгарии. Бесплатная консультация.",
-    cta: "Смотреть каталог",
-    ctaSecondary: "Бесплатная консультация",
-  },
-  ua: {
-    title: "Кондиціонери провідних світових брендів",
-    subtitle:
-      "Daikin, Mitsubishi Electric, Toshiba, Nippon — з доставкою та професійним монтажем по всій Болгарії. Безкоштовна консультація.",
-    cta: "Переглянути каталог",
-    ctaSecondary: "Безкоштовна консультація",
-  },
-};
+const locales = ["bg", "en", "ru", "ua"] as const;
 
-// Features section per locale
+async function getDictionary(locale: string) {
+  try {
+    const dict = await import(`@/dictionaries/${locale}.json`);
+    return dict.default;
+  } catch {
+    const dict = await import(`@/dictionaries/bg.json`);
+    return dict.default;
+  }
+}
+
+// Features section per locale — now uses trust.originalTitle from dictionary
 const features: Record<
   string,
   Array<{ icon: string; title: string; desc: string }>
@@ -63,13 +40,13 @@ const features: Record<
   bg: [
     {
       icon: "shield",
-      title: "Оригинални продукти",
-      desc: "Официален вносител. Пълна гаранция от производителя до 36 месеца.",
+      title: "Сертифициран партньор от 2015 г.",
+      desc: "Официален вносител на Daikin, Mitsubishi, Toshiba. Пълна гаранция от производителя и сертифицирано обслужване по европейски стандарти.",
     },
     {
       icon: "truck",
       title: "Бърза доставка",
-      desc: "Доставка до вашия адрес в цяла България. Наличност в реално време.",
+      desc: "Безплатна доставка до вашия адрес в цяла България. Наличност в реално време.",
     },
     {
       icon: "wrench",
@@ -80,13 +57,13 @@ const features: Record<
   en: [
     {
       icon: "shield",
-      title: "Original Products",
-      desc: "Authorized dealer. Full manufacturer warranty up to 36 months.",
+      title: "Certified partner since 2015",
+      desc: "Authorized dealer for Daikin, Mitsubishi, Toshiba. Full manufacturer warranty and certified service to European standards.",
     },
     {
       icon: "truck",
       title: "Fast Delivery",
-      desc: "Delivery to your address across Bulgaria. Real-time availability.",
+      desc: "Free delivery to your address across Bulgaria. Real-time availability.",
     },
     {
       icon: "wrench",
@@ -97,13 +74,13 @@ const features: Record<
   ru: [
     {
       icon: "shield",
-      title: "Оригинальная продукция",
-      desc: "Официальный дилер. Полная гарантия производителя до 36 месяцев.",
+      title: "Сертифицированный партнёр с 2015 г.",
+      desc: "Официальный дилер Daikin, Mitsubishi, Toshiba. Полная гарантия производителя и сертифицированное обслуживание по европейским стандартам.",
     },
     {
       icon: "truck",
       title: "Быстрая доставка",
-      desc: "Доставка по всей Болгарии. Наличие в реальном времени.",
+      desc: "Бесплатная доставка по всей Болгарии. Наличие в реальном времени.",
     },
     {
       icon: "wrench",
@@ -114,13 +91,13 @@ const features: Record<
   ua: [
     {
       icon: "shield",
-      title: "Оригінальна продукція",
-      desc: "Офіційний дилер. Повна гарантія виробника до 36 місяців.",
+      title: "Сертифікований партнер з 2015 р.",
+      desc: "Офіційний дилер Daikin, Mitsubishi, Toshiba. Повна гарантія виробника та сертифіковане обслуговування за європейськими стандартами.",
     },
     {
       icon: "truck",
       title: "Швидка доставка",
-      desc: "Доставка по всій Болгарії. Наявність у реальному часі.",
+      desc: "Безкоштовна доставка по всій Болгарії. Наявність у реальному часі.",
     },
     {
       icon: "wrench",
@@ -184,6 +161,7 @@ const sectionLabels: Record<string, {
   ctaTitle: string;
   ctaSubtitle: string;
   ctaButton: string;
+  freeConsultation: string;
 }> = {
   bg: {
     categories: "Категории",
@@ -194,6 +172,7 @@ const sectionLabels: Record<string, {
     ctaTitle: "Нуждаете се от помощ при избора?",
     ctaSubtitle: "Нашите специалисти ще ви помогнат да изберете перфектния климатик за вашия дом или офис. Безплатна консултация и професионално обслужване.",
     ctaButton: "Свържете се с нас",
+    freeConsultation: "Безплатна консултация",
   },
   en: {
     categories: "Categories",
@@ -204,6 +183,7 @@ const sectionLabels: Record<string, {
     ctaTitle: "Need help choosing?",
     ctaSubtitle: "Our specialists will help you choose the perfect air conditioner for your home or office. Free consultation and professional service.",
     ctaButton: "Contact us",
+    freeConsultation: "Free consultation",
   },
   ru: {
     categories: "Категории",
@@ -214,6 +194,7 @@ const sectionLabels: Record<string, {
     ctaTitle: "Нужна помощь с выбором?",
     ctaSubtitle: "Наши специалисты помогут вам выбрать идеальный кондиционер для дома или офиса. Бесплатная консультация и профессиональное обслуживание.",
     ctaButton: "Свяжитесь с нами",
+    freeConsultation: "Бесплатная консультация",
   },
   ua: {
     categories: "Категорії",
@@ -224,10 +205,9 @@ const sectionLabels: Record<string, {
     ctaTitle: "Потрібна допомога з вибором?",
     ctaSubtitle: "Наші спеціалісти допоможуть вам обрати ідеальний кондиціонер для дому чи офісу. Безкоштовна консультація та професійне обслуговування.",
     ctaButton: "Зв'яжіться з нами",
+    freeConsultation: "Безкоштовна консультація",
   },
 };
-
-const EUR_TO_BGN = 1.95583;
 
 async function getFeaturedProducts() {
   try {
@@ -246,29 +226,9 @@ async function getFeaturedProducts() {
   }
 }
 
-async function getHeroProduct() {
-  try {
-    const supabase = await createClient();
-    const { data } = await supabase
-      .from("products")
-      .select("slug, title, title_override, manufacturer, gallery, btu, energy_class, area_m2, price_client, price_override")
-      .eq("is_active", true)
-      .eq("availability", "Наличен")
-      .not("gallery", "is", null)
-      .not("btu", "is", null)
-      .order("price_client", { ascending: false })
-      .limit(1)
-      .single();
-    return data;
-  } catch {
-    return null;
-  }
-}
-
 async function getBrandsWithImages() {
   try {
     const supabase = await createClient();
-    // Get all active products with manufacturer and gallery
     const { data } = await supabase
       .from("products")
       .select("manufacturer, gallery")
@@ -285,7 +245,6 @@ async function getBrandsWithImages() {
         };
       }
       brandMap[row.manufacturer].count += 1;
-      // If we don't have an image yet, try this product
       if (!brandMap[row.manufacturer].image && row.gallery?.[0]) {
         brandMap[row.manufacturer].image = row.gallery[0];
       }
@@ -302,7 +261,6 @@ async function getBrandsWithImages() {
 async function getCategoryImages() {
   try {
     const supabase = await createClient();
-    // Get one product per category slug pattern
     const categorySlugs = ["invertorni-klimatici", "multi-split-sistemi", "profesionalni-sistemi", "ventilaciya"];
     const images: Record<string, string | null> = {};
 
@@ -325,22 +283,18 @@ async function getCategoryImages() {
 
 export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params;
-  const hero = heroContent[locale] || heroContent.bg;
+  const dictionary = await getDictionary(locale);
+  const hero = dictionary.hero;
+  const trust = dictionary.trust;
   const feats = features[locale] || features.bg;
   const cats = categories[locale] || categories.bg;
   const labels = sectionLabels[locale] || sectionLabels.bg;
 
-  const [featuredProducts, brands, heroProduct, categoryImages] = await Promise.all([
+  const [featuredProducts, brands, categoryImages] = await Promise.all([
     getFeaturedProducts(),
     getBrandsWithImages(),
-    getHeroProduct(),
     getCategoryImages(),
   ]);
-
-  const heroImageUrl = heroProduct?.gallery?.[0];
-  const heroPriceBGN = heroProduct
-    ? ((heroProduct.price_override || heroProduct.price_client) * EUR_TO_BGN).toFixed(0)
-    : null;
 
   return (
     <>
@@ -349,16 +303,16 @@ export default async function HomePage({ params }: HomePageProps) {
         {/* Background image */}
         <Image
           src="/hero-bg.jpg"
-          alt=""
+          alt="Air conditioning systems display"
           fill
           className="object-cover object-bottom"
           sizes="100vw"
           priority
           quality={85}
         />
-        {/* Dark overlay — stronger left for text, transparent right for AC */}
+        {/* Dark overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/90 via-[#0a1628]/70 to-[#0a1628]/5" />
-        {/* Bottom fade — only subtle, don't cover brand logos */}
+        {/* Bottom fade */}
         <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white/30 to-transparent" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-36">
@@ -367,21 +321,15 @@ export default async function HomePage({ params }: HomePageProps) {
             <div className="flex items-center gap-3 mb-8">
               <Image
                 src="/logo.png"
-                alt="Песнопоец Клима"
+                alt={dictionary.common.siteName}
                 width={56}
                 height={56}
                 className="rounded-xl shadow-lg"
               />
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full">
-                <Snowflake className="w-3.5 h-3.5 text-white" />
+                <Snowflake className="w-3.5 h-3.5 text-white" aria-hidden="true" />
                 <span className="text-xs font-medium text-white/90 tracking-wide">
-                  {locale === "bg"
-                    ? "Официален дилър"
-                    : locale === "ru"
-                      ? "Официальный дилер"
-                      : locale === "ua"
-                        ? "Офіційний дилер"
-                        : "Authorized Dealer"}
+                  {dictionary.common.authorizedDealer}
                 </span>
               </div>
             </div>
@@ -395,19 +343,12 @@ export default async function HomePage({ params }: HomePageProps) {
 
             {/* Service pills */}
             <div className="mt-6 flex flex-wrap gap-2 sm:gap-3">
-              {(locale === "bg"
-                ? ["Продажба", "Професионален монтаж", "Сервиз и поддръжка"]
-                : locale === "en"
-                  ? ["Sales", "Professional installation", "Service & maintenance"]
-                  : locale === "ru"
-                    ? ["Продажа", "Профессиональный монтаж", "Сервис и обслуживание"]
-                    : ["Продаж", "Професійний монтаж", "Сервіс та обслуговування"]
-              ).map((service) => (
+              {(dictionary.common.services || []).map((service: string) => (
                 <span
                   key={service}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/15 rounded-lg text-xs sm:text-sm font-medium text-white/90"
                 >
-                  <span className="w-1.5 h-1.5 bg-primary rounded-full" />
+                  <span className="w-1.5 h-1.5 bg-primary rounded-full" aria-hidden="true" />
                   {service}
                 </span>
               ))}
@@ -419,7 +360,7 @@ export default async function HomePage({ params }: HomePageProps) {
                 className="inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-[0_4px_20px_0_rgb(2_132_199/0.4)] hover:shadow-[0_6px_24px_0_rgb(2_132_199/0.5)] hover:-translate-y-0.5"
               >
                 {hero.cta}
-                <ArrowRight className="w-4.5 h-4.5" />
+                <ArrowRight className="w-4.5 h-4.5" aria-hidden="true" />
               </Link>
               <Link
                 href={`/${locale}/inquiry`}
@@ -429,9 +370,30 @@ export default async function HomePage({ params }: HomePageProps) {
               </Link>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Suppress unused vars */}
-          {(() => { void heroImageUrl; void heroProduct; void heroPriceBGN; return null; })()}
+      {/* Trust Strip */}
+      <section className="border-b border-border/60 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex gap-6 sm:gap-8 py-4 overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 sm:justify-center">
+            <div className="flex items-center gap-2 shrink-0">
+              <Truck className="w-5 h-5 text-primary" aria-hidden="true" />
+              <span className="text-sm font-medium text-foreground whitespace-nowrap">{trust.delivery}</span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <Wrench className="w-5 h-5 text-primary" aria-hidden="true" />
+              <span className="text-sm font-medium text-foreground whitespace-nowrap">{trust.installation}</span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <Shield className="w-5 h-5 text-primary" aria-hidden="true" />
+              <span className="text-sm font-medium text-foreground whitespace-nowrap">{trust.warranty}</span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <Headphones className="w-5 h-5 text-primary" aria-hidden="true" />
+              <span className="text-sm font-medium text-foreground whitespace-nowrap">{trust.consultation}</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -468,7 +430,7 @@ export default async function HomePage({ params }: HomePageProps) {
                 )}
                 {!catImage && (
                   <div className="w-12 h-12 bg-primary-light/60 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary-light group-hover:scale-105 transition-all duration-300">
-                    <IconComp className="w-6 h-6 text-primary" />
+                    <IconComp className="w-6 h-6 text-primary" aria-hidden="true" />
                   </div>
                 )}
                 <h3 className="text-sm sm:text-base font-semibold text-foreground mb-1 group-hover:text-primary transition-colors duration-200">
@@ -477,7 +439,7 @@ export default async function HomePage({ params }: HomePageProps) {
                 <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed hidden sm:block">
                   {cat.desc}
                 </p>
-                <ChevronRight className="absolute top-6 right-5 w-4 h-4 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" />
+                <ChevronRight className="absolute top-6 right-5 w-4 h-4 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" aria-hidden="true" />
               </Link>
             );
           })}
@@ -497,7 +459,7 @@ export default async function HomePage({ params }: HomePageProps) {
                 className="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary-dark transition-colors"
               >
                 {labels.viewAll}
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
@@ -516,7 +478,7 @@ export default async function HomePage({ params }: HomePageProps) {
                 className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary-dark transition-colors"
               >
                 {labels.viewAll}
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
             </div>
           </div>
@@ -542,7 +504,7 @@ export default async function HomePage({ params }: HomePageProps) {
                 >
                   <div className="flex items-start gap-5">
                     <div className="w-14 h-14 bg-primary-light/60 rounded-2xl flex items-center justify-center shrink-0">
-                      <IconComp className="w-7 h-7 text-primary" />
+                      <IconComp className="w-7 h-7 text-primary" aria-hidden="true" />
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-foreground mb-3">
@@ -554,7 +516,7 @@ export default async function HomePage({ params }: HomePageProps) {
                     </div>
                   </div>
                   {/* Subtle number */}
-                  <span className="absolute top-5 right-6 text-7xl font-bold text-primary/[0.04] select-none">
+                  <span className="absolute top-5 right-6 text-7xl font-bold text-primary/[0.04] select-none" aria-hidden="true">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                 </div>
@@ -577,9 +539,9 @@ export default async function HomePage({ params }: HomePageProps) {
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
             <div className="text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 border border-white/20 rounded-full mb-5">
-                <Phone className="w-3.5 h-3.5 text-white" />
+                <Phone className="w-3.5 h-3.5 text-white" aria-hidden="true" />
                 <span className="text-xs font-medium text-white/90 tracking-wide">
-                  {locale === "bg" ? "Безплатна консултация" : locale === "en" ? "Free consultation" : locale === "ru" ? "Бесплатная консультация" : "Безкоштовна консультація"}
+                  {labels.freeConsultation}
                 </span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold text-white leading-tight">
@@ -595,7 +557,7 @@ export default async function HomePage({ params }: HomePageProps) {
                 className="inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-white text-[#0369a1] font-semibold rounded-xl hover:bg-white/90 transition-all duration-200 shadow-[0_4px_14px_0_rgb(0_0_0/0.15)] hover:shadow-[0_6px_20px_0_rgb(0_0_0/0.2)] hover:-translate-y-0.5"
               >
                 {labels.ctaButton}
-                <ArrowRight className="w-4.5 h-4.5" />
+                <ArrowRight className="w-4.5 h-4.5" aria-hidden="true" />
               </Link>
             </div>
           </div>
@@ -620,7 +582,7 @@ export default async function HomePage({ params }: HomePageProps) {
                   <div className="relative w-full h-20 rounded-xl bg-[#fafbfc] overflow-hidden">
                     <Image
                       src={brand.image}
-                      alt={brand.name}
+                      alt={`${brand.name} air conditioner`}
                       fill
                       className="object-contain p-2 group-hover:scale-105 transition-transform duration-500"
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
@@ -628,7 +590,7 @@ export default async function HomePage({ params }: HomePageProps) {
                   </div>
                 ) : (
                   <div className="w-full h-20 rounded-xl bg-[#fafbfc] flex items-center justify-center">
-                    <Snowflake className="w-8 h-8 text-muted-foreground/20" />
+                    <Snowflake className="w-8 h-8 text-muted-foreground/20" aria-hidden="true" />
                   </div>
                 )}
                 <div className="text-center">
@@ -636,7 +598,7 @@ export default async function HomePage({ params }: HomePageProps) {
                     {brand.name}
                   </span>
                   <span className="block text-xs text-muted-foreground mt-0.5">
-                    {brand.count} {locale === "bg" ? "продукта" : locale === "en" ? "products" : locale === "ru" ? "товаров" : "товарів"}
+                    {brand.count} {dictionary.common.productsCount}
                   </span>
                 </div>
               </Link>

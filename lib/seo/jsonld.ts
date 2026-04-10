@@ -53,7 +53,7 @@ export function generateProductJsonLd(
       availability: availabilityMap[product.availability] || availabilityMap["Неналичен"],
       seller: {
         "@type": "Organization",
-        name: "Clima",
+        name: "Песнопоец Клима",
       },
     },
   };
@@ -103,7 +103,7 @@ export function generateOrganizationJsonLd(siteUrl: string) {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Clima",
+    name: "Песнопоец Клима",
     url: siteUrl,
     logo: `${siteUrl}/logo.png`,
     contactPoint: {

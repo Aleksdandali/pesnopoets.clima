@@ -17,9 +17,8 @@ export default function ProductGallery({
 
   if (!images || images.length === 0) {
     return (
-      <div className="aspect-square bg-muted/50 rounded-2xl flex flex-col items-center justify-center text-muted-foreground/30 gap-3">
-        <Wind className="w-12 h-12 sm:w-16 sm:h-16" />
-        <span className="text-xs sm:text-sm font-medium text-muted-foreground/40 uppercase tracking-wider">No image available</span>
+      <div className="aspect-square bg-muted/50 rounded-2xl flex items-center justify-center text-muted-foreground/20">
+        <Wind className="w-12 h-12 sm:w-16 sm:h-16" aria-hidden="true" />
       </div>
     );
   }

@@ -4,7 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 const locales = ["bg", "en", "ru", "ua"];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
   const supabase = createAdminClient();
 
   // Fetch all active products

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Send, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { Send, Loader2, CheckCircle2, AlertCircle, Clock } from "lucide-react";
 
 interface InquiryFormProps {
   locale: string;
@@ -15,6 +15,7 @@ interface InquiryFormProps {
       namePlaceholder: string;
       phone: string;
       phonePlaceholder: string;
+      phoneHelper?: string;
       email: string;
       emailPlaceholder: string;
       message: string;
@@ -23,10 +24,15 @@ interface InquiryFormProps {
       submitting: string;
       success: string;
       successMessage: string;
+      successNext?: string;
       error: string;
       errorMessage: string;
       privacy: string;
       required: string;
+    };
+    common?: {
+      inquiryFor?: string;
+      sendAnother?: string;
     };
   };
 }
@@ -40,6 +46,7 @@ export default function InquiryForm({
   dictionary,
 }: InquiryFormProps) {
   const t = dictionary.inquiry;
+  const c = dictionary.common;
   const [status, setStatus] = useState<FormStatus>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -90,20 +97,20 @@ export default function InquiryForm({
   if (status === "success") {
     return (
       <div className="text-center py-10 px-6">
-        <CheckCircle2 className="w-16 h-16 text-success mx-auto mb-4" />
+        <CheckCircle2 className="w-16 h-16 text-success mx-auto mb-4" aria-hidden="true" />
         <h3 className="text-xl font-bold text-foreground mb-2">{t.success}</h3>
         <p className="text-muted-foreground">{t.successMessage}</p>
+        {t.successNext && (
+          <div className="mt-4 flex items-start gap-2 text-sm text-muted-foreground bg-muted rounded-lg p-4 text-left">
+            <Clock className="w-4 h-4 shrink-0 mt-0.5 text-primary" aria-hidden="true" />
+            <p>{t.successNext}</p>
+          </div>
+        )}
         <button
           onClick={() => setStatus("idle")}
           className="mt-6 text-sm text-primary hover:underline"
         >
-          {locale === "bg"
-            ? "Изпрати ново запитване"
-            : locale === "ru"
-              ? "Отправить новый запрос"
-              : locale === "ua"
-                ? "Надіслати новий запит"
-                : "Send another inquiry"}
+          {c?.sendAnother || "Send another inquiry"}
         </button>
       </div>
     );
@@ -115,13 +122,7 @@ export default function InquiryForm({
       {productTitle && (
         <div className="bg-primary-light rounded-lg p-3 text-sm text-primary-dark">
           <span className="font-medium">
-            {locale === "bg"
-              ? "Запитване за:"
-              : locale === "ru"
-                ? "Запрос на:"
-                : locale === "ua"
-                  ? "Запит на:"
-                  : "Inquiry for:"}
+            {c?.inquiryFor || "Inquiry for:"}
           </span>{" "}
           {productTitle}
         </div>
@@ -142,12 +143,13 @@ export default function InquiryForm({
           placeholder={t.namePlaceholder}
           required
           maxLength={100}
+          autoComplete="name"
           className={`w-full px-4 py-3 text-sm border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-ring transition-colors ${
             errors.name ? "border-danger" : "border-border"
           }`}
         />
         {errors.name && (
-          <p className="mt-1 text-xs text-danger">{errors.name}</p>
+          <p className="mt-1 text-xs text-danger" role="alert">{errors.name}</p>
         )}
       </div>
 
@@ -166,13 +168,16 @@ export default function InquiryForm({
           placeholder={t.phonePlaceholder}
           required
           maxLength={20}
+          autoComplete="tel"
           className={`w-full px-4 py-3 text-sm border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-ring transition-colors ${
             errors.phone ? "border-danger" : "border-border"
           }`}
         />
-        {errors.phone && (
-          <p className="mt-1 text-xs text-danger">{errors.phone}</p>
-        )}
+        {errors.phone ? (
+          <p className="mt-1 text-xs text-danger" role="alert">{errors.phone}</p>
+        ) : t.phoneHelper ? (
+          <p className="mt-1.5 text-xs text-muted-foreground">{t.phoneHelper}</p>
+        ) : null}
       </div>
 
       {/* Email */}
@@ -189,6 +194,7 @@ export default function InquiryForm({
           name="email"
           placeholder={t.emailPlaceholder}
           maxLength={200}
+          autoComplete="email"
           className="w-full px-4 py-3 text-sm border border-border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-ring transition-colors"
         />
       </div>
@@ -213,8 +219,8 @@ export default function InquiryForm({
 
       {/* Error message */}
       {status === "error" && (
-        <div className="flex items-center gap-2 bg-danger-light text-danger rounded-lg p-3 text-sm">
-          <AlertCircle className="w-4 h-4 shrink-0" />
+        <div className="flex items-center gap-2 bg-danger-light text-danger rounded-lg p-3 text-sm" role="alert">
+          <AlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
           {t.errorMessage}
         </div>
       )}
@@ -227,12 +233,12 @@ export default function InquiryForm({
       >
         {status === "submitting" ? (
           <>
-            <Loader2 className="w-4 h-4 animate-spin" />
+            <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
             {t.submitting}
           </>
         ) : (
           <>
-            <Send className="w-4 h-4" />
+            <Send className="w-4 h-4" aria-hidden="true" />
             {t.submit}
           </>
         )}

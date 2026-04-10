@@ -18,18 +18,14 @@ interface HeaderProps {
       };
       siteName: string;
       phone: string;
+      inquiry?: string;
+      callUs?: string;
+      deliveryBanner?: string;
     };
   };
 }
 
 const PHONE_NUMBER = "+359 888 123 456";
-
-const callLabels: Record<string, string> = {
-  bg: "Обадете се",
-  en: "Call us",
-  ru: "Позвоните нам",
-  ua: "Зателефонуйте",
-};
 
 const localeLabels: Record<string, string> = {
   bg: "BG",
@@ -51,6 +47,10 @@ export default function Header({ locale, dictionary }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
   const t = dictionary.common;
+
+  const callLabel = t.callUs || "Call us";
+  const inquiryLabel = t.inquiry || "Inquiry";
+  const deliveryBanner = t.deliveryBanner || "Delivery and installation across Bulgaria";
 
   useEffect(() => {
     function handleScroll() {
@@ -84,19 +84,14 @@ export default function Header({ locale, dictionary }: HeaderProps) {
       <div className="hidden lg:block bg-[#0c1425] text-white/70">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-9">
           <p className="text-xs text-white/50">
-            {locale === "bg"
-              ? "Доставка и монтаж в цяла България"
-              : locale === "ru"
-                ? "Доставка и монтаж по всей Болгарии"
-                : locale === "ua"
-                  ? "Доставка та монтаж по всій Болгарії"
-                  : "Delivery and installation across Bulgaria"}
+            {deliveryBanner}
           </p>
           <a
             href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
             className="flex items-center gap-1.5 text-xs text-white/80 hover:text-white transition-colors font-medium"
+            aria-label={`${callLabel}: ${PHONE_NUMBER}`}
           >
-            <Phone className="w-3 h-3" />
+            <Phone className="w-3 h-3" aria-hidden="true" />
             {PHONE_NUMBER}
           </a>
         </div>
@@ -116,10 +111,11 @@ export default function Header({ locale, dictionary }: HeaderProps) {
             <Link
               href={`/${locale}`}
               className="flex items-center gap-2.5 shrink-0 group"
+              aria-label={t.siteName}
             >
               <Image
                 src="/logo.png"
-                alt="Песнопоец Клима"
+                alt={t.siteName}
                 width={44}
                 height={44}
                 className="rounded-lg group-hover:scale-105 transition-transform duration-200"
@@ -135,7 +131,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
             </Link>
 
             {/* Desktop nav */}
-            <nav className="hidden lg:flex items-center gap-0.5">
+            <nav className="hidden lg:flex items-center gap-0.5" aria-label="Main navigation">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -153,9 +149,9 @@ export default function Header({ locale, dictionary }: HeaderProps) {
               <a
                 href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
                 className="lg:hidden p-2 text-muted-foreground hover:text-primary hover:bg-muted rounded-lg transition-colors"
-                aria-label={callLabels[locale] || "Call us"}
+                aria-label={callLabel}
               >
-                <Phone className="w-5 h-5" />
+                <Phone className="w-5 h-5" aria-hidden="true" />
               </a>
 
               {/* Language switcher */}
@@ -164,17 +160,20 @@ export default function Header({ locale, dictionary }: HeaderProps) {
                   onClick={() => setLangMenuOpen(!langMenuOpen)}
                   className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted transition-colors"
                   aria-label="Change language"
+                  aria-expanded={langMenuOpen}
+                  aria-haspopup="true"
                 >
-                  <Globe className="w-4 h-4" />
+                  <Globe className="w-4 h-4" aria-hidden="true" />
                   <span>{localeLabels[locale]}</span>
                   <ChevronDown
                     className={`w-3.5 h-3.5 transition-transform duration-200 ${
                       langMenuOpen ? "rotate-180" : ""
                     }`}
+                    aria-hidden="true"
                   />
                 </button>
                 {langMenuOpen && (
-                  <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-lg border border-border/80 py-1.5 min-w-[160px] z-50">
+                  <div className="absolute right-0 top-full mt-2 bg-white rounded-xl shadow-lg border border-border/80 py-1.5 min-w-[160px] z-50" role="menu">
                     {Object.entries(localeNames).map(([code, name]) => (
                       <Link
                         key={code}
@@ -185,6 +184,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
                             : "text-foreground hover:bg-muted"
                         }`}
                         onClick={() => setLangMenuOpen(false)}
+                        role="menuitem"
                       >
                         {name}
                       </Link>
@@ -198,25 +198,20 @@ export default function Header({ locale, dictionary }: HeaderProps) {
                 href={`/${locale}/inquiry`}
                 className="hidden sm:inline-flex items-center px-5 py-2.5 bg-primary text-primary-foreground text-sm font-semibold rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-sm hover:shadow-md"
               >
-                {locale === "bg"
-                  ? "Запитване"
-                  : locale === "ru"
-                    ? "Запрос"
-                    : locale === "ua"
-                      ? "Запит"
-                      : "Inquiry"}
+                {inquiryLabel}
               </Link>
 
               {/* Mobile menu button */}
               <button
                 className="lg:hidden p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                aria-label="Menu"
+                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                aria-expanded={mobileMenuOpen}
               >
                 {mobileMenuOpen ? (
-                  <X className="w-5 h-5" />
+                  <X className="w-5 h-5" aria-hidden="true" />
                 ) : (
-                  <Menu className="w-5 h-5" />
+                  <Menu className="w-5 h-5" aria-hidden="true" />
                 )}
               </button>
             </div>
@@ -228,7 +223,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
               mobileMenuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
             }`}
           >
-            <nav className="flex flex-col pb-5 pt-2 border-t border-border/60">
+            <nav className="flex flex-col pb-5 pt-2 border-t border-border/60" aria-label="Mobile navigation">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -246,8 +241,8 @@ export default function Header({ locale, dictionary }: HeaderProps) {
                 className="mx-4 mt-3 flex items-center justify-center gap-2 px-5 py-3 border border-border text-foreground font-semibold rounded-xl hover:bg-muted transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <Phone className="w-4 h-4" />
-                {callLabels[locale] || "Call us"}: {PHONE_NUMBER}
+                <Phone className="w-4 h-4" aria-hidden="true" />
+                {callLabel}: {PHONE_NUMBER}
               </a>
 
               <Link
@@ -255,13 +250,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
                 className="mx-4 mt-2 text-center px-5 py-3 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary-dark transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {locale === "bg"
-                  ? "Запитване"
-                  : locale === "ru"
-                    ? "Запрос"
-                    : locale === "ua"
-                      ? "Запит"
-                      : "Inquiry"}
+                {inquiryLabel}
               </Link>
             </nav>
           </div>

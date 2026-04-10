@@ -14,7 +14,7 @@ import {
   Volume2,
   Snowflake,
   ShieldCheck,
-  Thermometer,
+  CheckCircle2,
 } from "lucide-react";
 
 interface ProductPageProps {
@@ -59,7 +59,7 @@ export async function generateMetadata({
       .replace(/<[^>]*>/g, "")
       .slice(0, 160);
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
 
   return {
     title,
@@ -83,14 +83,6 @@ export async function generateMetadata({
   };
 }
 
-// Breadcrumb labels from dictionary
-const breadcrumbLabels: Record<string, { home: string; catalog: string }> = {
-  bg: { home: "Начало", catalog: "Климатици" },
-  en: { home: "Home", catalog: "Air Conditioners" },
-  ru: { home: "Главная", catalog: "Кондиционеры" },
-  ua: { home: "Головна", catalog: "Кондиціонери" },
-};
-
 // Installment labels
 const installmentLabels: Record<string, { prefix: string; suffix: string }> = {
   bg: { prefix: "или 12 x", suffix: "лв./мес." },
@@ -106,8 +98,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const dictionary = await getDictionary(locale);
   const t = dictionary.product;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  const bc = breadcrumbLabels[locale] || breadcrumbLabels.bg;
+  const trust = dictionary.trust;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
 
   const displayTitle = product.title_override || product.title;
   const displayDescription =
@@ -117,21 +109,27 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const installmentMonthly = Math.ceil((displayPrice * EUR_TO_BGN) / 12);
   const instLabels = installmentLabels[locale] || installmentLabels.bg;
 
+  // Category info for breadcrumb
+  const categoryName = product.categories?.subgroup_name;
+  const categoryGroupName = product.categories?.group_name;
+
+  const bcHome = dictionary.common.nav.home;
+  const bcCatalog = dictionary.common.nav.catalog;
+
   const jsonLd = generateProductJsonLd(product, locale, siteUrl);
-  const breadcrumbJsonLd = generateBreadcrumbJsonLd(
-    [
-      {
-        name: bc.home,
-        url: `/${locale}`,
-      },
-      {
-        name: bc.catalog,
-        url: `/${locale}/klimatici`,
-      },
-      { name: displayTitle, url: `/${locale}/klimatici/${slug}` },
-    ],
-    siteUrl
-  );
+  const breadcrumbItems = [
+    { name: bcHome, url: `/${locale}` },
+    { name: bcCatalog, url: `/${locale}/klimatici` },
+  ];
+  if (categoryGroupName && categoryGroupName !== categoryName) {
+    breadcrumbItems.push({ name: categoryGroupName, url: `/${locale}/klimatici` });
+  }
+  if (categoryName) {
+    breadcrumbItems.push({ name: categoryName, url: `/${locale}/klimatici` });
+  }
+  breadcrumbItems.push({ name: displayTitle, url: `/${locale}/klimatici/${slug}` });
+
+  const breadcrumbJsonLd = generateBreadcrumbJsonLd(breadcrumbItems, siteUrl);
 
   const availLabels: Record<string, Record<string, string>> = {
     Наличен: { bg: "Наличен", en: "In Stock", ru: "В наличии", ua: "В наявності" },
@@ -160,16 +158,36 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24 lg:pb-8">
         {/* Breadcrumb */}
-        <nav className="text-sm text-muted-foreground mb-6">
-          <a href={`/${locale}`} className="hover:text-primary">
-            {bc.home}
-          </a>
-          <span className="mx-2">/</span>
-          <a href={`/${locale}/klimatici`} className="hover:text-primary">
-            {bc.catalog}
-          </a>
-          <span className="mx-2">/</span>
-          <span className="text-foreground">{product.manufacturer}</span>
+        <nav className="text-sm text-muted-foreground mb-6" role="navigation" aria-label="Breadcrumb">
+          <ol className="flex flex-wrap items-center gap-0">
+            <li className="flex items-center">
+              <a href={`/${locale}`} className="hover:text-primary">
+                {bcHome}
+              </a>
+              <span className="mx-2" aria-hidden="true">/</span>
+            </li>
+            <li className="flex items-center">
+              <a href={`/${locale}/klimatici`} className="hover:text-primary">
+                {bcCatalog}
+              </a>
+              <span className="mx-2" aria-hidden="true">/</span>
+            </li>
+            {categoryGroupName && categoryGroupName !== categoryName && (
+              <li className="flex items-center">
+                <span className="text-muted-foreground">{categoryGroupName}</span>
+                <span className="mx-2" aria-hidden="true">/</span>
+              </li>
+            )}
+            {categoryName && (
+              <li className="flex items-center">
+                <span className="text-muted-foreground">{categoryName}</span>
+                <span className="mx-2" aria-hidden="true">/</span>
+              </li>
+            )}
+            <li>
+              <span className="text-foreground" aria-current="page">{product.manufacturer}</span>
+            </li>
+          </ol>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10">
@@ -199,8 +217,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 {availLabels[product.availability]?.[locale] || product.availability}
                 {product.stock_size && product.stock_size <= 5 && (
                   <span className="ml-1.5">
-                    ({product.stock_size}{" "}
-                    {locale === "bg" ? "бр." : locale === "ru" ? "шт." : locale === "ua" ? "шт." : "pcs"})
+                    ({product.stock_size} {dictionary.common.pcs})
                   </span>
                 )}
               </span>
@@ -210,7 +227,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="bg-muted rounded-xl p-4 sm:p-6 mb-6">
               <div className="flex items-baseline gap-3">
                 <span className="text-3xl font-bold text-foreground">
-                  {priceBGN} лв.
+                  {priceBGN} {dictionary.common.currency.bgn}
                 </span>
                 <span className="text-lg text-muted-foreground">
                   ({displayPrice.toFixed(2)} &euro;)
@@ -226,11 +243,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </p>
               {product.is_promo && product.price_promo > 0 && (
                 <p className="text-sm text-danger font-medium mt-1">
-                  {locale === "bg" ? "Промоционална цена!" : locale === "en" ? "Promo price!" : locale === "ru" ? "Акционная цена!" : "Акційна ціна!"}
+                  {dictionary.common.promoPrice}
                 </p>
               )}
               <p className="text-xs text-muted-foreground mt-2">
-                {t?.priceVat || "Цената е с включен ДДС"}
+                {t?.priceVat}
               </p>
             </div>
 
@@ -238,7 +255,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-6">
               {product.btu && (
                 <div className="flex items-center gap-2.5 p-3 bg-white border border-border rounded-lg">
-                  <Zap className="w-5 h-5 text-primary shrink-0" />
+                  <Zap className="w-5 h-5 text-primary shrink-0" aria-hidden="true" />
                   <div>
                     <p className="text-xs text-muted-foreground">BTU</p>
                     <p className="text-sm font-semibold">
@@ -249,23 +266,23 @@ export default async function ProductPage({ params }: ProductPageProps) {
               )}
               {product.area_m2 && (
                 <div className="flex items-center gap-2.5 p-3 bg-white border border-border rounded-lg">
-                  <Maximize className="w-5 h-5 text-primary shrink-0" />
+                  <Maximize className="w-5 h-5 text-primary shrink-0" aria-hidden="true" />
                   <div>
                     <p className="text-xs text-muted-foreground">
-                      {t?.area || "Area"}
+                      {t?.area}
                     </p>
                     <p className="text-sm font-semibold">
-                      {locale === "en" ? `up to ${product.area_m2} sq.m` : `до ${product.area_m2} кв.м`}
+                      {dictionary.common.upTo} {product.area_m2} {dictionary.common.sqm}
                     </p>
                   </div>
                 </div>
               )}
               {product.energy_class && (
                 <div className="flex items-center gap-2.5 p-3 bg-white border border-border rounded-lg">
-                  <ShieldCheck className="w-5 h-5 text-success shrink-0" />
+                  <ShieldCheck className="w-5 h-5 text-success shrink-0" aria-hidden="true" />
                   <div>
                     <p className="text-xs text-muted-foreground">
-                      {t?.energyClass || "Energy Class"}
+                      {t?.energyClass}
                     </p>
                     <p className="text-sm font-semibold">
                       {product.energy_class}
@@ -275,10 +292,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
               )}
               {product.noise_db_indoor && (
                 <div className="flex items-center gap-2.5 p-3 bg-white border border-border rounded-lg">
-                  <Volume2 className="w-5 h-5 text-accent shrink-0" />
+                  <Volume2 className="w-5 h-5 text-accent shrink-0" aria-hidden="true" />
                   <div>
                     <p className="text-xs text-muted-foreground">
-                      {t?.noise || "Noise"}
+                      {t?.noise}
                     </p>
                     <p className="text-sm font-semibold">
                       {product.noise_db_indoor} dB
@@ -288,10 +305,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
               )}
               {product.refrigerant && (
                 <div className="flex items-center gap-2.5 p-3 bg-white border border-border rounded-lg">
-                  <Snowflake className="w-5 h-5 text-primary shrink-0" />
+                  <Snowflake className="w-5 h-5 text-primary shrink-0" aria-hidden="true" />
                   <div>
                     <p className="text-xs text-muted-foreground">
-                      {t?.refrigerant || "Refrigerant"}
+                      {t?.refrigerant}
                     </p>
                     <p className="text-sm font-semibold">
                       {product.refrigerant}
@@ -301,21 +318,41 @@ export default async function ProductPage({ params }: ProductPageProps) {
               )}
               {product.warranty_months && (
                 <div className="flex items-center gap-2.5 p-3 bg-white border border-border rounded-lg">
-                  <ShieldCheck className="w-5 h-5 text-primary shrink-0" />
+                  <ShieldCheck className="w-5 h-5 text-primary shrink-0" aria-hidden="true" />
                   <div>
                     <p className="text-xs text-muted-foreground">
-                      {t?.warranty || "Warranty"}
+                      {t?.warranty}
                     </p>
                     <p className="text-sm font-semibold">
                       {product.warranty_months}{" "}
-                      {t?.months || "mo."}
+                      {t?.months}
                     </p>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* 1-Click Order — prominent, ABOVE the full form */}
+            {/* Trust block */}
+            <div className="grid grid-cols-2 gap-2 mb-6">
+              <div className="flex items-center gap-2 p-2.5 rounded-lg bg-success-light/30">
+                <CheckCircle2 className="w-4 h-4 text-success shrink-0" aria-hidden="true" />
+                <span className="text-xs font-medium text-foreground">{trust.freeDelivery}</span>
+              </div>
+              <div className="flex items-center gap-2 p-2.5 rounded-lg bg-success-light/30">
+                <CheckCircle2 className="w-4 h-4 text-success shrink-0" aria-hidden="true" />
+                <span className="text-xs font-medium text-foreground">{trust.professionalInstallation}</span>
+              </div>
+              <div className="flex items-center gap-2 p-2.5 rounded-lg bg-success-light/30">
+                <CheckCircle2 className="w-4 h-4 text-success shrink-0" aria-hidden="true" />
+                <span className="text-xs font-medium text-foreground">{trust.warrantyLong}</span>
+              </div>
+              <div className="flex items-center gap-2 p-2.5 rounded-lg bg-success-light/30">
+                <CheckCircle2 className="w-4 h-4 text-success shrink-0" aria-hidden="true" />
+                <span className="text-xs font-medium text-foreground">{trust.freeConsultation}</span>
+              </div>
+            </div>
+
+            {/* 1-Click Order */}
             <OneClickOrder
               locale={locale}
               productId={product.id}
@@ -328,7 +365,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               className="bg-white border border-border rounded-xl p-4 sm:p-6"
             >
               <h2 className="text-lg font-bold text-foreground mb-4">
-                {dictionary.inquiry?.title || t?.inquiryButton || "Make an Inquiry"}
+                {dictionary.inquiry?.title || t?.inquiryButton}
               </h2>
               <InquiryForm
                 locale={locale}
@@ -344,7 +381,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         {displayDescription && (
           <div className="mt-12">
             <h2 className="text-xl font-bold text-foreground mb-4">
-              {t?.description || "Description"}
+              {t?.description}
             </h2>
             <div
               className="prose prose-sm max-w-none text-muted-foreground"
@@ -356,7 +393,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         {/* Specs */}
         <div className="mt-12">
           <h2 className="text-xl font-bold text-foreground mb-6">
-            {t?.specifications || "Technical Specifications"}
+            {t?.specifications}
           </h2>
           <SpecsTable features={product.features} locale={locale} />
         </div>

@@ -200,7 +200,7 @@ export default async function CatalogPage({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 overflow-x-hidden">
       {/* Breadcrumb */}
-      <nav className="text-sm text-muted-foreground mb-4">
+      <nav className="text-sm text-muted-foreground mb-4" role="navigation" aria-label="Breadcrumb">
         <a href={`/${locale}`} className="hover:text-primary">{labels.home}</a>
         <span className="mx-2">/</span>
         {activeCategoryName ? (

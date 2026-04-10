@@ -132,10 +132,10 @@ export default async function InquiryPage({ params }: InquiryPageProps) {
                   <div>
                     <p className="text-sm text-muted-foreground">Email</p>
                     <a
-                      href="mailto:info@clima.bg"
+                      href="mailto:info@pesnopoets-clima.com"
                       className="text-foreground font-medium hover:text-primary"
                     >
-                      info@clima.bg
+                      info@pesnopoets-clima.com
                     </a>
                   </div>
                 </li>

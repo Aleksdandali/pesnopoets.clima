@@ -1,7 +1,7 @@
 {
   "common": {
     "siteName": "Pesnopoets Clima",
-    "phone": "+359 XX XXX XXXX",
+    "phone": "+359 888 123 456",
     "nav": {
       "home": "Home",
       "catalog": "Air Conditioners",
@@ -15,18 +15,45 @@
       "contactUs": "Contact Us",
       "rights": "All rights reserved.",
       "privacy": "Privacy Policy",
-      "terms": "Terms of Service"
+      "terms": "Terms of Service",
+      "brands": "Brands"
     },
     "currency": {
       "bgn": "BGN",
       "eur": "€"
-    }
+    },
+    "inquiry": "Inquiry",
+    "callUs": "Call us",
+    "deliveryBanner": "Delivery and installation across Bulgaria",
+    "authorizedDealer": "Authorized Dealer",
+    "services": ["Sales", "Professional installation", "Service & maintenance"],
+    "productsCount": "products",
+    "pcs": "pcs",
+    "promoPrice": "Promo price!",
+    "upTo": "up to",
+    "sqm": "sq.m",
+    "inquiryFor": "Inquiry for:",
+    "sendAnother": "Send another inquiry"
   },
   "hero": {
     "title": "Air Conditioners from World-Leading Brands",
     "subtitle": "Daikin, Mitsubishi Electric, Toshiba, Nippon — with delivery and professional installation across Bulgaria. Free consultation.",
     "cta": "Browse Catalog",
     "ctaSecondary": "Free Consultation"
+  },
+  "trust": {
+    "delivery": "Free delivery",
+    "installation": "Professional installation",
+    "warranty": "36 mo. warranty",
+    "consultation": "Free consultation",
+    "originalTitle": "Certified partner since 2015",
+    "originalDesc": "Authorized dealer for Daikin, Mitsubishi, Toshiba. Full manufacturer warranty and certified service to European standards.",
+    "deliveryDesc": "Free delivery to your address across Bulgaria. Real-time availability.",
+    "installationDesc": "Installation by certified specialists. Commissioning and setup included.",
+    "freeDelivery": "Free delivery",
+    "professionalInstallation": "Professional installation",
+    "warrantyLong": "36 mo. warranty",
+    "freeConsultation": "Free consultation"
   },
   "catalog": {
     "title": "Air Conditioners",
@@ -76,6 +103,7 @@
     "namePlaceholder": "John Smith",
     "phone": "Phone",
     "phonePlaceholder": "+359 88 888 8888",
+    "phoneHelper": "We'll call you within 1 hour",
     "email": "Email (optional)",
     "emailPlaceholder": "john@example.com",
     "message": "Message (optional)",
@@ -84,6 +112,7 @@
     "submitting": "Sending...",
     "success": "Thank You!",
     "successMessage": "We received your inquiry. We'll contact you within 1 hour.",
+    "successNext": "What happens next: Our consultant will call you to clarify the details and offer the best option for your needs.",
     "error": "Error",
     "errorMessage": "Something went wrong. Please try again or call us directly.",
     "privacy": "By submitting this form you agree to our privacy policy.",

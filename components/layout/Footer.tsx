@@ -21,12 +21,15 @@ interface FooterProps {
         rights: string;
         privacy: string;
         terms: string;
+        brands?: string;
       };
+      deliveryBanner?: string;
     };
   };
 }
 
 const PHONE_NUMBER = "+359 888 123 456";
+const EMAIL = "info@pesnopoets-clima.com";
 
 const brands = [
   "Daikin",
@@ -39,6 +42,13 @@ const brands = [
   "HITACHI",
   "LG",
 ];
+
+const locationLabels: Record<string, string> = {
+  bg: "България",
+  en: "Bulgaria",
+  ru: "Болгария",
+  ua: "Болгарія",
+};
 
 export default function Footer({ locale, dictionary }: FooterProps) {
   const t = dictionary.common;
@@ -53,7 +63,7 @@ export default function Footer({ locale, dictionary }: FooterProps) {
             <Link href={`/${locale}`} className="flex items-center gap-2.5 mb-5">
               <Image
                 src="/logo.png"
-                alt="Песнопоец Клима"
+                alt={t.siteName}
                 width={40}
                 height={40}
                 className="rounded-lg"
@@ -83,6 +93,7 @@ export default function Footer({ locale, dictionary }: FooterProps) {
                 { href: `/${locale}/klimatici`, label: t.nav.catalog },
                 { href: `/${locale}/brands`, label: t.nav.brands },
                 { href: `/${locale}/za-nas`, label: t.nav.about },
+                { href: `/${locale}/kontakti`, label: t.nav.contact },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -99,13 +110,7 @@ export default function Footer({ locale, dictionary }: FooterProps) {
           {/* Brands */}
           <div>
             <h3 className="text-xs font-semibold text-white/90 uppercase tracking-[0.15em] mb-5">
-              {locale === "bg"
-                ? "Марки"
-                : locale === "ru"
-                  ? "Бренды"
-                  : locale === "ua"
-                    ? "Бренди"
-                    : "Brands"}
+              {t.footer.brands || t.nav.brands}
             </h3>
             <ul className="space-y-3">
               {brands.map((brand) => (
@@ -131,6 +136,7 @@ export default function Footer({ locale, dictionary }: FooterProps) {
                 <a
                   href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
                   className="flex items-center gap-2.5 text-sm text-white/50 hover:text-white transition-colors duration-200"
+                  aria-label={`${t.footer.contactUs}: ${PHONE_NUMBER}`}
                 >
                   <Phone className="w-4 h-4 shrink-0 text-white/30" />
                   <span>{PHONE_NUMBER}</span>
@@ -138,25 +144,18 @@ export default function Footer({ locale, dictionary }: FooterProps) {
               </li>
               <li>
                 <a
-                  href="mailto:info@clima.bg"
+                  href={`mailto:${EMAIL}`}
                   className="flex items-center gap-2.5 text-sm text-white/50 hover:text-white transition-colors duration-200"
+                  aria-label={`Email: ${EMAIL}`}
                 >
                   <Mail className="w-4 h-4 shrink-0 text-white/30" />
-                  <span>info@clima.bg</span>
+                  <span>{EMAIL}</span>
                 </a>
               </li>
               <li>
                 <div className="flex items-start gap-2.5 text-sm text-white/50">
-                  <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-white/30" />
-                  <span>
-                    {locale === "bg"
-                      ? "България"
-                      : locale === "ru"
-                        ? "Болгария"
-                        : locale === "ua"
-                          ? "Болгарія"
-                          : "Bulgaria"}
-                  </span>
+                  <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-white/30" aria-hidden="true" />
+                  <span>{locationLabels[locale] || locationLabels.bg}</span>
                 </div>
               </li>
             </ul>
