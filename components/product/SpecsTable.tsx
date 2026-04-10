@@ -1,3 +1,4 @@
+import { translateFeatureName, translateSectionName } from "@/lib/i18n/feature-names";
 import {
   Zap,
   Home,
@@ -81,7 +82,7 @@ function getHighlight(name: string): string | null {
   return null;
 }
 
-export default function SpecsTable({ features }: SpecsTableProps) {
+export default function SpecsTable({ features, locale }: SpecsTableProps) {
   if (!features || Object.keys(features).length === 0) return null;
 
   return (
@@ -94,7 +95,7 @@ export default function SpecsTable({ features }: SpecsTableProps) {
               <div className="w-7 h-7 sm:w-8 sm:h-8 bg-primary-light/60 rounded-lg flex items-center justify-center">
                 <IconComp className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" aria-hidden="true" />
               </div>
-              {group.name}
+              {translateSectionName(group.name, locale)}
             </h3>
             <div className="rounded-xl border border-border/80 overflow-hidden">
               {group.items.map((item, i) => {
@@ -118,7 +119,7 @@ export default function SpecsTable({ features }: SpecsTableProps) {
                     {/* Name + Value — stacked on mobile, side by side on desktop */}
                     <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5 sm:gap-4">
                       <span className="text-xs sm:text-sm text-muted-foreground leading-snug">
-                        {item.name}
+                        {translateFeatureName(item.name, locale)}
                       </span>
                       {highlight ? (
                         <span className={`inline-flex self-start sm:self-auto px-2.5 py-0.5 rounded-full text-xs font-semibold ${highlight} whitespace-nowrap`}>

@@ -40,7 +40,7 @@ async function getProduct(slug: string) {
   const supabase = await createClient();
   const { data } = await supabase
     .from("products")
-    .select("*, categories(slug, group_name, subgroup_name)")
+    .select("*, categories(slug, group_name, subgroup_name, name_en, name_ru, name_ua)")
     .eq("slug", slug)
     .eq("is_active", true)
     .single();
@@ -117,9 +117,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const priceBGN = (displayPrice * EUR_TO_BGN).toFixed(0);
   const installmentMonthly = Math.ceil((displayPrice * EUR_TO_BGN) / 12);
 
-  // Category info for breadcrumb
-  const categoryName = product.categories?.subgroup_name;
-  const categoryGroupName = product.categories?.group_name;
+  // Category info for breadcrumb — use translated name if available
+  const catData = product.categories;
+  const categoryName = locale === "en" ? catData?.name_en : locale === "ru" ? catData?.name_ru : locale === "ua" ? catData?.name_ua : null;
+  const categoryNameFinal = categoryName || catData?.subgroup_name;
+  const categoryGroupName = catData?.group_name;
 
   const bcHome = dictionary.common.nav.home;
   const bcCatalog = dictionary.common.nav.catalog;
@@ -129,11 +131,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
     { name: bcHome, url: `/${locale}` },
     { name: bcCatalog, url: `/${locale}/klimatici` },
   ];
-  if (categoryGroupName && categoryGroupName !== categoryName) {
+  if (categoryGroupName && categoryGroupName !== categoryNameFinal) {
     breadcrumbItems.push({ name: categoryGroupName, url: `/${locale}/klimatici` });
   }
-  if (categoryName) {
-    breadcrumbItems.push({ name: categoryName, url: `/${locale}/klimatici` });
+  if (categoryNameFinal) {
+    breadcrumbItems.push({ name: categoryNameFinal, url: `/${locale}/klimatici` });
   }
   breadcrumbItems.push({ name: displayTitle, url: `/${locale}/klimatici/${slug}` });
 
@@ -197,9 +199,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </a>
               <svg className="w-3.5 h-3.5 mx-1 sm:mx-1.5 text-muted-foreground/40 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
             </li>
-            {categoryName && (
+            {categoryNameFinal && (
               <li className="flex items-center shrink-0">
-                <a href={`/${locale}/klimatici?category=${product.category_id}`} className="hover:text-primary transition-colors py-1">{categoryName.toLowerCase()}</a>
+                <a href={`/${locale}/klimatici?category=${product.category_id}`} className="hover:text-primary transition-colors py-1">{categoryNameFinal.toLowerCase()}</a>
                 <svg className="w-3.5 h-3.5 mx-1 sm:mx-1.5 text-muted-foreground/40 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
               </li>
             )}
