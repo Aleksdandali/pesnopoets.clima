@@ -24,13 +24,21 @@ export const metadata: Metadata = {
   ),
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale?: string }>;
 }>) {
+  const resolvedParams = await params.catch(() => ({ locale: "bg" }));
+  const locale = resolvedParams?.locale || "bg";
+  const langMap: Record<string, string> = { bg: "bg", en: "en", ru: "ru", ua: "uk" };
+  const htmlLang = langMap[locale] || "bg";
+
   return (
     <html
+      lang={htmlLang}
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
