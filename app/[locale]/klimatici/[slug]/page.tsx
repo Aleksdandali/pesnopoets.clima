@@ -158,7 +158,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <span className="text-foreground">{product.manufacturer}</span>
         </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10">
           {/* Left: Gallery */}
           <ProductGallery
             images={product.gallery || []}
@@ -193,7 +193,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
 
             {/* Price */}
-            <div className="bg-muted rounded-xl p-6 mb-6">
+            <div className="bg-muted rounded-xl p-4 sm:p-6 mb-6">
               <div className="flex items-baseline gap-3">
                 <span className="text-3xl font-bold text-foreground">
                   {priceBGN} лв.
@@ -213,7 +213,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
 
             {/* Quick specs */}
-            <div className="grid grid-cols-2 gap-3 mb-6">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-6">
               {product.btu && (
                 <div className="flex items-center gap-2.5 p-3 bg-white border border-border rounded-lg">
                   <Zap className="w-5 h-5 text-primary shrink-0" />
@@ -294,7 +294,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
 
             {/* Inquiry form */}
-            <div className="bg-white border border-border rounded-xl p-6">
+            <div className="bg-white border border-border rounded-xl p-4 sm:p-6">
               <h2 className="text-lg font-bold text-foreground mb-4">
                 {dictionary.inquiry?.title || t?.inquiryButton || "Make an Inquiry"}
               </h2>

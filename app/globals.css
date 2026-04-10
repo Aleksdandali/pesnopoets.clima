@@ -127,6 +127,15 @@ h3 {
   background: var(--muted-foreground);
 }
 
+/* Hide scrollbar for horizontal filter scroll on mobile */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Subtle page transition */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(4px); }

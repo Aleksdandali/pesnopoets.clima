@@ -90,9 +90,9 @@ export default function FilterBar({
 
   return (
     <div className={`transition-opacity ${isPending ? "opacity-60" : ""}`}>
-      {/* Filter row */}
-      <div className="flex flex-wrap items-center gap-3 mb-6">
-        <div className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground mr-1">
+      {/* Filter row — horizontally scrollable on mobile */}
+      <div className="flex flex-nowrap items-center gap-2 sm:gap-3 mb-6 overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap pb-2 sm:pb-0 scrollbar-hide">
+        <div className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground mr-1 shrink-0">
           <SlidersHorizontal className="w-4 h-4" />
           <span className="hidden sm:inline">{t.filters.brand}:</span>
         </div>
@@ -101,7 +101,7 @@ export default function FilterBar({
         <select
           value={activeBrand}
           onChange={(e) => setFilter("brand", e.target.value)}
-          className="text-sm border border-border rounded-lg px-3 py-2 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          className="shrink-0 text-sm border border-border rounded-lg px-3 py-2 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
         >
           <option value="">{t.filters.allBrands}</option>
           {manufacturers.map((m) => (
@@ -115,7 +115,7 @@ export default function FilterBar({
         <select
           value={activeBtu}
           onChange={(e) => setFilter("btu", e.target.value)}
-          className="text-sm border border-border rounded-lg px-3 py-2 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          className="shrink-0 text-sm border border-border rounded-lg px-3 py-2 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
         >
           <option value="">{t.filters.btuRange}</option>
           {btuRanges.map((r) => (
@@ -129,7 +129,7 @@ export default function FilterBar({
         <select
           value={activeEnergy}
           onChange={(e) => setFilter("energy", e.target.value)}
-          className="text-sm border border-border rounded-lg px-3 py-2 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          className="shrink-0 text-sm border border-border rounded-lg px-3 py-2 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
         >
           <option value="">{t.filters.allClasses}</option>
           {energyClasses.map((c) => (
@@ -140,7 +140,7 @@ export default function FilterBar({
         </select>
 
         {/* Availability */}
-        <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
+        <label className="shrink-0 flex items-center gap-2 text-sm text-muted-foreground cursor-pointer whitespace-nowrap">
           <input
             type="checkbox"
             checked={activeAvailability === "1"}
@@ -156,7 +156,7 @@ export default function FilterBar({
         <select
           value={activeSort}
           onChange={(e) => setFilter("sort", e.target.value)}
-          className="text-sm border border-border rounded-lg px-3 py-2 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-ring ml-auto"
+          className="shrink-0 text-sm border border-border rounded-lg px-3 py-2 bg-white text-foreground focus:outline-none focus:ring-2 focus:ring-ring sm:ml-auto"
         >
           <option value="">{t.sort.label}</option>
           <option value="price_asc">{t.sort.priceAsc}</option>
@@ -170,7 +170,7 @@ export default function FilterBar({
         {hasFilters && (
           <button
             onClick={clearFilters}
-            className="flex items-center gap-1 text-sm text-danger hover:text-danger/80 transition-colors"
+            className="shrink-0 flex items-center gap-1 text-sm text-danger hover:text-danger/80 transition-colors whitespace-nowrap"
           >
             <X className="w-3.5 h-3.5" />
             {t.filters.clearFilters}

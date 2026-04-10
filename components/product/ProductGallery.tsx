@@ -17,8 +17,9 @@ export default function ProductGallery({
 
   if (!images || images.length === 0) {
     return (
-      <div className="aspect-square bg-muted/50 rounded-2xl flex items-center justify-center text-muted-foreground/30">
-        <Wind className="w-16 h-16" />
+      <div className="aspect-square bg-muted/50 rounded-2xl flex flex-col items-center justify-center text-muted-foreground/30 gap-3">
+        <Wind className="w-12 h-12 sm:w-16 sm:h-16" />
+        <span className="text-xs sm:text-sm font-medium text-muted-foreground/40 uppercase tracking-wider">No image available</span>
       </div>
     );
   }
@@ -43,7 +44,7 @@ export default function ProductGallery({
               onClick={() =>
                 setActiveIndex((i) => (i === 0 ? images.length - 1 : i - 1))
               }
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-white/90 shadow-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-white hover:shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200"
+              className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-white/90 shadow-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-white hover:shadow-md opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200"
               aria-label="Previous image"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -52,7 +53,7 @@ export default function ProductGallery({
               onClick={() =>
                 setActiveIndex((i) => (i === images.length - 1 ? 0 : i + 1))
               }
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-white/90 shadow-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-white hover:shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200"
+              className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-white/90 shadow-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-white hover:shadow-md opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200"
               aria-label="Next image"
             >
               <ChevronRight className="w-5 h-5" />

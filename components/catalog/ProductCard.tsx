@@ -73,12 +73,13 @@ export default function ProductCard({
             src={imageUrl}
             alt={displayTitle}
             fill
-            className="object-contain p-6 group-hover:scale-[1.03] transition-transform duration-500 ease-out"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-contain p-3 sm:p-6 group-hover:scale-[1.03] transition-transform duration-500 ease-out"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
           />
         ) : (
-          <div className="flex items-center justify-center h-full text-muted-foreground/40">
-            <Thermometer className="w-12 h-12" />
+          <div className="flex flex-col items-center justify-center h-full text-muted-foreground/30 gap-2">
+            <Thermometer className="w-10 h-10 sm:w-12 sm:h-12" />
+            <span className="text-[10px] sm:text-xs font-medium text-muted-foreground/40 uppercase tracking-wider">No image</span>
           </div>
         )}
 
@@ -98,19 +99,19 @@ export default function ProductCard({
       </div>
 
       {/* Content */}
-      <div className="p-5">
+      <div className="p-3 sm:p-5">
         {/* Manufacturer */}
-        <p className="text-[11px] font-semibold text-primary uppercase tracking-widest mb-1.5">
+        <p className="text-[10px] sm:text-[11px] font-semibold text-primary uppercase tracking-widest mb-1 sm:mb-1.5">
           {product.manufacturer}
         </p>
 
         {/* Title */}
-        <h3 className="text-sm font-semibold text-foreground line-clamp-2 mb-4 group-hover:text-primary transition-colors duration-200 leading-snug min-h-[2.5rem]">
+        <h3 className="text-xs sm:text-sm font-semibold text-foreground line-clamp-2 mb-2 sm:mb-4 group-hover:text-primary transition-colors duration-200 leading-snug min-h-[2rem] sm:min-h-[2.5rem]">
           {displayTitle}
         </h3>
 
         {/* Key specs */}
-        <div className="grid grid-cols-2 gap-2 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2 mb-2 sm:mb-4">
           {product.btu && (
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Zap className="w-3.5 h-3.5 text-primary/60" />
@@ -142,8 +143,8 @@ export default function ProductCard({
         </div>
 
         {/* Price */}
-        <div className="flex items-baseline gap-2 pt-4 border-t border-border/60">
-          <span className="text-xl font-bold text-foreground">
+        <div className="flex items-baseline gap-1.5 sm:gap-2 pt-3 sm:pt-4 border-t border-border/60">
+          <span className="text-base sm:text-xl font-bold text-foreground">
             {formatPrice(displayPrice, currency)}
           </span>
           {product.is_promo && product.price_promo && product.price_promo > 0 && (

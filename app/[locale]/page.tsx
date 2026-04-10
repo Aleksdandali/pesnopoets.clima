@@ -386,10 +386,10 @@ export default async function HomePage({ params }: HomePageProps) {
               </div>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-[3.5rem] font-bold text-white leading-[1.1] drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)]">
+            <h1 className="text-2xl sm:text-4xl lg:text-[3.5rem] font-bold text-white leading-[1.1] drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)]">
               {hero.title}
             </h1>
-            <p className="mt-6 text-base sm:text-lg text-white/80 leading-relaxed max-w-lg">
+            <p className="mt-4 sm:mt-6 text-sm sm:text-lg text-white/80 leading-relaxed max-w-lg">
               {hero.subtitle}
             </p>
             <div className="mt-10 flex flex-col sm:flex-row gap-3.5">
@@ -423,7 +423,7 @@ export default async function HomePage({ params }: HomePageProps) {
             </h2>
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {cats.map((cat) => {
             const IconComp = catIconMap[cat.icon] || Snowflake;
             const catImage = categoryImages[cat.slug];
@@ -431,7 +431,7 @@ export default async function HomePage({ params }: HomePageProps) {
               <Link
                 key={cat.slug}
                 href={`/${locale}/klimatici?category=${cat.slug}`}
-                className="group relative p-6 bg-white border border-border/80 rounded-2xl hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0_0_0/0.04)] transition-all duration-300 overflow-hidden"
+                className="group relative p-4 sm:p-6 bg-white border border-border/80 rounded-2xl hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0_0_0/0.04)] transition-all duration-300 overflow-hidden"
               >
                 {/* Category representative image */}
                 {catImage && (
@@ -450,10 +450,10 @@ export default async function HomePage({ params }: HomePageProps) {
                     <IconComp className="w-6 h-6 text-primary" />
                   </div>
                 )}
-                <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors duration-200">
+                <h3 className="text-sm sm:text-base font-semibold text-foreground mb-1 group-hover:text-primary transition-colors duration-200">
                   {cat.name}
                 </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed hidden sm:block">
                   {cat.desc}
                 </p>
                 <ChevronRight className="absolute top-6 right-5 w-4 h-4 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" />
@@ -479,7 +479,7 @@ export default async function HomePage({ params }: HomePageProps) {
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
               {featuredProducts.map((product) => (
                 <ProductCard
                   key={product.slug}
@@ -517,7 +517,7 @@ export default async function HomePage({ params }: HomePageProps) {
               return (
                 <div
                   key={feat.title}
-                  className="relative p-10 bg-white border border-border/60 rounded-2xl shadow-[0_4px_20px_rgb(0_0_0/0.03)] hover:shadow-[0_8px_30px_rgb(0_0_0/0.06)] transition-shadow duration-300"
+                  className="relative p-6 sm:p-10 bg-white border border-border/60 rounded-2xl shadow-[0_4px_20px_rgb(0_0_0/0.03)] hover:shadow-[0_8px_30px_rgb(0_0_0/0.06)] transition-shadow duration-300"
                 >
                   <div className="flex items-start gap-5">
                     <div className="w-14 h-14 bg-primary-light/60 rounded-2xl flex items-center justify-center shrink-0">
@@ -554,7 +554,7 @@ export default async function HomePage({ params }: HomePageProps) {
         />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
-            <div className="text-center lg:text-left max-w-2xl">
+            <div className="text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 border border-white/20 rounded-full mb-5">
                 <Phone className="w-3.5 h-3.5 text-white" />
                 <span className="text-xs font-medium text-white/90 tracking-wide">
@@ -564,7 +564,7 @@ export default async function HomePage({ params }: HomePageProps) {
               <h2 className="text-2xl sm:text-3xl font-bold text-white leading-tight">
                 {labels.ctaTitle}
               </h2>
-              <p className="mt-4 text-base text-white/80 leading-relaxed max-w-lg">
+              <p className="mt-4 text-sm sm:text-base text-white/80 leading-relaxed max-w-lg mx-auto lg:mx-0">
                 {labels.ctaSubtitle}
               </p>
             </div>
