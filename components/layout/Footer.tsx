@@ -191,6 +191,26 @@ export default function Footer({ locale, dictionary }: FooterProps) {
             </Link>
           </div>
         </div>
+
+        {/* Powered by DANGROW */}
+        <div className="mt-6 flex justify-center">
+          <a
+            href="https://dangrow.agency"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/[0.05] border border-white/[0.09] rounded-full hover:bg-white/[0.08] transition-colors"
+          >
+            <svg viewBox="0 0 64 64" width="14" height="14" aria-hidden="true">
+              <rect width="64" height="64" rx="14" fill="#CCFF00"/>
+              <path d="M21 44 L32 20 L43 44" stroke="#06060A" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              <line x1="32" y1="20" x2="32" y2="14" stroke="#06060A" strokeWidth="5" strokeLinecap="round"/>
+              <line x1="27" y1="18" x2="32" y2="14" stroke="#06060A" strokeWidth="4" strokeLinecap="round"/>
+              <line x1="37" y1="18" x2="32" y2="14" stroke="#06060A" strokeWidth="4" strokeLinecap="round"/>
+            </svg>
+            <span className="text-[11px] text-white/35">powered by</span>
+            <span className="text-[11px] font-extrabold text-white tracking-wide">DAN<span className="text-[#CCFF00]">GROW</span></span>
+          </a>
+        </div>
       </div>
     </footer>
   );
