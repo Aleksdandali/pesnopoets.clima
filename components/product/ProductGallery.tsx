@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Wind } from "lucide-react";
 
 interface ProductGalleryProps {
   images: string[];
@@ -17,8 +17,8 @@ export default function ProductGallery({
 
   if (!images || images.length === 0) {
     return (
-      <div className="aspect-square bg-muted rounded-xl flex items-center justify-center text-muted-foreground">
-        <span className="text-6xl">🌬️</span>
+      <div className="aspect-square bg-muted/50 rounded-2xl flex items-center justify-center text-muted-foreground/30">
+        <Wind className="w-16 h-16" />
       </div>
     );
   }
@@ -26,7 +26,7 @@ export default function ProductGallery({
   return (
     <div className="space-y-3">
       {/* Main image */}
-      <div className="relative aspect-square bg-white border border-border rounded-xl overflow-hidden group">
+      <div className="relative aspect-square bg-white border border-border/80 rounded-2xl overflow-hidden group">
         <Image
           src={images[activeIndex]}
           alt={`${title} - ${activeIndex + 1}`}
@@ -43,7 +43,7 @@ export default function ProductGallery({
               onClick={() =>
                 setActiveIndex((i) => (i === 0 ? images.length - 1 : i - 1))
               }
-              className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center text-foreground hover:bg-white opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-white/90 shadow-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-white hover:shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200"
               aria-label="Previous image"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -52,7 +52,7 @@ export default function ProductGallery({
               onClick={() =>
                 setActiveIndex((i) => (i === images.length - 1 ? 0 : i + 1))
               }
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 shadow-md flex items-center justify-center text-foreground hover:bg-white opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-white/90 shadow-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-white hover:shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200"
               aria-label="Next image"
             >
               <ChevronRight className="w-5 h-5" />
@@ -62,7 +62,7 @@ export default function ProductGallery({
 
         {/* Image counter */}
         {images.length > 1 && (
-          <div className="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-2.5 py-1 rounded-full">
+          <div className="absolute bottom-3 right-3 bg-foreground/60 text-white text-xs font-medium px-2.5 py-1 rounded-lg backdrop-blur-sm">
             {activeIndex + 1} / {images.length}
           </div>
         )}
@@ -75,10 +75,10 @@ export default function ProductGallery({
             <button
               key={i}
               onClick={() => setActiveIndex(i)}
-              className={`shrink-0 w-16 h-16 rounded-lg border-2 overflow-hidden transition-colors ${
+              className={`shrink-0 w-16 h-16 rounded-xl border-2 overflow-hidden transition-all duration-200 ${
                 i === activeIndex
-                  ? "border-primary"
-                  : "border-border hover:border-primary/50"
+                  ? "border-primary shadow-sm"
+                  : "border-border/60 hover:border-primary/40"
               }`}
             >
               <Image

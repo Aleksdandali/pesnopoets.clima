@@ -30,7 +30,7 @@ function formatPrice(price: number, currency: "EUR" | "BGN"): string {
     const bgn = price * EUR_TO_BGN;
     return `${bgn.toFixed(0)} лв.`;
   }
-  return `${price.toFixed(2)} €`;
+  return `${price.toFixed(2)} \u20AC`;
 }
 
 const availabilityStyles: Record<string, { bg: string; text: string; label: Record<string, string> }> = {
@@ -64,62 +64,62 @@ export default function ProductCard({
   return (
     <Link
       href={`/${locale}/klimatici/${product.slug}`}
-      className="group block bg-white rounded-xl border border-border hover:border-primary/30 hover:shadow-lg transition-all duration-300"
+      className="group block bg-white rounded-2xl border border-border/80 hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0_0_0/0.04)] transition-all duration-300"
     >
       {/* Image */}
-      <div className="relative aspect-[4/3] overflow-hidden rounded-t-xl bg-muted">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-t-2xl bg-[#fafbfc]">
         {imageUrl ? (
           <Image
             src={imageUrl}
             alt={displayTitle}
             fill
-            className="object-contain p-4 group-hover:scale-105 transition-transform duration-500"
+            className="object-contain p-6 group-hover:scale-[1.03] transition-transform duration-500 ease-out"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
         ) : (
-          <div className="flex items-center justify-center h-full text-muted-foreground">
+          <div className="flex items-center justify-center h-full text-muted-foreground/40">
             <Thermometer className="w-12 h-12" />
           </div>
         )}
 
         {/* Promo badge */}
         {product.is_promo && product.price_promo && product.price_promo > 0 && (
-          <div className="absolute top-3 left-3 bg-danger text-white text-xs font-bold px-2.5 py-1 rounded-full">
+          <div className="absolute top-3 left-3 bg-danger text-white text-xs font-bold px-2.5 py-1 rounded-lg">
             PROMO
           </div>
         )}
 
         {/* Availability badge */}
         <div
-          className={`absolute top-3 right-3 ${avail.bg} ${avail.text} text-xs font-medium px-2.5 py-1 rounded-full`}
+          className={`absolute top-3 right-3 ${avail.bg} ${avail.text} text-[11px] font-medium px-2.5 py-1 rounded-lg`}
         >
           {avail.label[locale] || avail.label.bg}
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-4">
+      <div className="p-5">
         {/* Manufacturer */}
-        <p className="text-xs font-medium text-primary uppercase tracking-wider mb-1">
+        <p className="text-[11px] font-semibold text-primary uppercase tracking-widest mb-1.5">
           {product.manufacturer}
         </p>
 
         {/* Title */}
-        <h3 className="text-sm font-semibold text-foreground line-clamp-2 mb-3 group-hover:text-primary transition-colors leading-snug min-h-[2.5rem]">
+        <h3 className="text-sm font-semibold text-foreground line-clamp-2 mb-4 group-hover:text-primary transition-colors duration-200 leading-snug min-h-[2.5rem]">
           {displayTitle}
         </h3>
 
         {/* Key specs */}
-        <div className="grid grid-cols-2 gap-2 mb-3">
+        <div className="grid grid-cols-2 gap-2 mb-4">
           {product.btu && (
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Zap className="w-3.5 h-3.5 text-primary" />
+              <Zap className="w-3.5 h-3.5 text-primary/60" />
               <span>{product.btu.toLocaleString()} BTU</span>
             </div>
           )}
           {product.area_m2 && (
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Maximize className="w-3.5 h-3.5 text-primary" />
+              <Maximize className="w-3.5 h-3.5 text-primary/60" />
               <span>
                 {locale === "bg" ? "до" : locale === "ru" || locale === "ua" ? "до" : "up to"}{" "}
                 {product.area_m2}{" "}
@@ -129,21 +129,21 @@ export default function ProductCard({
           )}
           {product.energy_class && (
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Zap className="w-3.5 h-3.5 text-success" />
+              <Zap className="w-3.5 h-3.5 text-success/60" />
               <span>{product.energy_class.split("/")[0]?.trim()}</span>
             </div>
           )}
           {product.noise_db_indoor && (
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Volume2 className="w-3.5 h-3.5 text-accent" />
+              <Volume2 className="w-3.5 h-3.5 text-accent/60" />
               <span>{product.noise_db_indoor} dB</span>
             </div>
           )}
         </div>
 
         {/* Price */}
-        <div className="flex items-baseline gap-2 pt-3 border-t border-border">
-          <span className="text-lg font-bold text-foreground">
+        <div className="flex items-baseline gap-2 pt-4 border-t border-border/60">
+          <span className="text-xl font-bold text-foreground">
             {formatPrice(displayPrice, currency)}
           </span>
           {product.is_promo && product.price_promo && product.price_promo > 0 && (
