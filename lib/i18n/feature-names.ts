@@ -65,3 +65,24 @@ export function translateSectionName(bgName: string, locale: string): string {
   const tr = sectionTranslations[bgName];
   return tr ? tr[locale as "en" | "ru" | "ua"] || bgName : bgName;
 }
+
+// Category GROUP name translations (for sidebar headers)
+const groupTranslations: Record<string, { en: string; ru: string; ua: string }> = {
+  "ИНВЕРТОРНИ КЛИМАТИЦИ": { en: "Inverter Air Conditioners", ru: "Инверторные кондиционеры", ua: "Інверторні кондиціонери" },
+  "ИНВ.МУЛТИСПЛИТ СИСТЕМИ": { en: "Multi-Split Systems", ru: "Мульти-сплит системы", ua: "Мульти-спліт системи" },
+  "ТЕРМОПОМПИ": { en: "Heat Pumps", ru: "Тепловые насосы", ua: "Теплові насоси" },
+  "ПРОФЕСИОНАЛНИ СИСТЕМИ": { en: "Professional Systems", ru: "Профессиональные системы", ua: "Професійні системи" },
+  "VRV СИСТЕМИ": { en: "VRV Systems", ru: "VRV системы", ua: "VRV системи" },
+  "ВЕНТИЛАЦИЯ": { en: "Ventilation", ru: "Вентиляция", ua: "Вентиляція" },
+  "ВЪЗДУХОПРЕЧИСТВАТЕЛИ": { en: "Air Purifiers", ru: "Очистители воздуха", ua: "Очищувачі повітря" },
+  "АКСЕСОАРИ": { en: "Accessories", ru: "Аксессуары", ua: "Аксесуари" },
+  "БОЙЛЕРИ": { en: "Boilers", ru: "Бойлеры", ua: "Бойлери" },
+  "ЧИЛЪРИ": { en: "Chillers", ru: "Чиллеры", ua: "Чилери" },
+  "ДРУГИ": { en: "Other", ru: "Другое", ua: "Інше" },
+};
+
+export function translateGroupName(bgName: string, locale: string): string {
+  if (locale === "bg") return bgName;
+  const tr = groupTranslations[bgName];
+  return tr ? tr[locale as "en" | "ru" | "ua"] || bgName : bgName;
+}

@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import ProductCard from "@/components/catalog/ProductCard";
 import FilterBar from "@/components/catalog/FilterBar";
 import CategorySidebar from "@/components/catalog/CategorySidebar";
+import { translateGroupName } from "@/lib/i18n/feature-names";
 
 interface CatalogPageProps {
   params: Promise<{ locale: string }>;
@@ -66,7 +67,7 @@ async function getCategoriesWithCounts(supabase: Awaited<ReturnType<typeof creat
 
   for (const cat of categories) {
     if (!groupMap[cat.group_name]) {
-      groupMap[cat.group_name] = { group_name: cat.group_name, subcategories: [], total_count: 0 };
+      groupMap[cat.group_name] = { group_name: translateGroupName(cat.group_name, locale), subcategories: [], total_count: 0 };
     }
     const count = countMap[cat.id] || 0;
     if (count > 0) {
