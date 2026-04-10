@@ -345,28 +345,36 @@ export default async function HomePage({ params }: HomePageProps) {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        {/* Gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#f0f9ff] via-white to-[#f0fdfa]" />
-        {/* Subtle grid pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, var(--foreground) 1px, transparent 0)`,
-            backgroundSize: "32px 32px",
-          }}
+      <section className="relative overflow-hidden min-h-[520px] sm:min-h-[600px] lg:min-h-[680px]">
+        {/* Background image */}
+        <Image
+          src="/hero-bg.jpg"
+          alt=""
+          fill
+          className="object-cover"
+          sizes="100vw"
+          priority
+          quality={85}
         />
-        {/* Decorative blobs */}
-        <div className="absolute -right-32 -top-32 w-[500px] h-[500px] bg-primary/[0.04] rounded-full blur-[100px]" />
-        <div className="absolute -left-20 bottom-0 w-[400px] h-[400px] bg-accent/[0.03] rounded-full blur-[100px]" />
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0f172a]/80 via-[#0f172a]/50 to-transparent" />
+        {/* Bottom gradient fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-36">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left: Text */}
-            <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary-light/60 border border-primary/10 rounded-full mb-6">
-                <Snowflake className="w-3.5 h-3.5 text-primary" />
-                <span className="text-xs font-medium text-primary-dark tracking-wide">
+          <div className="max-w-2xl">
+            {/* Logo + badge */}
+            <div className="flex items-center gap-3 mb-8">
+              <Image
+                src="/logo.png"
+                alt="Песнопоец Клима"
+                width={56}
+                height={56}
+                className="rounded-xl shadow-lg"
+              />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full">
+                <Snowflake className="w-3.5 h-3.5 text-white" />
+                <span className="text-xs font-medium text-white/90 tracking-wide">
                   {locale === "bg"
                     ? "Официален дилър"
                     : locale === "ru"
@@ -376,114 +384,33 @@ export default async function HomePage({ params }: HomePageProps) {
                         : "Authorized Dealer"}
                 </span>
               </div>
-
-              <h1 className="text-3xl sm:text-4xl lg:text-[3.25rem] font-bold text-foreground leading-[1.1]">
-                {hero.title}
-              </h1>
-              <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-xl">
-                {hero.subtitle}
-              </p>
-              <div className="mt-10 flex flex-col sm:flex-row gap-3.5">
-                <Link
-                  href={`/${locale}/klimatici`}
-                  className="inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-[0_4px_14px_0_rgb(2_132_199/0.25)] hover:shadow-[0_6px_20px_0_rgb(2_132_199/0.35)] hover:-translate-y-0.5"
-                >
-                  {hero.cta}
-                  <ArrowRight className="w-4.5 h-4.5" />
-                </Link>
-                <Link
-                  href={`/${locale}/inquiry`}
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-foreground font-semibold rounded-xl border border-border hover:border-primary/30 hover:bg-primary-light/30 transition-all duration-200"
-                >
-                  {hero.ctaSecondary}
-                </Link>
-              </div>
             </div>
 
-            {/* Right: Hero product image */}
-            <div className="hidden lg:block relative">
-              {heroImageUrl ? (
-                <div className="relative">
-                  {/* Decorative ring behind image */}
-                  <div className="absolute inset-0 -m-4 bg-gradient-to-br from-primary/5 to-accent/5 rounded-3xl" />
-                  <div className="relative bg-white border border-border/60 rounded-3xl p-8 shadow-[0_20px_60px_-12px_rgb(0_0_0/0.08)]">
-                    <div className="relative aspect-square">
-                      <Image
-                        src={heroImageUrl}
-                        alt={heroProduct?.title_override || heroProduct?.title || ""}
-                        fill
-                        className="object-contain"
-                        sizes="(max-width: 1024px) 0vw, 45vw"
-                        priority
-                      />
-                    </div>
-                    {/* Manufacturer label */}
-                    <div className="mt-4 text-center">
-                      <p className="text-xs font-semibold text-primary uppercase tracking-widest">
-                        {heroProduct?.manufacturer}
-                      </p>
-                      <p className="text-sm font-medium text-foreground mt-1 line-clamp-1">
-                        {heroProduct?.title_override || heroProduct?.title}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Floating specs badges */}
-                  {heroProduct?.btu && (
-                    <div className="absolute -left-4 top-1/4 bg-white border border-border/80 rounded-xl px-4 py-2.5 shadow-lg">
-                      <div className="flex items-center gap-2">
-                        <Zap className="w-4 h-4 text-primary" />
-                        <div>
-                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">BTU</p>
-                          <p className="text-sm font-bold text-foreground">{heroProduct.btu.toLocaleString()}</p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  {heroProduct?.energy_class && (
-                    <div className="absolute -right-4 top-1/3 bg-white border border-border/80 rounded-xl px-4 py-2.5 shadow-lg">
-                      <div className="flex items-center gap-2">
-                        <Shield className="w-4 h-4 text-success" />
-                        <div>
-                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
-                            {locale === "bg" ? "Клас" : locale === "en" ? "Class" : "Класс"}
-                          </p>
-                          <p className="text-sm font-bold text-success">{heroProduct.energy_class.split("/")[0]?.trim()}</p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  {heroProduct?.area_m2 && (
-                    <div className="absolute -left-2 bottom-24 bg-white border border-border/80 rounded-xl px-4 py-2.5 shadow-lg">
-                      <div className="flex items-center gap-2">
-                        <Maximize className="w-4 h-4 text-primary" />
-                        <div>
-                          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
-                            {locale === "en" ? "Area" : locale === "bg" ? "Площ" : "Площадь"}
-                          </p>
-                          <p className="text-sm font-bold text-foreground">
-                            {locale === "en" ? `${heroProduct.area_m2} sq.m` : `${heroProduct.area_m2} кв.м`}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  {heroPriceBGN && (
-                    <div className="absolute -right-2 bottom-16 bg-primary text-primary-foreground rounded-xl px-4 py-2.5 shadow-lg">
-                      <p className="text-[10px] uppercase tracking-wider opacity-80">
-                        {locale === "en" ? "From" : locale === "bg" ? "От" : "От"}
-                      </p>
-                      <p className="text-lg font-bold">{heroPriceBGN} лв.</p>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="relative bg-gradient-to-br from-primary-light/40 to-accent/10 rounded-3xl p-12 flex items-center justify-center aspect-square">
-                  <Snowflake className="w-32 h-32 text-primary/20" />
-                </div>
-              )}
+            <h1 className="text-3xl sm:text-4xl lg:text-[3.5rem] font-bold text-white leading-[1.1] drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)]">
+              {hero.title}
+            </h1>
+            <p className="mt-6 text-base sm:text-lg text-white/80 leading-relaxed max-w-lg">
+              {hero.subtitle}
+            </p>
+            <div className="mt-10 flex flex-col sm:flex-row gap-3.5">
+              <Link
+                href={`/${locale}/klimatici`}
+                className="inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-[0_4px_20px_0_rgb(2_132_199/0.4)] hover:shadow-[0_6px_24px_0_rgb(2_132_199/0.5)] hover:-translate-y-0.5"
+              >
+                {hero.cta}
+                <ArrowRight className="w-4.5 h-4.5" />
+              </Link>
+              <Link
+                href={`/${locale}/inquiry`}
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-md text-white font-semibold rounded-xl border border-white/30 hover:bg-white/20 transition-all duration-200"
+              >
+                {hero.ctaSecondary}
+              </Link>
             </div>
           </div>
+
+          {/* Suppress unused vars */}
+          {(() => { void heroImageUrl; void heroProduct; void heroPriceBGN; return null; })()}
         </div>
       </section>
 
