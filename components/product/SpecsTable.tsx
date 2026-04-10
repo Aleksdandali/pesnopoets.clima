@@ -85,14 +85,14 @@ export default function SpecsTable({ features }: SpecsTableProps) {
   if (!features || Object.keys(features).length === 0) return null;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {Object.entries(features).map(([key, group]) => {
         const IconComp = sectionIcons[group.name] || defaultIcon;
         return (
           <div key={key}>
-            <h3 className="flex items-center gap-2.5 text-base font-semibold text-foreground mb-4">
-              <div className="w-8 h-8 bg-primary-light/60 rounded-lg flex items-center justify-center">
-                <IconComp className="w-4 h-4 text-primary" aria-hidden="true" />
+            <h3 className="flex items-center gap-2.5 text-sm sm:text-base font-semibold text-foreground mb-3 sm:mb-4">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 bg-primary-light/60 rounded-lg flex items-center justify-center">
+                <IconComp className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" aria-hidden="true" />
               </div>
               {group.name}
             </h3>
@@ -104,20 +104,20 @@ export default function SpecsTable({ features }: SpecsTableProps) {
                 return (
                   <div
                     key={i}
-                    className={`flex items-start sm:items-center gap-3 px-4 py-3 sm:px-5 ${
+                    className={`flex items-start sm:items-center gap-2.5 sm:gap-3 px-3 sm:px-5 py-2.5 sm:py-3 ${
                       i % 2 === 0 ? "bg-muted/30" : "bg-white"
                     } ${i < group.items.length - 1 ? "border-b border-border/30" : ""}`}
                   >
                     {/* Icon */}
                     {SpecIcon && (
-                      <div className="shrink-0 w-7 h-7 rounded-md bg-muted flex items-center justify-center mt-0.5 sm:mt-0">
-                        <SpecIcon className="w-3.5 h-3.5 text-muted-foreground" aria-hidden="true" />
+                      <div className="shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-md bg-muted flex items-center justify-center mt-0.5 sm:mt-0">
+                        <SpecIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-muted-foreground" aria-hidden="true" />
                       </div>
                     )}
 
-                    {/* Name + Value */}
+                    {/* Name + Value — stacked on mobile, side by side on desktop */}
                     <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5 sm:gap-4">
-                      <span className="text-sm text-muted-foreground leading-snug">
+                      <span className="text-xs sm:text-sm text-muted-foreground leading-snug">
                         {item.name}
                       </span>
                       {highlight ? (
@@ -125,7 +125,7 @@ export default function SpecsTable({ features }: SpecsTableProps) {
                           {item.value.trim()}
                         </span>
                       ) : (
-                        <span className="text-sm font-medium text-foreground font-mono whitespace-nowrap">
+                        <span className="text-xs sm:text-sm font-medium text-foreground font-mono break-words sm:whitespace-nowrap">
                           {item.value.trim()}
                         </span>
                       )}

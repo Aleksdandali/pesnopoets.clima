@@ -117,10 +117,10 @@ export default function OneClickOrder({
   }
 
   return (
-    <div className="bg-primary rounded-xl p-5 sm:p-6 mb-6">
+    <div className="bg-primary rounded-xl p-4 sm:p-6 mb-6">
       <div className="flex items-center gap-2 mb-1">
         <Phone className="w-5 h-5 text-white" />
-        <h3 className="text-lg font-bold text-white">{t.title}</h3>
+        <h3 className="text-base sm:text-lg font-bold text-white">{t.title}</h3>
       </div>
       <p className="text-primary-foreground/80 text-sm mb-4">{t.subtitle}</p>
 
@@ -135,7 +135,7 @@ export default function OneClickOrder({
             }}
             placeholder={t.placeholder}
             maxLength={20}
-            className="w-full px-4 py-3 text-sm border-2 border-white/20 rounded-lg bg-white/10 text-white placeholder:text-white/50 focus:outline-none focus:border-white/60 transition-colors"
+            className="w-full px-4 py-3 text-sm border-2 border-white/20 rounded-lg bg-white/10 text-white placeholder:text-white/50 focus:outline-none focus:border-white/60 transition-colors min-h-[44px]"
             aria-label={t.title}
           />
           {error && <p className="mt-1 text-xs text-white/90">{error}</p>}
@@ -143,7 +143,7 @@ export default function OneClickOrder({
         <button
           type="submit"
           disabled={status === "submitting"}
-          className="shrink-0 flex items-center justify-center gap-2 px-6 py-3 bg-white text-primary font-semibold rounded-lg hover:bg-white/90 disabled:opacity-60 disabled:cursor-not-allowed transition-colors shadow-sm"
+          className="shrink-0 flex items-center justify-center gap-2 px-6 py-3 bg-white text-primary font-semibold rounded-lg hover:bg-white/90 disabled:opacity-60 disabled:cursor-not-allowed transition-colors shadow-sm min-h-[48px]"
         >
           {status === "submitting" ? (
             <>

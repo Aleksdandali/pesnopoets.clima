@@ -198,7 +198,7 @@ export default async function CatalogPage({
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 overflow-x-hidden">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 overflow-x-hidden">
       {/* Breadcrumb */}
       <nav className="text-sm text-muted-foreground mb-4" role="navigation" aria-label="Breadcrumb">
         <a href={`/${locale}`} className="hover:text-primary">{labels.home}</a>
@@ -220,10 +220,10 @@ export default async function CatalogPage({
         )}
       </nav>
 
-      <h1 className="text-3xl font-bold text-foreground mb-2">
+      <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
         {activeCategoryName || labels.title}
       </h1>
-      <p className="text-muted-foreground mb-6">
+      <p className="text-sm sm:text-base text-muted-foreground mb-6">
         {showingLabels[locale] || showingLabels.bg}
       </p>
 
@@ -265,13 +265,13 @@ export default async function CatalogPage({
             </div>
           ) : (
             <div className="text-center py-20">
-              <p className="text-lg text-muted-foreground">{labels.noResults}</p>
+              <p className="text-base sm:text-lg text-muted-foreground">{labels.noResults}</p>
             </div>
           )}
 
-          {/* Pagination */}
+          {/* Pagination — 44px tap targets */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 mt-10">
+            <div className="flex items-center justify-center gap-1.5 sm:gap-2 mt-10 flex-wrap">
               {Array.from({ length: Math.min(totalPages, 10) }, (_, i) => i + 1).map((p) => (
                 <a
                   key={p}
@@ -284,7 +284,7 @@ export default async function CatalogPage({
                     ...(filters.category && { category: filters.category }),
                     page: String(p),
                   }).toString()}`}
-                  className={`w-10 h-10 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${
+                  className={`w-11 h-11 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${
                     p === page
                       ? "bg-primary text-primary-foreground"
                       : "border border-border text-muted-foreground hover:bg-muted"
@@ -294,7 +294,7 @@ export default async function CatalogPage({
                 </a>
               ))}
               {totalPages > 10 && (
-                <span className="text-muted-foreground text-sm">... {totalPages}</span>
+                <span className="text-muted-foreground text-sm px-2">... {totalPages}</span>
               )}
             </div>
           )}

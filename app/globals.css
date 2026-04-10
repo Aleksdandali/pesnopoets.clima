@@ -68,6 +68,8 @@
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+  /* Prevent horizontal overflow on all pages */
+  overflow-x: hidden;
 }
 
 * {
@@ -80,6 +82,10 @@ body {
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Prevent horizontal overflow */
+  overflow-x: hidden;
+  /* Prevent iOS zoom on input focus by using 16px as base */
+  -webkit-text-size-adjust: 100%;
 }
 
 /* Typography scale */
@@ -144,4 +150,15 @@ h3 {
 
 main {
   animation: fadeIn 0.3s ease-out;
+}
+
+/* Ensure proper touch target sizing for iOS Safari */
+@supports (-webkit-touch-callout: none) {
+  select,
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  textarea {
+    font-size: 16px;
+  }
 }

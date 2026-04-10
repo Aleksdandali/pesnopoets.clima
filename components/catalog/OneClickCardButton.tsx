@@ -118,7 +118,7 @@ export default function OneClickCardButton({
               e.stopPropagation();
               setStatus("idle");
             }}
-            className="p-0.5 text-muted-foreground hover:text-foreground"
+            className="flex items-center justify-center w-8 h-8 text-muted-foreground hover:text-foreground rounded-md hover:bg-muted transition-colors"
             aria-label="Close"
           >
             <X className="w-3.5 h-3.5" />
@@ -135,14 +135,14 @@ export default function OneClickCardButton({
             onChange={(e) => setPhone(e.target.value)}
             placeholder={t.placeholder}
             maxLength={20}
-            className="flex-1 min-w-0 px-3 py-2 text-xs border border-border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-ring transition-colors"
+            className="flex-1 min-w-0 px-3 py-2.5 text-sm border border-border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-ring transition-colors"
             autoFocus
             onClick={(e) => e.preventDefault()}
           />
           <button
             type="submit"
             disabled={status === "submitting"}
-            className="shrink-0 px-3 py-2 bg-primary text-primary-foreground text-xs font-medium rounded-lg hover:bg-primary-dark disabled:opacity-60 transition-colors"
+            className="shrink-0 px-3 py-2.5 min-h-[44px] bg-primary text-primary-foreground text-xs font-medium rounded-lg hover:bg-primary-dark disabled:opacity-60 transition-colors"
             onClick={(e) => e.stopPropagation()}
           >
             {status === "submitting" ? (
@@ -163,7 +163,7 @@ export default function OneClickCardButton({
         e.stopPropagation();
         setStatus("open");
       }}
-      className="w-8 h-8 flex items-center justify-center rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors"
+      className="w-11 h-11 sm:w-9 sm:h-9 flex items-center justify-center rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors"
       aria-label={t.title}
       title={t.title}
     >

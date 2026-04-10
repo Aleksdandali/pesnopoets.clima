@@ -103,10 +103,10 @@ export default function InquiryForm({
 
   if (status === "success") {
     return (
-      <div className="text-center py-10 px-6">
-        <CheckCircle2 className="w-16 h-16 text-success mx-auto mb-4" aria-hidden="true" />
-        <h3 className="text-xl font-bold text-foreground mb-2">{t.success}</h3>
-        <p className="text-muted-foreground">{t.successMessage}</p>
+      <div className="text-center py-8 sm:py-10 px-4 sm:px-6">
+        <CheckCircle2 className="w-14 h-14 sm:w-16 sm:h-16 text-success mx-auto mb-4" aria-hidden="true" />
+        <h3 className="text-lg sm:text-xl font-bold text-foreground mb-2">{t.success}</h3>
+        <p className="text-sm sm:text-base text-muted-foreground">{t.successMessage}</p>
         {t.successNext && (
           <div className="mt-4 flex items-start gap-2 text-sm text-muted-foreground bg-muted rounded-lg p-4 text-left">
             <Clock className="w-4 h-4 shrink-0 mt-0.5 text-primary" aria-hidden="true" />
@@ -115,7 +115,7 @@ export default function InquiryForm({
         )}
         <button
           onClick={() => setStatus("idle")}
-          className="mt-6 text-sm text-primary hover:underline"
+          className="mt-6 text-sm text-primary hover:underline py-2"
         >
           {c?.sendAnother || "Send another inquiry"}
         </button>
@@ -151,7 +151,7 @@ export default function InquiryForm({
           required
           maxLength={100}
           autoComplete="name"
-          className={`w-full px-4 py-3 text-sm border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-ring transition-colors ${
+          className={`w-full px-4 py-3 text-base sm:text-sm border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-ring transition-colors min-h-[48px] ${
             errors.name ? "border-danger" : "border-border"
           }`}
         />
@@ -176,7 +176,7 @@ export default function InquiryForm({
           required
           maxLength={20}
           autoComplete="tel"
-          className={`w-full px-4 py-3 text-sm border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-ring transition-colors ${
+          className={`w-full px-4 py-3 text-base sm:text-sm border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-ring transition-colors min-h-[48px] ${
             errors.phone ? "border-danger" : "border-border"
           }`}
         />
@@ -202,7 +202,7 @@ export default function InquiryForm({
           placeholder={t.emailPlaceholder}
           maxLength={200}
           autoComplete="email"
-          className="w-full px-4 py-3 text-sm border border-border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-ring transition-colors"
+          className="w-full px-4 py-3 text-base sm:text-sm border border-border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-ring transition-colors min-h-[48px]"
         />
       </div>
 
@@ -220,7 +220,7 @@ export default function InquiryForm({
           rows={4}
           placeholder={t.messagePlaceholder}
           maxLength={1000}
-          className="w-full px-4 py-3 text-sm border border-border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-ring transition-colors resize-none"
+          className="w-full px-4 py-3 text-base sm:text-sm border border-border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-ring transition-colors resize-none"
         />
       </div>
 
@@ -232,11 +232,11 @@ export default function InquiryForm({
         </div>
       )}
 
-      {/* Submit */}
+      {/* Submit — 48px height on mobile */}
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary-dark disabled:opacity-60 disabled:cursor-not-allowed transition-colors shadow-sm"
+        className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary-dark disabled:opacity-60 disabled:cursor-not-allowed transition-colors shadow-sm min-h-[48px] text-base sm:text-sm"
       >
         {status === "submitting" ? (
           <>

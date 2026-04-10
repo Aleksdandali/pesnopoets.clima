@@ -77,7 +77,7 @@ export default function ProductCard({
               alt={displayTitle}
               fill
               className="object-contain p-3 sm:p-6 group-hover:scale-[1.03] transition-transform duration-500 ease-out"
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
           ) : (
             <div className="flex items-center justify-center h-full text-muted-foreground/20">
@@ -94,7 +94,7 @@ export default function ProductCard({
 
           {/* Availability badge */}
           <div
-            className={`absolute top-3 right-3 ${avail.bg} ${avail.text} text-[11px] font-medium px-2.5 py-1 rounded-lg`}
+            className={`absolute top-3 right-3 ${avail.bg} ${avail.text} text-xs font-medium px-2.5 py-1 rounded-lg`}
           >
             {avail.label[locale] || avail.label.bg}
           </div>
@@ -103,7 +103,7 @@ export default function ProductCard({
         {/* Content */}
         <div className="p-3 sm:p-5">
           {/* Manufacturer */}
-          <p className="text-[10px] sm:text-[11px] font-semibold text-primary uppercase tracking-widest mb-1 sm:mb-1.5">
+          <p className="text-[11px] sm:text-[11px] font-semibold text-primary uppercase tracking-widest mb-1 sm:mb-1.5">
             {product.manufacturer}
           </p>
 
@@ -147,7 +147,7 @@ export default function ProductCard({
           {/* Price + 1-click button */}
           <div className="flex items-center justify-between gap-2 pt-3 sm:pt-4 border-t border-border">
             <div className="flex items-baseline gap-1.5 sm:gap-2">
-              <span className="text-lg sm:text-xl font-extrabold text-foreground">
+              <span className="text-base sm:text-xl font-extrabold text-foreground">
                 {formatPrice(displayPrice, currency)}
               </span>
               {product.is_promo && product.price_promo && product.price_promo > 0 && (
@@ -160,7 +160,7 @@ export default function ProductCard({
         </div>
       </Link>
 
-      {/* 1-Click phone button — positioned absolutely at bottom-right */}
+      {/* 1-Click phone button — positioned absolutely at bottom-right, 44px tap target */}
       <div className="absolute bottom-3 right-3 sm:bottom-5 sm:right-5 z-[5]">
         <OneClickCardButton
           locale={locale}

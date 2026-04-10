@@ -106,11 +106,11 @@ export default function Header({ locale, dictionary }: HeaderProps) {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-[72px]">
+          <div className="flex items-center justify-between h-[64px] sm:h-[72px]">
             {/* Logo */}
             <Link
               href={`/${locale}`}
-              className="flex items-center gap-2.5 shrink-0 group"
+              className="flex items-center gap-2 sm:gap-2.5 shrink-0 group"
               aria-label={t.siteName}
             >
               <Image
@@ -118,10 +118,10 @@ export default function Header({ locale, dictionary }: HeaderProps) {
                 alt={t.siteName}
                 width={44}
                 height={44}
-                className="rounded-lg group-hover:scale-105 transition-transform duration-200"
+                className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg group-hover:scale-105 transition-transform duration-200"
               />
               <div className="flex flex-col">
-                <span className="text-base font-bold text-foreground tracking-tight leading-none">
+                <span className="text-sm sm:text-base font-bold text-foreground tracking-tight leading-none">
                   Песнопоец
                 </span>
                 <span className="text-[10px] text-primary font-semibold tracking-widest uppercase leading-none mt-0.5">
@@ -144,11 +144,11 @@ export default function Header({ locale, dictionary }: HeaderProps) {
             </nav>
 
             {/* Right side: lang + CTA + mobile */}
-            <div className="flex items-center gap-2">
-              {/* Phone link — visible on mobile as icon */}
+            <div className="flex items-center gap-1 sm:gap-2">
+              {/* Phone link — visible on mobile as icon, 44px tap target */}
               <a
                 href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
-                className="lg:hidden p-2 text-muted-foreground hover:text-primary hover:bg-muted rounded-lg transition-colors"
+                className="lg:hidden flex items-center justify-center w-11 h-11 text-muted-foreground hover:text-primary hover:bg-muted rounded-lg transition-colors"
                 aria-label={callLabel}
               >
                 <Phone className="w-5 h-5" aria-hidden="true" />
@@ -158,7 +158,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
               <div className="relative" ref={langRef}>
                 <button
                   onClick={() => setLangMenuOpen(!langMenuOpen)}
-                  className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted transition-colors"
+                  className="flex items-center justify-center gap-1 sm:gap-1.5 min-w-[44px] min-h-[44px] px-2 sm:px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted transition-colors"
                   aria-label="Change language"
                   aria-expanded={langMenuOpen}
                   aria-haspopup="true"
@@ -178,7 +178,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
                       <Link
                         key={code}
                         href={`/${code}`}
-                        className={`block px-4 py-2.5 text-sm transition-colors ${
+                        className={`block px-4 py-3 text-sm transition-colors ${
                           code === locale
                             ? "bg-primary-light text-primary font-medium"
                             : "text-foreground hover:bg-muted"
@@ -201,9 +201,9 @@ export default function Header({ locale, dictionary }: HeaderProps) {
                 {inquiryLabel}
               </Link>
 
-              {/* Mobile menu button */}
+              {/* Mobile menu button — 44px tap target */}
               <button
-                className="lg:hidden p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+                className="lg:hidden flex items-center justify-center w-11 h-11 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                 aria-expanded={mobileMenuOpen}
@@ -228,7 +228,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="px-4 py-3 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-lg transition-colors"
+                  className="px-4 py-3.5 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-lg transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {link.label}
@@ -238,7 +238,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
               {/* Call us button in mobile menu */}
               <a
                 href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
-                className="mx-4 mt-3 flex items-center justify-center gap-2 px-5 py-3 border border-border text-foreground font-semibold rounded-xl hover:bg-muted transition-colors"
+                className="mx-4 mt-3 flex items-center justify-center gap-2 px-5 py-3.5 border border-border text-foreground font-semibold rounded-xl hover:bg-muted transition-colors min-h-[48px]"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <Phone className="w-4 h-4" aria-hidden="true" />
@@ -247,7 +247,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
 
               <Link
                 href={`/${locale}/inquiry`}
-                className="mx-4 mt-2 text-center px-5 py-3 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary-dark transition-colors"
+                className="mx-4 mt-2 text-center px-5 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary-dark transition-colors min-h-[48px] flex items-center justify-center"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {inquiryLabel}

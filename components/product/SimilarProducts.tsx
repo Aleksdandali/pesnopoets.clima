@@ -57,13 +57,13 @@ export default async function SimilarProducts({
   const title = sectionTitles[locale] || sectionTitles.bg;
 
   return (
-    <section className="mt-16">
-      <h2 className="text-xl font-bold text-foreground mb-6">{title}</h2>
-      <div className="flex gap-4 overflow-x-auto pb-4 lg:grid lg:grid-cols-4 lg:overflow-visible lg:pb-0 snap-x snap-mandatory">
+    <section className="mt-12 sm:mt-16">
+      <h2 className="text-lg sm:text-xl font-bold text-foreground mb-5 sm:mb-6">{title}</h2>
+      <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-4 lg:grid lg:grid-cols-4 lg:overflow-visible lg:pb-0 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 lg:mx-0 lg:px-0">
         {products.map((product) => (
           <div
             key={product.id}
-            className="min-w-[260px] sm:min-w-[280px] lg:min-w-0 snap-start"
+            className="min-w-[240px] sm:min-w-[280px] lg:min-w-0 snap-start"
           >
             <ProductCard product={product} locale={locale} currency="BGN" />
           </div>

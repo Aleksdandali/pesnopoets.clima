@@ -53,7 +53,7 @@ export default function CategorySidebar({
       {/* All products */}
       <Link
         href={`/${locale}/klimatici`}
-        className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+        className={`flex items-center justify-between px-3 py-3 rounded-lg text-sm font-medium transition-colors ${
           !activeCategoryId
             ? "bg-primary-light text-primary"
             : "text-foreground hover:bg-muted"
@@ -71,7 +71,7 @@ export default function CategorySidebar({
         <div key={group.group_name}>
           <button
             onClick={() => toggleGroup(group.group_name)}
-            className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-semibold text-foreground hover:bg-muted transition-colors"
+            className="w-full flex items-center justify-between px-3 py-3 rounded-lg text-sm font-semibold text-foreground hover:bg-muted transition-colors min-h-[44px]"
           >
             <span className="truncate">{group.group_name}</span>
             <div className="flex items-center gap-1.5">
@@ -90,7 +90,7 @@ export default function CategorySidebar({
                 <Link
                   key={sub.id}
                   href={`/${locale}/klimatici?category=${sub.id}`}
-                  className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors ${
+                  className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors min-h-[44px] ${
                     activeCategoryId === sub.id
                       ? "bg-primary-light text-primary font-medium"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted"
@@ -110,10 +110,10 @@ export default function CategorySidebar({
 
   return (
     <>
-      {/* Mobile toggle button */}
+      {/* Mobile toggle button — 44px tap target */}
       <button
         onClick={() => setMobileOpen(true)}
-        className="lg:hidden flex items-center gap-2 px-4 py-2.5 bg-white border border-border rounded-xl text-sm font-medium text-foreground hover:bg-muted transition-colors mb-4"
+        className="lg:hidden flex items-center gap-2 px-4 py-3 bg-white border border-border rounded-xl text-sm font-medium text-foreground hover:bg-muted transition-colors mb-4 min-h-[44px]"
       >
         <SlidersHorizontal className="w-4 h-4" />
         {labels.categories}
@@ -131,7 +131,8 @@ export default function CategorySidebar({
               <h2 className="text-base font-semibold text-foreground">{labels.categories}</h2>
               <button
                 onClick={() => setMobileOpen(false)}
-                className="p-1.5 hover:bg-muted rounded-lg transition-colors"
+                className="flex items-center justify-center w-11 h-11 hover:bg-muted rounded-lg transition-colors"
+                aria-label="Close categories"
               >
                 <X className="w-5 h-5" />
               </button>

@@ -178,36 +178,36 @@ export default async function ProductPage({ params }: ProductPageProps) {
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 pb-24 lg:pb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 pb-28 sm:pb-28 lg:pb-8">
         {/* Breadcrumb */}
-        <nav className="text-sm text-muted-foreground mb-5" role="navigation" aria-label="Breadcrumb">
+        <nav className="text-sm text-muted-foreground mb-4 sm:mb-5" role="navigation" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-0">
             <li className="flex items-center">
-              <a href={`/${locale}`} className="hover:text-primary transition-colors">
+              <a href={`/${locale}`} className="hover:text-primary transition-colors py-1">
                 {bcHome}
               </a>
-              <span className="mx-2" aria-hidden="true">/</span>
+              <span className="mx-1.5 sm:mx-2" aria-hidden="true">/</span>
             </li>
             <li className="flex items-center">
-              <a href={`/${locale}/klimatici`} className="hover:text-primary transition-colors">
+              <a href={`/${locale}/klimatici`} className="hover:text-primary transition-colors py-1">
                 {bcCatalog}
               </a>
-              <span className="mx-2" aria-hidden="true">/</span>
+              <span className="mx-1.5 sm:mx-2" aria-hidden="true">/</span>
             </li>
             {categoryGroupName && categoryGroupName !== categoryName && (
               <li className="flex items-center">
-                <span className="text-muted-foreground">{categoryGroupName}</span>
-                <span className="mx-2" aria-hidden="true">/</span>
+                <span className="text-muted-foreground py-1">{categoryGroupName}</span>
+                <span className="mx-1.5 sm:mx-2" aria-hidden="true">/</span>
               </li>
             )}
             {categoryName && (
               <li className="flex items-center">
-                <span className="text-muted-foreground">{categoryName}</span>
-                <span className="mx-2" aria-hidden="true">/</span>
+                <span className="text-muted-foreground py-1">{categoryName}</span>
+                <span className="mx-1.5 sm:mx-2" aria-hidden="true">/</span>
               </li>
             )}
             <li>
-              <span className="text-foreground" aria-current="page">{product.manufacturer}</span>
+              <span className="text-foreground py-1" aria-current="page">{product.manufacturer}</span>
             </li>
           </ol>
         </nav>
@@ -230,12 +230,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <div className="order-2 flex flex-col">
 
             {/* 1. Manufacturer */}
-            <p className="text-sm font-medium text-primary uppercase tracking-wider mb-1.5">
+            <p className="text-xs sm:text-sm font-medium text-primary uppercase tracking-wider mb-1.5">
               {product.manufacturer}
             </p>
 
             {/* 2. Product Title (h1) */}
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3 leading-tight">
+            <h1 className="text-xl sm:text-3xl font-bold text-foreground mb-3 leading-tight">
               {displayTitle}
             </h1>
 
@@ -267,11 +267,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             {/* 4. Price Block (large, prominent) */}
             <div className="bg-muted rounded-xl p-4 sm:p-5 mb-4">
-              <div className="flex items-baseline gap-3">
-                <span className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
+              <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
+                <span className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
                   {priceBGN} {dictionary.common.currency.bgn}
                 </span>
-                <span className="text-base text-muted-foreground">
+                <span className="text-sm sm:text-base text-muted-foreground">
                   ({displayPrice.toFixed(2)} &euro;)
                 </span>
               </div>
@@ -295,10 +295,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {/* 5. Key Specs Grid (2 columns, compact) */}
             <div className="grid grid-cols-2 gap-2 mb-4">
               {product.btu && (
-                <div className="flex items-center gap-2.5 p-2.5 bg-white border border-border rounded-lg">
+                <div className="flex items-center gap-2 sm:gap-2.5 p-2.5 bg-white border border-border rounded-lg">
                   <Zap className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
                   <div className="min-w-0">
-                    <p className="text-[11px] text-muted-foreground leading-none mb-0.5">{t?.power || "BTU"}</p>
+                    <p className="text-xs text-muted-foreground leading-none mb-0.5">{t?.power || "BTU"}</p>
                     <p className="text-sm font-semibold leading-tight truncate">
                       {product.btu.toLocaleString()} BTU
                     </p>
@@ -306,10 +306,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
               )}
               {product.area_m2 && (
-                <div className="flex items-center gap-2.5 p-2.5 bg-white border border-border rounded-lg">
+                <div className="flex items-center gap-2 sm:gap-2.5 p-2.5 bg-white border border-border rounded-lg">
                   <Maximize className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
                   <div className="min-w-0">
-                    <p className="text-[11px] text-muted-foreground leading-none mb-0.5">{t?.area}</p>
+                    <p className="text-xs text-muted-foreground leading-none mb-0.5">{t?.area}</p>
                     <p className="text-sm font-semibold leading-tight truncate">
                       {dictionary.common.upTo} {product.area_m2} {dictionary.common.sqm}
                     </p>
@@ -317,37 +317,37 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
               )}
               {product.energy_class && (
-                <div className="flex items-center gap-2.5 p-2.5 bg-white border border-border rounded-lg">
+                <div className="flex items-center gap-2 sm:gap-2.5 p-2.5 bg-white border border-border rounded-lg">
                   <Leaf className="w-4 h-4 text-success shrink-0" aria-hidden="true" />
                   <div className="min-w-0">
-                    <p className="text-[11px] text-muted-foreground leading-none mb-0.5">{t?.energyClass}</p>
+                    <p className="text-xs text-muted-foreground leading-none mb-0.5">{t?.energyClass}</p>
                     <p className="text-sm font-semibold leading-tight">{product.energy_class}</p>
                   </div>
                 </div>
               )}
               {product.noise_db_indoor && (
-                <div className="flex items-center gap-2.5 p-2.5 bg-white border border-border rounded-lg">
+                <div className="flex items-center gap-2 sm:gap-2.5 p-2.5 bg-white border border-border rounded-lg">
                   <Volume2 className="w-4 h-4 text-accent shrink-0" aria-hidden="true" />
                   <div className="min-w-0">
-                    <p className="text-[11px] text-muted-foreground leading-none mb-0.5">{t?.noise}</p>
+                    <p className="text-xs text-muted-foreground leading-none mb-0.5">{t?.noise}</p>
                     <p className="text-sm font-semibold leading-tight">{product.noise_db_indoor} dB</p>
                   </div>
                 </div>
               )}
               {product.refrigerant && (
-                <div className="flex items-center gap-2.5 p-2.5 bg-white border border-border rounded-lg">
+                <div className="flex items-center gap-2 sm:gap-2.5 p-2.5 bg-white border border-border rounded-lg">
                   <Snowflake className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
                   <div className="min-w-0">
-                    <p className="text-[11px] text-muted-foreground leading-none mb-0.5">{t?.refrigerant}</p>
+                    <p className="text-xs text-muted-foreground leading-none mb-0.5">{t?.refrigerant}</p>
                     <p className="text-sm font-semibold leading-tight">{product.refrigerant}</p>
                   </div>
                 </div>
               )}
               {product.warranty_months && (
-                <div className="flex items-center gap-2.5 p-2.5 bg-white border border-border rounded-lg">
+                <div className="flex items-center gap-2 sm:gap-2.5 p-2.5 bg-white border border-border rounded-lg">
                   <ShieldCheck className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
                   <div className="min-w-0">
-                    <p className="text-[11px] text-muted-foreground leading-none mb-0.5">{t?.warranty}</p>
+                    <p className="text-xs text-muted-foreground leading-none mb-0.5">{t?.warranty}</p>
                     <p className="text-sm font-semibold leading-tight">
                       {product.warranty_months} {t?.months}
                     </p>
@@ -364,22 +364,22 @@ export default async function ProductPage({ params }: ProductPageProps) {
             />
 
             {/* 7. Trust Block (between CTA and inquiry form) */}
-            <div className="grid grid-cols-2 gap-2 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
               <div className="flex items-center gap-2 p-2.5 rounded-lg bg-success-light/30">
                 <CheckCircle2 className="w-4 h-4 text-success shrink-0" aria-hidden="true" />
-                <span className="text-xs font-medium text-foreground">{trust.freeDelivery}</span>
+                <span className="text-xs sm:text-sm font-medium text-foreground leading-snug">{trust.freeDelivery}</span>
               </div>
               <div className="flex items-center gap-2 p-2.5 rounded-lg bg-success-light/30">
                 <CheckCircle2 className="w-4 h-4 text-success shrink-0" aria-hidden="true" />
-                <span className="text-xs font-medium text-foreground">{trust.professionalInstallation}</span>
+                <span className="text-xs sm:text-sm font-medium text-foreground leading-snug">{trust.professionalInstallation}</span>
               </div>
               <div className="flex items-center gap-2 p-2.5 rounded-lg bg-success-light/30">
                 <CheckCircle2 className="w-4 h-4 text-success shrink-0" aria-hidden="true" />
-                <span className="text-xs font-medium text-foreground">{trust.warrantyLong}</span>
+                <span className="text-xs sm:text-sm font-medium text-foreground leading-snug">{trust.warrantyLong}</span>
               </div>
               <div className="flex items-center gap-2 p-2.5 rounded-lg bg-success-light/30">
                 <CheckCircle2 className="w-4 h-4 text-success shrink-0" aria-hidden="true" />
-                <span className="text-xs font-medium text-foreground">{trust.freeConsultation}</span>
+                <span className="text-xs sm:text-sm font-medium text-foreground leading-snug">{trust.freeConsultation}</span>
               </div>
             </div>
 
@@ -412,12 +412,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         {/* Product Highlights — large visual cards for key specs */}
         {highlightCount > 0 && (
-          <section className="mt-12">
-            <h2 className="text-xl font-bold text-foreground mb-6">
+          <section className="mt-10 sm:mt-12">
+            <h2 className="text-lg sm:text-xl font-bold text-foreground mb-5 sm:mb-6">
               {t?.highlights}
             </h2>
             <div
-              className={`grid gap-4 ${
+              className={`grid gap-3 sm:gap-4 ${
                 highlightCount === 1
                   ? "grid-cols-1"
                   : highlightCount === 2
@@ -428,57 +428,57 @@ export default async function ProductPage({ params }: ProductPageProps) {
               }`}
             >
               {hasHighlightBtu && (
-                <div className="relative overflow-hidden bg-gradient-to-br from-primary-light to-white border border-primary/10 rounded-2xl p-5 sm:p-6 text-center">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <Zap className="w-6 h-6 text-primary" aria-hidden="true" />
+                <div className="relative overflow-hidden bg-gradient-to-br from-primary-light to-white border border-primary/10 rounded-2xl p-4 sm:p-6 text-center">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                    <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-primary" aria-hidden="true" />
                   </div>
-                  <p className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                  <p className="text-xl sm:text-3xl font-extrabold text-foreground tracking-tight">
                     {product.btu.toLocaleString()}
                   </p>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                     BTU — {t?.power || "BTU"}
                   </p>
                 </div>
               )}
               {hasHighlightArea && (
-                <div className="relative overflow-hidden bg-gradient-to-br from-accent-light to-white border border-accent/10 rounded-2xl p-5 sm:p-6 text-center">
-                  <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <Maximize className="w-6 h-6 text-accent" aria-hidden="true" />
+                <div className="relative overflow-hidden bg-gradient-to-br from-accent-light to-white border border-accent/10 rounded-2xl p-4 sm:p-6 text-center">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                    <Maximize className="w-5 h-5 sm:w-6 sm:h-6 text-accent" aria-hidden="true" />
                   </div>
-                  <p className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                  <p className="text-xl sm:text-3xl font-extrabold text-foreground tracking-tight">
                     {dictionary.common.upTo} {product.area_m2}
                   </p>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                     {dictionary.common.sqm} — {t?.area}
                   </p>
                 </div>
               )}
               {hasHighlightEnergy && (
-                <div className="relative overflow-hidden bg-gradient-to-br from-success-light to-white border border-success/10 rounded-2xl p-5 sm:p-6 text-center">
-                  <div className="w-12 h-12 bg-success/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <Leaf className="w-6 h-6 text-success" aria-hidden="true" />
+                <div className="relative overflow-hidden bg-gradient-to-br from-success-light to-white border border-success/10 rounded-2xl p-4 sm:p-6 text-center">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-success/10 rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                    <Leaf className="w-5 h-5 sm:w-6 sm:h-6 text-success" aria-hidden="true" />
                   </div>
                   <span
-                    className={`inline-block text-lg sm:text-xl font-extrabold px-4 py-1 rounded-full ${getEnergyClassColor(
+                    className={`inline-block text-base sm:text-xl font-extrabold px-3 sm:px-4 py-1 rounded-full ${getEnergyClassColor(
                       product.energy_class
                     )}`}
                   >
                     {product.energy_class}
                   </span>
-                  <p className="text-sm text-muted-foreground mt-2">
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-2">
                     {t?.energyClass}
                   </p>
                 </div>
               )}
               {hasHighlightNoise && (
-                <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 to-white border border-blue-100 rounded-2xl p-5 sm:p-6 text-center">
-                  <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <Volume2 className="w-6 h-6 text-blue-500" aria-hidden="true" />
+                <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 to-white border border-blue-100 rounded-2xl p-4 sm:p-6 text-center">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-50 rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-3">
+                    <Volume2 className="w-5 h-5 sm:w-6 sm:h-6 text-blue-500" aria-hidden="true" />
                   </div>
-                  <p className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-                    {product.noise_db_indoor} <span className="text-lg font-bold">dB</span>
+                  <p className="text-xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+                    {product.noise_db_indoor} <span className="text-sm sm:text-lg font-bold">dB</span>
                   </p>
-                  <p className="text-sm text-muted-foreground mt-1">
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-1">
                     {t?.noiseLevel || t?.noise}
                   </p>
                 </div>
@@ -489,8 +489,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         {/* Description (collapsible, smart-hidden if empty/duplicate) */}
         {displayDescription && (
-          <section className="mt-12">
-            <h2 className="text-xl font-bold text-foreground mb-4">
+          <section className="mt-10 sm:mt-12">
+            <h2 className="text-lg sm:text-xl font-bold text-foreground mb-4">
               {t?.description}
             </h2>
             <ProductDescription
@@ -503,8 +503,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
         )}
 
         {/* Specs Table */}
-        <section className="mt-12">
-          <h2 className="text-xl font-bold text-foreground mb-6">
+        <section className="mt-10 sm:mt-12">
+          <h2 className="text-lg sm:text-xl font-bold text-foreground mb-5 sm:mb-6">
             {t?.specifications}
           </h2>
           <SpecsTable features={product.features} locale={locale} />

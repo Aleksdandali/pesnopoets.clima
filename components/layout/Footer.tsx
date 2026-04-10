@@ -63,7 +63,7 @@ export default function Footer({ locale, dictionary }: FooterProps) {
 
   return (
     <footer className="bg-[#0c1425] text-white/70 mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div className="lg:col-span-1">
@@ -94,7 +94,7 @@ export default function Footer({ locale, dictionary }: FooterProps) {
             <h3 className="text-xs font-semibold text-white/90 uppercase tracking-[0.15em] mb-5">
               {t.footer.quickLinks}
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-1">
               {[
                 { href: `/${locale}`, label: t.nav.home },
                 { href: `/${locale}/klimatici`, label: t.nav.catalog },
@@ -105,7 +105,7 @@ export default function Footer({ locale, dictionary }: FooterProps) {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-white/50 hover:text-white transition-colors duration-200"
+                    className="block text-sm text-white/50 hover:text-white transition-colors duration-200 py-2"
                   >
                     {link.label}
                   </Link>
@@ -119,12 +119,12 @@ export default function Footer({ locale, dictionary }: FooterProps) {
             <h3 className="text-xs font-semibold text-white/90 uppercase tracking-[0.15em] mb-5">
               {t.footer.brands || t.nav.brands}
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-1">
               {brands.map((brand) => (
                 <li key={brand}>
                   <Link
                     href={`/${locale}/klimatici?brand=${encodeURIComponent(brand)}`}
-                    className="text-sm text-white/50 hover:text-white transition-colors duration-200"
+                    className="block text-sm text-white/50 hover:text-white transition-colors duration-200 py-2"
                   >
                     {brand}
                   </Link>
@@ -138,11 +138,11 @@ export default function Footer({ locale, dictionary }: FooterProps) {
             <h3 className="text-xs font-semibold text-white/90 uppercase tracking-[0.15em] mb-5">
               {t.footer.contactUs}
             </h3>
-            <ul className="space-y-3.5">
+            <ul className="space-y-2">
               <li>
                 <a
                   href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
-                  className="flex items-center gap-2.5 text-sm text-white/50 hover:text-white transition-colors duration-200"
+                  className="flex items-center gap-2.5 text-sm text-white/50 hover:text-white transition-colors duration-200 py-2"
                   aria-label={`${t.footer.contactUs}: ${PHONE_NUMBER}`}
                 >
                   <Phone className="w-4 h-4 shrink-0 text-white/30" />
@@ -152,15 +152,15 @@ export default function Footer({ locale, dictionary }: FooterProps) {
               <li>
                 <a
                   href={`mailto:${EMAIL}`}
-                  className="flex items-center gap-2.5 text-sm text-white/50 hover:text-white transition-colors duration-200"
+                  className="flex items-center gap-2.5 text-sm text-white/50 hover:text-white transition-colors duration-200 py-2"
                   aria-label={`Email: ${EMAIL}`}
                 >
                   <Mail className="w-4 h-4 shrink-0 text-white/30" />
-                  <span>{EMAIL}</span>
+                  <span className="break-all">{EMAIL}</span>
                 </a>
               </li>
               <li>
-                <div className="flex items-start gap-2.5 text-sm text-white/50">
+                <div className="flex items-start gap-2.5 text-sm text-white/50 py-2">
                   <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-white/30" aria-hidden="true" />
                   <span>{locationLabels[locale] || locationLabels.bg}</span>
                 </div>
@@ -170,8 +170,8 @@ export default function Footer({ locale, dictionary }: FooterProps) {
         </div>
 
         {/* Dealer trust line */}
-        <div className="mt-14 pt-6 border-t border-white/8 text-center">
-          <p className="text-xs text-white/40">{dealerLine[locale] || dealerLine.bg}</p>
+        <div className="mt-12 sm:mt-14 pt-6 border-t border-white/8 text-center">
+          <p className="text-xs sm:text-sm text-white/40 leading-relaxed">{dealerLine[locale] || dealerLine.bg}</p>
         </div>
 
         {/* Bottom bar */}
@@ -179,16 +179,16 @@ export default function Footer({ locale, dictionary }: FooterProps) {
           <p className="text-xs text-white/30">
             &copy; {year} {t.siteName}. {t.footer.rights}
           </p>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6">
             <Link
               href={`/${locale}/privacy`}
-              className="text-xs text-white/30 hover:text-white/60 transition-colors duration-200"
+              className="text-xs text-white/30 hover:text-white/60 transition-colors duration-200 py-2 px-1"
             >
               {t.footer.privacy}
             </Link>
             <Link
               href={`/${locale}/terms`}
-              className="text-xs text-white/30 hover:text-white/60 transition-colors duration-200"
+              className="text-xs text-white/30 hover:text-white/60 transition-colors duration-200 py-2 px-1"
             >
               {t.footer.terms}
             </Link>

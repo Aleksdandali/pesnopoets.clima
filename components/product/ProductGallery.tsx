@@ -31,19 +31,19 @@ export default function ProductGallery({
           src={images[activeIndex]}
           alt={`${title} - ${activeIndex + 1}`}
           fill
-          className="object-contain p-6"
+          className="object-contain p-4 sm:p-6"
           sizes="(max-width: 768px) 100vw, 50vw"
           priority={activeIndex === 0}
         />
 
-        {/* Navigation arrows */}
+        {/* Navigation arrows — 44px tap targets on mobile */}
         {images.length > 1 && (
           <>
             <button
               onClick={() =>
                 setActiveIndex((i) => (i === 0 ? images.length - 1 : i - 1))
               }
-              className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-white/90 shadow-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-white hover:shadow-md opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200"
+              className="absolute left-1.5 sm:left-3 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-10 sm:h-10 rounded-xl bg-white/90 shadow-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-white hover:shadow-md opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200"
               aria-label="Previous image"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -52,7 +52,7 @@ export default function ProductGallery({
               onClick={() =>
                 setActiveIndex((i) => (i === images.length - 1 ? 0 : i + 1))
               }
-              className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-white/90 shadow-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-white hover:shadow-md opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200"
+              className="absolute right-1.5 sm:right-3 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-10 sm:h-10 rounded-xl bg-white/90 shadow-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-white hover:shadow-md opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200"
               aria-label="Next image"
             >
               <ChevronRight className="w-5 h-5" />
@@ -68,9 +68,9 @@ export default function ProductGallery({
         )}
       </div>
 
-      {/* Thumbnails */}
+      {/* Thumbnails — horizontal scroll on mobile */}
       {images.length > 1 && (
-        <div className="flex gap-2 overflow-x-auto pb-1">
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
           {images.map((img, i) => (
             <button
               key={i}

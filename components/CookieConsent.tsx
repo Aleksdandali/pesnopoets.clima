@@ -71,7 +71,7 @@ export default function CookieConsent({ locale }: CookieConsentProps) {
 
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 z-50 p-4 animate-in slide-in-from-bottom duration-500"
+      className="fixed bottom-0 left-0 right-0 z-50 p-3 sm:p-4 animate-in slide-in-from-bottom duration-500"
       role="dialog"
       aria-label="Cookie consent"
     >
@@ -91,7 +91,7 @@ export default function CookieConsent({ locale }: CookieConsentProps) {
           </div>
           <button
             onClick={handleDecline}
-            className="shrink-0 p-1 text-muted-foreground hover:text-foreground sm:hidden"
+            className="shrink-0 flex items-center justify-center w-9 h-9 text-muted-foreground hover:text-foreground sm:hidden rounded-md"
             aria-label="Close"
           >
             <X className="w-4 h-4" />
@@ -100,13 +100,13 @@ export default function CookieConsent({ locale }: CookieConsentProps) {
         <div className="flex items-center justify-end gap-3 mt-4">
           <button
             onClick={handleDecline}
-            className="hidden sm:inline-flex px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground border border-border rounded-lg hover:bg-muted transition-colors"
+            className="hidden sm:inline-flex px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground border border-border rounded-lg hover:bg-muted transition-colors min-h-[44px]"
           >
             {t.decline}
           </button>
           <button
             onClick={handleAccept}
-            className="px-5 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary-dark transition-colors shadow-sm"
+            className="px-5 py-2.5 text-sm font-semibold bg-primary text-primary-foreground rounded-lg hover:bg-primary-dark transition-colors shadow-sm min-h-[44px]"
           >
             {t.accept}
           </button>
