@@ -35,11 +35,13 @@ export default async function SimilarProducts({
   const TARGET = 4;
   let products: any[] = [];
 
+  const selectColumns = "id, slug, title, title_override, title_en, title_ru, title_ua, manufacturer, price_client, price_override, price_promo, is_promo, availability, gallery, btu, energy_class, area_m2, noise_db_indoor";
+
   // First: same category, exclude current product
   if (categoryId) {
     const { data } = await supabase
       .from("products")
-      .select("*")
+      .select(selectColumns)
       .eq("category_id", categoryId)
       .eq("is_active", true)
       .neq("id", currentProductId)
@@ -53,7 +55,7 @@ export default async function SimilarProducts({
     const existingIds = [currentProductId, ...products.map((p) => p.id)];
     const { data } = await supabase
       .from("products")
-      .select("*")
+      .select(selectColumns)
       .eq("manufacturer", manufacturer)
       .eq("is_active", true)
       .not("id", "in", `(${existingIds.join(",")})`)

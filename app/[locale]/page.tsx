@@ -16,6 +16,9 @@ import {
 import { createClient } from "@/lib/supabase/server";
 import ProductCard from "@/components/catalog/ProductCard";
 
+// Revalidate homepage every 5 minutes for fresh product data
+export const revalidate = 300;
+
 interface HomePageProps {
   params: Promise<{ locale: string }>;
 }
@@ -262,17 +265,19 @@ async function getCategoryImages() {
   try {
     const supabase = await createClient();
     const categorySlugs = ["invertorni-klimatici", "multi-split-sistemi", "profesionalni-sistemi", "ventilaciya"];
-    const images: Record<string, string | null> = {};
 
-    for (const slug of categorySlugs) {
-      const { data } = await supabase
-        .from("products")
-        .select("gallery")
-        .eq("is_active", true)
-        .not("gallery", "is", null)
-        .limit(1);
-      if (data?.[0]?.gallery?.[0]) {
-        images[slug] = data[0].gallery[0];
+    // Single query instead of 4 sequential ones
+    const { data } = await supabase
+      .from("products")
+      .select("gallery")
+      .eq("is_active", true)
+      .not("gallery", "is", null)
+      .limit(4);
+
+    const images: Record<string, string | null> = {};
+    for (let i = 0; i < categorySlugs.length; i++) {
+      if (data?.[i]?.gallery?.[0]) {
+        images[categorySlugs[i]] = data[i].gallery[0];
       }
     }
     return images;
@@ -425,6 +430,7 @@ export default async function HomePage({ params }: HomePageProps) {
                       fill
                       className="object-contain p-2 sm:p-3 group-hover:scale-105 transition-transform duration-500"
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
+                      loading="lazy"
                     />
                   </div>
                 )}
@@ -587,6 +593,7 @@ export default async function HomePage({ params }: HomePageProps) {
                       fill
                       className="object-contain p-2 group-hover:scale-105 transition-transform duration-500"
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                      loading="lazy"
                     />
                   </div>
                 ) : (

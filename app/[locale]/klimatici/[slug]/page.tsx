@@ -9,6 +9,8 @@ import SimilarProducts from "@/components/product/SimilarProducts";
 import StickyMobileCTA from "@/components/product/StickyMobileCTA";
 import ProductDescription from "@/components/product/ProductDescription";
 import { generateProductJsonLd, generateBreadcrumbJsonLd } from "@/lib/seo/jsonld";
+import { generateBadges } from "@/lib/bittel/badges";
+import ProductBadges from "@/components/catalog/ProductBadges";
 import {
   Zap,
   Maximize,
@@ -18,6 +20,9 @@ import {
   CheckCircle2,
   Leaf,
 } from "lucide-react";
+
+// ISR: revalidate product pages every 10 minutes
+export const revalidate = 600;
 
 interface ProductPageProps {
   params: Promise<{ locale: string; slug: string }>;
@@ -229,6 +234,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <p className="text-xs sm:text-sm font-medium text-primary uppercase tracking-wider mb-1.5">
               {product.manufacturer}
             </p>
+
+            {/* Product Badges */}
+            {(() => {
+              const badges = generateBadges(product, locale, 6);
+              return badges.length > 0 ? (
+                <div className="mb-2">
+                  <ProductBadges badges={badges} max={6} />
+                </div>
+              ) : null;
+            })()}
 
             {/* 2. Product Title (h1) */}
             <h1 className="text-xl sm:text-3xl font-bold text-foreground mb-3 leading-tight">

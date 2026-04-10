@@ -70,6 +70,7 @@ export default function Footer({ locale, dictionary }: FooterProps) {
                 width={40}
                 height={40}
                 className="rounded-lg"
+                loading="lazy"
               />
               <div className="flex flex-col">
                 <span className="text-base font-bold text-white tracking-tight leading-none">

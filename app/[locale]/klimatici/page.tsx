@@ -29,21 +29,24 @@ async function getDictionary(locale: string) {
 }
 
 async function getCategoriesWithCounts(supabase: Awaited<ReturnType<typeof createClient>>, locale: string) {
-  // Get all categories with product counts
-  const { data: categories } = await supabase
-    .from("categories")
-    .select("id, group_name, subgroup_name, slug, name_en, name_ru, name_ua")
-    .order("group_name")
-    .order("subgroup_name");
+  // Run both queries in parallel
+  const [categoriesResult, productCountsResult] = await Promise.all([
+    supabase
+      .from("categories")
+      .select("id, group_name, subgroup_name, slug, name_en, name_ru, name_ua")
+      .order("group_name")
+      .order("subgroup_name"),
+    supabase
+      .from("products")
+      .select("category_id")
+      .eq("is_active", true)
+      .eq("is_hidden", false),
+  ]);
+
+  const { data: categories } = categoriesResult;
+  const { data: productCounts } = productCountsResult;
 
   if (!categories) return { groups: [], total: 0 };
-
-  // Count products per category
-  const { data: productCounts } = await supabase
-    .from("products")
-    .select("category_id")
-    .eq("is_active", true)
-    .eq("is_hidden", false);
 
   const countMap: Record<number, number> = {};
   let total = 0;
@@ -116,10 +119,10 @@ export default async function CatalogPage({
     }
   }
 
-  // Build query
+  // Build query — select only needed columns for catalog cards
   let query = supabase
     .from("products")
-    .select("*", { count: "exact" })
+    .select("id, slug, title, title_override, title_en, title_ru, title_ua, manufacturer, price_client, price_override, price_promo, is_promo, availability, gallery, btu, energy_class, area_m2, noise_db_indoor, refrigerant, stock_size, features, category_id", { count: "exact" })
     .eq("is_active", true)
     .eq("is_hidden", false);
 
@@ -160,15 +163,19 @@ export default async function CatalogPage({
   const from = (page - 1) * PRODUCTS_PER_PAGE;
   query = query.range(from, from + PRODUCTS_PER_PAGE - 1);
 
-  const { data: products, count } = await query;
+  // Run product query and manufacturer query in parallel
+  const [productResult, manufacturerResult] = await Promise.all([
+    query,
+    supabase
+      .from("products")
+      .select("manufacturer")
+      .eq("is_active", true)
+      .eq("is_hidden", false)
+      .not("manufacturer", "is", null),
+  ]);
 
-  // Get unique manufacturers
-  const { data: manufacturerRows } = await supabase
-    .from("products")
-    .select("manufacturer")
-    .eq("is_active", true)
-    .eq("is_hidden", false)
-    .not("manufacturer", "is", null);
+  const { data: products, count } = productResult;
+  const { data: manufacturerRows } = manufacturerResult;
 
   const manufacturers = [
     ...new Set(

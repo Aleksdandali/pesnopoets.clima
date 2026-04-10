@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useState, useCallback, useRef } from "react";
 import { Zap, Thermometer, Volume2, Maximize, ChevronLeft, ChevronRight } from "lucide-react";
 import OneClickCardButton from "@/components/catalog/OneClickCardButton";
+import ProductBadges from "@/components/catalog/ProductBadges";
+import { generateBadges } from "@/lib/bittel/badges";
 
 interface ProductCardProps {
   product: {
@@ -23,6 +25,9 @@ interface ProductCardProps {
     energy_class?: string | null;
     area_m2?: number | null;
     noise_db_indoor?: number | null;
+    refrigerant?: string | null;
+    stock_size?: number | null;
+    features?: Record<string, { name: string; items: { name: string; value: string }[] }>;
     title_en?: string | null;
     title_ru?: string | null;
     title_ua?: string | null;
@@ -88,6 +93,7 @@ export default function ProductCard({
   const localeTitle = locale === "en" ? product.title_en : locale === "ru" ? product.title_ru : locale === "ua" ? product.title_ua : null;
   const displayTitle = product.title_override || localeTitle || product.title;
   const displayPrice = product.price_override || product.price_client;
+  const badges = generateBadges(product, locale, 3);
   const gallery = product.gallery || [];
   const hasMultipleImages = gallery.length > 1;
   const imageUrl = gallery[currentIndex] || gallery[0];
@@ -152,9 +158,6 @@ export default function ProductCard({
     [gallery.length]
   );
 
-  // Preload next image
-  const nextIndex = gallery.length > 1 ? (currentIndex + 1) % gallery.length : -1;
-
   return (
     <div className="relative group block bg-white rounded-2xl border border-border shadow-[0_2px_8px_rgb(0_0_0/0.04)] hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0_0_0/0.08)] transition-all duration-300 overflow-hidden">
       <Link
@@ -174,23 +177,12 @@ export default function ProductCard({
               fill
               className="object-contain p-3 sm:p-6 group-hover:scale-[1.03] transition-transform duration-500 ease-out"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              loading="lazy"
             />
           ) : (
             <div className="flex items-center justify-center h-full text-muted-foreground/20">
               <Thermometer className="w-10 h-10 sm:w-12 sm:h-12" aria-hidden="true" />
             </div>
-          )}
-
-          {/* Preload next image (hidden) */}
-          {nextIndex >= 0 && gallery[nextIndex] && (
-            <Image
-              src={gallery[nextIndex]}
-              alt=""
-              fill
-              className="sr-only"
-              sizes="1px"
-              aria-hidden="true"
-            />
           )}
 
           {/* Promo badge */}
@@ -245,6 +237,13 @@ export default function ProductCard({
             </div>
           )}
         </div>
+
+        {/* Badges row */}
+        {badges.length > 0 && (
+          <div className="px-3 sm:px-5 pt-2.5">
+            <ProductBadges badges={badges} max={3} />
+          </div>
+        )}
 
         {/* Content */}
         <div className="p-3 sm:p-5">

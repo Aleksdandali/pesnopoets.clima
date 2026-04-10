@@ -131,6 +131,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
                 width={44}
                 height={44}
                 className="w-9 h-9 sm:w-11 sm:h-11 rounded-lg group-hover:scale-105 transition-transform duration-200"
+                priority
               />
               <div className="flex flex-col">
                 <span className="text-sm sm:text-base font-bold text-foreground tracking-tight leading-none">

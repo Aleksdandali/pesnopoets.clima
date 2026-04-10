@@ -2,6 +2,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 
+// Revalidate brands page every 10 minutes
+export const revalidate = 600;
+
 async function getDictionary(locale: string) {
   try {
     const dict = await import(`@/dictionaries/${locale}.json`);
@@ -47,7 +50,7 @@ export default async function BrandsPage({ params }: { params: Promise<{ locale:
           >
             {brand.image ? (
               <div className="relative w-full h-24 rounded-xl bg-[#fafbfc] overflow-hidden">
-                <Image src={brand.image} alt={brand.name} fill className="object-contain p-3 group-hover:scale-105 transition-transform duration-500" sizes="25vw" />
+                <Image src={brand.image} alt={brand.name} fill className="object-contain p-3 group-hover:scale-105 transition-transform duration-500" sizes="25vw" loading="lazy" />
               </div>
             ) : (
               <div className="w-full h-24 rounded-xl bg-[#fafbfc] flex items-center justify-center text-2xl font-bold text-muted-foreground/20">{brand.name[0]}</div>
