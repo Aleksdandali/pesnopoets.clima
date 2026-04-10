@@ -356,8 +356,8 @@ export default async function HomePage({ params }: HomePageProps) {
           priority
           quality={85}
         />
-        {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0f172a]/80 via-[#0f172a]/50 to-transparent" />
+        {/* Dark overlay — only left side, keeps AC unit visible on right */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0f172a]/85 via-[#0f172a]/60 to-[#0f172a]/10 sm:to-transparent" />
         {/* Bottom gradient fade */}
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
 
