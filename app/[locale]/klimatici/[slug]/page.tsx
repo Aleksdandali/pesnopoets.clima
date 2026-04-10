@@ -183,30 +183,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 pb-28 sm:pb-28 lg:pb-8">
         {/* Breadcrumb */}
-        <nav className="text-sm text-muted-foreground mb-4 sm:mb-5" role="navigation" aria-label="Breadcrumb">
-          <ol className="flex flex-wrap items-center gap-0">
-            <li className="flex items-center">
+        <nav className="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-5 overflow-x-auto scrollbar-hide" role="navigation" aria-label="Breadcrumb">
+          <ol className="flex items-center whitespace-nowrap gap-0 min-w-0">
+            <li className="flex items-center shrink-0">
               <a href={`/${locale}`} className="hover:text-primary transition-colors py-1">
                 {bcHome}
               </a>
-              <span className="mx-1.5 sm:mx-2" aria-hidden="true">/</span>
+              <svg className="w-3.5 h-3.5 mx-1 sm:mx-1.5 text-muted-foreground/40 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
             </li>
-            <li className="flex items-center">
+            <li className="flex items-center shrink-0">
               <a href={`/${locale}/klimatici`} className="hover:text-primary transition-colors py-1">
                 {bcCatalog}
               </a>
-              <span className="mx-1.5 sm:mx-2" aria-hidden="true">/</span>
+              <svg className="w-3.5 h-3.5 mx-1 sm:mx-1.5 text-muted-foreground/40 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
             </li>
-            {categoryGroupName && categoryGroupName !== categoryName && (
-              <li className="flex items-center">
-                <span className="text-muted-foreground py-1">{categoryGroupName}</span>
-                <span className="mx-1.5 sm:mx-2" aria-hidden="true">/</span>
-              </li>
-            )}
             {categoryName && (
-              <li className="flex items-center">
-                <span className="text-muted-foreground py-1">{categoryName}</span>
-                <span className="mx-1.5 sm:mx-2" aria-hidden="true">/</span>
+              <li className="flex items-center shrink-0">
+                <span className="text-muted-foreground py-1 capitalize-first">{categoryName.toLowerCase()}</span>
+                <svg className="w-3.5 h-3.5 mx-1 sm:mx-1.5 text-muted-foreground/40 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
               </li>
             )}
             <li>

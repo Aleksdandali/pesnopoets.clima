@@ -185,24 +185,24 @@ export default async function CatalogPage({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 overflow-x-hidden">
       {/* Breadcrumb */}
-      <nav className="text-sm text-muted-foreground mb-4" role="navigation" aria-label="Breadcrumb">
-        <a href={`/${locale}`} className="hover:text-primary">{catalogDict.home}</a>
-        <span className="mx-2">/</span>
-        {activeCategoryName ? (
-          <>
-            <a href={`/${locale}/klimatici`} className="hover:text-primary">{catalogDict.title}</a>
-            <span className="mx-2">/</span>
-            {activeGroupName && (
-              <>
-                <span className="text-muted-foreground">{activeGroupName}</span>
-                <span className="mx-2">/</span>
-              </>
-            )}
-            <span className="text-foreground">{activeCategoryName}</span>
-          </>
-        ) : (
-          <span className="text-foreground">{catalogDict.title}</span>
-        )}
+      <nav className="text-xs sm:text-sm text-muted-foreground mb-4 overflow-x-auto scrollbar-hide" role="navigation" aria-label="Breadcrumb">
+        <ol className="flex items-center whitespace-nowrap">
+          <li className="flex items-center shrink-0">
+            <a href={`/${locale}`} className="hover:text-primary transition-colors">{catalogDict.home}</a>
+            <svg className="w-3.5 h-3.5 mx-1 sm:mx-1.5 text-muted-foreground/40 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+          </li>
+          {activeCategoryName ? (
+            <>
+              <li className="flex items-center shrink-0">
+                <a href={`/${locale}/klimatici`} className="hover:text-primary transition-colors">{catalogDict.title}</a>
+                <svg className="w-3.5 h-3.5 mx-1 sm:mx-1.5 text-muted-foreground/40 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+              </li>
+              <li><span className="text-foreground">{activeCategoryName}</span></li>
+            </>
+          ) : (
+            <li><span className="text-foreground">{catalogDict.title}</span></li>
+          )}
+        </ol>
       </nav>
 
       <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
