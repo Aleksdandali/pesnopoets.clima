@@ -1,5 +1,13 @@
 import { NextResponse } from "next/server";
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@supabase/supabase-js";
+
+// Use anon key (not service role) — RLS allows anon INSERT on inquiries + SELECT on products
+function createAnonClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+}
 import { sendInquiryNotification } from "@/lib/telegram";
 import {
   checkRateLimit,
@@ -59,7 +67,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const supabase = createAdminClient();
+    const supabase = createAnonClient();
 
     // Get product title for notification
     let productTitle = null;
@@ -86,7 +94,7 @@ export async function POST(request: Request) {
         email,
         message,
         locale,
-        source: body.source || null,
+        source: ["one-click", "one-click-card", "inquiry-page", "product-page"].includes(body.source) ? body.source : null,
         status: "new",
       })
       .select()
@@ -114,7 +122,7 @@ export async function POST(request: Request) {
     );
 
     return NextResponse.json(
-      { success: true, id: inquiry.id },
+      { success: true },
       { status: 201 }
     );
   } catch (err) {

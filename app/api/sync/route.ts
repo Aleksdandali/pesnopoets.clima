@@ -26,16 +26,10 @@ export async function POST(request: Request) {
   } catch (err) {
     console.error("[Sync] Fatal error:", err);
     return NextResponse.json(
-      { error: "Sync failed", details: String(err) },
+      { error: "Sync failed" },
       { status: 500 }
     );
   }
 }
 
-// Also allow GET for manual triggering in development
-export async function GET(request: Request) {
-  if (process.env.NODE_ENV !== "development") {
-    return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
-  }
-  return POST(request);
-}
+// Sync is POST-only, triggered by Vercel Cron
