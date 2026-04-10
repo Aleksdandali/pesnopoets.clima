@@ -1,0 +1,96 @@
+{
+  "common": {
+    "siteName": "Clima",
+    "phone": "+359 XX XXX XXXX",
+    "nav": {
+      "home": "Home",
+      "catalog": "Air Conditioners",
+      "brands": "Brands",
+      "about": "About Us",
+      "contact": "Contact"
+    },
+    "footer": {
+      "description": "Air conditioners from leading brands with delivery and professional installation across Bulgaria.",
+      "quickLinks": "Quick Links",
+      "contactUs": "Contact Us",
+      "rights": "All rights reserved.",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    },
+    "currency": {
+      "bgn": "BGN",
+      "eur": "€"
+    }
+  },
+  "hero": {
+    "title": "Air Conditioners from World-Leading Brands",
+    "subtitle": "Daikin, Mitsubishi Electric, Toshiba, Nippon — with delivery and professional installation across Bulgaria. Free consultation.",
+    "cta": "Browse Catalog",
+    "ctaSecondary": "Free Consultation"
+  },
+  "catalog": {
+    "title": "Air Conditioners",
+    "showing": "Showing {count} of {total} products",
+    "noResults": "No products found. Try different filters.",
+    "filters": {
+      "brand": "Brand",
+      "btuRange": "Power (BTU)",
+      "priceRange": "Price",
+      "energyClass": "Energy Class",
+      "availability": "Availability",
+      "allBrands": "All brands",
+      "allClasses": "All classes",
+      "inStock": "In stock only",
+      "clearFilters": "Clear filters"
+    },
+    "sort": {
+      "label": "Sort by",
+      "priceAsc": "Price ↑",
+      "priceDesc": "Price ↓",
+      "btuAsc": "BTU ↑",
+      "btuDesc": "BTU ↓",
+      "nameAsc": "Name A-Z"
+    }
+  },
+  "product": {
+    "specifications": "Technical Specifications",
+    "description": "Description",
+    "inquiryButton": "Make an Inquiry",
+    "availability": {
+      "inStock": "In Stock",
+      "limited": "Limited Stock",
+      "outOfStock": "Out of Stock"
+    },
+    "priceVat": "Price includes VAT",
+    "area": "Area",
+    "noise": "Noise",
+    "energyClass": "Energy Class",
+    "refrigerant": "Refrigerant",
+    "warranty": "Warranty",
+    "months": "mo."
+  },
+  "inquiry": {
+    "title": "Make an Inquiry",
+    "subtitle": "Fill out the form and we'll contact you within 1 hour.",
+    "name": "Your Name",
+    "namePlaceholder": "John Smith",
+    "phone": "Phone",
+    "phonePlaceholder": "+359 88 888 8888",
+    "email": "Email (optional)",
+    "emailPlaceholder": "john@example.com",
+    "message": "Message (optional)",
+    "messagePlaceholder": "Describe your requirements — room size, brand preference, budget...",
+    "submit": "Send Inquiry",
+    "submitting": "Sending...",
+    "success": "Thank You!",
+    "successMessage": "We received your inquiry. We'll contact you within 1 hour.",
+    "error": "Error",
+    "errorMessage": "Something went wrong. Please try again or call us directly.",
+    "privacy": "By submitting this form you agree to our privacy policy.",
+    "required": "This field is required"
+  },
+  "seo": {
+    "titleTemplate": "%s | Clima — Air Conditioners for Your Home",
+    "defaultDescription": "Air conditioners from leading brands — Daikin, Mitsubishi, Toshiba. Delivery and installation across Bulgaria."
+  }
+}

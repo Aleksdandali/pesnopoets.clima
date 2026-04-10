@@ -1,0 +1,96 @@
+{
+  "common": {
+    "siteName": "Clima",
+    "phone": "+359 XX XXX XXXX",
+    "nav": {
+      "home": "Головна",
+      "catalog": "Кондиціонери",
+      "brands": "Бренди",
+      "about": "Про нас",
+      "contact": "Контакти"
+    },
+    "footer": {
+      "description": "Кондиціонери провідних брендів з доставкою та професійним монтажем по всій Болгарії.",
+      "quickLinks": "Швидкі посилання",
+      "contactUs": "Зв'яжіться з нами",
+      "rights": "Усі права захищено.",
+      "privacy": "Конфіденційність",
+      "terms": "Умови використання"
+    },
+    "currency": {
+      "bgn": "лв.",
+      "eur": "€"
+    }
+  },
+  "hero": {
+    "title": "Кондиціонери провідних світових брендів",
+    "subtitle": "Daikin, Mitsubishi Electric, Toshiba, Nippon — з доставкою та професійним монтажем по всій Болгарії. Безкоштовна консультація.",
+    "cta": "Переглянути каталог",
+    "ctaSecondary": "Безкоштовна консультація"
+  },
+  "catalog": {
+    "title": "Кондиціонери",
+    "showing": "Показано {count} з {total} товарів",
+    "noResults": "Товари не знайдено. Спробуйте інші фільтри.",
+    "filters": {
+      "brand": "Бренд",
+      "btuRange": "Потужність (BTU)",
+      "priceRange": "Ціна",
+      "energyClass": "Енергоклас",
+      "availability": "Наявність",
+      "allBrands": "Усі бренди",
+      "allClasses": "Усі класи",
+      "inStock": "Тільки в наявності",
+      "clearFilters": "Скинути фільтри"
+    },
+    "sort": {
+      "label": "Сортування",
+      "priceAsc": "Ціна ↑",
+      "priceDesc": "Ціна ↓",
+      "btuAsc": "BTU ↑",
+      "btuDesc": "BTU ↓",
+      "nameAsc": "Назва А-Я"
+    }
+  },
+  "product": {
+    "specifications": "Технічні характеристики",
+    "description": "Опис",
+    "inquiryButton": "Залишити заявку",
+    "availability": {
+      "inStock": "В наявності",
+      "limited": "Обмежено",
+      "outOfStock": "Немає в наявності"
+    },
+    "priceVat": "Ціна з ПДВ",
+    "area": "Площа",
+    "noise": "Шум",
+    "energyClass": "Енергоклас",
+    "refrigerant": "Холодоагент",
+    "warranty": "Гарантія",
+    "months": "міс."
+  },
+  "inquiry": {
+    "title": "Залишити заявку",
+    "subtitle": "Заповніть форму, і ми зв'яжемось з вами протягом 1 години.",
+    "name": "Ваше ім'я",
+    "namePlaceholder": "Іван Іванов",
+    "phone": "Телефон",
+    "phonePlaceholder": "+359 88 888 8888",
+    "email": "Email (необов'язково)",
+    "emailPlaceholder": "ivan@example.com",
+    "message": "Повідомлення (необов'язково)",
+    "messagePlaceholder": "Опишіть ваші вимоги — площу приміщення, вподобання щодо бренду, бюджет...",
+    "submit": "Надіслати заявку",
+    "submitting": "Надсилання...",
+    "success": "Дякуємо!",
+    "successMessage": "Ми отримали вашу заявку. Зв'яжемось з вами протягом 1 години.",
+    "error": "Помилка",
+    "errorMessage": "Виникла помилка. Спробуйте ще раз або зателефонуйте нам.",
+    "privacy": "Надсилаючи форму, ви погоджуєтесь з політикою конфіденційності.",
+    "required": "Обов'язкове поле"
+  },
+  "seo": {
+    "titleTemplate": "%s | Clima — Кондиціонери для вашого дому",
+    "defaultDescription": "Кондиціонери провідних брендів — Daikin, Mitsubishi, Toshiba. Доставка та монтаж по всій Болгарії."
+  }
+}

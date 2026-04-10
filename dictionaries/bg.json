@@ -1,0 +1,96 @@
+{
+  "common": {
+    "siteName": "Clima",
+    "phone": "+359 XX XXX XXXX",
+    "nav": {
+      "home": "Начало",
+      "catalog": "Климатици",
+      "brands": "Марки",
+      "about": "За нас",
+      "contact": "Контакти"
+    },
+    "footer": {
+      "description": "Климатици от водещи марки с доставка и професионален монтаж в цяла България.",
+      "quickLinks": "Бързи връзки",
+      "contactUs": "Свържете се с нас",
+      "rights": "Всички права запазени.",
+      "privacy": "Поверителност",
+      "terms": "Условия за ползване"
+    },
+    "currency": {
+      "bgn": "лв.",
+      "eur": "€"
+    }
+  },
+  "hero": {
+    "title": "Климатици от водещи световни марки",
+    "subtitle": "Daikin, Mitsubishi Electric, Toshiba, Nippon — с доставка и професионален монтаж в цяла България. Безплатна консултация.",
+    "cta": "Разгледай каталога",
+    "ctaSecondary": "Безплатна консултация"
+  },
+  "catalog": {
+    "title": "Климатици",
+    "showing": "Показваме {count} от {total} продукта",
+    "noResults": "Няма намерени продукти. Опитайте с други филтри.",
+    "filters": {
+      "brand": "Марка",
+      "btuRange": "Мощност (BTU)",
+      "priceRange": "Цена",
+      "energyClass": "Енергиен клас",
+      "availability": "Наличност",
+      "allBrands": "Всички марки",
+      "allClasses": "Всички класове",
+      "inStock": "Само налични",
+      "clearFilters": "Изчисти филтрите"
+    },
+    "sort": {
+      "label": "Сортирай",
+      "priceAsc": "Цена ↑",
+      "priceDesc": "Цена ↓",
+      "btuAsc": "BTU ↑",
+      "btuDesc": "BTU ↓",
+      "nameAsc": "Име А-Я"
+    }
+  },
+  "product": {
+    "specifications": "Технически характеристики",
+    "description": "Описание",
+    "inquiryButton": "Направете запитване",
+    "availability": {
+      "inStock": "Наличен",
+      "limited": "Ограничена наличност",
+      "outOfStock": "Неналичен"
+    },
+    "priceVat": "Цената е с включен ДДС",
+    "area": "Площ",
+    "noise": "Шум",
+    "energyClass": "Енергиен клас",
+    "refrigerant": "Хладилен агент",
+    "warranty": "Гаранция",
+    "months": "мес."
+  },
+  "inquiry": {
+    "title": "Направете запитване",
+    "subtitle": "Попълнете формата и ние ще се свържем с вас в рамките на 1 час.",
+    "name": "Вашето име",
+    "namePlaceholder": "Иван Иванов",
+    "phone": "Телефон",
+    "phonePlaceholder": "+359 88 888 8888",
+    "email": "Имейл (по избор)",
+    "emailPlaceholder": "ivan@example.com",
+    "message": "Съобщение (по избор)",
+    "messagePlaceholder": "Опишете вашите изисквания — площ на помещението, предпочитания към марка, бюджет...",
+    "submit": "Изпрати запитване",
+    "submitting": "Изпращане...",
+    "success": "Благодарим ви!",
+    "successMessage": "Получихме вашето запитване. Ще се свържем с вас в рамките на 1 час.",
+    "error": "Грешка",
+    "errorMessage": "Възникна грешка при изпращането. Моля, опитайте отново или се обадете на нашия телефон.",
+    "privacy": "С изпращането на тази форма се съгласявате с нашата политика за поверителност.",
+    "required": "Това поле е задължително"
+  },
+  "seo": {
+    "titleTemplate": "%s | Clima — Климатици за вашия дом",
+    "defaultDescription": "Климатици от водещи марки — Daikin, Mitsubishi, Toshiba. Доставка и монтаж в цяла България."
+  }
+}

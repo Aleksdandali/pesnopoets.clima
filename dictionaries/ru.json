@@ -1,0 +1,96 @@
+{
+  "common": {
+    "siteName": "Clima",
+    "phone": "+359 XX XXX XXXX",
+    "nav": {
+      "home": "Главная",
+      "catalog": "Кондиционеры",
+      "brands": "Бренды",
+      "about": "О нас",
+      "contact": "Контакты"
+    },
+    "footer": {
+      "description": "Кондиционеры ведущих брендов с доставкой и профессиональным монтажом по всей Болгарии.",
+      "quickLinks": "Быстрые ссылки",
+      "contactUs": "Свяжитесь с нами",
+      "rights": "Все права защищены.",
+      "privacy": "Конфиденциальность",
+      "terms": "Условия использования"
+    },
+    "currency": {
+      "bgn": "лв.",
+      "eur": "€"
+    }
+  },
+  "hero": {
+    "title": "Кондиционеры ведущих мировых брендов",
+    "subtitle": "Daikin, Mitsubishi Electric, Toshiba, Nippon — с доставкой и профессиональным монтажом по всей Болгарии. Бесплатная консультация.",
+    "cta": "Смотреть каталог",
+    "ctaSecondary": "Бесплатная консультация"
+  },
+  "catalog": {
+    "title": "Кондиционеры",
+    "showing": "Показано {count} из {total} товаров",
+    "noResults": "Товары не найдены. Попробуйте другие фильтры.",
+    "filters": {
+      "brand": "Бренд",
+      "btuRange": "Мощность (BTU)",
+      "priceRange": "Цена",
+      "energyClass": "Энергокласс",
+      "availability": "Наличие",
+      "allBrands": "Все бренды",
+      "allClasses": "Все классы",
+      "inStock": "Только в наличии",
+      "clearFilters": "Сбросить фильтры"
+    },
+    "sort": {
+      "label": "Сортировка",
+      "priceAsc": "Цена ↑",
+      "priceDesc": "Цена ↓",
+      "btuAsc": "BTU ↑",
+      "btuDesc": "BTU ↓",
+      "nameAsc": "Имя А-Я"
+    }
+  },
+  "product": {
+    "specifications": "Технические характеристики",
+    "description": "Описание",
+    "inquiryButton": "Оставить заявку",
+    "availability": {
+      "inStock": "В наличии",
+      "limited": "Ограниченно",
+      "outOfStock": "Нет в наличии"
+    },
+    "priceVat": "Цена с НДС",
+    "area": "Площадь",
+    "noise": "Шум",
+    "energyClass": "Энергокласс",
+    "refrigerant": "Хладагент",
+    "warranty": "Гарантия",
+    "months": "мес."
+  },
+  "inquiry": {
+    "title": "Оставить заявку",
+    "subtitle": "Заполните форму, и мы свяжемся с вами в течение 1 часа.",
+    "name": "Ваше имя",
+    "namePlaceholder": "Иван Иванов",
+    "phone": "Телефон",
+    "phonePlaceholder": "+359 88 888 8888",
+    "email": "Email (необязательно)",
+    "emailPlaceholder": "ivan@example.com",
+    "message": "Сообщение (необязательно)",
+    "messagePlaceholder": "Опишите ваши требования — площадь помещения, предпочтения по бренду, бюджет...",
+    "submit": "Отправить заявку",
+    "submitting": "Отправка...",
+    "success": "Спасибо!",
+    "successMessage": "Мы получили вашу заявку. Свяжемся с вами в течение 1 часа.",
+    "error": "Ошибка",
+    "errorMessage": "Произошла ошибка. Попробуйте ещё раз или позвоните нам.",
+    "privacy": "Отправляя форму, вы соглашаетесь с политикой конфиденциальности.",
+    "required": "Обязательное поле"
+  },
+  "seo": {
+    "titleTemplate": "%s | Clima — Кондиционеры для вашего дома",
+    "defaultDescription": "Кондиционеры ведущих брендов — Daikin, Mitsubishi, Toshiba. Доставка и монтаж по всей Болгарии."
+  }
+}
