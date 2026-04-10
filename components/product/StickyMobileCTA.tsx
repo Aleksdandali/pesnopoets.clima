@@ -6,21 +6,20 @@ interface StickyMobileCTAProps {
   locale: string;
   priceBGN: string;
   phoneNumber: string;
+  dictionary: {
+    stickyBar: { call: string; inquiry: string };
+    common: { currency: { bgn: string } };
+  };
 }
-
-const labels: Record<string, { call: string; inquiry: string }> = {
-  bg: { call: "Обадете се", inquiry: "Запитване" },
-  en: { call: "Call", inquiry: "Inquiry" },
-  ru: { call: "Позвонить", inquiry: "Запрос" },
-  ua: { call: "Зателефонувати", inquiry: "Запит" },
-};
 
 export default function StickyMobileCTA({
   locale,
   priceBGN,
   phoneNumber,
+  dictionary,
 }: StickyMobileCTAProps) {
-  const t = labels[locale] || labels.bg;
+  const t = dictionary.stickyBar;
+  const currencyLabel = dictionary.common.currency.bgn;
 
   function scrollToInquiry() {
     const el = document.getElementById("inquiry-form-section");
@@ -36,7 +35,7 @@ export default function StickyMobileCTA({
           {/* Price */}
           <div className="flex-1 min-w-0">
             <span className="text-base sm:text-lg font-bold text-foreground">
-              {priceBGN} лв.
+              {priceBGN} {currencyLabel}
             </span>
           </div>
 

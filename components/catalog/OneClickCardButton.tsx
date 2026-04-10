@@ -105,7 +105,8 @@ export default function OneClickCardButton({
   if (status === "open" || status === "submitting" || status === "error") {
     return (
       <div
-        className="absolute inset-x-0 bottom-0 bg-white border-t border-border p-3 rounded-b-2xl shadow-lg z-10"
+        className="absolute inset-x-0 bottom-0 bg-white border-t border-border p-3 rounded-b-2xl shadow-[0_-4px_12px_rgb(0_0_0/0.08)] z-10"
+      style={{ position: "absolute" }}
         onClick={(e) => e.preventDefault()}
       >
         <div className="flex items-center justify-between mb-2">

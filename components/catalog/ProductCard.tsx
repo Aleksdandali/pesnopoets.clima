@@ -20,36 +20,54 @@ interface ProductCardProps {
     energy_class?: string | null;
     area_m2?: number | null;
     noise_db_indoor?: number | null;
+    title_en?: string | null;
+    title_ru?: string | null;
+    title_ua?: string | null;
   };
   locale: string;
   currency: "EUR" | "BGN";
+  dictionary?: {
+    common: {
+      currency: { bgn: string; eur: string };
+      upTo: string;
+      sqm: string;
+      promoBadge: string;
+    };
+    product: {
+      availability: {
+        inStock: string;
+        limited: string;
+        outOfStock: string;
+      };
+    };
+  };
 }
 
 const EUR_TO_BGN = 1.95583;
 
-function formatPrice(price: number, currency: "EUR" | "BGN"): string {
+function formatPrice(price: number, currency: "EUR" | "BGN", currencyLabel?: string): string {
   if (currency === "BGN") {
     const bgn = price * EUR_TO_BGN;
-    return `${bgn.toFixed(0)} лв.`;
+    return `${bgn.toFixed(0)} ${currencyLabel || "лв."}`;
   }
   return `${price.toFixed(2)} \u20AC`;
 }
 
-const availabilityStyles: Record<string, { bg: string; text: string; label: Record<string, string> }> = {
+const availabilityStyles: Record<string, { bg: string; text: string; dictKey: "inStock" | "limited" | "outOfStock" }> = {
   Наличен: {
     bg: "bg-success-light",
     text: "text-success",
-    label: { bg: "Наличен", en: "In Stock", ru: "В наличии", ua: "В наявності" },
+    dictKey: "inStock",
   },
   "Ограничена наличност": {
     bg: "bg-warning-light",
     text: "text-warning",
-    label: { bg: "Ограничено", en: "Limited", ru: "Ограничено", ua: "Обмежено" },
+    dictKey: "limited",
   },
   Неналичен: {
     bg: "bg-danger-light",
     text: "text-danger",
-    label: { bg: "Неналичен", en: "Out of Stock", ru: "Нет в наличии", ua: "Немає" },
+    dictKey: "outOfStock",
   },
 };
 
@@ -57,14 +75,26 @@ export default function ProductCard({
   product,
   locale,
   currency,
+  dictionary,
 }: ProductCardProps) {
-  const displayTitle = product.title_override || product.title;
+  // Use translated title for non-bg locales
+  const localeTitle = locale === "en" ? product.title_en : locale === "ru" ? product.title_ru : locale === "ua" ? product.title_ua : null;
+  const displayTitle = product.title_override || localeTitle || product.title;
   const displayPrice = product.price_override || product.price_client;
   const imageUrl = product.gallery?.[0];
   const avail = availabilityStyles[product.availability] || availabilityStyles["Неналичен"];
 
+  const availLabel = dictionary
+    ? dictionary.product.availability[avail.dictKey]
+    : product.availability;
+
+  const upToLabel = dictionary?.common.upTo || (locale === "en" ? "up to" : "до");
+  const sqmLabel = dictionary?.common.sqm || (locale === "en" ? "sq.m" : "кв.м");
+  const promoBadge = dictionary?.common.promoBadge || "PROMO";
+  const currencyLabel = dictionary?.common.currency.bgn;
+
   return (
-    <div className="relative group block bg-white rounded-2xl border border-border shadow-[0_2px_8px_rgb(0_0_0/0.04)] hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0_0_0/0.08)] transition-all duration-300">
+    <div className="relative group block bg-white rounded-2xl border border-border shadow-[0_2px_8px_rgb(0_0_0/0.04)] hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0_0_0/0.08)] transition-all duration-300 overflow-hidden">
       <Link
         href={`/${locale}/klimatici/${product.slug}`}
         className="block"
@@ -88,7 +118,7 @@ export default function ProductCard({
           {/* Promo badge */}
           {product.is_promo && product.price_promo && product.price_promo > 0 && (
             <div className="absolute top-3 left-3 bg-danger text-white text-xs font-bold px-2.5 py-1 rounded-lg">
-              PROMO
+              {promoBadge}
             </div>
           )}
 
@@ -96,7 +126,7 @@ export default function ProductCard({
           <div
             className={`absolute top-3 right-3 ${avail.bg} ${avail.text} text-xs font-medium px-2.5 py-1 rounded-lg`}
           >
-            {avail.label[locale] || avail.label.bg}
+            {availLabel}
           </div>
         </div>
 
@@ -124,9 +154,9 @@ export default function ProductCard({
               <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                 <Maximize className="w-3.5 h-3.5 text-primary/60" />
                 <span>
-                  {locale === "bg" ? "до" : locale === "ru" || locale === "ua" ? "до" : "up to"}{" "}
+                  {upToLabel}{" "}
                   {product.area_m2}{" "}
-                  {locale === "en" ? "sq.m" : "кв.м"}
+                  {sqmLabel}
                 </span>
               </div>
             )}
@@ -148,11 +178,11 @@ export default function ProductCard({
           <div className="flex items-center justify-between gap-2 pt-3 sm:pt-4 border-t border-border">
             <div className="flex items-baseline gap-1.5 sm:gap-2">
               <span className="text-base sm:text-xl font-extrabold text-foreground">
-                {formatPrice(displayPrice, currency)}
+                {formatPrice(displayPrice, currency, currencyLabel)}
               </span>
               {product.is_promo && product.price_promo && product.price_promo > 0 && (
                 <span className="text-sm text-muted-foreground line-through">
-                  {formatPrice(product.price_client, currency)}
+                  {formatPrice(product.price_client, currency, currencyLabel)}
                 </span>
               )}
             </div>

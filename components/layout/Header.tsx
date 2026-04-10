@@ -17,6 +17,8 @@ interface HeaderProps {
         contact: string;
       };
       siteName: string;
+      siteNameFirst: string;
+      siteNameSecond: string;
       phone: string;
       inquiry?: string;
       callUs?: string;
@@ -122,10 +124,10 @@ export default function Header({ locale, dictionary }: HeaderProps) {
               />
               <div className="flex flex-col">
                 <span className="text-sm sm:text-base font-bold text-foreground tracking-tight leading-none">
-                  Песнопоец
+                  {t.siteNameFirst}
                 </span>
                 <span className="text-[10px] text-primary font-semibold tracking-widest uppercase leading-none mt-0.5">
-                  Клима
+                  {t.siteNameSecond}
                 </span>
               </div>
             </Link>

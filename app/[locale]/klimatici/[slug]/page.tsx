@@ -85,14 +85,6 @@ export async function generateMetadata({
   };
 }
 
-// Installment labels
-const installmentLabels: Record<string, { prefix: string; suffix: string }> = {
-  bg: { prefix: "или 12 x", suffix: "лв./мес." },
-  en: { prefix: "or 12 x", suffix: "BGN/mo." },
-  ru: { prefix: "или 12 x", suffix: "лв./мес." },
-  ua: { prefix: "або 12 x", suffix: "лв./міс." },
-};
-
 // Energy class color mapping
 function getEnergyClassColor(energyClass: string): string {
   const cls = energyClass.toUpperCase().replace(/\s/g, "");
@@ -116,13 +108,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const trust = dictionary.trust;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
 
-  const displayTitle = product.title_override || product.title;
-  const displayDescription =
-    product.description_override || product.description;
+  // Use translated title/description for non-bg locales
+  const localeTitle = locale === "en" ? product.title_en : locale === "ru" ? product.title_ru : locale === "ua" ? product.title_ua : null;
+  const displayTitle = product.title_override || localeTitle || product.title;
+  const localeDesc = locale === "en" ? product.description_en : locale === "ru" ? product.description_ru : locale === "ua" ? product.description_ua : null;
+  const displayDescription = product.description_override || localeDesc || product.description;
   const displayPrice = product.price_override || product.price_client;
   const priceBGN = (displayPrice * EUR_TO_BGN).toFixed(0);
   const installmentMonthly = Math.ceil((displayPrice * EUR_TO_BGN) / 12);
-  const instLabels = installmentLabels[locale] || installmentLabels.bg;
 
   // Category info for breadcrumb
   const categoryName = product.categories?.subgroup_name;
@@ -146,16 +139,26 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const breadcrumbJsonLd = generateBreadcrumbJsonLd(breadcrumbItems, siteUrl);
 
-  const availLabels: Record<string, Record<string, string>> = {
-    Наличен: { bg: "Наличен", en: "In Stock", ru: "В наличии", ua: "В наявності" },
-    "Ограничена наличност": { bg: "Ограничена наличност", en: "Limited Stock", ru: "Ограниченно", ua: "Обмежено" },
-    Неналичен: { bg: "Неналичен", en: "Out of Stock", ru: "Нет в наличии", ua: "Немає в наявності" },
+  // Map availability DB values to dictionary keys
+  const availKeyMap: Record<string, "inStock" | "limited" | "outOfStock"> = {
+    "Наличен": "inStock",
+    "Ограничена наличност": "limited",
+    "Неналичен": "outOfStock",
   };
 
+  const availKey = availKeyMap[product.availability] || "outOfStock";
+  const availLabel = t.availability[availKey];
+
   const availColors: Record<string, string> = {
-    Наличен: "bg-success-light text-success",
-    "Ограничена наличност": "bg-warning-light text-warning",
-    Неналичен: "bg-danger-light text-danger",
+    inStock: "bg-success-light text-success",
+    limited: "bg-warning-light text-warning",
+    outOfStock: "bg-danger-light text-danger",
+  };
+
+  const availDotColors: Record<string, string> = {
+    inStock: "bg-success animate-pulse",
+    limited: "bg-warning",
+    outOfStock: "bg-danger",
   };
 
   // Count available highlight specs for grid sizing
@@ -212,10 +215,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </ol>
         </nav>
 
-        {/* ============================================================ */}
-        {/* MAIN TWO-COLUMN LAYOUT                                       */}
-        {/* Mobile order is controlled via order-* classes                */}
-        {/* ============================================================ */}
+        {/* MAIN TWO-COLUMN LAYOUT */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10">
 
           {/* LEFT COLUMN: Gallery */}
@@ -243,20 +243,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="mb-4">
               <span
                 className={`inline-flex items-center px-3.5 py-1.5 rounded-full text-sm font-semibold ${
-                  availColors[product.availability] || availColors["Неналичен"]
+                  availColors[availKey]
                 }`}
               >
                 <span
-                  className={`w-2 h-2 rounded-full mr-2 ${
-                    product.availability === "Наличен"
-                      ? "bg-success animate-pulse"
-                      : product.availability === "Ограничена наличност"
-                      ? "bg-warning"
-                      : "bg-danger"
-                  }`}
+                  className={`w-2 h-2 rounded-full mr-2 ${availDotColors[availKey]}`}
                   aria-hidden="true"
                 />
-                {availLabels[product.availability]?.[locale] || product.availability}
+                {availLabel}
                 {product.stock_size && product.stock_size <= 5 && (
                   <span className="ml-1.5">
                     ({product.stock_size} {dictionary.common.pcs})
@@ -276,11 +270,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </span>
               </div>
               <p className="text-sm text-muted-foreground mt-1">
-                {instLabels.prefix}{" "}
+                {t.installmentPrefix}{" "}
                 <span className="font-semibold text-foreground">
                   {installmentMonthly}
                 </span>{" "}
-                {instLabels.suffix}
+                {t.installmentSuffix}
               </p>
               {product.is_promo && product.price_promo > 0 && (
                 <p className="text-sm text-danger font-semibold mt-1">
@@ -406,9 +400,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
         </div>
 
-        {/* ============================================================ */}
-        {/* BELOW THE FOLD CONTENT                                       */}
-        {/* ============================================================ */}
+        {/* BELOW THE FOLD CONTENT */}
 
         {/* Product Highlights — large visual cards for key specs */}
         {highlightCount > 0 && (
@@ -516,6 +508,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           categoryId={product.category_id}
           manufacturer={product.manufacturer}
           locale={locale}
+          dictionary={dictionary}
         />
       </div>
 
@@ -524,6 +517,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         locale={locale}
         priceBGN={priceBGN}
         phoneNumber={PHONE_NUMBER}
+        dictionary={dictionary}
       />
     </>
   );

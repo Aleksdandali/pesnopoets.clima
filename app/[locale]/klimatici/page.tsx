@@ -18,20 +18,6 @@ interface CatalogPageProps {
 
 const PRODUCTS_PER_PAGE = 24;
 
-const catalogLabels: Record<string, {
-  title: string;
-  home: string;
-  allProducts: string;
-  categories: string;
-  filters: string;
-  noResults: string;
-}> = {
-  bg: { title: "Климатици", home: "Начало", allProducts: "Всички продукти", categories: "Категории", filters: "Филтри", noResults: "Няма намерени продукти. Опитайте с други филтри." },
-  en: { title: "Air Conditioners", home: "Home", allProducts: "All products", categories: "Categories", filters: "Filters", noResults: "No products found. Try different filters." },
-  ru: { title: "Кондиционеры", home: "Главная", allProducts: "Все товары", categories: "Категории", filters: "Фильтры", noResults: "Товары не найдены. Попробуйте другие фильтры." },
-  ua: { title: "Кондиціонери", home: "Головна", allProducts: "Усі товари", categories: "Категорії", filters: "Фільтри", noResults: "Товари не знайдено. Спробуйте інші фільтри." },
-};
-
 async function getDictionary(locale: string) {
   try {
     const dict = await import(`@/dictionaries/${locale}.json`);
@@ -42,11 +28,11 @@ async function getDictionary(locale: string) {
   }
 }
 
-async function getCategoriesWithCounts(supabase: Awaited<ReturnType<typeof createClient>>) {
+async function getCategoriesWithCounts(supabase: Awaited<ReturnType<typeof createClient>>, locale: string) {
   // Get all categories with product counts
   const { data: categories } = await supabase
     .from("categories")
-    .select("id, group_name, subgroup_name, slug")
+    .select("id, group_name, subgroup_name, slug, name_en, name_ru, name_ua")
     .order("group_name")
     .order("subgroup_name");
 
@@ -81,9 +67,11 @@ async function getCategoriesWithCounts(supabase: Awaited<ReturnType<typeof creat
     }
     const count = countMap[cat.id] || 0;
     if (count > 0) {
+      // Use translated subgroup name if available
+      const translatedSubName = locale === "en" ? cat.name_en : locale === "ru" ? cat.name_ru : locale === "ua" ? cat.name_ua : null;
       groupMap[cat.group_name].subcategories.push({
         id: cat.id,
-        subgroup_name: cat.subgroup_name,
+        subgroup_name: translatedSubName || cat.subgroup_name,
         slug: cat.slug,
         product_count: count,
       });
@@ -107,10 +95,10 @@ export default async function CatalogPage({
   const filters = await searchParams;
   const dictionary = await getDictionary(locale);
   const supabase = await createClient();
-  const labels = catalogLabels[locale] || catalogLabels.bg;
+  const catalogDict = dictionary.catalog;
 
   // Get categories with counts
-  const { groups: categoryGroups, total: totalProducts } = await getCategoriesWithCounts(supabase);
+  const { groups: categoryGroups, total: totalProducts } = await getCategoriesWithCounts(supabase, locale);
   const activeCategoryId = filters.category ? parseInt(filters.category) : undefined;
 
   // Find active category name for breadcrumb
@@ -190,22 +178,19 @@ export default async function CatalogPage({
 
   const totalPages = Math.ceil((count || 0) / PRODUCTS_PER_PAGE);
 
-  const showingLabels: Record<string, string> = {
-    bg: `Показваме ${products?.length || 0} от ${count || 0} продукта`,
-    en: `Showing ${products?.length || 0} of ${count || 0} products`,
-    ru: `Показано ${products?.length || 0} из ${count || 0} товаров`,
-    ua: `Показано ${products?.length || 0} з ${count || 0} товарів`,
-  };
+  const showingText = catalogDict.showing
+    .replace("{count}", String(products?.length || 0))
+    .replace("{total}", String(count || 0));
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 overflow-x-hidden">
       {/* Breadcrumb */}
       <nav className="text-sm text-muted-foreground mb-4" role="navigation" aria-label="Breadcrumb">
-        <a href={`/${locale}`} className="hover:text-primary">{labels.home}</a>
+        <a href={`/${locale}`} className="hover:text-primary">{catalogDict.home}</a>
         <span className="mx-2">/</span>
         {activeCategoryName ? (
           <>
-            <a href={`/${locale}/klimatici`} className="hover:text-primary">{labels.title}</a>
+            <a href={`/${locale}/klimatici`} className="hover:text-primary">{catalogDict.title}</a>
             <span className="mx-2">/</span>
             {activeGroupName && (
               <>
@@ -216,15 +201,15 @@ export default async function CatalogPage({
             <span className="text-foreground">{activeCategoryName}</span>
           </>
         ) : (
-          <span className="text-foreground">{labels.title}</span>
+          <span className="text-foreground">{catalogDict.title}</span>
         )}
       </nav>
 
       <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
-        {activeCategoryName || labels.title}
+        {activeCategoryName || catalogDict.title}
       </h1>
       <p className="text-sm sm:text-base text-muted-foreground mb-6">
-        {showingLabels[locale] || showingLabels.bg}
+        {showingText}
       </p>
 
       {/* Layout: On mobile — full width. On desktop — sidebar + content */}
@@ -235,9 +220,9 @@ export default async function CatalogPage({
           categories={categoryGroups}
           activeCategoryId={activeCategoryId}
           labels={{
-            allProducts: labels.allProducts,
-            categories: labels.categories,
-            filters: labels.filters,
+            allProducts: catalogDict.allProducts,
+            categories: catalogDict.categories,
+            filters: catalogDict.filtersLabel,
           }}
           totalProducts={totalProducts}
         />
@@ -260,12 +245,13 @@ export default async function CatalogPage({
                   product={product}
                   locale={locale}
                   currency="BGN"
+                  dictionary={dictionary}
                 />
               ))}
             </div>
           ) : (
             <div className="text-center py-20">
-              <p className="text-base sm:text-lg text-muted-foreground">{labels.noResults}</p>
+              <p className="text-base sm:text-lg text-muted-foreground">{catalogDict.noResults}</p>
             </div>
           )}
 

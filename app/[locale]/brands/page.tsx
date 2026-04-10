@@ -2,18 +2,19 @@ import Link from "next/link";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 
-const titles: Record<string, string> = {
-  bg: "Марки", en: "Brands", ru: "Бренды", ua: "Бренди",
-};
-const subtitles: Record<string, string> = {
-  bg: "Работим с водещи световни производители на климатична техника.", en: "We work with world-leading air conditioning manufacturers.", ru: "Работаем с ведущими мировыми производителями климатической техники.", ua: "Працюємо з провідними світовими виробниками кліматичної техніки.",
-};
-const productLabel: Record<string, string> = {
-  bg: "продукта", en: "products", ru: "товаров", ua: "товарів",
-};
+async function getDictionary(locale: string) {
+  try {
+    const dict = await import(`@/dictionaries/${locale}.json`);
+    return dict.default;
+  } catch {
+    const dict = await import(`@/dictionaries/bg.json`);
+    return dict.default;
+  }
+}
 
 export default async function BrandsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  const dictionary = await getDictionary(locale);
   const supabase = await createClient();
 
   const { data } = await supabase
@@ -30,11 +31,12 @@ export default async function BrandsPage({ params }: { params: Promise<{ locale:
   }
 
   const brands = Object.entries(brandMap).map(([name, info]) => ({ name, ...info })).sort((a, b) => b.count - a.count);
+  const t = dictionary.brands;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="text-3xl font-bold text-foreground mb-3">{titles[locale] || titles.bg}</h1>
-      <p className="text-muted-foreground mb-10">{subtitles[locale] || subtitles.bg}</p>
+      <h1 className="text-3xl font-bold text-foreground mb-3">{t.title}</h1>
+      <p className="text-muted-foreground mb-10">{t.subtitle}</p>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
         {brands.map((brand) => (
@@ -52,7 +54,7 @@ export default async function BrandsPage({ params }: { params: Promise<{ locale:
             )}
             <div className="text-center">
               <span className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">{brand.name}</span>
-              <span className="block text-xs text-muted-foreground mt-1">{brand.count} {productLabel[locale] || productLabel.bg}</span>
+              <span className="block text-xs text-muted-foreground mt-1">{brand.count} {t.productsCount}</span>
             </div>
           </Link>
         ))}

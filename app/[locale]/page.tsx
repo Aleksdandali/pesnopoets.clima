@@ -171,7 +171,7 @@ const sectionLabels: Record<string, {
     whyUs: "Защо да изберете нас",
     ctaTitle: "Нуждаете се от помощ при избора?",
     ctaSubtitle: "Обадете ни се или оставете запитване — наш специалист ще ви помогне да изберете най-подходящия климатик за вашето помещение и бюджет. Без ангажимент.",
-    ctaButton: "Свържете се с нас",
+    ctaButton: "Безплатна консултация",
     freeConsultation: "Безплатна консултация",
   },
   en: {
@@ -182,7 +182,7 @@ const sectionLabels: Record<string, {
     whyUs: "Why choose us",
     ctaTitle: "Need help choosing?",
     ctaSubtitle: "Call us or leave an inquiry — our specialist will help you choose the best air conditioner for your space and budget. No commitment.",
-    ctaButton: "Contact us",
+    ctaButton: "Free consultation",
     freeConsultation: "Free consultation",
   },
   ru: {
@@ -193,7 +193,7 @@ const sectionLabels: Record<string, {
     whyUs: "Почему выбирают нас",
     ctaTitle: "Нужна помощь с выбором?",
     ctaSubtitle: "Позвоните нам или оставьте заявку — наш специалист поможет подобрать оптимальный кондиционер для вашего помещения и бюджета. Без обязательств.",
-    ctaButton: "Свяжитесь с нами",
+    ctaButton: "Бесплатная консультация",
     freeConsultation: "Бесплатная консультация",
   },
   ua: {
@@ -204,7 +204,7 @@ const sectionLabels: Record<string, {
     whyUs: "Чому обирають нас",
     ctaTitle: "Потрібна допомога з вибором?",
     ctaSubtitle: "Зателефонуйте або залиште заявку — наш спеціаліст допоможе обрати найкращий кондиціонер для вашого приміщення та бюджету. Без зобов'язань.",
-    ctaButton: "Зв'яжіться з нами",
+    ctaButton: "Безкоштовна консультація",
     freeConsultation: "Безкоштовна консультація",
   },
 };
@@ -469,6 +469,7 @@ export default async function HomePage({ params }: HomePageProps) {
                   product={product}
                   locale={locale}
                   currency="BGN"
+                  dictionary={dictionary}
                 />
               ))}
             </div>

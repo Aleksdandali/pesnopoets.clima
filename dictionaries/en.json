@@ -1,6 +1,8 @@
 {
   "common": {
     "siteName": "Pesnopoets Clima",
+    "siteNameFirst": "Pesnopoets",
+    "siteNameSecond": "Clima",
     "phone": "+359 888 123 456",
     "nav": {
       "home": "Home",
@@ -30,10 +32,13 @@
     "productsCount": "products",
     "pcs": "pcs",
     "promoPrice": "Promo price!",
+    "promoBadge": "PROMO",
     "upTo": "up to",
     "sqm": "sq.m",
     "inquiryFor": "Inquiry for:",
-    "sendAnother": "Send another inquiry"
+    "sendAnother": "Send another inquiry",
+    "noImage": "No image",
+    "country": "Bulgaria"
   },
   "hero": {
     "title": "Air Conditioners from World-Leading Brands",
@@ -58,7 +63,7 @@
   "catalog": {
     "title": "Air Conditioners",
     "showing": "Showing {count} of {total} products",
-    "noResults": "No products found. Try different filters.",
+    "noResults": "No products match your criteria. Try different filters or contact us for assistance.",
     "filters": {
       "brand": "Brand",
       "btuRange": "Power (BTU)",
@@ -77,7 +82,11 @@
       "btuAsc": "BTU ↑",
       "btuDesc": "BTU ↓",
       "nameAsc": "Name A-Z"
-    }
+    },
+    "home": "Home",
+    "allProducts": "All products",
+    "categories": "Categories",
+    "filtersLabel": "Filters"
   },
   "product": {
     "specifications": "Technical Specifications",
@@ -99,7 +108,10 @@
     "readMore": "Read more",
     "readLess": "Show less",
     "power": "Power",
-    "noiseLevel": "Noise Level"
+    "noiseLevel": "Noise Level",
+    "similarProducts": "Similar Products",
+    "installmentPrefix": "or 12 x",
+    "installmentSuffix": "BGN/mo."
   },
   "inquiry": {
     "title": "Make an Inquiry",
@@ -121,7 +133,79 @@
     "error": "Error",
     "errorMessage": "Something went wrong. Please try again or call us directly.",
     "privacy": "By submitting this form you agree to our privacy policy.",
-    "required": "This field is required"
+    "required": "This field is required",
+    "pageTitle": "Inquiry",
+    "pageSubtitle": "Have questions or want a quote? Fill out the form and we'll contact you within 1 hour.",
+    "contactTitle": "Contact Us",
+    "workHours": "Working Hours",
+    "workHoursValue": "Mon-Fri: 09:00-18:00\nSat: 10:00-14:00"
+  },
+  "cookie": {
+    "text": "This site uses cookies to improve your experience. By continuing, you agree to their use.",
+    "accept": "Accept",
+    "decline": "Decline",
+    "learnMore": "Learn more"
+  },
+  "oneClick": {
+    "title": "Order in 1 click",
+    "subtitle": "Enter phone and we'll call you",
+    "placeholder": "+359 88 888 8888",
+    "submit": "Call me",
+    "submitting": "Sending...",
+    "success": "We'll call you soon!",
+    "error": "Error. Please try again.",
+    "required": "Enter a phone number"
+  },
+  "stickyBar": {
+    "call": "Call",
+    "inquiry": "Inquiry"
+  },
+  "brands": {
+    "title": "Brands",
+    "subtitle": "We work with world-leading air conditioning manufacturers.",
+    "productsCount": "products"
+  },
+  "about": {
+    "title": "About Us",
+    "subtitle": "Pesnopoets Clima is an authorized dealer of leading air conditioning brands in Bulgaria. We offer a full range of services — from consultation and selection, through delivery, to professional installation and warranty service.",
+    "teamParagraph": "Behind Pesnopoets Clima is a team of specialists with years of experience in HVAC systems. Our priority is to offer every client a solution tailored to their space and budget — honestly, professionally, and without pressure.",
+    "stats": [
+      { "value": "500+", "label": "installations" },
+      { "value": "8+", "label": "years experience" },
+      { "value": "10+", "label": "brands" },
+      { "value": "4.9/5", "label": "rating" }
+    ],
+    "values": [
+      { "title": "Original Products", "desc": "We work directly with manufacturers. All products come with full warranty." },
+      { "title": "Delivery Across Bulgaria", "desc": "Fast delivery to your address. Real-time availability." },
+      { "title": "Professional Installation", "desc": "Installation by certified specialists with years of experience." },
+      { "title": "After-Sales Service", "desc": "Warranty and out-of-warranty service. Always available." }
+    ]
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Get in touch for consultation, quotes or questions.",
+    "phone": "Phone",
+    "email": "Email",
+    "address": "Address",
+    "hours": "Working Hours",
+    "hoursValue": "Mon-Fri: 09:00-18:00\nSat: 10:00-14:00",
+    "responseTime": "We respond within 1 hour",
+    "viber": "Viber",
+    "whatsapp": "WhatsApp",
+    "messengers": "Message us on:"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "intro": "This page describes how we collect and use your personal data when using our website.",
+    "dataTitle": "What data we collect",
+    "dataText": "When filling out the inquiry form, we collect: name, phone number, email (optional), and message. This data is used solely to process your inquiry."
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "intro": "By using this website, you accept these terms of service.",
+    "pricesTitle": "Prices and availability",
+    "pricesText": "All prices are in Bulgarian Lev including VAT. Prices and availability are updated automatically every 2 hours. Discrepancies between displayed and actual availability may occur."
   },
   "seo": {
     "titleTemplate": "%s | Clima — Air Conditioners for Your Home",

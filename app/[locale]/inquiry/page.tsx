@@ -6,6 +6,8 @@ interface InquiryPageProps {
   params: Promise<{ locale: string }>;
 }
 
+const PHONE_NUMBER = "+359 888 123 456";
+
 async function getDictionary(locale: string) {
   try {
     const dict = await import(`@/dictionaries/${locale}.json`);
@@ -16,57 +18,22 @@ async function getDictionary(locale: string) {
   }
 }
 
-const pageContent: Record<
-  string,
-  {
-    title: string;
-    subtitle: string;
-    metaTitle: string;
-    metaDesc: string;
-    contactTitle: string;
-    workHours: string;
-    workHoursValue: string;
-  }
-> = {
+const metaContent: Record<string, { metaTitle: string; metaDesc: string }> = {
   bg: {
-    title: "Запитване",
-    subtitle:
-      "Имате въпроси или искате оферта? Попълнете формата и ние ще се свържем с вас в рамките на 1 час.",
     metaTitle: "Запитване — Clima",
     metaDesc: "Направете запитване за климатик. Безплатна консултация и оферта.",
-    contactTitle: "Свържете се с нас",
-    workHours: "Работно време",
-    workHoursValue: "Пон-Пет: 09:00–18:00\nСъб: 10:00–14:00",
   },
   en: {
-    title: "Inquiry",
-    subtitle:
-      "Have questions or want a quote? Fill out the form and we'll contact you within 1 hour.",
     metaTitle: "Inquiry — Clima",
     metaDesc: "Make an inquiry about air conditioners. Free consultation and quote.",
-    contactTitle: "Contact Us",
-    workHours: "Working Hours",
-    workHoursValue: "Mon-Fri: 09:00–18:00\nSat: 10:00–14:00",
   },
   ru: {
-    title: "Запрос",
-    subtitle:
-      "Есть вопросы или хотите получить предложение? Заполните форму, и мы свяжемся с вами в течение 1 часа.",
     metaTitle: "Запрос — Clima",
     metaDesc: "Оставьте заявку на кондиционер. Бесплатная консультация.",
-    contactTitle: "Свяжитесь с нами",
-    workHours: "Рабочее время",
-    workHoursValue: "Пн-Пт: 09:00–18:00\nСб: 10:00–14:00",
   },
   ua: {
-    title: "Запит",
-    subtitle:
-      "Маєте запитання або хочете отримати пропозицію? Заповніть форму, і ми зв'яжемось з вами протягом 1 години.",
     metaTitle: "Запит — Clima",
     metaDesc: "Залиште заявку на кондиціонер. Безкоштовна консультація.",
-    contactTitle: "Зв'яжіться з нами",
-    workHours: "Робочий час",
-    workHoursValue: "Пн-Пт: 09:00–18:00\nСб: 10:00–14:00",
   },
 };
 
@@ -74,17 +41,17 @@ export async function generateMetadata({
   params,
 }: InquiryPageProps): Promise<Metadata> {
   const { locale } = await params;
-  const content = pageContent[locale] || pageContent.bg;
+  const meta = metaContent[locale] || metaContent.bg;
   return {
-    title: content.metaTitle,
-    description: content.metaDesc,
+    title: meta.metaTitle,
+    description: meta.metaDesc,
   };
 }
 
 export default async function InquiryPage({ params }: InquiryPageProps) {
   const { locale } = await params;
   const dictionary = await getDictionary(locale);
-  const content = pageContent[locale] || pageContent.bg;
+  const t = dictionary.inquiry;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -92,9 +59,9 @@ export default async function InquiryPage({ params }: InquiryPageProps) {
         {/* Form */}
         <div className="lg:col-span-3">
           <h1 className="text-3xl font-bold text-foreground mb-3">
-            {content.title}
+            {t.pageTitle}
           </h1>
-          <p className="text-muted-foreground mb-8">{content.subtitle}</p>
+          <p className="text-muted-foreground mb-8">{t.pageSubtitle}</p>
 
           <div className="bg-white border border-border rounded-xl p-6 sm:p-8">
             <InquiryForm locale={locale} dictionary={dictionary} />
@@ -106,7 +73,7 @@ export default async function InquiryPage({ params }: InquiryPageProps) {
           <div className="sticky top-24 space-y-6">
             <div className="bg-muted rounded-xl p-6">
               <h2 className="text-lg font-bold text-foreground mb-4">
-                {content.contactTitle}
+                {t.contactTitle}
               </h2>
               <ul className="space-y-4">
                 <li className="flex items-center gap-3">
@@ -115,13 +82,13 @@ export default async function InquiryPage({ params }: InquiryPageProps) {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">
-                      {locale === "bg" ? "Телефон" : locale === "ru" || locale === "ua" ? "Телефон" : "Phone"}
+                      {t.phone}
                     </p>
                     <a
-                      href="tel:+359000000000"
+                      href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
                       className="text-foreground font-medium hover:text-primary"
                     >
-                      +359 XX XXX XXXX
+                      {PHONE_NUMBER}
                     </a>
                   </div>
                 </li>
@@ -145,10 +112,10 @@ export default async function InquiryPage({ params }: InquiryPageProps) {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">
-                      {content.workHours}
+                      {t.workHours}
                     </p>
                     <p className="text-foreground font-medium whitespace-pre-line text-sm">
-                      {content.workHoursValue}
+                      {t.workHoursValue}
                     </p>
                   </div>
                 </li>

@@ -5,48 +5,21 @@ import { Cookie, X } from "lucide-react";
 
 interface CookieConsentProps {
   locale: string;
+  dictionary: {
+    cookie: {
+      text: string;
+      accept: string;
+      decline: string;
+      learnMore: string;
+    };
+  };
 }
-
-const translations: Record<
-  string,
-  {
-    text: string;
-    accept: string;
-    decline: string;
-    learnMore: string;
-  }
-> = {
-  bg: {
-    text: "Този сайт използва бисквитки, за да подобри вашето преживяване. Продължавайки, вие се съгласявате с използването им.",
-    accept: "Приемам",
-    decline: "Отказвам",
-    learnMore: "Научете повече",
-  },
-  en: {
-    text: "This site uses cookies to improve your experience. By continuing, you agree to their use.",
-    accept: "Accept",
-    decline: "Decline",
-    learnMore: "Learn more",
-  },
-  ru: {
-    text: "Этот сайт использует файлы cookie для улучшения вашего опыта. Продолжая, вы соглашаетесь с их использованием.",
-    accept: "Принять",
-    decline: "Отклонить",
-    learnMore: "Подробнее",
-  },
-  ua: {
-    text: "Цей сайт використовує файли cookie для покращення вашого досвіду. Продовжуючи, ви погоджуєтеся з їх використанням.",
-    accept: "Прийняти",
-    decline: "Відхилити",
-    learnMore: "Дізнатися більше",
-  },
-};
 
 const CONSENT_KEY = "cookie-consent";
 
-export default function CookieConsent({ locale }: CookieConsentProps) {
+export default function CookieConsent({ locale, dictionary }: CookieConsentProps) {
   const [visible, setVisible] = useState(false);
-  const t = translations[locale] || translations.bg;
+  const t = dictionary.cookie;
 
   useEffect(() => {
     const consent = localStorage.getItem(CONSENT_KEY);

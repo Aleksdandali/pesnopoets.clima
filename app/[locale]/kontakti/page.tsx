@@ -4,21 +4,14 @@ import InquiryForm from "@/components/forms/InquiryForm";
 const PHONE_NUMBER = "+359 888 123 456";
 const PHONE_RAW = "+359888123456";
 
-const content: Record<string, { title: string; subtitle: string; phone: string; email: string; address: string; hours: string; hoursValue: string; responseTime: string; viber: string; whatsapp: string; messengers: string }> = {
-  bg: { title: "Контакти", subtitle: "Свържете се с нас за консултация, оферта или въпроси.", phone: "Телефон", email: "Имейл", address: "Адрес", hours: "Работно време", hoursValue: "Пон-Пет: 09:00-18:00\nСъб: 10:00-14:00", responseTime: "Отговаряме в рамките на 1 час", viber: "Viber", whatsapp: "WhatsApp", messengers: "Пишете ни и в:" },
-  en: { title: "Contact", subtitle: "Get in touch for consultation, quotes or questions.", phone: "Phone", email: "Email", address: "Address", hours: "Working Hours", hoursValue: "Mon-Fri: 09:00-18:00\nSat: 10:00-14:00", responseTime: "We respond within 1 hour", viber: "Viber", whatsapp: "WhatsApp", messengers: "Message us on:" },
-  ru: { title: "Контакты", subtitle: "Свяжитесь с нами для консультации, предложений или вопросов.", phone: "Телефон", email: "Email", address: "Адрес", hours: "Рабочее время", hoursValue: "Пн-Пт: 09:00-18:00\nСб: 10:00-14:00", responseTime: "Отвечаем в течение 1 часа", viber: "Viber", whatsapp: "WhatsApp", messengers: "Напишите нам:" },
-  ua: { title: "Контакти", subtitle: "Зв'яжіться з нами для консультації, пропозицій або запитань.", phone: "Телефон", email: "Email", address: "Адреса", hours: "Робочий час", hoursValue: "Пн-Пт: 09:00-18:00\nСб: 10:00-14:00", responseTime: "Відповідаємо протягом 1 години", viber: "Viber", whatsapp: "WhatsApp", messengers: "Напишіть нам:" },
-};
-
 async function getDictionary(locale: string) {
   try { return (await import(`@/dictionaries/${locale}.json`)).default; } catch { return (await import(`@/dictionaries/bg.json`)).default; }
 }
 
 export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const c = content[locale] || content.bg;
   const dictionary = await getDictionary(locale);
+  const c = dictionary.contact;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -59,7 +52,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">{c.address}</p>
-                    <p className="text-foreground font-medium">{locale === "bg" ? "България" : locale === "ru" ? "Болгария" : locale === "ua" ? "Болгарія" : "Bulgaria"}</p>
+                    <p className="text-foreground font-medium">{dictionary.common.country}</p>
                   </div>
                 </li>
                 <li className="flex items-center gap-3">

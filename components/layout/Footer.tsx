@@ -7,6 +7,9 @@ interface FooterProps {
   dictionary: {
     common: {
       siteName: string;
+      siteNameFirst: string;
+      siteNameSecond: string;
+      country: string;
       nav: {
         home: string;
         catalog: string;
@@ -43,13 +46,6 @@ const brands = [
   "LG",
 ];
 
-const locationLabels: Record<string, string> = {
-  bg: "България",
-  en: "Bulgaria",
-  ru: "Болгария",
-  ua: "Болгарія",
-};
-
 const dealerLine: Record<string, string> = {
   bg: "Официален дилър на Daikin, Mitsubishi, Toshiba и Gree в България",
   en: "Authorized dealer of Daikin, Mitsubishi, Toshiba and Gree in Bulgaria",
@@ -77,10 +73,10 @@ export default function Footer({ locale, dictionary }: FooterProps) {
               />
               <div className="flex flex-col">
                 <span className="text-base font-bold text-white tracking-tight leading-none">
-                  Песнопоец
+                  {t.siteNameFirst}
                 </span>
                 <span className="text-[10px] text-primary-light font-semibold tracking-widest uppercase leading-none mt-0.5">
-                  Клима
+                  {t.siteNameSecond}
                 </span>
               </div>
             </Link>
@@ -162,7 +158,7 @@ export default function Footer({ locale, dictionary }: FooterProps) {
               <li>
                 <div className="flex items-start gap-2.5 text-sm text-white/50 py-2">
                   <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-white/30" aria-hidden="true" />
-                  <span>{locationLabels[locale] || locationLabels.bg}</span>
+                  <span>{t.country}</span>
                 </div>
               </li>
             </ul>

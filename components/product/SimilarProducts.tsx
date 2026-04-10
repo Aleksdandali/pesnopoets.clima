@@ -6,20 +6,30 @@ interface SimilarProductsProps {
   categoryId: number | null;
   manufacturer: string;
   locale: string;
+  dictionary: {
+    product: {
+      similarProducts: string;
+      availability: {
+        inStock: string;
+        limited: string;
+        outOfStock: string;
+      };
+    };
+    common: {
+      currency: { bgn: string; eur: string };
+      upTo: string;
+      sqm: string;
+      promoBadge: string;
+    };
+  };
 }
-
-const sectionTitles: Record<string, string> = {
-  bg: "Подобни продукти",
-  en: "Similar Products",
-  ru: "Похожие товары",
-  ua: "Схожі товари",
-};
 
 export default async function SimilarProducts({
   currentProductId,
   categoryId,
   manufacturer,
   locale,
+  dictionary,
 }: SimilarProductsProps) {
   const supabase = await createClient();
   const TARGET = 4;
@@ -54,7 +64,7 @@ export default async function SimilarProducts({
 
   if (products.length === 0) return null;
 
-  const title = sectionTitles[locale] || sectionTitles.bg;
+  const title = dictionary.product.similarProducts;
 
   return (
     <section className="mt-12 sm:mt-16">
@@ -65,7 +75,7 @@ export default async function SimilarProducts({
             key={product.id}
             className="min-w-[240px] sm:min-w-[280px] lg:min-w-0 snap-start"
           >
-            <ProductCard product={product} locale={locale} currency="BGN" />
+            <ProductCard product={product} locale={locale} currency="BGN" dictionary={dictionary} />
           </div>
         ))}
       </div>
