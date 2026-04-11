@@ -172,40 +172,45 @@ export default function Footer({ locale, dictionary }: FooterProps) {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-4 pt-4 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-white/30">
+        <div className="mt-4 pt-4 border-t border-white/5 flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
+          {/* Copyright — left on desktop, centered on mobile */}
+          <p className="text-xs text-white/30 text-center sm:text-left">
             &copy; {year} {t.siteName}. {t.footer.rights}
           </p>
-          <div className="flex items-center gap-4 sm:gap-6">
+
+          {/* Privacy + Terms — center row */}
+          <div className="flex items-center gap-5">
             <Link
               href={`/${locale}/privacy`}
-              className="text-xs text-white/30 hover:text-white/60 transition-colors duration-200 py-2 px-1"
+              className="text-xs text-white/30 hover:text-white/60 transition-colors duration-200 py-2"
             >
               {t.footer.privacy}
             </Link>
             <Link
               href={`/${locale}/terms`}
-              className="text-xs text-white/30 hover:text-white/60 transition-colors duration-200 py-2 px-1"
+              className="text-xs text-white/30 hover:text-white/60 transition-colors duration-200 py-2"
             >
               {t.footer.terms}
             </Link>
-            <a
-              href="https://dangrow.agency"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/[0.04] border border-white/[0.08] rounded-full hover:bg-white/[0.07] transition-colors"
-            >
-              <svg viewBox="0 0 64 64" width="12" height="12" aria-hidden="true">
-                <rect width="64" height="64" rx="14" fill="#CCFF00"/>
-                <path d="M21 44 L32 20 L43 44" stroke="#06060A" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                <line x1="32" y1="20" x2="32" y2="14" stroke="#06060A" strokeWidth="5" strokeLinecap="round"/>
-                <line x1="27" y1="18" x2="32" y2="14" stroke="#06060A" strokeWidth="4" strokeLinecap="round"/>
-                <line x1="37" y1="18" x2="32" y2="14" stroke="#06060A" strokeWidth="4" strokeLinecap="round"/>
-              </svg>
-              <span className="text-[10px] text-white/35">powered by</span>
-              <span className="text-[10px] font-extrabold text-white tracking-wide">DAN<span className="text-[#CCFF00]">GROW</span></span>
-            </a>
           </div>
+
+          {/* DANGROW badge — right on desktop, centered on mobile */}
+          <a
+            href="https://dangrow.agency"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/[0.04] border border-white/[0.08] rounded-full hover:bg-white/[0.07] transition-colors"
+          >
+            <svg viewBox="0 0 64 64" width="13" height="13" aria-hidden="true">
+              <rect width="64" height="64" rx="14" fill="#CCFF00"/>
+              <path d="M21 44 L32 20 L43 44" stroke="#06060A" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              <line x1="32" y1="20" x2="32" y2="14" stroke="#06060A" strokeWidth="5" strokeLinecap="round"/>
+              <line x1="27" y1="18" x2="32" y2="14" stroke="#06060A" strokeWidth="4" strokeLinecap="round"/>
+              <line x1="37" y1="18" x2="32" y2="14" stroke="#06060A" strokeWidth="4" strokeLinecap="round"/>
+            </svg>
+            <span className="text-[10px] text-white/35">powered by</span>
+            <span className="text-[10px] font-extrabold text-white tracking-wide">DAN<span className="text-[#CCFF00]">GROW</span></span>
+          </a>
         </div>
       </div>
     </footer>
