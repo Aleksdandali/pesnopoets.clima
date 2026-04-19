@@ -1,0 +1,268 @@
+import Link from "next/link";
+import type { Metadata } from "next";
+import {
+  ArrowRight,
+  CheckCircle2,
+  Info,
+  Sparkles,
+  Wrench,
+  ShieldCheck,
+} from "lucide-react";
+import BeforeAfterSlider from "@/components/montazh/BeforeAfterSlider";
+import { INSTALLATION_TIERS, EXTRA_SERVICES_BGN } from "@/lib/pricing";
+
+interface PageProps {
+  params: Promise<{ locale: string }>;
+}
+
+async function getDictionary(locale: string) {
+  try {
+    const dict = await import(`@/dictionaries/${locale}.json`);
+    return dict.default;
+  } catch {
+    const dict = await import(`@/dictionaries/bg.json`);
+    return dict.default;
+  }
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const dict = await getDictionary(locale);
+  return {
+    title: `${dict.montazh.pageTitle} | ${dict.common.siteName}`,
+    description: dict.montazh.pageSubtitle,
+  };
+}
+
+/** Short BTU → "up to Y kW" style label for the first column of the price table. */
+function formatPowerLabel(maxBtu: number): string {
+  const kw = (maxBtu * 0.000293).toFixed(1);
+  return `≤ ${(maxBtu / 1000).toFixed(0)}K BTU (~${kw} kW)`;
+}
+
+export default async function MontazhPage({ params }: PageProps) {
+  const { locale } = await params;
+  const dict = await getDictionary(locale);
+  const t = dict.montazh;
+  const common = dict.common;
+
+  return (
+    <>
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-[#0a1628] via-[#0c1e3a] to-[#0a1628] text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+          {/* Breadcrumbs */}
+          <nav className="text-xs text-white/50 mb-5" aria-label="breadcrumb">
+            <Link href={`/${locale}`} className="hover:text-white/80">
+              {t.breadcrumbHome}
+            </Link>
+            <span className="mx-2">/</span>
+            <span className="text-white/80">{t.breadcrumbMontazh}</span>
+          </nav>
+
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/20 border border-primary/30 rounded-full mb-5">
+              <Wrench className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
+              <span className="text-xs font-medium text-white/90 tracking-wide">
+                {common.deliveryBanner}
+              </span>
+            </div>
+            <h1 className="text-3xl sm:text-5xl font-bold leading-tight">
+              {t.pageTitle}
+            </h1>
+            <p className="mt-4 text-base sm:text-lg text-white/70 leading-relaxed">
+              {t.pageSubtitle}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* What's included */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="flex items-start gap-3 mb-6 sm:mb-8">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary-light/60 rounded-xl flex items-center justify-center shrink-0">
+            <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-primary" aria-hidden="true" />
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground pt-1.5 sm:pt-2">
+            {t.includedTitle}
+          </h2>
+        </div>
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          {(t.includedItems as string[]).map((item) => (
+            <li
+              key={item}
+              className="flex items-start gap-3 p-4 bg-white border border-border/60 rounded-xl"
+            >
+              <CheckCircle2 className="w-5 h-5 text-primary shrink-0 mt-0.5" aria-hidden="true" />
+              <span className="text-sm text-foreground leading-relaxed">{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Price table */}
+      <section className="bg-muted/50 border-y border-border/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <div className="mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+              {t.tableTitle}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground max-w-2xl leading-relaxed">
+              {t.tableSubtitle}
+            </p>
+          </div>
+
+          <div className="overflow-hidden bg-white border border-border rounded-2xl shadow-[0_2px_8px_rgb(0_0_0/0.04)]">
+            <table className="w-full">
+              <thead className="bg-[#0a1628] text-white">
+                <tr>
+                  <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold uppercase tracking-wider">
+                    {t.thPower}
+                  </th>
+                  <th className="px-4 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold uppercase tracking-wider">
+                    {t.thPrice}
+                  </th>
+                  <th className="px-4 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold uppercase tracking-wider hidden sm:table-cell">
+                    {t.thExtraPipe}
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {INSTALLATION_TIERS.map((tier) => (
+                  <tr key={tier.maxBtu} className="hover:bg-muted/30 transition-colors">
+                    <td className="px-4 sm:px-6 py-4 text-sm text-foreground font-medium">
+                      {formatPowerLabel(tier.maxBtu)}
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 text-right">
+                      <span className="text-base sm:text-lg font-extrabold text-foreground">
+                        {tier.price}
+                      </span>
+                      <span className="ml-1 text-xs text-muted-foreground">{t.bgn}</span>
+                      {/* Mobile: show extra pipe here too */}
+                      <div className="sm:hidden text-[11px] text-muted-foreground mt-1">
+                        +{tier.extraPipePerM} {t.bgnPerM}
+                      </div>
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 text-right hidden sm:table-cell">
+                      <span className="text-sm font-semibold text-foreground">
+                        {tier.extraPipePerM}
+                      </span>
+                      <span className="ml-1 text-xs text-muted-foreground">{t.bgnPerM}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Extras */}
+          <div className="mt-8 sm:mt-10">
+            <h3 className="text-lg sm:text-xl font-bold text-foreground mb-1.5">
+              {t.extrasTitle}
+            </h3>
+            <p className="text-sm text-muted-foreground mb-4 sm:mb-5">
+              {t.extrasSubtitle}
+            </p>
+            <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <li className="flex items-baseline justify-between p-4 bg-white border border-border/60 rounded-xl">
+                <span className="text-sm text-foreground pr-2">{t.extraChasing}</span>
+                <span className="whitespace-nowrap">
+                  <span className="text-base font-bold text-foreground">
+                    {EXTRA_SERVICES_BGN.chasingPerM}
+                  </span>
+                  <span className="ml-1 text-xs text-muted-foreground">{t.bgnPerM}</span>
+                </span>
+              </li>
+              <li className="flex items-baseline justify-between p-4 bg-white border border-border/60 rounded-xl">
+                <span className="text-sm text-foreground pr-2">{t.extraWallDrill}</span>
+                <span className="whitespace-nowrap">
+                  <span className="text-base font-bold text-foreground">
+                    {EXTRA_SERVICES_BGN.wallDrill}
+                  </span>
+                  <span className="ml-1 text-xs text-muted-foreground">{t.bgn}</span>
+                </span>
+              </li>
+              <li className="flex items-baseline justify-between p-4 bg-white border border-border/60 rounded-xl">
+                <span className="text-sm text-foreground pr-2">{t.extraDismantle}</span>
+                <span className="whitespace-nowrap">
+                  <span className="text-base font-bold text-foreground">
+                    {EXTRA_SERVICES_BGN.dismantle}
+                  </span>
+                  <span className="ml-1 text-xs text-muted-foreground">{t.bgn}</span>
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Note */}
+          <div className="mt-8 sm:mt-10 p-4 sm:p-5 bg-amber-50 border border-amber-200 rounded-2xl flex gap-3">
+            <Info className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
+            <div>
+              <h4 className="text-sm font-semibold text-amber-900 mb-1">
+                {t.noteTitle}
+              </h4>
+              <p className="text-sm text-amber-800 leading-relaxed">
+                {t.noteText}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Before / After gallery */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="text-center mb-8 sm:mb-10 max-w-2xl mx-auto">
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+            {t.beforeAfterTitle}
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+            {t.beforeAfterSubtitle}
+          </p>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
+          {/* Placeholder slots — owner will replace srcs later */}
+          <BeforeAfterSlider
+            beforeLabel={t.beforeLabel}
+            afterLabel={t.afterLabel}
+            dragHint={t.dragHint}
+          />
+          <BeforeAfterSlider
+            beforeLabel={t.beforeLabel}
+            afterLabel={t.afterLabel}
+            dragHint={t.dragHint}
+          />
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="relative overflow-hidden border-t border-border/60">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0369a1] to-[#0284c7]" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+            <div className="text-center lg:text-left max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 border border-white/20 rounded-full mb-4">
+                <ShieldCheck className="w-3.5 h-3.5 text-white" aria-hidden="true" />
+                <span className="text-xs font-medium text-white/90 tracking-wide">
+                  {common.authorizedDealer}
+                </span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold text-white">
+                {t.ctaTitle}
+              </h2>
+              <p className="mt-2 text-sm sm:text-base text-white/80 leading-relaxed">
+                {t.ctaDesc}
+              </p>
+            </div>
+            <Link
+              href={`/${locale}/inquiry`}
+              className="shrink-0 inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-white text-[#0369a1] font-semibold rounded-xl hover:bg-white/90 transition-all duration-200 shadow-[0_4px_14px_0_rgb(0_0_0/0.15)] min-h-[48px]"
+            >
+              {t.ctaButton}
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

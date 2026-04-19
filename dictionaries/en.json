@@ -7,9 +7,12 @@
     "nav": {
       "home": "Home",
       "catalog": "Air Conditioners",
+      "installation": "Installation",
+      "services": "Services",
       "brands": "Brands",
       "about": "About Us",
-      "contact": "Contact"
+      "contact": "Contact",
+      "cart": "Cart"
     },
     "footer": {
       "description": "Air conditioners from leading brands with delivery and professional installation across Bulgaria.",
@@ -26,9 +29,9 @@
     },
     "inquiry": "Inquiry",
     "callUs": "Call us",
-    "deliveryBanner": "Delivery and installation across Bulgaria",
-    "authorizedDealer": "Authorized Dealer",
-    "services": ["Sales", "Professional installation", "Service & maintenance"],
+    "deliveryBanner": "AC sales & installation in Varna",
+    "authorizedDealer": "Authorized Dealer · Daikin · Mitsubishi · Gree",
+    "services": ["Clean install (with vacuum)", "Same-day dispatch", "Fixed price"],
     "productsCount": "products",
     "pcs": "pcs",
     "promoPrice": "Promo price!",
@@ -41,23 +44,23 @@
     "country": "Bulgaria"
   },
   "hero": {
-    "title": "Air Conditioners from World-Leading Brands",
-    "subtitle": "Daikin, Mitsubishi Electric, Toshiba, Nippon — with delivery and professional installation across Bulgaria. Free consultation.",
+    "title": "Sales & Professional AC Installation in Varna",
+    "subtitle": "Authorized dealer for Daikin, Mitsubishi, Gree. Turnkey installation with warranty up to 5 years.",
     "cta": "Browse Catalog",
     "ctaSecondary": "Free Consultation"
   },
   "trust": {
-    "delivery": "Free delivery",
-    "installation": "Professional installation",
-    "warranty": "36 mo. warranty",
+    "delivery": "Same-day dispatch",
+    "installation": "Turnkey installation",
+    "warranty": "Up to 5-yr warranty",
     "consultation": "Free consultation",
-    "originalTitle": "Certified partner since 2015",
-    "originalDesc": "Authorized dealer for Daikin, Mitsubishi, Toshiba. Full manufacturer warranty and certified service to European standards.",
-    "deliveryDesc": "Free delivery to your address across Bulgaria. Real-time availability.",
-    "installationDesc": "Installation by certified specialists. Commissioning and setup included.",
-    "freeDelivery": "Free delivery",
-    "professionalInstallation": "Professional installation",
-    "warrantyLong": "36 mo. warranty",
+    "originalTitle": "Authorized dealer in Varna",
+    "originalDesc": "Authorized dealer for Daikin, Mitsubishi, Gree. In-house installation crew in Varna and full manufacturer warranty.",
+    "deliveryDesc": "Same-day dispatch for requests before noon. We cover all of Varna and Varna region.",
+    "installationDesc": "Clean installation with vacuum by our own crew. Fixed price — no hidden fees.",
+    "freeDelivery": "Same-day dispatch",
+    "professionalInstallation": "Turnkey installation",
+    "warrantyLong": "Up to 5-year warranty",
     "freeConsultation": "Free consultation"
   },
   "catalog": {
@@ -111,7 +114,8 @@
     "noiseLevel": "Noise Level",
     "similarProducts": "Similar Products",
     "installmentPrefix": "or 12 x",
-    "installmentSuffix": "BGN/mo."
+    "installmentSuffix": "BGN/mo.",
+    "withInstallation": "with base installation"
   },
   "inquiry": {
     "title": "Make an Inquiry",
@@ -182,6 +186,150 @@
       { "title": "After-Sales Service", "desc": "Warranty and out-of-warranty service. Always available." }
     ]
   },
+  "uslugi": {
+    "pageTitle": "Services",
+    "pageSubtitle": "Installation, maintenance and repair of air conditioners by our own crew in Varna.",
+    "breadcrumbHome": "Home",
+    "breadcrumbServices": "Services",
+    "services": [
+      {
+        "slug": "montazh",
+        "title": "AC Installation",
+        "desc": "Turnkey professional install — from delivery to commissioning. Clean work with a vacuum, fixed price.",
+        "items": [
+          "Copper line up to 3 m, insulated",
+          "Commissioning and leak test",
+          "Vacuum clean-up after work",
+          "12-month workmanship warranty"
+        ],
+        "priceFrom": "from 300 BGN",
+        "ctaLabel": "Rates & details",
+        "ctaHref": "/montazh"
+      },
+      {
+        "slug": "profilaktika",
+        "title": "Maintenance & cleaning",
+        "desc": "Annual upkeep — filters, coils and indoor unit cleaning. Proper maintenance extends AC life by years.",
+        "items": [
+          "Full indoor unit clean",
+          "Outdoor unit clean",
+          "Refrigerant & pressure check",
+          "Indoor unit disinfection"
+        ],
+        "priceFrom": "from 70 BGN",
+        "ctaLabel": "Request",
+        "ctaHref": "/inquiry?service=profilaktika"
+      },
+      {
+        "slug": "remont",
+        "title": "Repair & diagnostics",
+        "desc": "We find and fix the issue. We work with all brands. Firm quote after diagnostics.",
+        "items": [
+          "On-site diagnostics",
+          "Refrigerant leak search",
+          "Compressor & board replacement",
+          "Refill with R-32 / R-410A"
+        ],
+        "priceFrom": "diagnostics 40 BGN",
+        "ctaLabel": "Request",
+        "ctaHref": "/inquiry?service=remont"
+      }
+    ],
+    "included": "What's included:",
+    "whyTitle": "Why work with us",
+    "whyItems": [
+      {
+        "title": "Our own crew in Varna",
+        "desc": "We don't subcontract — we work with people we know personally."
+      },
+      {
+        "title": "Fixed pricing",
+        "desc": "Price agreed before work starts. No hidden extras."
+      },
+      {
+        "title": "Workmanship warranty",
+        "desc": "12-month warranty on every install and repair. If something fails — we come back for free."
+      }
+    ],
+    "ctaTitle": "Not sure what you need?",
+    "ctaDesc": "Call us or leave a request — we'll advise for free.",
+    "ctaButton": "Free consultation"
+  },
+  "cart": {
+    "pageTitle": "Your cart",
+    "empty": "Your cart is empty",
+    "emptyDesc": "Browse the catalog and add air conditioners to your cart.",
+    "browseCatalog": "Browse catalog",
+    "quantity": "Qty",
+    "remove": "Remove",
+    "item": "item",
+    "items": "items",
+    "subtotal": "Subtotal",
+    "includesInstallation": "Prices include base installation",
+    "checkout": "Checkout",
+    "continueShopping": "Continue shopping",
+    "clear": "Clear cart"
+  },
+  "checkout": {
+    "pageTitle": "Checkout",
+    "pageSubtitle": "Fill in your details — our manager will call you to confirm and schedule installation. No online payment required.",
+    "yourOrder": "Your order",
+    "customerData": "Your details",
+    "name": "Name",
+    "namePlaceholder": "Your name",
+    "phone": "Phone",
+    "phonePlaceholder": "+359 888 123 456",
+    "email": "Email (optional)",
+    "emailPlaceholder": "email@example.com",
+    "comment": "Comment (floor, install notes)",
+    "commentPlaceholder": "E.g. 3rd floor, bedroom wall",
+    "noPaymentNotice": "No online payment — a manager will contact you to confirm.",
+    "submit": "Place order",
+    "submitting": "Sending...",
+    "successTitle": "Thank you! Order received",
+    "successDesc": "We'll contact you within 1 hour to confirm.",
+    "newInquiry": "New order",
+    "error": "Something went wrong. Please try again or call us.",
+    "total": "Total",
+    "items": "Items"
+  },
+  "montazh": {
+    "pageTitle": "AC Installation in Varna",
+    "pageSubtitle": "Transparent pricing. Fixed rates. Clean install with vacuum.",
+    "breadcrumbHome": "Home",
+    "breadcrumbMontazh": "Installation",
+    "includedTitle": "What's included in standard install",
+    "includedItems": [
+      "Copper line up to 3 m (insulated)",
+      "Mounting brackets and fasteners",
+      "Power cable up to 3 m",
+      "System vacuum and leak test",
+      "Commissioning and user briefing",
+      "Vacuum clean-up after install"
+    ],
+    "tableTitle": "Standard install pricing",
+    "tableSubtitle": "Price covers all materials and labour for a trace up to 3 m between indoor and outdoor units.",
+    "thPower": "Power",
+    "thPrice": "Base price",
+    "thExtraPipe": "Extra per metre",
+    "extrasTitle": "Add-on services",
+    "extrasSubtitle": "Added to the base when needed — always agreed in advance.",
+    "extraChasing": "Wall chasing for pipe (per metre)",
+    "extraWallDrill": "External wall core drill",
+    "extraDismantle": "Dismantle old AC unit",
+    "bgnPerM": "BGN/m",
+    "bgn": "BGN",
+    "beforeAfterTitle": "Our work in Varna",
+    "beforeAfterSubtitle": "Real sites — before and after install by our crew",
+    "beforeLabel": "Before",
+    "afterLabel": "After",
+    "dragHint": "← drag →",
+    "noteTitle": "A note on pricing",
+    "noteText": "Listed prices are averages for the city of Varna and Varna region. For non-standard jobs (high elevation, awkward access, special materials) prices may differ. A firm quote is issued after a free on-site survey.",
+    "ctaTitle": "Request a free site survey",
+    "ctaDesc": "Our crew will visit your site in Varna, take measurements and provide a written quote.",
+    "ctaButton": "Request survey"
+  },
   "contact": {
     "title": "Contact",
     "subtitle": "Get in touch for consultation, quotes or questions.",
@@ -193,7 +341,9 @@
     "responseTime": "We respond within 1 hour",
     "viber": "Viber",
     "whatsapp": "WhatsApp",
-    "messengers": "Message us on:"
+    "messengers": "Message us on:",
+    "mapTitle": "Find us in Varna",
+    "mapSubtitle": "We serve the entire city and Varna region"
   },
   "privacy": {
     "title": "Privacy Policy",
