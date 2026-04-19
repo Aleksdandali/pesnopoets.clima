@@ -13,7 +13,8 @@ export type BadgeType =
   | "area"
   | "btu"
   | "promo"
-  | "low_stock";
+  | "low_stock"
+  | "cold_climate";
 
 export interface Badge {
   type: BadgeType;
@@ -77,6 +78,7 @@ const badgeColors: Record<BadgeType, string> = {
   btu: "bg-primary-dark text-white",
   promo: "bg-red-500 text-white",
   low_stock: "bg-amber-500 text-white",
+  cold_climate: "bg-sky-700 text-white",
 };
 
 // ---------------------------------------------------------------------------
@@ -104,6 +106,52 @@ function hasWiFiFeature(product: BadgeableProduct): boolean {
 function isInverter(product: BadgeableProduct): boolean {
   const titleLower = product.title.toLowerCase();
   return titleLower.includes("инверторен") || titleLower.includes("inverter");
+}
+
+/**
+ * Detects whether the product can operate in cold climate (≤ -25 °C).
+ *
+ * Strategy:
+ *  1. Scan title for known cold-climate marketing terms (Nordic, North, Arctic, -25).
+ *  2. Scan features map for min. operating temperature; treat ≤ -20 °C as cold-ready.
+ */
+function hasColdClimateSupport(product: BadgeableProduct): boolean {
+  const titleLower = product.title.toLowerCase();
+  if (
+    titleLower.includes("nordic") ||
+    titleLower.includes("норд") ||
+    titleLower.includes("north") ||
+    titleLower.includes("arctic") ||
+    titleLower.includes("арктик") ||
+    titleLower.includes("-25") ||
+    titleLower.includes("-30")
+  ) {
+    return true;
+  }
+
+  if (!product.features) return false;
+  for (const group of Object.values(product.features)) {
+    for (const item of group.items) {
+      const combined = `${item.name} ${item.value}`.toLowerCase();
+      // Bulgarian/Russian/EN variants of "min. operating temperature"
+      if (
+        combined.includes("минимална") ||
+        combined.includes("минимальная") ||
+        combined.includes("min") && combined.includes("temp") ||
+        combined.includes("работна температура") ||
+        combined.includes("рабочая температура") ||
+        combined.includes("operating temperature")
+      ) {
+        // Pull out the first negative number we find
+        const match = item.value.match(/-(\d{2,3})/);
+        if (match) {
+          const min = parseInt(match[1], 10);
+          if (min >= 20) return true; // -20 °C or colder
+        }
+      }
+    }
+  }
+  return false;
 }
 
 // ---------------------------------------------------------------------------
@@ -172,6 +220,16 @@ export function generateBadges(
         priority: 4,
       });
     }
+  }
+
+  // Cold climate (−25 °C capable) — promote high so it shows on the card
+  if (hasColdClimateSupport(product)) {
+    badges.push({
+      type: "cold_climate",
+      label: "-25°C",
+      color: badgeColors.cold_climate,
+      priority: 4.5,
+    });
   }
 
   // Inverter

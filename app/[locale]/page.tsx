@@ -43,69 +43,69 @@ const features: Record<
   bg: [
     {
       icon: "shield",
-      title: "Сертифициран партньор от 2015 г.",
-      desc: "Официален вносител на Daikin, Mitsubishi, Toshiba. Пълна гаранция от производителя и сертифицирано обслужване по европейски стандарти.",
+      title: "Официален дилър във Варна",
+      desc: "Оторизиран партньор на Daikin, Mitsubishi, Gree. Пълна гаранция до 5 години и оригинални резервни части.",
     },
     {
       icon: "truck",
-      title: "Бърза доставка",
-      desc: "Безплатна доставка до вашия адрес в цяла България. Наличност в реално време.",
+      title: "Посещение в същия ден",
+      desc: "Собствена монтажна бригада във Варна. При заявка до обяд — идваме в същия ден.",
     },
     {
       icon: "wrench",
-      title: "Професионален монтаж",
-      desc: "Монтаж от сертифицирани специалисти. Пускане в експлоатация и настройка.",
+      title: "Чист монтаж, фиксирана цена",
+      desc: "Работим с прахосмукачка — без прах и мръсотия. Цената е фиксирана, без скрити разходи.",
     },
   ],
   en: [
     {
       icon: "shield",
-      title: "Certified partner since 2015",
-      desc: "Authorized dealer for Daikin, Mitsubishi, Toshiba. Full manufacturer warranty and certified service to European standards.",
+      title: "Authorized dealer in Varna",
+      desc: "Authorized partner for Daikin, Mitsubishi, Gree. Full warranty up to 5 years and original spare parts.",
     },
     {
       icon: "truck",
-      title: "Fast Delivery",
-      desc: "Free delivery to your address across Bulgaria. Real-time availability.",
+      title: "Same-day dispatch",
+      desc: "Our own installation crew in Varna. Request before noon — we come the same day.",
     },
     {
       icon: "wrench",
-      title: "Professional Installation",
-      desc: "Installation by certified specialists. Commissioning and setup included.",
+      title: "Clean install, fixed price",
+      desc: "We work with a vacuum — no dust or mess. Price is fixed, no hidden extras.",
     },
   ],
   ru: [
     {
       icon: "shield",
-      title: "Сертифицированный партнёр с 2015 г.",
-      desc: "Официальный дилер Daikin, Mitsubishi, Toshiba. Полная гарантия производителя и сертифицированное обслуживание по европейским стандартам.",
+      title: "Официальный дилер в Варне",
+      desc: "Авторизованный партнёр Daikin, Mitsubishi, Gree. Полная гарантия до 5 лет и оригинальные запчасти.",
     },
     {
       icon: "truck",
-      title: "Быстрая доставка",
-      desc: "Бесплатная доставка по всей Болгарии. Наличие в реальном времени.",
+      title: "Выезд в день обращения",
+      desc: "Собственная монтажная бригада в Варне. Заявка до обеда — приезжаем в тот же день.",
     },
     {
       icon: "wrench",
-      title: "Профессиональный монтаж",
-      desc: "Монтаж сертифицированными специалистами. Пуск и настройка.",
+      title: "Чистый монтаж, фиксированная цена",
+      desc: "Работаем с пылесосом — без пыли и грязи. Цена фиксированная, без скрытых доплат.",
     },
   ],
   ua: [
     {
       icon: "shield",
-      title: "Сертифікований партнер з 2015 р.",
-      desc: "Офіційний дилер Daikin, Mitsubishi, Toshiba. Повна гарантія виробника та сертифіковане обслуговування за європейськими стандартами.",
+      title: "Офіційний дилер у Варні",
+      desc: "Авторизований партнер Daikin, Mitsubishi, Gree. Повна гарантія до 5 років та оригінальні запчастини.",
     },
     {
       icon: "truck",
-      title: "Швидка доставка",
-      desc: "Безкоштовна доставка по всій Болгарії. Наявність у реальному часі.",
+      title: "Виїзд у день звернення",
+      desc: "Власна монтажна бригада у Варні. Заявка до обіду — приїжджаємо того ж дня.",
     },
     {
       icon: "wrench",
-      title: "Професійний монтаж",
-      desc: "Монтаж сертифікованими фахівцями. Пуск та налаштування.",
+      title: "Чистий монтаж, фіксована ціна",
+      desc: "Працюємо з пилососом — без пилу й бруду. Ціна фіксована, без прихованих доплат.",
     },
   ],
 };

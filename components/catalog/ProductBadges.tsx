@@ -1,4 +1,4 @@
-import { Wifi, Zap, Snowflake, Leaf, Volume2, Flame, Tag, AlertTriangle, Wrench } from "lucide-react";
+import { Wifi, Zap, Snowflake, Leaf, Volume2, Flame, Tag, AlertTriangle, Wrench, ThermometerSnowflake } from "lucide-react";
 import type { Badge } from "@/lib/bittel/badges";
 
 interface ProductBadgesProps {
@@ -19,6 +19,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   promo: Tag,
   low_stock: AlertTriangle,
   install: Wrench,
+  cold_climate: ThermometerSnowflake,
 };
 
 export default function ProductBadges({ badges, max, overlay }: ProductBadgesProps) {

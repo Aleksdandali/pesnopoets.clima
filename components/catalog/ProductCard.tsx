@@ -5,8 +5,10 @@ import Link from "next/link";
 import { useState, useCallback, useRef } from "react";
 import { Zap, Thermometer, Volume2, Maximize, ChevronLeft, ChevronRight } from "lucide-react";
 import OneClickCardButton from "@/components/catalog/OneClickCardButton";
+import AddToCartButton from "@/components/cart/AddToCartButton";
 import ProductBadges from "@/components/catalog/ProductBadges";
 import { generateBadges } from "@/lib/bittel/badges";
+import { getBaseInstallationBgn, EUR_TO_BGN as EUR_TO_BGN_RATE } from "@/lib/pricing";
 
 interface ProductCardProps {
   product: {
@@ -47,6 +49,9 @@ interface ProductCardProps {
         limited: string;
         outOfStock: string;
       };
+      withInstallation?: string;
+      addToCart?: string;
+      addedToCart?: string;
     };
   };
 }
@@ -107,6 +112,21 @@ export default function ProductCard({
   const sqmLabel = dictionary?.common.sqm || (locale === "en" ? "sq.m" : "кв.м");
   const promoBadge = dictionary?.common.promoBadge || "PROMO";
   const currencyLabel = dictionary?.common.currency.bgn;
+
+  // Installation base price (Varna rates) — stored in BGN; formatPrice expects EUR
+  // internally, so convert once here.
+  const installationBgn = getBaseInstallationBgn(product.btu);
+  const installationEur = installationBgn / EUR_TO_BGN_RATE;
+  const priceWithInstall = displayPrice + installationEur;
+  const withInstallLabel =
+    dictionary?.product.withInstallation ||
+    (locale === "en"
+      ? "with base installation"
+      : locale === "ua"
+      ? "з базовим монтажем"
+      : locale === "ru"
+      ? "с базовым монтажом"
+      : "с базов монтаж");
 
   const goToPrev = useCallback(
     (e: React.MouseEvent) => {
@@ -279,23 +299,58 @@ export default function ProductCard({
           </div>
 
           {/* Price + 1-click button */}
-          <div className="flex items-center justify-between gap-2 pt-3 sm:pt-4 border-t border-border">
+          <div className="flex flex-col gap-0.5 pt-3 sm:pt-4 border-t border-border">
             <div className="flex items-baseline gap-1.5 sm:gap-2">
               <span className="text-base sm:text-xl font-extrabold text-foreground">
-                {formatPrice(displayPrice, currency, currencyLabel)}
+                {formatPrice(priceWithInstall, currency, currencyLabel)}
               </span>
               {product.is_promo && product.price_promo && product.price_promo > 0 && (
                 <span className="text-sm text-muted-foreground line-through">
-                  {formatPrice(product.price_client, currency, currencyLabel)}
+                  {formatPrice(product.price_client + installationEur, currency, currencyLabel)}
                 </span>
               )}
             </div>
+            <span className="text-[10px] sm:text-[11px] text-muted-foreground">
+              {withInstallLabel}
+            </span>
           </div>
         </div>
       </Link>
 
-      {/* 1-Click phone button — positioned absolutely at bottom-right, 44px tap target */}
-      <div className="absolute bottom-3 right-3 sm:bottom-5 sm:right-5 z-[5]">
+      {/* Action buttons — positioned absolutely at bottom-right */}
+      <div className="absolute bottom-3 right-3 sm:bottom-5 sm:right-5 z-[5] flex items-center gap-2">
+        <AddToCartButton
+          locale={locale}
+          item={{
+            id: product.id,
+            slug: product.slug,
+            title: displayTitle,
+            manufacturer: product.manufacturer,
+            priceEur: priceWithInstall,
+            image: imageUrl,
+            btu: product.btu ?? null,
+          }}
+          label={
+            dictionary?.product.addToCart ||
+            (locale === "en"
+              ? "Add to cart"
+              : locale === "ua"
+              ? "У кошик"
+              : locale === "ru"
+              ? "В корзину"
+              : "В количката")
+          }
+          addedLabel={
+            dictionary?.product.addedToCart ||
+            (locale === "en"
+              ? "Added"
+              : locale === "ua"
+              ? "Додано"
+              : locale === "ru"
+              ? "Добавлено"
+              : "Добавено")
+          }
+        />
         <OneClickCardButton
           locale={locale}
           productId={product.id}
