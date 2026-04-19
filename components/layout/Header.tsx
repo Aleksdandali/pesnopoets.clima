@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, Globe, Phone } from "lucide-react";
+import HeaderCartBadge from "@/components/cart/HeaderCartBadge";
 
 interface HeaderProps {
   locale: string;
@@ -13,6 +14,8 @@ interface HeaderProps {
       nav: {
         home: string;
         catalog: string;
+        installation?: string;
+        services?: string;
         brands: string;
         about: string;
         contact: string;
@@ -24,6 +27,7 @@ interface HeaderProps {
       inquiry?: string;
       callUs?: string;
       deliveryBanner?: string;
+      cart?: string;
     };
   };
 }
@@ -85,6 +89,8 @@ export default function Header({ locale, dictionary }: HeaderProps) {
   const navLinks = [
     { href: `/${locale}`, label: t.nav.home },
     { href: `/${locale}/klimatici`, label: t.nav.catalog },
+    { href: `/${locale}/montazh`, label: t.nav.installation || "Installation" },
+    { href: `/${locale}/uslugi`, label: t.nav.services || "Services" },
     { href: `/${locale}/brands`, label: t.nav.brands },
     { href: `/${locale}/za-nas`, label: t.nav.about },
     { href: `/${locale}/kontakti`, label: t.nav.contact },
@@ -166,6 +172,9 @@ export default function Header({ locale, dictionary }: HeaderProps) {
               >
                 <Phone className="w-5 h-5" aria-hidden="true" />
               </a>
+
+              {/* Cart badge */}
+              <HeaderCartBadge locale={locale} label={t.cart || "Cart"} />
 
               {/* Language switcher */}
               <div className="relative" ref={langRef}>

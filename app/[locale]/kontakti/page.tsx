@@ -14,7 +14,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   const c = dictionary.contact;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
         <div className="lg:col-span-3">
           <h1 className="text-3xl font-bold text-foreground mb-3">{c.title}</h1>
@@ -92,6 +92,24 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
           </div>
         </div>
       </div>
+
+      {/* Map section */}
+      <section>
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-foreground">{c.mapTitle}</h2>
+          <p className="mt-1.5 text-sm text-muted-foreground">{c.mapSubtitle}</p>
+        </div>
+        <div className="relative w-full overflow-hidden rounded-2xl border border-border shadow-[0_2px_8px_rgb(0_0_0/0.04)] aspect-[16/9] bg-muted">
+          <iframe
+            title={c.mapTitle}
+            src="https://www.google.com/maps?q=Varna,+Bulgaria&output=embed"
+            className="absolute inset-0 w-full h-full"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allowFullScreen
+          />
+        </div>
+      </section>
     </div>
   );
 }
