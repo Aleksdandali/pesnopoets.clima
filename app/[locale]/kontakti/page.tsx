@@ -1,8 +1,12 @@
-import { Mail, MapPin, Clock, MessageCircle } from "lucide-react";
+import { Mail, MapPin, Clock, MessageCircle, Phone } from "lucide-react";
 import InquiryForm from "@/components/forms/InquiryForm";
-
-const PHONE_NUMBER = "+359 888 123 456";
-const PHONE_RAW = "+359888123456";
+import {
+  BUSINESS_EMAIL,
+  BUSINESS_PHONE_DISPLAY,
+  BUSINESS_PHONE_TEL,
+  VIBER_URL,
+  WHATSAPP_URL,
+} from "@/lib/constants";
 
 async function getDictionary(locale: string) {
   try { return (await import(`@/dictionaries/${locale}.json`)).default; } catch { return (await import(`@/dictionaries/bg.json`)).default; }
@@ -39,11 +43,30 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
               <ul className="space-y-4">
                 <li className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-primary-light rounded-lg flex items-center justify-center shrink-0">
-                    <Mail className="w-5 h-5 text-primary" />
+                    <Phone className="w-5 h-5 text-primary" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">{c.phone || "Phone"}</p>
+                    <a
+                      href={`tel:${BUSINESS_PHONE_TEL}`}
+                      className="text-foreground font-medium hover:text-primary"
+                    >
+                      {BUSINESS_PHONE_DISPLAY}
+                    </a>
+                  </div>
+                </li>
+                <li className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-primary-light rounded-lg flex items-center justify-center shrink-0">
+                    <Mail className="w-5 h-5 text-primary" aria-hidden="true" />
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">{c.email}</p>
-                    <a href="mailto:info@pesnopoets-clima.com" className="text-foreground font-medium hover:text-primary">info@pesnopoets-clima.com</a>
+                    <a
+                      href={`mailto:${BUSINESS_EMAIL}`}
+                      className="text-foreground font-medium hover:text-primary break-all"
+                    >
+                      {BUSINESS_EMAIL}
+                    </a>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
@@ -72,7 +95,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
               <p className="text-sm font-medium text-muted-foreground mb-3">{c.messengers}</p>
               <div className="flex gap-3">
                 <a
-                  href={`viber://chat?number=${PHONE_RAW}`}
+                  href={VIBER_URL}
                   className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#7360f2] text-white text-sm font-medium rounded-lg hover:bg-[#6350e0] transition-colors"
                   aria-label={c.viber}
                 >
@@ -80,7 +103,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                   {c.viber}
                 </a>
                 <a
-                  href={`https://wa.me/${PHONE_RAW.replace("+", "")}`}
+                  href={WHATSAPP_URL}
                   className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#25D366] text-white text-sm font-medium rounded-lg hover:bg-[#20bd5a] transition-colors"
                   aria-label={c.whatsapp}
                 >

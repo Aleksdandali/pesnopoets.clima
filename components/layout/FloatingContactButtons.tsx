@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-const PHONE_RAW = "+359888123456";
-const WA_NUMBER = PHONE_RAW.replace("+", "");
+import { VIBER_URL, WHATSAPP_URL } from "@/lib/constants";
 
 interface FloatingContactButtonsProps {
   whatsappLabel: string;
@@ -19,6 +17,7 @@ export default function FloatingContactButtons({
   viberLabel,
 }: FloatingContactButtonsProps) {
   const [visible, setVisible] = useState(false);
+  const [stickyCta, setStickyCta] = useState(false);
 
   useEffect(() => {
     function onScroll() {
@@ -29,9 +28,23 @@ export default function FloatingContactButtons({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Watch <body data-sticky-cta> toggled by StickyMobileCTA so we can lift above it
+  useEffect(() => {
+    const update = () => setStickyCta(document.body.hasAttribute("data-sticky-cta"));
+    update();
+    const observer = new MutationObserver(update);
+    observer.observe(document.body, { attributes: true, attributeFilter: ["data-sticky-cta"] });
+    return () => observer.disconnect();
+  }, []);
+
+  // On mobile: lift above sticky bar (~72px). On desktop: ignore (sticky bar is mobile-only).
+  const bottomClass = stickyCta
+    ? "bottom-[80px] sm:bottom-5"
+    : "bottom-3 sm:bottom-5";
+
   return (
     <div
-      className={`fixed right-3 sm:right-5 bottom-3 sm:bottom-5 z-40 flex flex-col gap-2.5 transition-all duration-300 ${
+      className={`fixed right-3 sm:right-5 ${bottomClass} z-40 flex flex-col gap-2.5 transition-all duration-300 ${
         visible
           ? "opacity-100 translate-y-0 pointer-events-auto"
           : "opacity-0 translate-y-3 pointer-events-none"
@@ -39,11 +52,12 @@ export default function FloatingContactButtons({
       aria-hidden={!visible}
     >
       <a
-        href={`https://wa.me/${WA_NUMBER}`}
+        href={WHATSAPP_URL}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={whatsappLabel}
-        className="group relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white shadow-[0_8px_24px_rgb(37_211_102/0.4)] hover:scale-105 hover:shadow-[0_12px_32px_rgb(37_211_102/0.5)] transition-all duration-200"
+        tabIndex={visible ? 0 : -1}
+        className="group relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white shadow-[0_8px_24px_rgb(37_211_102/0.4)] hover:scale-105 hover:shadow-[0_12px_32px_rgb(37_211_102/0.5)] transition-all duration-200 focus-visible:outline-offset-4"
       >
         <span className="absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-60 animate-ping" />
         <svg
@@ -57,9 +71,10 @@ export default function FloatingContactButtons({
       </a>
 
       <a
-        href={`viber://chat?number=${encodeURIComponent(PHONE_RAW)}`}
+        href={VIBER_URL}
         aria-label={viberLabel}
-        className="group relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#7360f2] text-white shadow-[0_8px_24px_rgb(115_96_242/0.4)] hover:scale-105 hover:shadow-[0_12px_32px_rgb(115_96_242/0.5)] transition-all duration-200"
+        tabIndex={visible ? 0 : -1}
+        className="group relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#7360f2] text-white shadow-[0_8px_24px_rgb(115_96_242/0.4)] hover:scale-105 hover:shadow-[0_12px_32px_rgb(115_96_242/0.5)] transition-all duration-200 focus-visible:outline-offset-4"
       >
         <svg
           className="w-6 h-6 sm:w-7 sm:h-7"

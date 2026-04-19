@@ -118,9 +118,13 @@ export default function CheckoutView({ locale, dictionary }: CheckoutViewProps) 
 
   if (status === "success") {
     return (
-      <div className="text-center py-16 bg-white border border-border/60 rounded-2xl max-w-xl mx-auto">
+      <div
+        className="text-center py-16 bg-white border border-border/60 rounded-2xl max-w-xl mx-auto"
+        role="status"
+        aria-live="polite"
+      >
         <div className="inline-flex items-center justify-center w-16 h-16 bg-success-light rounded-full mb-4">
-          <CheckCircle2 className="w-8 h-8 text-success" />
+          <CheckCircle2 className="w-8 h-8 text-success" aria-hidden="true" />
         </div>
         <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">{t.successTitle}</h2>
         <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">{t.successDesc}</p>
@@ -158,20 +162,31 @@ export default function CheckoutView({ locale, dictionary }: CheckoutViewProps) 
     );
   }
 
+  const isSubmitting = status === "submitting";
+  const isError = status === "error";
+
   return (
-    <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8">
+    <form
+      onSubmit={handleSubmit}
+      className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8"
+      noValidate
+      aria-busy={isSubmitting}
+    >
       {/* Form */}
       <div className="lg:col-span-3 bg-white border border-border rounded-2xl p-5 sm:p-7">
         <h2 className="text-lg font-bold text-foreground mb-4">{t.customerData}</h2>
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">
-              {t.name} <span className="text-danger">*</span>
+            <label htmlFor="checkout-name" className="block text-sm font-medium text-foreground mb-1.5">
+              {t.name} <span className="text-danger" aria-hidden="true">*</span>
             </label>
             <input
+              id="checkout-name"
               type="text"
               required
+              aria-required="true"
+              aria-invalid={isError && !form.name ? "true" : undefined}
               minLength={2}
               maxLength={100}
               value={form.name}
@@ -183,39 +198,51 @@ export default function CheckoutView({ locale, dictionary }: CheckoutViewProps) 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">
-              {t.phone} <span className="text-danger">*</span>
+            <label htmlFor="checkout-phone" className="block text-sm font-medium text-foreground mb-1.5">
+              {t.phone} <span className="text-danger" aria-hidden="true">*</span>
             </label>
             <input
+              id="checkout-phone"
               type="tel"
               required
+              aria-required="true"
+              aria-invalid={isError && !form.phone ? "true" : undefined}
+              aria-describedby="checkout-phone-hint"
               value={form.phone}
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
               placeholder={t.phonePlaceholder}
               className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
               autoComplete="tel"
+              inputMode="tel"
+              pattern="[+0-9 ()\-]{7,}"
             />
+            <p id="checkout-phone-hint" className="mt-1 text-[11px] text-muted-foreground">
+              {t.phonePlaceholder}
+            </p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">
+            <label htmlFor="checkout-email" className="block text-sm font-medium text-foreground mb-1.5">
               {t.email}
             </label>
             <input
+              id="checkout-email"
               type="email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               placeholder={t.emailPlaceholder}
               className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
               autoComplete="email"
+              inputMode="email"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">
+            <label htmlFor="checkout-comment" className="block text-sm font-medium text-foreground mb-1.5">
               {t.comment}
             </label>
             <textarea
+              id="checkout-comment"
               rows={3}
               maxLength={1000}
               value={form.comment}
@@ -228,31 +255,36 @@ export default function CheckoutView({ locale, dictionary }: CheckoutViewProps) 
 
         {/* No-payment notice */}
         <div className="mt-5 flex items-start gap-3 p-4 bg-primary-light/60 border border-primary/20 rounded-xl">
-          <ShieldCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+          <ShieldCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" aria-hidden="true" />
           <p className="text-sm text-foreground leading-relaxed">{t.noPaymentNotice}</p>
         </div>
 
-        {status === "error" && (
-          <div className="mt-4 flex items-start gap-3 p-4 bg-danger-light border border-danger/30 rounded-xl">
-            <AlertCircle className="w-5 h-5 text-danger shrink-0 mt-0.5" />
+        {isError && (
+          <div
+            className="mt-4 flex items-start gap-3 p-4 bg-danger-light border border-danger/30 rounded-xl"
+            role="alert"
+            aria-live="assertive"
+          >
+            <AlertCircle className="w-5 h-5 text-danger shrink-0 mt-0.5" aria-hidden="true" />
             <p className="text-sm text-danger">{errorMsg || t.error}</p>
           </div>
         )}
 
         <button
           type="submit"
-          disabled={status === "submitting"}
+          disabled={isSubmitting}
+          aria-busy={isSubmitting}
           className="mt-6 w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary-dark transition-colors min-h-[48px] disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          {status === "submitting" ? (
+          {isSubmitting ? (
             <>
-              <Loader2 className="w-5 h-5 animate-spin" />
+              <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
               {t.submitting}
             </>
           ) : (
             <>
               {t.submit}
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
             </>
           )}
         </button>

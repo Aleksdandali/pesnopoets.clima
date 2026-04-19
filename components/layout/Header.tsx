@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, Globe, Phone } from "lucide-react";
 import HeaderCartBadge from "@/components/cart/HeaderCartBadge";
+import { BUSINESS_PHONE_DISPLAY, BUSINESS_PHONE_TEL } from "@/lib/constants";
 
 interface HeaderProps {
   locale: string;
@@ -32,8 +33,6 @@ interface HeaderProps {
   };
 }
 
-const PHONE_NUMBER = "+359 888 123 456";
-
 const localeLabels: Record<string, string> = {
   bg: "BG",
   en: "EN",
@@ -53,6 +52,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
+  const langButtonRef = useRef<HTMLButtonElement>(null);
   const t = dictionary.common;
 
   const callLabel = t.callUs || "Call us";
@@ -82,9 +82,24 @@ export default function Header({ locale, dictionary }: HeaderProps) {
         setLangMenuOpen(false);
       }
     }
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        if (langMenuOpen) {
+          setLangMenuOpen(false);
+          langButtonRef.current?.focus();
+        }
+        if (mobileMenuOpen) {
+          setMobileMenuOpen(false);
+        }
+      }
+    }
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [langMenuOpen, mobileMenuOpen]);
 
   const navLinks = [
     { href: `/${locale}`, label: t.nav.home },
@@ -105,12 +120,12 @@ export default function Header({ locale, dictionary }: HeaderProps) {
             {deliveryBanner}
           </p>
           <a
-            href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
+            href={`tel:${BUSINESS_PHONE_TEL}`}
             className="flex items-center gap-1.5 text-xs text-white/80 hover:text-white transition-colors font-medium"
-            aria-label={`${callLabel}: ${PHONE_NUMBER}`}
+            aria-label={`${callLabel}: ${BUSINESS_PHONE_DISPLAY}`}
           >
             <Phone className="w-3 h-3" aria-hidden="true" />
-            {PHONE_NUMBER}
+            {BUSINESS_PHONE_DISPLAY}
           </a>
         </div>
       </div>
@@ -166,7 +181,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
             <div className="flex items-center gap-1 sm:gap-2">
               {/* Phone link — visible on mobile as icon, 44px tap target */}
               <a
-                href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
+                href={`tel:${BUSINESS_PHONE_TEL}`}
                 className="lg:hidden flex items-center justify-center w-11 h-11 text-muted-foreground hover:text-primary hover:bg-muted rounded-lg transition-colors"
                 aria-label={callLabel}
               >
@@ -179,6 +194,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
               {/* Language switcher */}
               <div className="relative" ref={langRef}>
                 <button
+                  ref={langButtonRef}
                   onClick={() => setLangMenuOpen(!langMenuOpen)}
                   className="flex items-center justify-center gap-1 sm:gap-1.5 min-w-[44px] min-h-[44px] px-2 sm:px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted transition-colors"
                   aria-label="Change language"
@@ -215,10 +231,10 @@ export default function Header({ locale, dictionary }: HeaderProps) {
                 )}
               </div>
 
-              {/* CTA */}
+              {/* CTA — visible on all breakpoints (compact on mobile) */}
               <Link
                 href={`/${locale}/inquiry`}
-                className="hidden sm:inline-flex items-center px-5 py-2.5 bg-primary text-primary-foreground text-sm font-semibold rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-sm hover:shadow-md"
+                className="inline-flex items-center px-3 sm:px-5 py-2 sm:py-2.5 bg-primary text-primary-foreground text-xs sm:text-sm font-semibold rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-sm hover:shadow-md min-h-[40px] sm:min-h-[44px]"
               >
                 {inquiryLabel}
               </Link>
@@ -229,6 +245,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                 aria-expanded={mobileMenuOpen}
+                aria-controls="mobile-nav"
               >
                 {mobileMenuOpen ? (
                   <X className="w-5 h-5" aria-hidden="true" />
@@ -241,9 +258,11 @@ export default function Header({ locale, dictionary }: HeaderProps) {
 
           {/* Mobile menu */}
           <div
+            id="mobile-nav"
             className={`lg:hidden overflow-hidden transition-all duration-300 ease-in-out ${
               mobileMenuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
             }`}
+            aria-hidden={!mobileMenuOpen}
           >
             <nav className="flex flex-col pb-5 pt-2 border-t border-border/60" aria-label="Mobile navigation">
               {navLinks.map((link) => (
@@ -259,12 +278,12 @@ export default function Header({ locale, dictionary }: HeaderProps) {
 
               {/* Call us button in mobile menu */}
               <a
-                href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
+                href={`tel:${BUSINESS_PHONE_TEL}`}
                 className="mx-4 mt-3 flex items-center justify-center gap-2 px-5 py-3.5 border border-border text-foreground font-semibold rounded-xl hover:bg-muted transition-colors min-h-[48px]"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <Phone className="w-4 h-4" aria-hidden="true" />
-                {callLabel}: {PHONE_NUMBER}
+                {callLabel}: {BUSINESS_PHONE_DISPLAY}
               </a>
 
               <Link

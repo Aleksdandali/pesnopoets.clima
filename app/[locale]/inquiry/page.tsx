@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import InquiryForm from "@/components/forms/InquiryForm";
 import { Phone, Mail, Clock } from "lucide-react";
+import { BUSINESS_PHONE_DISPLAY, BUSINESS_PHONE_TEL } from "@/lib/constants";
 
 interface InquiryPageProps {
   params: Promise<{ locale: string }>;
 }
-
-const PHONE_NUMBER = "+359 888 123 456";
 
 async function getDictionary(locale: string) {
   try {
@@ -85,10 +84,10 @@ export default async function InquiryPage({ params }: InquiryPageProps) {
                       {t.phone}
                     </p>
                     <a
-                      href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
+                      href={`tel:${BUSINESS_PHONE_TEL}`}
                       className="text-foreground font-medium hover:text-primary"
                     >
-                      {PHONE_NUMBER}
+                      {BUSINESS_PHONE_DISPLAY}
                     </a>
                   </div>
                 </li>

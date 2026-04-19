@@ -105,11 +105,14 @@ export default async function LocaleLayout({
         description={seoDescriptions[locale] || seoDescriptions.bg}
       />
       <CartProvider>
+        <a href="#main" className="skip-link">
+          {dictionary.common?.skipToContent || "Skip to main content"}
+        </a>
         <Suspense fallback={null}>
           <PageProgress />
         </Suspense>
         <Header locale={locale} dictionary={dictionary} />
-        <main className="flex-1">{children}</main>
+        <main id="main" tabIndex={-1} className="flex-1">{children}</main>
         <Footer locale={locale} dictionary={dictionary} />
         <FloatingContactButtons
           whatsappLabel={dictionary.contact?.whatsapp || "WhatsApp"}

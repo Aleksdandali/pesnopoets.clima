@@ -1,6 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, MapPin, Phone } from "lucide-react";
+import {
+  BUSINESS_EMAIL,
+  BUSINESS_PHONE_DISPLAY,
+  BUSINESS_PHONE_TEL,
+} from "@/lib/constants";
 
 interface FooterProps {
   locale: string;
@@ -30,9 +35,6 @@ interface FooterProps {
     };
   };
 }
-
-const PHONE_NUMBER = "+359 888 123 456";
-const EMAIL = "info@pesnopoets-clima.com";
 
 const brands = [
   "Daikin",
@@ -138,22 +140,22 @@ export default function Footer({ locale, dictionary }: FooterProps) {
             <ul className="space-y-2">
               <li>
                 <a
-                  href={`tel:${PHONE_NUMBER.replace(/\s/g, "")}`}
-                  className="flex items-center gap-2.5 text-sm text-white/50 hover:text-white transition-colors duration-200 py-2"
-                  aria-label={`${t.footer.contactUs}: ${PHONE_NUMBER}`}
+                  href={`tel:${BUSINESS_PHONE_TEL}`}
+                  className="flex items-center gap-2.5 text-sm text-white/70 hover:text-white transition-colors duration-200 py-2"
+                  aria-label={`${t.footer.contactUs}: ${BUSINESS_PHONE_DISPLAY}`}
                 >
-                  <Phone className="w-4 h-4 shrink-0 text-white/30" />
-                  <span>{PHONE_NUMBER}</span>
+                  <Phone className="w-4 h-4 shrink-0 text-white/50" aria-hidden="true" />
+                  <span>{BUSINESS_PHONE_DISPLAY}</span>
                 </a>
               </li>
               <li>
                 <a
-                  href={`mailto:${EMAIL}`}
-                  className="flex items-center gap-2.5 text-sm text-white/50 hover:text-white transition-colors duration-200 py-2"
-                  aria-label={`Email: ${EMAIL}`}
+                  href={`mailto:${BUSINESS_EMAIL}`}
+                  className="flex items-center gap-2.5 text-sm text-white/70 hover:text-white transition-colors duration-200 py-2"
+                  aria-label={`Email: ${BUSINESS_EMAIL}`}
                 >
-                  <Mail className="w-4 h-4 shrink-0 text-white/30" />
-                  <span className="break-all">{EMAIL}</span>
+                  <Mail className="w-4 h-4 shrink-0 text-white/50" aria-hidden="true" />
+                  <span className="break-all">{BUSINESS_EMAIL}</span>
                 </a>
               </li>
               <li>

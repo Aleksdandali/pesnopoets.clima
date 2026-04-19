@@ -13,6 +13,7 @@ import { generateBadges } from "@/lib/bittel/badges";
 import ProductBadges from "@/components/catalog/ProductBadges";
 import AddToCartButton from "@/components/cart/AddToCartButton";
 import { getBaseInstallationBgn, EUR_TO_BGN as EUR_TO_BGN_RATE } from "@/lib/pricing";
+import { BUSINESS_PHONE_DISPLAY } from "@/lib/constants";
 import {
   Zap,
   Maximize,
@@ -31,7 +32,6 @@ interface ProductPageProps {
 }
 
 const EUR_TO_BGN = 1.95583;
-const PHONE_NUMBER = "+359 888 123 456";
 
 async function getDictionary(locale: string) {
   try {
@@ -589,7 +589,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <StickyMobileCTA
         locale={locale}
         priceBGN={priceBGN}
-        phoneNumber={PHONE_NUMBER}
+        priceEUR={priceWithInstallEur.toFixed(0)}
+        phoneNumber={BUSINESS_PHONE_DISPLAY}
         dictionary={dictionary}
       />
     </>

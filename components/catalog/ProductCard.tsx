@@ -178,134 +178,146 @@ export default function ProductCard({
     [gallery.length]
   );
 
+  // Localized aria-labels for carousel controls
+  const prevImgLabel = locale === "en" ? "Previous image" : locale === "ua" ? "Попереднє зображення" : locale === "ru" ? "Предыдущее изображение" : "Предишно изображение";
+  const nextImgLabel = locale === "en" ? "Next image" : locale === "ua" ? "Наступне зображення" : locale === "ru" ? "Следующее изображение" : "Следващо изображение";
+  const goToImgLabel = (i: number) =>
+    locale === "en" ? `Go to image ${i}` : locale === "ua" ? `Перейти до зображення ${i}` : locale === "ru" ? `Перейти к изображению ${i}` : `Покажи изображение ${i}`;
+
   return (
-    <div className="relative group block bg-white rounded-2xl border border-border shadow-[0_2px_8px_rgb(0_0_0/0.04)] hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0_0_0/0.08)] transition-all duration-300 overflow-hidden">
-      <Link
-        href={`/${locale}/klimatici/${product.slug}`}
-        className="block"
+    <article className="relative group bg-white rounded-2xl border border-border shadow-[0_2px_8px_rgb(0_0_0/0.04)] hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0_0_0/0.08)] transition-all duration-300 overflow-hidden flex flex-col">
+      {/* Image area with carousel (NOT wrapped in Link — buttons live here) */}
+      <div
+        className="relative aspect-[4/3] overflow-hidden rounded-t-2xl bg-[#fafbfc]"
+        onTouchStart={hasMultipleImages ? handleTouchStart : undefined}
+        onTouchEnd={hasMultipleImages ? handleTouchEnd : undefined}
       >
-        {/* Image area with carousel */}
-        <div
-          className="relative aspect-[4/3] overflow-hidden rounded-t-2xl bg-[#fafbfc]"
-          onTouchStart={hasMultipleImages ? handleTouchStart : undefined}
-          onTouchEnd={hasMultipleImages ? handleTouchEnd : undefined}
-        >
-          {imageUrl ? (
-            <Image
-              src={imageUrl}
-              alt={displayTitle}
-              fill
-              className="object-contain p-3 sm:p-6 group-hover:scale-[1.03] transition-transform duration-500 ease-out"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-              loading="lazy"
-            />
-          ) : (
-            <div className="flex items-center justify-center h-full text-muted-foreground/20">
-              <Thermometer className="w-10 h-10 sm:w-12 sm:h-12" aria-hidden="true" />
-            </div>
-          )}
-
-          {/* Feature badges — overlay stickers on image */}
-          <ProductBadges badges={badges} max={3} overlay />
-
-          {/* Availability badge */}
-          <div
-            className={`absolute top-3 right-3 ${avail.bg} ${avail.text} text-xs font-medium px-2.5 py-1 rounded-lg z-[2]`}
-          >
-            {availLabel}
+        {imageUrl ? (
+          <Image
+            src={imageUrl}
+            alt={displayTitle}
+            fill
+            className="object-contain p-3 sm:p-6 group-hover:scale-[1.03] transition-transform duration-500 ease-out"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            loading="lazy"
+          />
+        ) : (
+          <div className="flex items-center justify-center h-full text-muted-foreground/20">
+            <Thermometer className="w-10 h-10 sm:w-12 sm:h-12" aria-hidden="true" />
           </div>
+        )}
 
-          {/* Arrow buttons — visible on desktop hover only */}
-          {hasMultipleImages && (
-            <>
-              <button
-                onClick={goToPrev}
-                className="absolute left-1.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 shadow-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-white hover:shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-[3] hidden sm:flex"
-                aria-label="Previous image"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                onClick={goToNext}
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 shadow-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-white hover:shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-[3] hidden sm:flex"
-                aria-label="Next image"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </>
-          )}
+        {/* Feature badges — overlay stickers on image */}
+        <ProductBadges badges={badges} max={3} overlay />
 
-          {/* Dot indicators */}
-          {hasMultipleImages && (
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-[3]">
-              {gallery.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={(e) => handleDotClick(e, i)}
+        {/* Availability badge */}
+        <div
+          className={`absolute top-3 right-3 ${avail.bg} ${avail.text} text-xs font-medium px-2.5 py-1 rounded-lg z-[2]`}
+        >
+          {availLabel}
+        </div>
+
+        {/* Arrow buttons — desktop hover; 44x44 hit-target */}
+        {hasMultipleImages && (
+          <>
+            <button
+              type="button"
+              onClick={goToPrev}
+              className="absolute left-1.5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/90 shadow-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-white hover:shadow-md opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity duration-200 z-[6] hidden sm:flex"
+              aria-label={prevImgLabel}
+            >
+              <ChevronLeft className="w-5 h-5" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              onClick={goToNext}
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/90 shadow-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-white hover:shadow-md opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity duration-200 z-[6] hidden sm:flex"
+              aria-label={nextImgLabel}
+            >
+              <ChevronRight className="w-5 h-5" aria-hidden="true" />
+            </button>
+          </>
+        )}
+
+        {/* Dot indicators — 44x44 hit area via padding */}
+        {hasMultipleImages && (
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex items-center z-[6]">
+            {gallery.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={(e) => handleDotClick(e, i)}
+                className="group/dot inline-flex items-center justify-center w-11 h-11"
+                aria-label={goToImgLabel(i + 1)}
+                aria-current={i === currentIndex ? "true" : undefined}
+              >
+                <span
                   className={`rounded-full transition-all duration-200 ${
                     i === currentIndex
                       ? "w-2 h-2 bg-primary"
-                      : "w-1.5 h-1.5 bg-foreground/25 hover:bg-foreground/40"
+                      : "w-1.5 h-1.5 bg-foreground/30 group-hover/dot:bg-foreground/50"
                   }`}
-                  aria-label={`Image ${i + 1}`}
                 />
-              ))}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Content — stretched <Link> makes the whole card clickable via ::before */}
+      <div className="p-3 sm:p-5 flex-1 flex flex-col">
+        <p className="text-[11px] font-semibold text-primary uppercase tracking-widest mb-1 sm:mb-1.5">
+          {product.manufacturer}
+        </p>
+
+        <h3 className="text-xs sm:text-sm font-semibold text-foreground line-clamp-2 mb-2 sm:mb-4 leading-snug min-h-[2rem] sm:min-h-[2.5rem]">
+          <Link
+            href={`/${locale}/klimatici/${product.slug}`}
+            className="before:absolute before:inset-0 before:z-[1] before:content-[''] hover:text-primary transition-colors duration-200 outline-none"
+          >
+            <span className="relative z-[2]">{displayTitle}</span>
+          </Link>
+        </h3>
+
+        {/* Key specs */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2 mb-2 sm:mb-4">
+          {product.btu && (
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Zap className="w-3.5 h-3.5 text-primary/60" aria-hidden="true" />
+              <span>{product.btu.toLocaleString()} BTU</span>
+            </div>
+          )}
+          {product.area_m2 && (
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Maximize className="w-3.5 h-3.5 text-primary/60" aria-hidden="true" />
+              <span>
+                {upToLabel} {product.area_m2} {sqmLabel}
+              </span>
+            </div>
+          )}
+          {product.energy_class && (
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Zap className="w-3.5 h-3.5 text-success/60" aria-hidden="true" />
+              <span>{product.energy_class.split("/")[0]?.trim()}</span>
+            </div>
+          )}
+          {product.noise_db_indoor && (
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Volume2 className="w-3.5 h-3.5 text-accent/60" aria-hidden="true" />
+              <span>{product.noise_db_indoor} dB</span>
             </div>
           )}
         </div>
 
-        {/* Content */}
-        <div className="p-3 sm:p-5">
-          {/* Manufacturer */}
-          <p className="text-[11px] sm:text-[11px] font-semibold text-primary uppercase tracking-widest mb-1 sm:mb-1.5">
-            {product.manufacturer}
-          </p>
-
-          {/* Title */}
-          <h3 className="text-xs sm:text-sm font-semibold text-foreground line-clamp-2 mb-2 sm:mb-4 group-hover:text-primary transition-colors duration-200 leading-snug min-h-[2rem] sm:min-h-[2.5rem]">
-            {displayTitle}
-          </h3>
-
-          {/* Key specs */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2 mb-2 sm:mb-4">
-            {product.btu && (
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Zap className="w-3.5 h-3.5 text-primary/60" />
-                <span>{product.btu.toLocaleString()} BTU</span>
-              </div>
-            )}
-            {product.area_m2 && (
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Maximize className="w-3.5 h-3.5 text-primary/60" />
-                <span>
-                  {upToLabel}{" "}
-                  {product.area_m2}{" "}
-                  {sqmLabel}
-                </span>
-              </div>
-            )}
-            {product.energy_class && (
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Zap className="w-3.5 h-3.5 text-success/60" />
-                <span>{product.energy_class.split("/")[0]?.trim()}</span>
-              </div>
-            )}
-            {product.noise_db_indoor && (
-              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <Volume2 className="w-3.5 h-3.5 text-accent/60" />
-                <span>{product.noise_db_indoor} dB</span>
-              </div>
-            )}
-          </div>
-
-          {/* Price + 1-click button */}
-          <div className="flex flex-col gap-0.5 pt-3 sm:pt-4 border-t border-border">
-            <div className="flex items-baseline gap-1.5 sm:gap-2">
+        {/* Price block — simplified: single total + breakdown line */}
+        <div className="mt-auto flex items-end justify-between gap-3 pt-3 sm:pt-4 border-t border-border">
+          <div className="flex flex-col gap-0.5 min-w-0">
+            <div className="flex items-baseline gap-1.5 flex-wrap">
               <span className="text-base sm:text-xl font-extrabold text-foreground">
                 {formatPrice(priceWithInstall, currency, currencyLabel)}
               </span>
               {product.is_promo && product.price_promo && product.price_promo > 0 && (
-                <span className="text-sm text-muted-foreground line-through">
+                <span className="text-xs sm:text-sm text-muted-foreground line-through">
                   {formatPrice(product.price_client + installationEur, currency, currencyLabel)}
                 </span>
               )}
@@ -314,49 +326,49 @@ export default function ProductCard({
               {withInstallLabel}
             </span>
           </div>
-        </div>
-      </Link>
 
-      {/* Action buttons — positioned absolutely at bottom-right */}
-      <div className="absolute bottom-3 right-3 sm:bottom-5 sm:right-5 z-[5] flex items-center gap-2">
-        <AddToCartButton
-          locale={locale}
-          item={{
-            id: product.id,
-            slug: product.slug,
-            title: displayTitle,
-            manufacturer: product.manufacturer,
-            priceEur: priceWithInstall,
-            image: imageUrl,
-            btu: product.btu ?? null,
-          }}
-          label={
-            dictionary?.product.addToCart ||
-            (locale === "en"
-              ? "Add to cart"
-              : locale === "ua"
-              ? "У кошик"
-              : locale === "ru"
-              ? "В корзину"
-              : "В количката")
-          }
-          addedLabel={
-            dictionary?.product.addedToCart ||
-            (locale === "en"
-              ? "Added"
-              : locale === "ua"
-              ? "Додано"
-              : locale === "ru"
-              ? "Добавлено"
-              : "Добавено")
-          }
-        />
-        <OneClickCardButton
-          locale={locale}
-          productId={product.id}
-          productTitle={displayTitle}
-        />
+          {/* Action buttons — siblings of Link, z-[5] keeps them above ::before */}
+          <div className="relative z-[5] flex items-center gap-1.5 shrink-0">
+            <AddToCartButton
+              locale={locale}
+              item={{
+                id: product.id,
+                slug: product.slug,
+                title: displayTitle,
+                manufacturer: product.manufacturer,
+                priceEur: priceWithInstall,
+                image: imageUrl,
+                btu: product.btu ?? null,
+              }}
+              label={
+                dictionary?.product.addToCart ||
+                (locale === "en"
+                  ? "Add to cart"
+                  : locale === "ua"
+                  ? "У кошик"
+                  : locale === "ru"
+                  ? "В корзину"
+                  : "В количката")
+              }
+              addedLabel={
+                dictionary?.product.addedToCart ||
+                (locale === "en"
+                  ? "Added"
+                  : locale === "ua"
+                  ? "Додано"
+                  : locale === "ru"
+                  ? "Добавлено"
+                  : "Добавено")
+              }
+            />
+            <OneClickCardButton
+              locale={locale}
+              productId={product.id}
+              productTitle={displayTitle}
+            />
+          </div>
+        </div>
       </div>
-    </div>
+    </article>
   );
 }

@@ -1,3 +1,5 @@
+import { BUSINESS_EMAIL, BUSINESS_PHONE_TEL } from "@/lib/constants";
+
 interface LocalBusinessJsonLdProps {
   locale: string;
   siteUrl: string;
@@ -22,8 +24,8 @@ export default function LocalBusinessJsonLd({
     name: siteName,
     description,
     url: `${siteUrl}/${locale}`,
-    telephone: "+359888123456",
-    email: "info@pesnopoets-clima.com",
+    telephone: BUSINESS_PHONE_TEL,
+    email: BUSINESS_EMAIL,
     priceRange: "€€",
     image: `${siteUrl}/logo.png`,
     logo: `${siteUrl}/logo.png`,

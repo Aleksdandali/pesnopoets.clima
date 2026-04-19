@@ -28,6 +28,7 @@
       "eur": "€"
     },
     "inquiry": "Запрос",
+    "skipToContent": "Перейти к основному содержимому",
     "callUs": "Позвоните нам",
     "deliveryBanner": "Продажа и монтаж кондиционеров в Варне",
     "authorizedDealer": "Официальный дилер Daikin · Mitsubishi · Gree",
@@ -268,7 +269,10 @@
     "includesInstallation": "Цены включают базовый монтаж",
     "checkout": "Оформить заказ",
     "continueShopping": "Продолжить покупки",
-    "clear": "Очистить корзину"
+    "clear": "Очистить корзину",
+    "clearConfirm": "Вы уверены, что хотите очистить корзину",
+    "decrease": "Уменьшить количество",
+    "increase": "Увеличить количество"
   },
   "checkout": {
     "pageTitle": "Оформление заказа",
