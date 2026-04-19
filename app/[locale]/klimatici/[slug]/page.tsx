@@ -11,6 +11,8 @@ import ProductDescription from "@/components/product/ProductDescription";
 import { generateProductJsonLd, generateBreadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { generateBadges } from "@/lib/bittel/badges";
 import ProductBadges from "@/components/catalog/ProductBadges";
+import AddToCartButton from "@/components/cart/AddToCartButton";
+import { getBaseInstallationBgn, EUR_TO_BGN as EUR_TO_BGN_RATE } from "@/lib/pricing";
 import {
   Zap,
   Maximize,
@@ -119,8 +121,23 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const localeDesc = locale === "en" ? product.description_en : locale === "ru" ? product.description_ru : locale === "ua" ? product.description_ua : null;
   const displayDescription = product.description_override || localeDesc || product.description;
   const displayPrice = product.price_override || product.price_client;
-  const priceBGN = (displayPrice * EUR_TO_BGN).toFixed(0);
-  const installmentMonthly = Math.ceil((displayPrice * EUR_TO_BGN) / 12);
+
+  // Price WITH base installation (Varna tiered rates, BGN-native)
+  const installationBgn = getBaseInstallationBgn(product.btu);
+  const installationEur = installationBgn / EUR_TO_BGN_RATE;
+  const priceWithInstallEur = displayPrice + installationEur;
+  const priceBGN = (priceWithInstallEur * EUR_TO_BGN).toFixed(0);
+  const priceBGNNoInstall = (displayPrice * EUR_TO_BGN).toFixed(0);
+  const installmentMonthly = Math.ceil((priceWithInstallEur * EUR_TO_BGN) / 12);
+  const withInstallLabel =
+    t?.withInstallation ||
+    (locale === "en"
+      ? "with base installation"
+      : locale === "ua"
+      ? "з базовим монтажем"
+      : locale === "ru"
+      ? "с базовым монтажом"
+      : "с базов монтаж");
 
   // Category info for breadcrumb — use translated name if available
   const catData = product.categories;
@@ -270,16 +287,23 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </span>
             </div>
 
-            {/* 4. Price Block (large, prominent) */}
+            {/* 4. Price Block (large, prominent) — price WITH base installation */}
             <div className="bg-muted rounded-xl p-4 sm:p-5 mb-4">
               <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
                 <span className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
                   {priceBGN} {dictionary.common.currency.bgn}
                 </span>
                 <span className="text-sm sm:text-base text-muted-foreground">
-                  ({displayPrice.toFixed(2)} &euro;)
+                  ({priceWithInstallEur.toFixed(2)} &euro;)
                 </span>
               </div>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1 leading-snug">
+                {withInstallLabel}
+                <span className="mx-1.5 opacity-40">·</span>
+                <span className="whitespace-nowrap">
+                  {priceBGNNoInstall} + {installationBgn.toFixed(0)} {dictionary.common.currency.bgn}
+                </span>
+              </p>
               <p className="text-sm text-muted-foreground mt-1">
                 {t.installmentPrefix}{" "}
                 <span className="font-semibold text-foreground">
@@ -367,6 +391,44 @@ export default async function ProductPage({ params }: ProductPageProps) {
               productId={product.id}
               productTitle={displayTitle}
             />
+
+            {/* 6b. Add to Cart — full-width button */}
+            <div className="mt-3 mb-6">
+              <AddToCartButton
+                locale={locale}
+                variant="full"
+                className="w-full"
+                item={{
+                  id: product.id,
+                  slug: product.slug,
+                  title: displayTitle,
+                  manufacturer: product.manufacturer,
+                  priceEur: priceWithInstallEur,
+                  image: product.gallery?.[0],
+                  btu: product.btu ?? null,
+                }}
+                label={
+                  t?.addToCart ||
+                  (locale === "en"
+                    ? "Add to cart"
+                    : locale === "ua"
+                    ? "У кошик"
+                    : locale === "ru"
+                    ? "В корзину"
+                    : "В количката")
+                }
+                addedLabel={
+                  t?.addedToCart ||
+                  (locale === "en"
+                    ? "Added"
+                    : locale === "ua"
+                    ? "Додано"
+                    : locale === "ru"
+                    ? "Добавлено"
+                    : "Добавено")
+                }
+              />
+            </div>
 
             {/* 7. Trust Block (between CTA and inquiry form) */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
