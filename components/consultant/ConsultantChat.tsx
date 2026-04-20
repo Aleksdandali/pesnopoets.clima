@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { MessageCircle, X, Send, Sparkles, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -132,10 +132,21 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
     }
   }, [open, hydrated, messages.length, labels.greeting]);
 
-  // Auto-scroll on new content
+  // Auto-scroll on new content and when chat opens.
+  // Instant jump when opening (we just want to land at the bottom),
+  // smooth when new messages/deltas arrive during an active session.
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, streaming]);
+    const el = scrollRef.current;
+    if (!el) return;
+    // rAF ensures the panel is painted before we measure scrollHeight,
+    // otherwise the first scroll on open can miss the latest message.
+    requestAnimationFrame(() => {
+      el.scrollTo({
+        top: el.scrollHeight,
+        behavior: open && messages.length <= 1 ? "auto" : "smooth",
+      });
+    });
+  }, [messages, streaming, open]);
 
   // Lift above sticky mobile CTA when open + lock background scroll
   useEffect(() => {
@@ -249,13 +260,13 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
 
       // Attach collected products to the last assistant message
       if (pendingProducts.length > 0) {
-        // Dedupe by slug, cap at 4
+        // Dedupe by slug, cap at 3 (AI is instructed to present 3 options)
         const seen = new Set<string>();
         const unique = pendingProducts.filter((p) => {
           if (seen.has(p.slug)) return false;
           seen.add(p.slug);
           return true;
-        }).slice(0, 4);
+        }).slice(0, 3);
         setMessages((m) => {
           const copy = [...m];
           const last = copy[copy.length - 1];
@@ -320,7 +331,7 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
         <div
           role="dialog"
           aria-label={labels.title}
-          className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[380px] sm:h-[600px] sm:max-h-[85vh] z-[70] flex flex-col bg-white sm:rounded-2xl shadow-2xl sm:border sm:border-border overflow-hidden"
+          className="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[380px] sm:h-[600px] sm:max-h-[85vh] z-[70] flex flex-col bg-white sm:rounded-2xl shadow-2xl sm:border sm:border-border overflow-hidden animate-consultant-in"
         >
           {/* Header */}
           <div className="flex items-center gap-3 px-4 py-3 bg-primary text-primary-foreground">
@@ -419,13 +430,13 @@ function MessageBubble({
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div className={`max-w-[85%] space-y-2`}>
         <div
-          className={`px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+          className={`px-3.5 py-2.5 rounded-2xl text-[13.5px] leading-relaxed ${
             isUser
               ? "bg-primary text-primary-foreground rounded-br-md"
               : "bg-white text-foreground rounded-bl-md shadow-sm border border-border"
           }`}
         >
-          {message.text || "\u200B"}
+          {message.text ? renderRich(message.text) : "\u200B"}
         </div>
 
         {/* Inline product cards (assistant only) */}
@@ -476,4 +487,63 @@ function MessageBubble({
       </div>
     </div>
   );
+}
+
+/**
+ * Minimal inline renderer for chat messages.
+ * Supports: **bold**, `- ` / `• ` bullets, and paragraph breaks.
+ * Keeps streaming-safe (handles partial markdown gracefully).
+ */
+function renderRich(text: string): React.ReactNode {
+  // Normalize bullet markers and split into blocks by blank lines.
+  const blocks = text.trim().split(/\n{2,}/);
+
+  return blocks.map((block, bi) => {
+    const lines = block.split("\n").map((l) => l.replace(/\s+$/, ""));
+    const isBulletBlock =
+      lines.length > 1 && lines.every((l) => /^\s*[-•]\s+/.test(l));
+
+    if (isBulletBlock) {
+      return (
+        <ul key={bi} className="my-1 space-y-1 pl-0 list-none">
+          {lines.map((l, li) => (
+            <li key={li} className="flex gap-2">
+              <span className="text-emerald-500 shrink-0 leading-relaxed">•</span>
+              <span className="flex-1">{renderInline(l.replace(/^\s*[-•]\s+/, ""))}</span>
+            </li>
+          ))}
+        </ul>
+      );
+    }
+
+    return (
+      <p
+        key={bi}
+        className={bi > 0 ? "mt-2" : undefined}
+      >
+        {lines.map((l, li) => (
+          <React.Fragment key={li}>
+            {li > 0 && <br />}
+            {renderInline(l)}
+          </React.Fragment>
+        ))}
+      </p>
+    );
+  });
+}
+
+/** Inline markdown: **bold**. Everything else passes through as text. */
+function renderInline(s: string): React.ReactNode {
+  const parts = s.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    const m = part.match(/^\*\*([^*]+)\*\*$/);
+    if (m) {
+      return (
+        <strong key={i} className="font-semibold">
+          {m[1]}
+        </strong>
+      );
+    }
+    return <React.Fragment key={i}>{part}</React.Fragment>;
+  });
 }

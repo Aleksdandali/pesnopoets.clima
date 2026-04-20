@@ -189,6 +189,30 @@ main {
   animation: fadeIn 0.3s ease-out;
 }
 
+/* AI consultant panel enter animation — soft fade + slide */
+@keyframes consultantIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-consultant-in {
+  animation: consultantIn 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform-origin: bottom right;
+}
+
+@media (max-width: 639px) {
+  /* On mobile the panel fills the screen — origin bottom center looks better */
+  .animate-consultant-in {
+    transform-origin: bottom center;
+  }
+}
+
 /* Ensure proper touch target sizing for iOS Safari */
 @supports (-webkit-touch-callout: none) {
   select,
