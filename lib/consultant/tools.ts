@@ -184,7 +184,7 @@ async function searchProducts(
   let q = supabase
     .from("products")
     .select(
-      "id, slug, title, title_override, title_en, title_ru, title_ua, manufacturer, price_client, price_override, price_promo, is_promo, availability, gallery, btu, area_m2, noise_db_indoor, energy_class, stock_size"
+      "id, slug, title, title_override, title_en, title_ru, title_ua, manufacturer, price_client, price_override, price_promo, is_promo, availability, gallery, btu, area_m2, noise_db_indoor, energy_class, stock_size, selling_points, best_for, warnings"
     )
     .eq("is_active", true)
     .eq("is_hidden", false);
@@ -241,6 +241,11 @@ async function searchProducts(
         in_stock: (p.stock_size ?? 0) > 0,
         image_url: image,
         url: `/${ctx.locale}/klimatici/${p.slug}`,
+        // Semantic enrichment (optional — may be null for products not yet tagged).
+        // AI uses these to craft expert-sounding hooks instead of raw spec listing.
+        selling_points: (p as ProductListRow & { selling_points?: unknown }).selling_points ?? null,
+        best_for: (p as ProductListRow & { best_for?: unknown }).best_for ?? null,
+        warnings: (p as ProductListRow & { warnings?: unknown }).warnings ?? null,
       };
     })
     .filter((p: { price_bgn: number }) => {
@@ -402,6 +407,10 @@ interface ProductListRow extends ProductRow {
   noise_db_indoor: number | null;
   energy_class: string | null;
   stock_size: number | null;
+  // Optional AI enrichment (migration 003). May be null for un-tagged rows.
+  selling_points?: unknown;
+  best_for?: unknown;
+  warnings?: unknown;
 }
 
 function pickTitle(p: ProductRow, locale: Locale): string {
