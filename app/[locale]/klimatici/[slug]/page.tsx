@@ -646,10 +646,42 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
       {/* Sticky top header on scroll (all breakpoints) */}
       <StickyProductHeader
+        locale={locale}
         title={displayTitle}
         priceBGN={priceBGN}
         priceEUR={priceWithInstallEur.toFixed(0)}
-        dictionary={dictionary}
+        cartItem={{
+          id: product.id,
+          slug: product.slug,
+          title: displayTitle,
+          manufacturer: product.manufacturer,
+          priceEur: priceWithInstallEur,
+          image: product.gallery?.[0],
+          btu: product.btu ?? null,
+        }}
+        labels={{
+          buy:
+            t?.buyNow ||
+            (locale === "en"
+              ? "Buy"
+              : locale === "ua"
+              ? "Купити"
+              : locale === "ru"
+              ? "Купить"
+              : "Купи"),
+          added:
+            t?.addedToCart ||
+            (locale === "en"
+              ? "Added"
+              : locale === "ua"
+              ? "Додано"
+              : locale === "ru"
+              ? "Добавлено"
+              : "Добавено"),
+          inquiry: dictionary.stickyBar.inquiry,
+          bgn: dictionary.common.currency.bgn,
+          eur: dictionary.common.currency.eur,
+        }}
       />
 
       {/* Sticky mobile CTA (bottom, mobile-only) */}
@@ -658,7 +690,38 @@ export default async function ProductPage({ params }: ProductPageProps) {
         priceBGN={priceBGN}
         priceEUR={priceWithInstallEur.toFixed(0)}
         phoneNumber={BUSINESS_PHONE_DISPLAY}
-        dictionary={dictionary}
+        cartItem={{
+          id: product.id,
+          slug: product.slug,
+          title: displayTitle,
+          manufacturer: product.manufacturer,
+          priceEur: priceWithInstallEur,
+          image: product.gallery?.[0],
+          btu: product.btu ?? null,
+        }}
+        labels={{
+          call: dictionary.stickyBar.call,
+          buy:
+            t?.buyNow ||
+            (locale === "en"
+              ? "Buy"
+              : locale === "ua"
+              ? "Купити"
+              : locale === "ru"
+              ? "Купить"
+              : "Купи"),
+          added:
+            t?.addedToCart ||
+            (locale === "en"
+              ? "Added"
+              : locale === "ua"
+              ? "Додано"
+              : locale === "ru"
+              ? "Добавлено"
+              : "Добавено"),
+          bgn: dictionary.common.currency.bgn,
+          eur: dictionary.common.currency.eur,
+        }}
       />
     </>
   );

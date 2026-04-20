@@ -1,32 +1,51 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Check, ShoppingCart } from "lucide-react";
+import { useCart, type CartItem } from "@/contexts/CartContext";
 
 interface StickyProductHeaderProps {
+  locale: string;
   title: string;
   priceBGN: string;
   priceEUR?: string;
-  dictionary: {
-    stickyBar: { inquiry: string };
-    common: { currency: { bgn: string; eur: string } };
+  cartItem: Omit<CartItem, "quantity">;
+  labels: {
+    buy: string;          // "Купи" / "Buy"
+    added: string;        // "Добавено" / "Added"
+    inquiry: string;      // "Запитване" / "Inquiry"
+    bgn: string;
+    eur: string;
   };
 }
 
 /**
- * Top sticky header that slides in after the user scrolls past the hero / price block.
- * Shows compact title + price + single inquiry CTA. Mobile-first but also appears on desktop.
- * Inspired by bittel.bg's top bar — but compact, lightweight, and non-intrusive.
+ * Top sticky header that slides in after the user scrolls past the main price block.
+ *
+ * Hierarchy (intentional):
+ *   Primary  → "Купи" (adds to cart; second click → /cart)
+ *   Secondary → "Заявка" (scrolls to inquiry form on-page)
+ *
+ * Matches the visual prominence of competitor sticky bars (e.g. bittel.bg's red КУПИ)
+ * while staying honest to our MVP: "Купи" = add to cart → full checkout-style inquiry
+ * (no direct payment yet).
  */
 export default function StickyProductHeader({
+  locale,
   title,
   priceBGN,
   priceEUR,
-  dictionary,
+  cartItem,
+  labels,
 }: StickyProductHeaderProps) {
+  const { addItem } = useCart();
+  const router = useRouter();
   const [visible, setVisible] = useState(false);
+  const [justAdded, setJustAdded] = useState(false);
 
   useEffect(() => {
-    // Trigger after ~500px scroll (past the main price block)
     function onScroll() {
       setVisible(window.scrollY > 520);
     }
@@ -34,6 +53,17 @@ export default function StickyProductHeader({
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  function handleBuy() {
+    if (justAdded) {
+      // Second click — go to cart for checkout
+      router.push(`/${locale}/cart`);
+      return;
+    }
+    addItem(cartItem, 1);
+    setJustAdded(true);
+    setTimeout(() => setJustAdded(false), 2500);
+  }
 
   function scrollToInquiry() {
     const el =
@@ -48,10 +78,6 @@ export default function StickyProductHeader({
     }
   }
 
-  const t = dictionary.stickyBar;
-  const bgnLabel = dictionary.common.currency.bgn;
-  const eurLabel = dictionary.common.currency.eur;
-
   return (
     <div
       className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-300 ${
@@ -62,32 +88,52 @@ export default function StickyProductHeader({
       aria-hidden={!visible}
     >
       <div className="bg-white/95 backdrop-blur-xl border-b border-border shadow-[0_2px_12px_rgb(0_0_0/0.06)]">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-2 sm:py-2.5 flex items-center gap-2 sm:gap-4">
-          {/* Title — truncates aggressively */}
-          <p className="flex-1 min-w-0 text-xs sm:text-sm font-semibold text-foreground truncate">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-2 sm:py-2.5 flex items-center gap-2 sm:gap-3">
+          {/* Title — hidden on very narrow screens to keep price + buttons visible */}
+          <p className="hidden sm:block flex-1 min-w-0 text-sm font-semibold text-foreground truncate">
             {title}
           </p>
 
-          {/* Price — stacked on mobile, inline on larger screens */}
-          <div className="flex flex-col items-end leading-tight shrink-0 sm:flex-row sm:items-baseline sm:gap-2">
+          {/* Price — always visible; on mobile it's the main info element */}
+          <div className="flex flex-col items-start sm:items-end leading-tight shrink-0 sm:flex-row sm:items-baseline sm:gap-2 flex-1 sm:flex-none min-w-0">
             <span className="text-sm sm:text-base font-extrabold text-foreground tabular-nums whitespace-nowrap">
-              {priceBGN} {bgnLabel}
+              {priceBGN} {labels.bgn}
             </span>
             {priceEUR && (
               <span className="text-[10px] sm:text-xs text-muted-foreground tabular-nums whitespace-nowrap">
-                ≈ {priceEUR} {eurLabel}
+                ≈ {priceEUR} {labels.eur}
               </span>
             )}
           </div>
 
-          {/* Inquiry CTA */}
+          {/* Secondary: Inquiry (text/ghost on desktop, icon hidden on very narrow) */}
           <button
             type="button"
             onClick={scrollToInquiry}
             tabIndex={visible ? 0 : -1}
-            className="shrink-0 inline-flex items-center justify-center px-3 sm:px-5 min-h-[36px] sm:min-h-[40px] bg-primary text-primary-foreground text-xs sm:text-sm font-semibold rounded-lg hover:bg-primary-dark transition-colors shadow-sm"
+            className="hidden sm:inline-flex shrink-0 items-center justify-center px-3 min-h-[40px] text-xs sm:text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
-            {t.inquiry}
+            {labels.inquiry}
+          </button>
+
+          {/* Primary: Buy / Add to cart */}
+          <button
+            type="button"
+            onClick={handleBuy}
+            tabIndex={visible ? 0 : -1}
+            aria-label={justAdded ? labels.added : labels.buy}
+            className={`shrink-0 inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 min-h-[40px] text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 shadow-sm ${
+              justAdded
+                ? "bg-success text-white"
+                : "bg-primary text-primary-foreground hover:bg-primary-dark"
+            }`}
+          >
+            {justAdded ? (
+              <Check className="w-4 h-4" aria-hidden="true" />
+            ) : (
+              <ShoppingCart className="w-4 h-4" aria-hidden="true" />
+            )}
+            <span>{justAdded ? labels.added : labels.buy}</span>
           </button>
         </div>
       </div>

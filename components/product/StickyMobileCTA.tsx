@@ -1,29 +1,41 @@
 "use client";
 
-import { useEffect } from "react";
-import { Phone, Send } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Phone, Check, ShoppingCart } from "lucide-react";
+import { useCart, type CartItem } from "@/contexts/CartContext";
 
 interface StickyMobileCTAProps {
   locale: string;
   priceBGN: string;
   priceEUR?: string;
   phoneNumber: string;
-  dictionary: {
-    stickyBar: { call: string; inquiry: string };
-    common: { currency: { bgn: string; eur: string } };
+  cartItem: Omit<CartItem, "quantity">;
+  labels: {
+    call: string;
+    buy: string;
+    added: string;
+    bgn: string;
+    eur: string;
   };
 }
 
+/**
+ * Mobile-only bottom sticky CTA.
+ * Hierarchy: Price → Call (secondary) → Buy / Add-to-cart (primary).
+ * Second tap on "Buy" after item is added navigates to the cart for checkout.
+ */
 export default function StickyMobileCTA({
-  locale: _locale,
+  locale,
   priceBGN,
   priceEUR,
   phoneNumber,
-  dictionary,
+  cartItem,
+  labels,
 }: StickyMobileCTAProps) {
-  const t = dictionary.stickyBar;
-  const bgnLabel = dictionary.common.currency.bgn;
-  const eurLabel = dictionary.common.currency.eur;
+  const { addItem } = useCart();
+  const router = useRouter();
+  const [justAdded, setJustAdded] = useState(false);
 
   // Tell floating WA/Viber buttons to lift above this bar (on mobile).
   useEffect(() => {
@@ -31,19 +43,14 @@ export default function StickyMobileCTA({
     return () => document.body.removeAttribute("data-sticky-cta");
   }, []);
 
-  function scrollToInquiry() {
-    // Mobile-only variant sits below Similar Products; prefer it on small screens.
-    const el =
-      document.getElementById("inquiry-form-section-mobile") ||
-      document.getElementById("inquiry-form-section");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-      // Move focus to the first input for a better a11y flow after scroll.
-      const firstField = el.querySelector<HTMLElement>("input,textarea,select,button");
-      if (firstField) {
-        setTimeout(() => firstField.focus({ preventScroll: true }), 400);
-      }
+  function handleBuy() {
+    if (justAdded) {
+      router.push(`/${locale}/cart`);
+      return;
     }
+    addItem(cartItem, 1);
+    setJustAdded(true);
+    setTimeout(() => setJustAdded(false), 2500);
   }
 
   return (
@@ -53,11 +60,11 @@ export default function StickyMobileCTA({
           {/* Price: BGN primary + EUR secondary */}
           <div className="flex-1 min-w-0 flex flex-col leading-tight">
             <span className="text-base sm:text-lg font-extrabold text-foreground tabular-nums">
-              {priceBGN} {bgnLabel}
+              {priceBGN} {labels.bgn}
             </span>
             {priceEUR && (
               <span className="text-[11px] text-muted-foreground tabular-nums">
-                ≈ {priceEUR} {eurLabel}
+                ≈ {priceEUR} {labels.eur}
               </span>
             )}
           </div>
@@ -66,20 +73,29 @@ export default function StickyMobileCTA({
           <a
             href={`tel:${phoneNumber.replace(/\s/g, "")}`}
             className="flex items-center justify-center gap-1.5 px-3 sm:px-4 min-h-[44px] min-w-[44px] border border-border rounded-xl text-sm font-medium text-foreground hover:bg-muted transition-colors"
-            aria-label={t.call}
+            aria-label={labels.call}
           >
             <Phone className="w-4 h-4" aria-hidden="true" />
-            <span className="hidden sm:inline">{t.call}</span>
+            <span className="hidden sm:inline">{labels.call}</span>
           </a>
 
-          {/* Inquiry button — min 44px tap target */}
+          {/* Buy / Add-to-cart — primary */}
           <button
             type="button"
-            onClick={scrollToInquiry}
-            className="flex items-center justify-center gap-1.5 px-4 sm:px-5 min-h-[44px] bg-primary text-primary-foreground text-sm font-semibold rounded-xl hover:bg-primary-dark transition-colors shadow-sm"
+            onClick={handleBuy}
+            aria-label={justAdded ? labels.added : labels.buy}
+            className={`flex items-center justify-center gap-1.5 px-4 sm:px-5 min-h-[44px] text-sm font-semibold rounded-xl transition-colors shadow-sm ${
+              justAdded
+                ? "bg-success text-white"
+                : "bg-primary text-primary-foreground hover:bg-primary-dark"
+            }`}
           >
-            <Send className="w-4 h-4" aria-hidden="true" />
-            {t.inquiry}
+            {justAdded ? (
+              <Check className="w-4 h-4" aria-hidden="true" />
+            ) : (
+              <ShoppingCart className="w-4 h-4" aria-hidden="true" />
+            )}
+            <span>{justAdded ? labels.added : labels.buy}</span>
           </button>
         </div>
       </div>
