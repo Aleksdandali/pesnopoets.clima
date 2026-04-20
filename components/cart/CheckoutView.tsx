@@ -77,7 +77,7 @@ export default function CheckoutView({ locale, dictionary }: CheckoutViewProps) 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: form.name,
-          phone: form.phone,
+          phone: `+359 ${form.phone.trim()}`.trim(),
           email: form.email || null,
           comment: form.comment || null,
           locale,
@@ -201,21 +201,33 @@ export default function CheckoutView({ locale, dictionary }: CheckoutViewProps) 
             <label htmlFor="checkout-phone" className="block text-sm font-medium text-foreground mb-1.5">
               {t.phone} <span className="text-danger" aria-hidden="true">*</span>
             </label>
-            <input
-              id="checkout-phone"
-              type="tel"
-              required
-              aria-required="true"
-              aria-invalid={isError && !form.phone ? "true" : undefined}
-              aria-describedby="checkout-phone-hint"
-              value={form.phone}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              placeholder={t.phonePlaceholder}
-              className="w-full px-4 py-3 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
-              autoComplete="tel"
-              inputMode="tel"
-              pattern="[+0-9 ()\-]{7,}"
-            />
+            <div className="flex items-stretch rounded-xl border border-border overflow-hidden focus-within:ring-2 focus-within:ring-primary/40 focus-within:border-primary transition-all">
+              <span
+                aria-hidden="true"
+                className="flex items-center px-3 bg-muted text-sm font-medium text-muted-foreground border-r border-border tabular-nums"
+              >
+                +359
+              </span>
+              <input
+                id="checkout-phone"
+                type="tel"
+                required
+                aria-required="true"
+                aria-invalid={isError && !form.phone ? "true" : undefined}
+                aria-describedby="checkout-phone-hint"
+                value={form.phone}
+                onChange={(e) => {
+                  // Strip any leading +359 / 00359 / 0 so we don't double-prefix on submit
+                  let v = e.target.value.replace(/^\+?359\s?/, "").replace(/^0+/, "");
+                  setForm({ ...form, phone: v });
+                }}
+                placeholder="88 123 4567"
+                className="flex-1 min-w-0 px-4 py-3 bg-transparent focus:outline-none"
+                autoComplete="tel-national"
+                inputMode="tel"
+                pattern="[0-9 ()\-]{7,}"
+              />
+            </div>
             <p id="checkout-phone-hint" className="mt-1 text-[11px] text-muted-foreground">
               {t.phonePlaceholder}
             </p>

@@ -90,7 +90,14 @@
     "home": "Начало",
     "allProducts": "Всички продукти",
     "categories": "Категории",
-    "filtersLabel": "Филтри"
+    "filtersLabel": "Филтри",
+    "pagination": {
+      "label": "Страниране",
+      "prev": "Предишна",
+      "next": "Следваща",
+      "page": "Страница {n}",
+      "current": "Страница {n}, текуща"
+    }
   },
   "product": {
     "specifications": "Технически характеристики",

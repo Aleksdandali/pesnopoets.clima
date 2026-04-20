@@ -62,9 +62,10 @@ export default function InquiryForm({
     setErrors({});
 
     const form = new FormData(e.currentTarget);
+    const rawPhone = (form.get("phone") as string)?.trim() || "";
     const data = {
       name: (form.get("name") as string)?.trim(),
-      phone: (form.get("phone") as string)?.trim(),
+      phone: rawPhone ? `+359 ${rawPhone}`.trim() : "",
       email: (form.get("email") as string)?.trim(),
       message: (form.get("message") as string)?.trim(),
       product_id: productId,
@@ -168,18 +169,36 @@ export default function InquiryForm({
         >
           {t.phone} <span className="text-danger">*</span>
         </label>
-        <input
-          type="tel"
-          id="phone"
-          name="phone"
-          placeholder={t.phonePlaceholder}
-          required
-          maxLength={20}
-          autoComplete="tel"
-          className={`w-full px-4 py-3 text-base sm:text-sm border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-ring transition-colors min-h-[48px] ${
+        <div
+          className={`flex items-stretch rounded-lg bg-white border focus-within:ring-2 focus-within:ring-ring transition-colors overflow-hidden ${
             errors.phone ? "border-danger" : "border-border"
           }`}
-        />
+        >
+          <span
+            aria-hidden="true"
+            className="flex items-center px-3 bg-muted text-sm font-medium text-muted-foreground border-r border-border tabular-nums"
+          >
+            +359
+          </span>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            placeholder="88 123 4567"
+            required
+            maxLength={20}
+            autoComplete="tel-national"
+            inputMode="tel"
+            pattern="[0-9 ()\-]{7,}"
+            onInput={(e) => {
+              const el = e.currentTarget;
+              // Strip any accidental +359 / 00359 / leading 0 so we never double-prefix
+              const clean = el.value.replace(/^\+?359\s?/, "").replace(/^0+/, "");
+              if (clean !== el.value) el.value = clean;
+            }}
+            className="flex-1 min-w-0 px-4 py-3 text-base sm:text-sm bg-transparent focus:outline-none min-h-[48px]"
+          />
+        </div>
         {errors.phone ? (
           <p className="mt-1 text-xs text-danger" role="alert">{errors.phone}</p>
         ) : t.phoneHelper ? (

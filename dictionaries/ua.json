@@ -90,7 +90,14 @@
     "home": "Головна",
     "allProducts": "Усі товари",
     "categories": "Категорії",
-    "filtersLabel": "Фільтри"
+    "filtersLabel": "Фільтри",
+    "pagination": {
+      "label": "Посторінкова навігація",
+      "prev": "Попередня",
+      "next": "Наступна",
+      "page": "Сторінка {n}",
+      "current": "Сторінка {n}, поточна"
+    }
   },
   "product": {
     "specifications": "Технічні характеристики",

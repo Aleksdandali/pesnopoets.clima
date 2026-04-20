@@ -90,7 +90,14 @@
     "home": "Home",
     "allProducts": "All products",
     "categories": "Categories",
-    "filtersLabel": "Filters"
+    "filtersLabel": "Filters",
+    "pagination": {
+      "label": "Pagination",
+      "prev": "Previous",
+      "next": "Next",
+      "page": "Page {n}",
+      "current": "Page {n}, current"
+    }
   },
   "product": {
     "specifications": "Technical Specifications",

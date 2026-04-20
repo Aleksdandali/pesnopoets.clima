@@ -535,7 +535,7 @@ export default async function HomePage({ params }: HomePageProps) {
 
       {/* CTA Banner */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0369a1] to-[#0284c7]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--primary-dark)] to-[var(--primary)]" />
         <div className="absolute inset-0 opacity-10"
           style={{
             backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
@@ -561,7 +561,7 @@ export default async function HomePage({ params }: HomePageProps) {
             <div className="shrink-0 w-full sm:w-auto">
               <Link
                 href={`/${locale}/inquiry`}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-white text-[#0369a1] font-semibold rounded-xl hover:bg-white/90 transition-all duration-200 shadow-[0_4px_14px_0_rgb(0_0_0/0.15)] hover:shadow-[0_6px_20px_0_rgb(0_0_0/0.2)] hover:-translate-y-0.5 min-h-[48px]"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-white text-[var(--primary-dark)] font-semibold rounded-xl hover:bg-white/90 transition-all duration-200 shadow-[0_4px_14px_0_rgb(0_0_0/0.15)] hover:shadow-[0_6px_20px_0_rgb(0_0_0/0.2)] hover:-translate-y-0.5 min-h-[48px]"
               >
                 {labels.ctaButton}
                 <ArrowRight className="w-4.5 h-4.5" aria-hidden="true" />

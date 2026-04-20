@@ -185,7 +185,7 @@ export default async function UslugiPage({ params }: PageProps) {
 
       {/* CTA */}
       <section className="relative overflow-hidden border-t border-border/60">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0369a1] to-[#0284c7]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--primary-dark)] to-[var(--primary)]" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
             <div className="text-center lg:text-left max-w-2xl">
@@ -204,7 +204,7 @@ export default async function UslugiPage({ params }: PageProps) {
             </div>
             <Link
               href={`/${locale}/inquiry`}
-              className="shrink-0 inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-white text-[#0369a1] font-semibold rounded-xl hover:bg-white/90 transition-all duration-200 shadow-[0_4px_14px_0_rgb(0_0_0/0.15)] min-h-[48px]"
+              className="shrink-0 inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-white text-[var(--primary-dark)] font-semibold rounded-xl hover:bg-white/90 transition-all duration-200 shadow-[0_4px_14px_0_rgb(0_0_0/0.15)] min-h-[48px]"
             >
               {t.ctaButton}
               <ArrowRight className="w-4 h-4" aria-hidden="true" />

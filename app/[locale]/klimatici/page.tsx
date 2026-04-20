@@ -263,35 +263,115 @@ export default async function CatalogPage({
             </div>
           )}
 
-          {/* Pagination — 44px tap targets */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-1.5 sm:gap-2 mt-10 flex-wrap">
-              {Array.from({ length: Math.min(totalPages, 10) }, (_, i) => i + 1).map((p) => (
-                <a
-                  key={p}
-                  href={`?${new URLSearchParams({
-                    ...(filters.brand && { brand: filters.brand }),
-                    ...(filters.btu && { btu: filters.btu }),
-                    ...(filters.energy && { energy: filters.energy }),
-                    ...(filters.available && { available: filters.available }),
-                    ...(filters.sort && { sort: filters.sort }),
-                    ...(filters.category && { category: filters.category }),
-                    page: String(p),
-                  }).toString()}`}
-                  className={`w-11 h-11 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${
-                    p === page
-                      ? "bg-primary text-primary-foreground"
-                      : "border border-border text-muted-foreground hover:bg-muted"
-                  }`}
-                >
-                  {p}
-                </a>
-              ))}
-              {totalPages > 10 && (
-                <span className="text-muted-foreground text-sm px-2">... {totalPages}</span>
-              )}
-            </div>
-          )}
+          {/* Pagination — 44px tap targets, prev/next + ellipsis + last page */}
+          {totalPages > 1 && (() => {
+            const pg = catalogDict.pagination;
+            const buildHref = (p: number) =>
+              `?${new URLSearchParams({
+                ...(filters.brand && { brand: filters.brand }),
+                ...(filters.btu && { btu: filters.btu }),
+                ...(filters.energy && { energy: filters.energy }),
+                ...(filters.available && { available: filters.available }),
+                ...(filters.sort && { sort: filters.sort }),
+                ...(filters.category && { category: filters.category }),
+                page: String(p),
+              }).toString()}`;
+
+            // Build visible page list: [1..min(totalPages,10)] + optional ellipsis + last
+            const windowEnd = Math.min(totalPages, 10);
+            const pages = Array.from({ length: windowEnd }, (_, i) => i + 1);
+            const showLast = totalPages > 10;
+
+            const baseCell =
+              "min-w-11 h-11 px-3 flex items-center justify-center rounded-lg text-sm font-medium transition-colors";
+            const inactive = "border border-border text-muted-foreground hover:bg-muted";
+            const active = "bg-primary text-primary-foreground";
+            const disabled = "border border-border text-muted-foreground/40 pointer-events-none";
+
+            return (
+              <nav
+                aria-label={pg.label}
+                className="flex items-center justify-center gap-1.5 sm:gap-2 mt-10 flex-wrap"
+              >
+                {/* Prev */}
+                {page > 1 ? (
+                  <a
+                    href={buildHref(page - 1)}
+                    rel="prev"
+                    aria-label={pg.prev}
+                    className={`${baseCell} ${inactive}`}
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                    <span className="sr-only sm:not-sr-only sm:ml-1">{pg.prev}</span>
+                  </a>
+                ) : (
+                  <span aria-hidden="true" className={`${baseCell} ${disabled}`}>
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </span>
+                )}
+
+                {pages.map((p) => {
+                  const isCurrent = p === page;
+                  const label = (isCurrent ? pg.current : pg.page).replace("{n}", String(p));
+                  return (
+                    <a
+                      key={p}
+                      href={buildHref(p)}
+                      aria-label={label}
+                      aria-current={isCurrent ? "page" : undefined}
+                      className={`${baseCell} ${isCurrent ? active : inactive}`}
+                    >
+                      {p}
+                    </a>
+                  );
+                })}
+
+                {showLast && (
+                  <>
+                    <span aria-hidden="true" className="text-muted-foreground text-sm px-1">
+                      …
+                    </span>
+                    <a
+                      href={buildHref(totalPages)}
+                      aria-label={(page === totalPages ? pg.current : pg.page).replace(
+                        "{n}",
+                        String(totalPages)
+                      )}
+                      aria-current={page === totalPages ? "page" : undefined}
+                      className={`${baseCell} ${page === totalPages ? active : inactive}`}
+                    >
+                      {totalPages}
+                    </a>
+                  </>
+                )}
+
+                {/* Next */}
+                {page < totalPages ? (
+                  <a
+                    href={buildHref(page + 1)}
+                    rel="next"
+                    aria-label={pg.next}
+                    className={`${baseCell} ${inactive}`}
+                  >
+                    <span className="sr-only sm:not-sr-only sm:mr-1">{pg.next}</span>
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </a>
+                ) : (
+                  <span aria-hidden="true" className={`${baseCell} ${disabled}`}>
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                )}
+              </nav>
+            );
+          })()}
         </div>
       </div>
     </div>
