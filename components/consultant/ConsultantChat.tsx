@@ -45,6 +45,40 @@ interface ChatMessage {
   id: string;
 }
 
+const STORAGE_KEY = "pesnopoets-consultant-v1";
+const STORAGE_MAX_MESSAGES = 40; // keep chat size bounded
+
+function loadStoredMessages(): ChatMessage[] | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return null;
+    // Minimal shape validation to avoid crashing on bad data.
+    return parsed.filter(
+      (m): m is ChatMessage =>
+        !!m &&
+        typeof m === "object" &&
+        (m.role === "user" || m.role === "assistant") &&
+        typeof m.text === "string" &&
+        typeof m.id === "string"
+    );
+  } catch {
+    return null;
+  }
+}
+
+function saveMessages(msgs: ChatMessage[]) {
+  if (typeof window === "undefined") return;
+  try {
+    const trimmed = msgs.slice(-STORAGE_MAX_MESSAGES);
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
+  } catch {
+    /* quota / disabled — ignore */
+  }
+}
+
 export default function ConsultantChat({ locale, labels }: ConsultantChatProps) {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
@@ -52,6 +86,7 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
   const [streaming, setStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [stickyCta, setStickyCta] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
@@ -64,14 +99,29 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
     return () => observer.disconnect();
   }, []);
 
-  // Seed greeting on first open
+  // Load saved chat history once on mount (per device, locale-agnostic)
   useEffect(() => {
-    if (open && messages.length === 0) {
+    const stored = loadStoredMessages();
+    if (stored && stored.length > 0) {
+      setMessages(stored);
+    }
+    setHydrated(true);
+  }, []);
+
+  // Persist messages whenever they change (after hydration, to avoid wiping storage with empty state)
+  useEffect(() => {
+    if (!hydrated) return;
+    saveMessages(messages);
+  }, [messages, hydrated]);
+
+  // Seed greeting on first open (only if no saved history)
+  useEffect(() => {
+    if (open && hydrated && messages.length === 0) {
       setMessages([
         { id: crypto.randomUUID(), role: "assistant", text: labels.greeting },
       ]);
     }
-  }, [open, messages.length, labels.greeting]);
+  }, [open, hydrated, messages.length, labels.greeting]);
 
   // Auto-scroll on new content
   useEffect(() => {

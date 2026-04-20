@@ -143,9 +143,9 @@ export default function FloatingContactButtons({
       }`}
       aria-hidden={!effectivelyVisible}
     >
-      {/* Expanded items — fan upward from main trigger */}
+      {/* Expanded items — fan SIDEWAYS (leftward) from main trigger */}
       <div
-        className={`absolute bottom-full right-0 mb-3 flex flex-col items-end gap-2.5 transition-all duration-200 origin-bottom-right ${
+        className={`absolute right-full top-1/2 -translate-y-1/2 mr-3 flex items-center gap-2.5 transition-all duration-200 origin-right ${
           expanded
             ? "opacity-100 scale-100 pointer-events-auto"
             : "opacity-0 scale-95 pointer-events-none"
@@ -157,31 +157,27 @@ export default function FloatingContactButtons({
             href={item.href}
             target={item.external ? "_blank" : undefined}
             rel={item.external ? "noopener noreferrer" : undefined}
-            aria-label={item.label}
+            aria-label={`${item.label} — ${item.sub}`}
+            title={`${item.label} · ${item.sub}`}
             tabIndex={expanded && effectivelyVisible ? 0 : -1}
             onClick={() => setExpanded(false)}
             style={{
               transitionDelay: expanded ? `${i * 40}ms` : "0ms",
             }}
-            className={`group flex items-center gap-3 transition-all duration-200 ${
-              expanded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+            className={`group flex flex-col items-center gap-1 transition-all duration-200 ${
+              expanded ? "opacity-100 translate-x-0" : "opacity-0 translate-x-2"
             }`}
           >
-            {/* Label chip */}
-            <div className="flex flex-col items-end px-3 py-1.5 rounded-xl bg-white/95 backdrop-blur-sm shadow-md border border-border/60">
-              <span className="text-xs font-semibold text-foreground leading-tight">
-                {item.label}
-              </span>
-              <span className="text-[10px] text-muted-foreground leading-tight tabular-nums">
-                {item.sub}
-              </span>
-            </div>
             {/* Icon circle */}
             <div
               className={`flex items-center justify-center w-12 h-12 rounded-full ${item.bg} ${item.text} shadow-lg group-hover:scale-110 transition-transform duration-200`}
             >
               {item.icon}
             </div>
+            {/* Tiny label below each icon */}
+            <span className="px-1.5 py-0.5 rounded-full bg-white/95 backdrop-blur-sm text-[9px] font-semibold text-foreground shadow-sm border border-border/60 whitespace-nowrap leading-none">
+              {item.sub}
+            </span>
           </a>
         ))}
       </div>
