@@ -203,6 +203,7 @@ export default async function LocaleLayout({
         <FloatingContactButtons
           whatsappLabel={dictionary.contact?.whatsapp || "WhatsApp"}
           viberLabel={dictionary.contact?.viber || "Viber"}
+          locale={locale as "bg" | "en" | "ru" | "ua"}
         />
         <ConsultantChat
           locale={locale as "bg" | "en" | "ru" | "ua"}

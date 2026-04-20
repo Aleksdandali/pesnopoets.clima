@@ -202,22 +202,32 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
 
   return (
     <>
-      {/* Floating trigger button — hidden when panel open.
-          Positioned ABOVE the WhatsApp/Viber stack. Lifts further when StickyMobileCTA is present. */}
+      {/* Floating trigger — circle button + tiny label underneath.
+          Sits ABOVE the contact FAB; lifts further when StickyMobileCTA is present. */}
       {!open && (
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          aria-label={labels.triggerAria}
-          data-consultant-trigger
-          className={`fixed right-3 sm:right-5 z-[55] flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary text-primary-foreground shadow-[0_8px_24px_rgb(0_135_255/0.35)] hover:scale-105 hover:shadow-[0_12px_32px_rgb(0_135_255/0.45)] transition-all duration-200 group ${
-            stickyCta ? "bottom-[204px] sm:bottom-[140px]" : "bottom-[124px] sm:bottom-[140px]"
+        <div
+          className={`fixed right-3 sm:right-5 z-[55] flex flex-col items-center gap-1 transition-all duration-300 ${
+            stickyCta ? "bottom-[168px] sm:bottom-[116px]" : "bottom-[96px] sm:bottom-[116px]"
           }`}
         >
-          <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-40 animate-ping" />
-          <Sparkles className="relative w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
-          <span className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-green-400 border-2 border-white" />
-        </button>
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            aria-label={labels.triggerAria}
+            data-consultant-trigger
+            className="relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary text-primary-foreground shadow-[0_8px_24px_rgb(0_135_255/0.35)] hover:scale-105 hover:shadow-[0_12px_32px_rgb(0_135_255/0.45)] transition-all duration-200 group"
+          >
+            <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-40 animate-ping" />
+            <Sparkles className="relative w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
+            <span className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-green-400 border-2 border-white" />
+          </button>
+          <span
+            className="px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-sm text-[9px] sm:text-[10px] font-semibold text-foreground shadow-sm border border-border/60 whitespace-nowrap pointer-events-none select-none"
+            aria-hidden="true"
+          >
+            {labels.title}
+          </span>
+        </div>
       )}
 
       {/* Chat panel */}
