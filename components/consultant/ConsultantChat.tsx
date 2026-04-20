@@ -256,8 +256,8 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
           Sits ABOVE the contact FAB; lifts further when StickyMobileCTA is present. */}
       {!open && (
         <div
-          className={`fixed right-3 sm:right-5 z-[55] flex flex-col items-center gap-1.5 transition-all duration-300 ${
-            stickyCta ? "bottom-[152px] sm:bottom-[100px]" : "bottom-[80px] sm:bottom-[100px]"
+          className={`fixed right-3 sm:right-5 z-[55] transition-all duration-300 ${
+            stickyCta ? "bottom-[168px] sm:bottom-[116px]" : "bottom-[96px] sm:bottom-[116px]"
           }`}
         >
           <button
@@ -275,7 +275,7 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
             <span className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-green-400 border-2 border-white" />
           </button>
           <span
-            className="px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-sm text-[9px] sm:text-[10px] font-semibold text-foreground shadow-sm border border-border/60 whitespace-nowrap pointer-events-none select-none"
+            className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-sm text-[9px] sm:text-[10px] font-semibold text-foreground shadow-sm border border-border/60 whitespace-nowrap pointer-events-none select-none"
             aria-hidden="true"
           >
             {labels.title}
