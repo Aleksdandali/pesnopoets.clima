@@ -45,13 +45,21 @@ interface ChatMessage {
   id: string;
 }
 
-const STORAGE_KEY = "pesnopoets-consultant-v1";
+const STORAGE_PREFIX = "pesnopoets-consultant-v2";
+const LEGACY_STORAGE_KEY = "pesnopoets-consultant-v1"; // removed in v2 (mixed locales)
 const STORAGE_MAX_MESSAGES = 40; // keep chat size bounded
 
-function loadStoredMessages(): ChatMessage[] | null {
+function storageKeyFor(locale: Locale): string {
+  return `${STORAGE_PREFIX}-${locale}`;
+}
+
+function loadStoredMessages(locale: Locale): ChatMessage[] | null {
   if (typeof window === "undefined") return null;
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    // One-time cleanup of the legacy cross-locale key so old mixed-language
+    // history doesn't contaminate the new locale-scoped conversation.
+    window.localStorage.removeItem(LEGACY_STORAGE_KEY);
+    const raw = window.localStorage.getItem(storageKeyFor(locale));
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return null;
@@ -69,11 +77,11 @@ function loadStoredMessages(): ChatMessage[] | null {
   }
 }
 
-function saveMessages(msgs: ChatMessage[]) {
+function saveMessages(locale: Locale, msgs: ChatMessage[]) {
   if (typeof window === "undefined") return;
   try {
     const trimmed = msgs.slice(-STORAGE_MAX_MESSAGES);
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
+    window.localStorage.setItem(storageKeyFor(locale), JSON.stringify(trimmed));
   } catch {
     /* quota / disabled — ignore */
   }
@@ -99,20 +107,21 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
     return () => observer.disconnect();
   }, []);
 
-  // Load saved chat history once on mount (per device, locale-agnostic)
+  // Load saved chat history whenever locale changes (per device, per locale).
+  // When user switches /bg → /ru, we reset and load the RU-specific history,
+  // so the AI never sees mixed-language context that could hijack its locale.
   useEffect(() => {
-    const stored = loadStoredMessages();
-    if (stored && stored.length > 0) {
-      setMessages(stored);
-    }
+    setHydrated(false);
+    const stored = loadStoredMessages(locale);
+    setMessages(stored && stored.length > 0 ? stored : []);
     setHydrated(true);
-  }, []);
+  }, [locale]);
 
   // Persist messages whenever they change (after hydration, to avoid wiping storage with empty state)
   useEffect(() => {
     if (!hydrated) return;
-    saveMessages(messages);
-  }, [messages, hydrated]);
+    saveMessages(locale, messages);
+  }, [messages, hydrated, locale]);
 
   // Seed greeting on first open (only if no saved history)
   useEffect(() => {
@@ -128,10 +137,33 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, streaming]);
 
-  // Lift above sticky mobile CTA when open
+  // Lift above sticky mobile CTA when open + lock background scroll
   useEffect(() => {
-    if (open) document.body.setAttribute("data-consultant-open", "true");
-    else document.body.removeAttribute("data-consultant-open");
+    if (!open) {
+      document.body.removeAttribute("data-consultant-open");
+      return;
+    }
+    document.body.setAttribute("data-consultant-open", "true");
+
+    const scrollY = window.scrollY;
+    const prev = {
+      position: document.body.style.position,
+      top: document.body.style.top,
+      width: document.body.style.width,
+      overflow: document.body.style.overflow,
+    };
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.position = prev.position;
+      document.body.style.top = prev.top;
+      document.body.style.width = prev.width;
+      document.body.style.overflow = prev.overflow;
+      window.scrollTo(0, scrollY);
+    };
   }, [open]);
 
   const sendMessage = useCallback(async () => {
