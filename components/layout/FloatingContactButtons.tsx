@@ -143,9 +143,9 @@ export default function FloatingContactButtons({
       }`}
       aria-hidden={!effectivelyVisible}
     >
-      {/* Expanded items — fan SIDEWAYS (leftward) from main trigger */}
+      {/* Expanded items — fan SIDEWAYS (leftward), aligned on same axis as main trigger */}
       <div
-        className={`absolute right-full top-1/2 -translate-y-1/2 mr-3 flex items-center gap-2.5 transition-all duration-200 origin-right ${
+        className={`absolute right-full top-0 mr-3 flex items-center gap-2.5 h-12 sm:h-14 transition-all duration-200 origin-right ${
           expanded
             ? "opacity-100 scale-100 pointer-events-auto"
             : "opacity-0 scale-95 pointer-events-none"
@@ -164,20 +164,11 @@ export default function FloatingContactButtons({
             style={{
               transitionDelay: expanded ? `${i * 40}ms` : "0ms",
             }}
-            className={`group flex flex-col items-center gap-1 transition-all duration-200 ${
+            className={`flex items-center justify-center w-12 h-12 rounded-full ${item.bg} ${item.text} shadow-lg hover:scale-110 transition-all duration-200 ${
               expanded ? "opacity-100 translate-x-0" : "opacity-0 translate-x-2"
             }`}
           >
-            {/* Icon circle */}
-            <div
-              className={`flex items-center justify-center w-12 h-12 rounded-full ${item.bg} ${item.text} shadow-lg group-hover:scale-110 transition-transform duration-200`}
-            >
-              {item.icon}
-            </div>
-            {/* Tiny label below each icon */}
-            <span className="px-1.5 py-0.5 rounded-full bg-white/95 backdrop-blur-sm text-[9px] font-semibold text-foreground shadow-sm border border-border/60 whitespace-nowrap leading-none">
-              {item.sub}
-            </span>
+            {item.icon}
           </a>
         ))}
       </div>
@@ -196,9 +187,12 @@ export default function FloatingContactButtons({
             : "bg-foreground text-white"
         }`}
       >
-        {/* Pulse ring — only when collapsed */}
+        {/* Pulse ring — slower, subtler; only when collapsed */}
         {!expanded && (
-          <span className="absolute inline-flex h-full w-full rounded-full bg-foreground opacity-25 animate-ping" />
+          <span
+            className="absolute inline-flex h-full w-full rounded-full bg-foreground opacity-15"
+            style={{ animation: "ping 3.5s cubic-bezier(0, 0, 0.2, 1) infinite" }}
+          />
         )}
         {expanded ? (
           <X className="relative w-5 h-5 sm:w-6 sm:h-6 transition-transform -rotate-90" aria-hidden="true" />
@@ -206,16 +200,6 @@ export default function FloatingContactButtons({
           <MessageCircle className="relative w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
         )}
       </button>
-
-      {/* Tiny label under the collapsed button */}
-      {!expanded && (
-        <span
-          className="absolute top-full left-1/2 -translate-x-1/2 mt-1 px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-sm text-[9px] sm:text-[10px] font-semibold text-foreground shadow-sm border border-border/60 whitespace-nowrap pointer-events-none select-none"
-          aria-hidden="true"
-        >
-          {t.contact}
-        </span>
-      )}
     </div>
   );
 }
