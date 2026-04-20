@@ -297,10 +297,10 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
             onClick={() => setOpen(true)}
             aria-label={labels.triggerAria}
             data-consultant-trigger
-            className="relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary text-primary-foreground shadow-[0_8px_24px_rgb(0_135_255/0.35)] hover:scale-105 hover:shadow-[0_12px_32px_rgb(0_135_255/0.45)] transition-all duration-200 group"
+            className="relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-emerald-500 text-white shadow-[0_8px_24px_rgb(16_185_129/0.4)] hover:scale-105 hover:shadow-[0_12px_32px_rgb(16_185_129/0.5)] transition-all duration-200 group"
           >
             <span
-              className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-20"
+              className="absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-25"
               style={{ animation: "ping 4s cubic-bezier(0, 0, 0.2, 1) infinite" }}
             />
             <Sparkles className="relative w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
@@ -349,7 +349,12 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
             aria-live="polite"
           >
             {messages.map((m) => (
-              <MessageBubble key={m.id} message={m} labels={labels} />
+              <MessageBubble
+                key={m.id}
+                message={m}
+                labels={labels}
+                onProductClick={() => setOpen(false)}
+              />
             ))}
             {streaming && messages[messages.length - 1]?.text === "" && (
               <div className="flex items-center gap-2 text-xs text-muted-foreground px-3">
@@ -403,9 +408,11 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
 function MessageBubble({
   message,
   labels,
+  onProductClick,
 }: {
   message: ChatMessage;
   labels: ConsultantChatProps["labels"];
+  onProductClick?: () => void;
 }) {
   const isUser = message.role === "user";
   return (
@@ -428,6 +435,7 @@ function MessageBubble({
               <Link
                 key={p.slug}
                 href={p.url}
+                onClick={onProductClick}
                 className="flex gap-3 p-2 bg-white border border-border rounded-xl shadow-sm hover:shadow-md hover:border-primary/30 transition-all group"
               >
                 {p.image_url && (
