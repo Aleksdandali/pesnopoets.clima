@@ -1,0 +1,419 @@
+/**
+ * Tool definitions for the AI consultant.
+ * Each tool has a JSON-schema definition (sent to Claude) and an `execute` function.
+ */
+
+import type Anthropic from "@anthropic-ai/sdk";
+import { createClient } from "@/lib/supabase/server";
+import { FAQ, recommendBTU } from "./knowledge";
+import { EUR_TO_BGN, getBaseInstallationBgn } from "@/lib/pricing";
+
+type Locale = "bg" | "en" | "ru" | "ua";
+
+export const TOOL_DEFINITIONS: Anthropic.Tool[] = [
+  {
+    name: "search_products",
+    description:
+      "Search the catalog for air conditioners matching given criteria. Returns up to 8 products with id, slug, title, manufacturer, price (BGN), BTU, area_m2, noise_db_indoor, energy_class, availability, and image. Use this whenever you need to recommend products. ALL parameters are optional — omit what's unknown.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        btu_min: { type: "number", description: "Minimum BTU (e.g. 9000)" },
+        btu_max: { type: "number", description: "Maximum BTU (e.g. 18000)" },
+        area_m2_min: { type: "number", description: "Min area the unit covers, m²" },
+        max_noise_db: {
+          type: "number",
+          description: "Max indoor noise in dB. Use 25 for bedrooms, 30 for living rooms.",
+        },
+        max_price_bgn: { type: "number", description: "Maximum price in BGN" },
+        min_price_bgn: { type: "number", description: "Minimum price in BGN" },
+        manufacturers: {
+          type: "array",
+          items: { type: "string" },
+          description: "Brand filter, e.g. ['Toshiba', 'Daikin']",
+        },
+        energy_classes: {
+          type: "array",
+          items: { type: "string" },
+          description: "Energy class filter, e.g. ['A+++', 'A++']",
+        },
+        only_in_stock: {
+          type: "boolean",
+          description: "If true, exclude unavailable items. Default false.",
+        },
+        sort: {
+          type: "string",
+          enum: ["price_asc", "price_desc", "noise_asc", "btu_asc"],
+          description: "Sort order. Default: price_asc.",
+        },
+        limit: { type: "number", description: "Max results. Default 6, cap 8." },
+      },
+    },
+  },
+  {
+    name: "get_product_details",
+    description:
+      "Fetch full specs for a single product by slug. Use AFTER search_products when the customer asks for more details on a specific item.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        slug: { type: "string", description: "Product slug from search_products results." },
+      },
+      required: ["slug"],
+    },
+  },
+  {
+    name: "calculate_btu",
+    description:
+      "Calculate recommended BTU for a room based on area and conditions. Returns min/recommended/max BTU and reasoning notes. Use before search_products when customer gives you a room.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        area_m2: { type: "number", description: "Room area in square meters" },
+        orientation: {
+          type: "string",
+          enum: ["north", "south", "east", "west", "unknown"],
+          description: "Which side the room faces. Default unknown.",
+        },
+        top_floor: { type: "boolean", description: "Is it the top floor?" },
+        insulation: {
+          type: "string",
+          enum: ["good", "average", "poor"],
+          description: "Insulation quality. Default average.",
+        },
+        occupants: { type: "number", description: "Number of people regularly in the room" },
+        heat_sources: {
+          type: "boolean",
+          description: "Kitchen nearby, many electronics, south-facing windows with no blinds",
+        },
+        ceiling_height_m: { type: "number", description: "Ceiling height in meters" },
+      },
+      required: ["area_m2"],
+    },
+  },
+  {
+    name: "get_faq",
+    description:
+      "Retrieve FAQ entries matching a topic. Use for questions about warranty, installation price/time, payment, service area, multi-split, inverter, noise explanations. Always call this before answering such questions — do not guess numbers.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        topic: {
+          type: "string",
+          description:
+            "Keyword(s) matching the user's question, e.g. 'warranty', 'installation price', 'multi-split'.",
+        },
+      },
+      required: ["topic"],
+    },
+  },
+  {
+    name: "get_installation_price",
+    description:
+      "Get the standard installation price in BGN for an AC of given BTU. Returns base price (includes 3m pipe, materials, commissioning) plus extra-pipe rate.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        btu: { type: "number", description: "Cooling capacity in BTU" },
+      },
+      required: ["btu"],
+    },
+  },
+  {
+    name: "collect_lead",
+    description:
+      "Save the customer's contact details as a new inquiry in the CRM. Use when the customer agrees to be contacted by a human manager, mentions a specific product to purchase, or asks a question only a human can answer. Always confirm with the customer before calling this.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        name: { type: "string", description: "Customer name" },
+        phone: {
+          type: "string",
+          description: "Phone number in any format; will be normalized to +359 if local",
+        },
+        message: {
+          type: "string",
+          description: "Short summary of what the customer wants — in their language",
+        },
+        product_slug: {
+          type: "string",
+          description: "If customer showed interest in a specific product, its slug",
+        },
+      },
+      required: ["name", "phone", "message"],
+    },
+  },
+];
+
+// ---- Tool executors ----
+
+export interface ToolContext {
+  locale: Locale;
+}
+
+export async function executeTool(
+  toolName: string,
+  input: Record<string, unknown>,
+  ctx: ToolContext
+): Promise<unknown> {
+  switch (toolName) {
+    case "search_products":
+      return searchProducts(input, ctx);
+    case "get_product_details":
+      return getProductDetails(input as { slug: string }, ctx);
+    case "calculate_btu":
+      return calculateBTU(input as Parameters<typeof recommendBTU>[0]);
+    case "get_faq":
+      return getFAQ(input as { topic: string }, ctx);
+    case "get_installation_price":
+      return getInstallationPrice(input as { btu: number });
+    case "collect_lead":
+      return collectLead(input as unknown as CollectLeadInput, ctx);
+    default:
+      return { error: `Unknown tool: ${toolName}` };
+  }
+}
+
+async function searchProducts(
+  input: Record<string, unknown>,
+  ctx: ToolContext
+): Promise<unknown> {
+  const supabase = await createClient();
+  const limit = Math.min((input.limit as number) ?? 6, 8);
+
+  let q = supabase
+    .from("products")
+    .select(
+      "id, slug, title, title_override, title_en, title_ru, title_ua, manufacturer, price_client, price_override, price_promo, is_promo, availability, gallery, btu, area_m2, noise_db_indoor, energy_class, stock_size"
+    )
+    .eq("is_active", true)
+    .eq("is_hidden", false);
+
+  if (input.btu_min) q = q.gte("btu", input.btu_min as number);
+  if (input.btu_max) q = q.lte("btu", input.btu_max as number);
+  if (input.area_m2_min) q = q.gte("area_m2", input.area_m2_min as number);
+  if (input.max_noise_db) q = q.lte("noise_db_indoor", input.max_noise_db as number);
+  if (input.manufacturers && Array.isArray(input.manufacturers)) {
+    q = q.in("manufacturer", input.manufacturers as string[]);
+  }
+  if (input.energy_classes && Array.isArray(input.energy_classes)) {
+    q = q.in("energy_class", input.energy_classes as string[]);
+  }
+  if (input.only_in_stock) q = q.gt("stock_size", 0);
+
+  const sort = (input.sort as string) ?? "price_asc";
+  if (sort === "price_asc" || sort === "price_desc") {
+    q = q.order("price_client", { ascending: sort === "price_asc" });
+  } else if (sort === "noise_asc") {
+    q = q.order("noise_db_indoor", { ascending: true, nullsFirst: false });
+  } else if (sort === "btu_asc") {
+    q = q.order("btu", { ascending: true, nullsFirst: false });
+  }
+
+  // Price filter applied after effective-price resolution (client-side)
+  q = q.limit(limit * 2); // fetch extra to allow price filtering post-query
+  const { data, error } = await q;
+  if (error) return { error: error.message };
+  if (!data) return { products: [] };
+
+  const minPrice = input.min_price_bgn as number | undefined;
+  const maxPrice = input.max_price_bgn as number | undefined;
+
+  const products = (data as ProductListRow[])
+    .map((p) => {
+      const effectivePrice = Number(
+        p.price_override ?? (p.is_promo && p.price_promo ? p.price_promo : p.price_client)
+      );
+      const title = pickTitle(p, ctx.locale);
+      const image = Array.isArray(p.gallery) && p.gallery.length > 0 ? p.gallery[0] : null;
+      return {
+        id: p.id,
+        slug: p.slug,
+        title,
+        manufacturer: p.manufacturer,
+        price_bgn: Math.round(effectivePrice),
+        price_eur: Math.round((effectivePrice / EUR_TO_BGN) * 100) / 100,
+        btu: p.btu,
+        area_m2: p.area_m2,
+        noise_db_indoor: p.noise_db_indoor,
+        energy_class: p.energy_class,
+        availability: p.availability,
+        in_stock: (p.stock_size ?? 0) > 0,
+        image_url: image,
+        url: `/${ctx.locale}/klimatici/${p.slug}`,
+      };
+    })
+    .filter((p: { price_bgn: number }) => {
+      if (minPrice && p.price_bgn < minPrice) return false;
+      if (maxPrice && p.price_bgn > maxPrice) return false;
+      return true;
+    })
+    .slice(0, limit);
+
+  return { products, count: products.length };
+}
+
+async function getProductDetails(
+  input: { slug: string },
+  ctx: ToolContext
+): Promise<unknown> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("slug", input.slug)
+    .eq("is_active", true)
+    .maybeSingle();
+  if (error) return { error: error.message };
+  if (!data) return { error: "Product not found" };
+
+  const effectivePrice = Number(
+    data.price_override ?? (data.is_promo && data.price_promo ? data.price_promo : data.price_client)
+  );
+  return {
+    slug: data.slug,
+    title: pickTitle(data, ctx.locale),
+    manufacturer: data.manufacturer,
+    description: pickDescription(data, ctx.locale),
+    price_bgn: Math.round(effectivePrice),
+    price_eur: Math.round((effectivePrice / EUR_TO_BGN) * 100) / 100,
+    btu: data.btu,
+    area_m2: data.area_m2,
+    noise_db_indoor: data.noise_db_indoor,
+    energy_class: data.energy_class,
+    refrigerant: data.refrigerant,
+    seer: data.seer,
+    scop: data.scop,
+    availability: data.availability,
+    in_stock: (data.stock_size ?? 0) > 0,
+    features: data.features,
+    url: `/${ctx.locale}/klimatici/${data.slug}`,
+  };
+}
+
+function calculateBTU(input: Parameters<typeof recommendBTU>[0]): unknown {
+  return recommendBTU(input);
+}
+
+function getFAQ(input: { topic: string }, ctx: ToolContext): unknown {
+  const q = input.topic.toLowerCase();
+  const hits = FAQ.filter((f) => f.keywords.some((k) => q.includes(k.toLowerCase())))
+    .slice(0, 3)
+    .map((f) => ({ id: f.id, question: f.q[ctx.locale], answer: f.a[ctx.locale] }));
+  if (hits.length === 0) {
+    return {
+      note: "No exact FAQ match. Topics available: warranty, install-price, delivery-time, coverage-area, payment, inverter-explained, multi-split, noise-levels. Try a keyword from these.",
+    };
+  }
+  return { entries: hits };
+}
+
+function getInstallationPrice(input: { btu: number }): unknown {
+  const base = getBaseInstallationBgn(input.btu);
+  return {
+    btu: input.btu,
+    base_price_bgn: base,
+    base_includes: "3m copper pipe, materials, commissioning, vacuum service",
+    note: "Extra 3+ m pipe, drilling, chasing, and high-floor access billed separately. Final price after site visit or photos.",
+  };
+}
+
+interface CollectLeadInput {
+  name: string;
+  phone: string;
+  message: string;
+  product_slug?: string;
+}
+
+async function collectLead(input: CollectLeadInput, ctx: ToolContext): Promise<unknown> {
+  const supabase = await createClient();
+
+  // Normalize phone: strip spaces/dashes/parens, prepend +359 if local
+  let phone = input.phone.replace(/[\s\-()]/g, "");
+  if (!phone.startsWith("+")) {
+    phone = phone.replace(/^0+/, "");
+    phone = `+359${phone}`;
+  }
+
+  // Resolve product_id if slug given
+  let productId: number | null = null;
+  if (input.product_slug) {
+    const { data } = await supabase
+      .from("products")
+      .select("id")
+      .eq("slug", input.product_slug)
+      .maybeSingle();
+    productId = data?.id ?? null;
+  }
+
+  const { data, error } = await supabase
+    .from("inquiries")
+    .insert({
+      name: input.name,
+      phone,
+      message: input.message,
+      locale: ctx.locale,
+      source: "consultant-chat",
+      product_id: productId,
+      status: "new",
+    })
+    .select("id")
+    .single();
+
+  if (error) return { success: false, error: error.message };
+  return {
+    success: true,
+    inquiry_id: data?.id,
+    message_to_customer:
+      ctx.locale === "bg"
+        ? "Благодарим! Нашият специалист ще Ви звънне скоро."
+        : ctx.locale === "ru"
+          ? "Спасибо! Наш специалист скоро с вами свяжется."
+          : ctx.locale === "ua"
+            ? "Дякуємо! Наш спеціаліст скоро з вами зв'яжеться."
+            : "Thank you! Our specialist will call you soon.",
+  };
+}
+
+// ---- Helpers ----
+
+interface ProductRow {
+  title: string;
+  title_override?: string | null;
+  title_en?: string | null;
+  title_ru?: string | null;
+  title_ua?: string | null;
+  description?: string | null;
+  description_override?: string | null;
+}
+
+interface ProductListRow extends ProductRow {
+  id: number;
+  slug: string;
+  manufacturer: string | null;
+  price_client: number | string | null;
+  price_override: number | string | null;
+  price_promo: number | string | null;
+  is_promo: boolean | null;
+  availability: string | null;
+  gallery: unknown;
+  btu: number | null;
+  area_m2: number | null;
+  noise_db_indoor: number | null;
+  energy_class: string | null;
+  stock_size: number | null;
+}
+
+function pickTitle(p: ProductRow, locale: Locale): string {
+  if (p.title_override) return p.title_override;
+  if (locale === "en" && p.title_en) return p.title_en;
+  if (locale === "ru" && p.title_ru) return p.title_ru;
+  if (locale === "ua" && p.title_ua) return p.title_ua;
+  return p.title;
+}
+
+function pickDescription(p: ProductRow, locale: Locale): string {
+  if (p.description_override) return p.description_override;
+  // locale-specific description fields don't exist yet — fall back to base
+  return p.description ?? "";
+}

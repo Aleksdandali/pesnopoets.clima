@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import FloatingContactButtons from "@/components/layout/FloatingContactButtons";
+import ConsultantChat from "@/components/consultant/ConsultantChat";
 import CookieConsent from "@/components/CookieConsent";
 import PageProgress from "@/components/PageProgress";
 import LocalBusinessJsonLd from "@/components/seo/LocalBusinessJsonLd";
@@ -73,6 +74,91 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
+interface ConsultantLabels {
+  triggerAria: string;
+  title: string;
+  subtitle: string;
+  greeting: string;
+  placeholder: string;
+  send: string;
+  close: string;
+  thinking: string;
+  errorGeneric: string;
+  disclaimer: string;
+  viewProduct: string;
+  viewPrice: string;
+}
+
+function getConsultantLabels(locale: string): ConsultantLabels {
+  const map: Record<string, ConsultantLabels> = {
+    bg: buildLabels({
+      triggerAria: "Отвори AI консултант",
+      title: "AI консултант",
+      subtitle: "Онлайн • Отговаря веднага",
+      greeting:
+        "Здравейте! 👋 Аз съм AI консултантът на Песнопоец Клима. Мога да Ви помогна да изберете климатик за Вашия дом. За каква стая търсите — спалня, хол, офис? И колко е приблизително квадратурата?",
+      placeholder: "Напишете въпрос...",
+      send: "Изпрати",
+      close: "Затвори",
+      thinking: "Мисля...",
+      errorGeneric: "Възникна грешка. Опитайте пак или се обадете на телефона.",
+      disclaimer: "AI съветник — може да допуска грешки. За точна информация се свържете с нас.",
+      viewProduct: "Виж продукта",
+      viewPrice: "лв",
+    }),
+    en: buildLabels({
+      triggerAria: "Open AI consultant",
+      title: "AI Consultant",
+      subtitle: "Online • Replies instantly",
+      greeting:
+        "Hi! 👋 I'm the AI consultant for Pesnopoets Klima. I can help you pick the right AC for your space. What room is it for — bedroom, living room, office? And roughly what size (m²)?",
+      placeholder: "Type your question...",
+      send: "Send",
+      close: "Close",
+      thinking: "Thinking...",
+      errorGeneric: "Something went wrong. Please try again or call us.",
+      disclaimer: "AI assistant — may make mistakes. For accurate info, contact us directly.",
+      viewProduct: "View product",
+      viewPrice: "BGN",
+    }),
+    ru: buildLabels({
+      triggerAria: "Открыть AI консультанта",
+      title: "AI консультант",
+      subtitle: "Онлайн • Отвечает мгновенно",
+      greeting:
+        "Здравствуйте! 👋 Я AI консультант Песнопоец Клима. Помогу подобрать климатик под вашу ситуацию. Для какой комнаты — спальня, гостиная, офис? И сколько примерно квадратов?",
+      placeholder: "Напишите вопрос...",
+      send: "Отправить",
+      close: "Закрыть",
+      thinking: "Думаю...",
+      errorGeneric: "Произошла ошибка. Попробуйте снова или позвоните нам.",
+      disclaimer: "AI помощник — может ошибаться. Для точной информации свяжитесь с нами.",
+      viewProduct: "Смотреть товар",
+      viewPrice: "лв",
+    }),
+    ua: buildLabels({
+      triggerAria: "Відкрити AI консультанта",
+      title: "AI консультант",
+      subtitle: "Онлайн • Відповідає миттєво",
+      greeting:
+        "Вітаю! 👋 Я AI консультант Песнопоец Клима. Допоможу підібрати кондиціонер під вашу ситуацію. Для якої кімнати — спальня, вітальня, офіс? І приблизно скільки квадратів?",
+      placeholder: "Напишіть запитання...",
+      send: "Надіслати",
+      close: "Закрити",
+      thinking: "Думаю...",
+      errorGeneric: "Сталася помилка. Спробуйте знову або зателефонуйте нам.",
+      disclaimer: "AI помічник — може помилятися. Для точної інформації зв'яжіться з нами.",
+      viewProduct: "Дивитись товар",
+      viewPrice: "лв",
+    }),
+  };
+  return map[locale] ?? map.bg;
+}
+
+function buildLabels(o: ConsultantLabels): ConsultantLabels {
+  return o;
+}
+
 export default async function LocaleLayout({
   children,
   params,
@@ -117,6 +203,10 @@ export default async function LocaleLayout({
         <FloatingContactButtons
           whatsappLabel={dictionary.contact?.whatsapp || "WhatsApp"}
           viberLabel={dictionary.contact?.viber || "Viber"}
+        />
+        <ConsultantChat
+          locale={locale as "bg" | "en" | "ru" | "ua"}
+          labels={getConsultantLabels(locale)}
         />
         <CookieConsent locale={locale} dictionary={dictionary} />
       </CartProvider>
