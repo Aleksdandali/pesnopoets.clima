@@ -262,11 +262,17 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
               return copy;
             });
           } else if (event.type === "tool_result") {
-            // If search_products or get_product_details returned products, collect them
+            // If search_products or get_product_details returned products, collect them.
+            // IMPORTANT: when the AI calls search_products multiple times in the same turn
+            // (e.g. broad search → refined search), we REPLACE rather than append so the
+            // cards match what the AI actually describes in the final prose. Accumulating
+            // caused mismatches where the card showed model A but the AI described model B.
             const out = event.output as Record<string, unknown> | undefined;
             if (out && Array.isArray(out.products)) {
-              pendingProducts = [...pendingProducts, ...(out.products as ProductCardData[])];
+              pendingProducts = [...(out.products as ProductCardData[])];
             } else if (out && typeof out === "object" && "slug" in out && "url" in out) {
+              // get_product_details returns a single product — append to existing set so
+              // a follow-up drilldown can add to the last search result.
               pendingProducts.push(out as unknown as ProductCardData);
             }
           } else if (event.type === "error") {
