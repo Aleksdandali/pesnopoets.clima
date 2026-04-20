@@ -123,6 +123,23 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
     saveMessages(locale, messages);
   }, [messages, hydrated, locale]);
 
+  // Belt-and-suspenders: save when the page is hidden or being unloaded.
+  // pagehide fires reliably on iOS Safari when closing/switching tabs;
+  // visibilitychange covers backgrounding. Without this, a fast tab-close
+  // mid-stream could leave the effect-based save un-flushed.
+  useEffect(() => {
+    if (!hydrated) return;
+    const flush = () => {
+      saveMessages(locale, messages);
+    };
+    window.addEventListener("pagehide", flush);
+    document.addEventListener("visibilitychange", flush);
+    return () => {
+      window.removeEventListener("pagehide", flush);
+      document.removeEventListener("visibilitychange", flush);
+    };
+  }, [hydrated, locale, messages]);
+
   // Seed greeting on first open (only if no saved history)
   useEffect(() => {
     if (open && hydrated && messages.length === 0) {
