@@ -123,7 +123,10 @@
     "similarProducts": "Похожие товары",
     "installmentPrefix": "или 12 x",
     "installmentSuffix": "лв./мес.",
-    "withInstallation": "с базовым монтажом"
+    "withInstallation": "с базовым монтажом",
+    "sku": "Код",
+    "weight": "Вес",
+    "kg": "кг"
   },
   "inquiry": {
     "title": "Оставить заявку",

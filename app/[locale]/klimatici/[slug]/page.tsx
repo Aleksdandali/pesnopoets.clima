@@ -7,6 +7,7 @@ import InquiryForm from "@/components/forms/InquiryForm";
 import OneClickOrder from "@/components/product/OneClickOrder";
 import SimilarProducts from "@/components/product/SimilarProducts";
 import StickyMobileCTA from "@/components/product/StickyMobileCTA";
+import StickyProductHeader from "@/components/product/StickyProductHeader";
 import ProductDescription from "@/components/product/ProductDescription";
 import { generateProductJsonLd, generateBreadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { generateBadges } from "@/lib/bittel/badges";
@@ -22,6 +23,7 @@ import {
   ShieldCheck,
   CheckCircle2,
   Leaf,
+  Package,
 } from "lucide-react";
 
 // ISR: revalidate product pages every 10 minutes
@@ -138,6 +140,23 @@ export default async function ProductPage({ params }: ProductPageProps) {
       : locale === "ru"
       ? "с базовым монтажом"
       : "с базов монтаж");
+
+  // Extract total shipping weight from transport_packages (sum of all packages)
+  const totalWeightKg: number | null = (() => {
+    const pkgs = product.transport_packages;
+    if (!Array.isArray(pkgs) || pkgs.length === 0) return null;
+    let total = 0;
+    for (const group of pkgs) {
+      const inner = group?.packages;
+      if (!Array.isArray(inner)) continue;
+      for (const p of inner) {
+        const w = Number(p?.weight) || 0;
+        const n = Number(p?.pieces) || 1;
+        total += w * n;
+      }
+    }
+    return total > 0 ? Math.round(total) : null;
+  })();
 
   // Category info for breadcrumb — use translated name if available
   const catData = product.categories;
@@ -267,8 +286,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
               {displayTitle}
             </h1>
 
-            {/* 3. Availability Badge (prominent) */}
-            <div className="mb-4">
+            {/* 3. Availability Badge + SKU */}
+            <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2">
               <span
                 className={`inline-flex items-center px-3.5 py-1.5 rounded-full text-sm font-semibold ${
                   availColors[availKey]
@@ -285,6 +304,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   </span>
                 )}
               </span>
+              {product.bittel_id && (
+                <span className="text-xs sm:text-sm text-muted-foreground">
+                  {t?.sku || "Код"}:{" "}
+                  <span className="font-mono font-medium text-foreground tabular-nums">
+                    {product.bittel_id}
+                  </span>
+                </span>
+              )}
             </div>
 
             {/* 4. Price Block (large, prominent) — price WITH base installation */}
@@ -379,6 +406,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     <p className="text-xs text-muted-foreground leading-none mb-0.5">{t?.warranty}</p>
                     <p className="text-sm font-semibold leading-tight">
                       {product.warranty_months} {t?.months}
+                    </p>
+                  </div>
+                </div>
+              )}
+              {totalWeightKg && (
+                <div className="flex items-center gap-2 sm:gap-2.5 p-2.5 bg-white border border-border rounded-lg">
+                  <Package className="w-4 h-4 text-muted-foreground shrink-0" aria-hidden="true" />
+                  <div className="min-w-0">
+                    <p className="text-xs text-muted-foreground leading-none mb-0.5">{t?.weight || "Weight"}</p>
+                    <p className="text-sm font-semibold leading-tight tabular-nums">
+                      {totalWeightKg} {t?.kg || "kg"}
                     </p>
                   </div>
                 </div>
@@ -606,7 +644,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </section>
       </div>
 
-      {/* Sticky mobile CTA */}
+      {/* Sticky top header on scroll (all breakpoints) */}
+      <StickyProductHeader
+        title={displayTitle}
+        priceBGN={priceBGN}
+        priceEUR={priceWithInstallEur.toFixed(0)}
+        dictionary={dictionary}
+      />
+
+      {/* Sticky mobile CTA (bottom, mobile-only) */}
       <StickyMobileCTA
         locale={locale}
         priceBGN={priceBGN}

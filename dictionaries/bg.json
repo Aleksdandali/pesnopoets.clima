@@ -123,7 +123,10 @@
     "similarProducts": "Подобни продукти",
     "installmentPrefix": "или 12 x",
     "installmentSuffix": "лв./мес.",
-    "withInstallation": "с базов монтаж"
+    "withInstallation": "с базов монтаж",
+    "sku": "Код",
+    "weight": "Тегло",
+    "kg": "кг"
   },
   "inquiry": {
     "title": "Направете запитване",

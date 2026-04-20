@@ -123,7 +123,10 @@
     "similarProducts": "Similar Products",
     "installmentPrefix": "or 12 x",
     "installmentSuffix": "BGN/mo.",
-    "withInstallation": "with base installation"
+    "withInstallation": "with base installation",
+    "sku": "SKU",
+    "weight": "Weight",
+    "kg": "kg"
   },
   "inquiry": {
     "title": "Make an Inquiry",
