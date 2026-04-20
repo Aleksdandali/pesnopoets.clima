@@ -32,7 +32,11 @@
     "callUs": "Call us",
     "deliveryBanner": "AC sales & installation in Varna",
     "authorizedDealer": "Authorized Dealer · Daikin · Mitsubishi · Gree",
-    "services": ["Clean install (with vacuum)", "Same-day dispatch", "Fixed price"],
+    "services": [
+      "Clean install (with vacuum)",
+      "Same-day dispatch",
+      "Fixed price"
+    ],
     "productsCount": "products",
     "pcs": "pcs",
     "promoPrice": "Promo price!",
@@ -121,8 +125,6 @@
     "power": "Power",
     "noiseLevel": "Noise Level",
     "similarProducts": "Similar Products",
-    "installmentPrefix": "or 12 x",
-    "installmentSuffix": "BGN/mo.",
     "withInstallation": "with base installation",
     "sku": "SKU",
     "weight": "Weight",
@@ -185,16 +187,40 @@
     "subtitle": "Pesnopoets Clima is an authorized dealer of leading air conditioning brands in Bulgaria. We offer a full range of services — from consultation and selection, through delivery, to professional installation and warranty service.",
     "teamParagraph": "Behind Pesnopoets Clima is a team of specialists with years of experience in HVAC systems. Our priority is to offer every client a solution tailored to their space and budget — honestly, professionally, and without pressure.",
     "stats": [
-      { "value": "500+", "label": "installations" },
-      { "value": "8+", "label": "years experience" },
-      { "value": "10+", "label": "brands" },
-      { "value": "4.9/5", "label": "rating" }
+      {
+        "value": "500+",
+        "label": "installations"
+      },
+      {
+        "value": "8+",
+        "label": "years experience"
+      },
+      {
+        "value": "10+",
+        "label": "brands"
+      },
+      {
+        "value": "4.9/5",
+        "label": "rating"
+      }
     ],
     "values": [
-      { "title": "Original Products", "desc": "We work directly with manufacturers. All products come with full warranty." },
-      { "title": "Delivery Across Bulgaria", "desc": "Fast delivery to your address. Real-time availability." },
-      { "title": "Professional Installation", "desc": "Installation by certified specialists with years of experience." },
-      { "title": "After-Sales Service", "desc": "Warranty and out-of-warranty service. Always available." }
+      {
+        "title": "Original Products",
+        "desc": "We work directly with manufacturers. All products come with full warranty."
+      },
+      {
+        "title": "Delivery Across Bulgaria",
+        "desc": "Fast delivery to your address. Real-time availability."
+      },
+      {
+        "title": "Professional Installation",
+        "desc": "Installation by certified specialists with years of experience."
+      },
+      {
+        "title": "After-Sales Service",
+        "desc": "Warranty and out-of-warranty service. Always available."
+      }
     ]
   },
   "uslugi": {

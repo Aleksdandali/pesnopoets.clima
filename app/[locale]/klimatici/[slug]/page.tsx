@@ -130,7 +130,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const priceWithInstallEur = displayPrice + installationEur;
   const priceBGN = (priceWithInstallEur * EUR_TO_BGN).toFixed(0);
   const priceBGNNoInstall = (displayPrice * EUR_TO_BGN).toFixed(0);
-  const installmentMonthly = Math.ceil((priceWithInstallEur * EUR_TO_BGN) / 12);
   const withInstallLabel =
     t?.withInstallation ||
     (locale === "en"
@@ -330,13 +329,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <span className="whitespace-nowrap">
                   {priceBGNNoInstall} + {installationBgn.toFixed(0)} {dictionary.common.currency.bgn}
                 </span>
-              </p>
-              <p className="text-sm text-muted-foreground mt-1">
-                {t.installmentPrefix}{" "}
-                <span className="font-semibold text-foreground">
-                  {installmentMonthly}
-                </span>{" "}
-                {t.installmentSuffix}
               </p>
               {product.is_promo && product.price_promo > 0 && (
                 <p className="text-sm text-danger font-semibold mt-1">
