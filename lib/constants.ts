@@ -3,9 +3,9 @@
  * Avoid hardcoding phone/email anywhere else in the codebase.
  */
 
-export const BUSINESS_PHONE_DISPLAY = "+359 888 123 456";
-export const BUSINESS_PHONE_TEL = "+359888123456"; // for tel: links
-export const BUSINESS_EMAIL = "info@pesnopoets-clima.com";
+export const BUSINESS_PHONE_DISPLAY = "+359 87 799 8795";
+export const BUSINESS_PHONE_TEL = "+359877998795"; // for tel: links
+export const BUSINESS_EMAIL = "pesnopoetsklima@gmail.com";
 export const BUSINESS_ADDRESS_CITY = "Varna";
 export const BUSINESS_ADDRESS_REGION = "Varna Province";
 export const BUSINESS_COUNTRY = "BG";
