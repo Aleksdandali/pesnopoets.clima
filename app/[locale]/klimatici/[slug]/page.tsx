@@ -450,10 +450,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </div>
             </div>
 
-            {/* 8. Full Inquiry Form */}
+            {/* 8. Full Inquiry Form — desktop only; on mobile it lives below Similar Products */}
             <div
               id="inquiry-form-section"
-              className="bg-white border border-border rounded-xl p-4 sm:p-6"
+              className="hidden lg:block bg-white border border-border rounded-xl p-4 sm:p-6"
             >
               <h2 className="text-lg font-bold text-foreground mb-1">
                 {dictionary.inquiry?.title || t?.inquiryButton}
@@ -583,6 +583,27 @@ export default async function ProductPage({ params }: ProductPageProps) {
           locale={locale}
           dictionary={dictionary}
         />
+
+        {/* Mobile-only Inquiry Form — appears AFTER similar products on small screens */}
+        <section
+          id="inquiry-form-section-mobile"
+          className="lg:hidden mt-10 sm:mt-12 bg-white border border-border rounded-xl p-4 sm:p-6"
+        >
+          <h2 className="text-lg font-bold text-foreground mb-1">
+            {dictionary.inquiry?.title || t?.inquiryButton}
+          </h2>
+          {dictionary.inquiry?.subtitle && (
+            <p className="text-sm text-muted-foreground mb-4">
+              {dictionary.inquiry.subtitle}
+            </p>
+          )}
+          <InquiryForm
+            locale={locale}
+            productId={product.id}
+            productTitle={displayTitle}
+            dictionary={dictionary}
+          />
+        </section>
       </div>
 
       {/* Sticky mobile CTA */}

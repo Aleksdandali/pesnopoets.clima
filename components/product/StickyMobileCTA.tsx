@@ -32,9 +32,17 @@ export default function StickyMobileCTA({
   }, []);
 
   function scrollToInquiry() {
-    const el = document.getElementById("inquiry-form-section");
+    // Mobile-only variant sits below Similar Products; prefer it on small screens.
+    const el =
+      document.getElementById("inquiry-form-section-mobile") ||
+      document.getElementById("inquiry-form-section");
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
+      // Move focus to the first input for a better a11y flow after scroll.
+      const firstField = el.querySelector<HTMLElement>("input,textarea,select,button");
+      if (firstField) {
+        setTimeout(() => firstField.focus({ preventScroll: true }), 400);
+      }
     }
   }
 

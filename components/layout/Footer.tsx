@@ -5,6 +5,8 @@ import {
   BUSINESS_EMAIL,
   BUSINESS_PHONE_DISPLAY,
   BUSINESS_PHONE_TEL,
+  INSTAGRAM_URL,
+  INSTAGRAM_HANDLE,
 } from "@/lib/constants";
 
 interface FooterProps {
@@ -163,6 +165,31 @@ export default function Footer({ locale, dictionary }: FooterProps) {
                   <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-white/30" aria-hidden="true" />
                   <span>{t.country}</span>
                 </div>
+              </li>
+              <li>
+                <a
+                  href={INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 text-sm text-white/70 hover:text-white transition-colors duration-200 py-2"
+                  aria-label={`Instagram: ${INSTAGRAM_HANDLE}`}
+                >
+                  <svg
+                    className="w-4 h-4 shrink-0 text-white/50"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                  </svg>
+                  <span>{INSTAGRAM_HANDLE}</span>
+                </a>
               </li>
             </ul>
           </div>

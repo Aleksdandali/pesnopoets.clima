@@ -1,4 +1,4 @@
-import { BUSINESS_EMAIL, BUSINESS_PHONE_TEL } from "@/lib/constants";
+import { BUSINESS_EMAIL, BUSINESS_PHONE_TEL, INSTAGRAM_URL } from "@/lib/constants";
 
 interface LocalBusinessJsonLdProps {
   locale: string;
@@ -66,7 +66,7 @@ export default function LocalBusinessJsonLd({
         closes: "14:00",
       },
     ],
-    sameAs: [] as string[],
+    sameAs: [INSTAGRAM_URL],
     makesOffer: [
       {
         "@type": "Offer",

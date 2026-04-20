@@ -13,3 +13,7 @@ export const BUSINESS_COUNTRY = "BG";
 /** Viber & WhatsApp deep links derived from BUSINESS_PHONE_TEL. */
 export const WHATSAPP_URL = `https://wa.me/${BUSINESS_PHONE_TEL.replace(/^\+/, "")}`;
 export const VIBER_URL = `viber://chat?number=${encodeURIComponent(BUSINESS_PHONE_TEL)}`;
+
+/** Social profiles. */
+export const INSTAGRAM_URL = "https://www.instagram.com/pesnopoets.klima/";
+export const INSTAGRAM_HANDLE = "@pesnopoets.klima";

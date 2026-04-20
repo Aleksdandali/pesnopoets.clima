@@ -305,10 +305,11 @@ export default async function HomePage({ params }: HomePageProps) {
     <>
       {/* Hero */}
       <section className="relative overflow-hidden min-h-[520px] sm:min-h-[640px] lg:min-h-[740px]">
-        {/* Background image */}
+        {/* Background image — purely decorative; hero text already conveys meaning */}
         <Image
           src="/hero-bg.jpg"
-          alt="Air conditioning systems display"
+          alt=""
+          role="presentation"
           fill
           className="object-cover object-bottom"
           sizes="100vw"
