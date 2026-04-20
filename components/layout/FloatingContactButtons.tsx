@@ -18,6 +18,7 @@ export default function FloatingContactButtons({
 }: FloatingContactButtonsProps) {
   const [visible, setVisible] = useState(false);
   const [stickyCta, setStickyCta] = useState(false);
+  const [consultantOpen, setConsultantOpen] = useState(false);
 
   useEffect(() => {
     function onScroll() {
@@ -28,12 +29,18 @@ export default function FloatingContactButtons({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Watch <body data-sticky-cta> toggled by StickyMobileCTA so we can lift above it
+  // Watch <body data-sticky-cta> + data-consultant-open so we can lift / hide accordingly
   useEffect(() => {
-    const update = () => setStickyCta(document.body.hasAttribute("data-sticky-cta"));
+    const update = () => {
+      setStickyCta(document.body.hasAttribute("data-sticky-cta"));
+      setConsultantOpen(document.body.hasAttribute("data-consultant-open"));
+    };
     update();
     const observer = new MutationObserver(update);
-    observer.observe(document.body, { attributes: true, attributeFilter: ["data-sticky-cta"] });
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["data-sticky-cta", "data-consultant-open"],
+    });
     return () => observer.disconnect();
   }, []);
 
@@ -42,21 +49,24 @@ export default function FloatingContactButtons({
     ? "bottom-[80px] sm:bottom-5"
     : "bottom-3 sm:bottom-5";
 
+  // Hide entirely while the AI consultant panel is open — it claims focus and these would compete.
+  const effectivelyVisible = visible && !consultantOpen;
+
   return (
     <div
       className={`fixed right-3 sm:right-5 ${bottomClass} z-40 flex flex-col gap-2.5 transition-all duration-300 ${
-        visible
+        effectivelyVisible
           ? "opacity-100 translate-y-0 pointer-events-auto"
           : "opacity-0 translate-y-3 pointer-events-none"
       }`}
-      aria-hidden={!visible}
+      aria-hidden={!effectivelyVisible}
     >
       <a
         href={WHATSAPP_URL}
         target="_blank"
         rel="noopener noreferrer"
         aria-label={whatsappLabel}
-        tabIndex={visible ? 0 : -1}
+        tabIndex={effectivelyVisible ? 0 : -1}
         className="group relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white shadow-[0_8px_24px_rgb(37_211_102/0.4)] hover:scale-105 hover:shadow-[0_12px_32px_rgb(37_211_102/0.5)] transition-all duration-200 focus-visible:outline-offset-4"
       >
         <span className="absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-60 animate-ping" />
@@ -73,7 +83,7 @@ export default function FloatingContactButtons({
       <a
         href={VIBER_URL}
         aria-label={viberLabel}
-        tabIndex={visible ? 0 : -1}
+        tabIndex={effectivelyVisible ? 0 : -1}
         className="group relative flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#7360f2] text-white shadow-[0_8px_24px_rgb(115_96_242/0.4)] hover:scale-105 hover:shadow-[0_12px_32px_rgb(115_96_242/0.5)] transition-all duration-200 focus-visible:outline-offset-4"
       >
         <svg

@@ -51,8 +51,18 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [streaming, setStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [stickyCta, setStickyCta] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+
+  // Watch for StickyMobileCTA so trigger button lifts above it on product pages
+  useEffect(() => {
+    const update = () => setStickyCta(document.body.hasAttribute("data-sticky-cta"));
+    update();
+    const observer = new MutationObserver(update);
+    observer.observe(document.body, { attributes: true, attributeFilter: ["data-sticky-cta"] });
+    return () => observer.disconnect();
+  }, []);
 
   // Seed greeting on first open
   useEffect(() => {
@@ -192,22 +202,21 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
 
   return (
     <>
-      {/* Floating trigger button — hidden when panel open */}
+      {/* Floating trigger button — hidden when panel open.
+          Positioned ABOVE the WhatsApp/Viber stack. Lifts further when StickyMobileCTA is present. */}
       {!open && (
         <button
           type="button"
           onClick={() => setOpen(true)}
           aria-label={labels.triggerAria}
-          className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[55] flex items-center gap-2 pl-3 pr-4 py-3 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl hover:bg-primary-dark transition-all duration-200 group"
           data-consultant-trigger
+          className={`fixed right-3 sm:right-5 z-[55] flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary text-primary-foreground shadow-[0_8px_24px_rgb(0_135_255/0.35)] hover:scale-105 hover:shadow-[0_12px_32px_rgb(0_135_255/0.45)] transition-all duration-200 group ${
+            stickyCta ? "bottom-[204px] sm:bottom-[140px]" : "bottom-[124px] sm:bottom-[140px]"
+          }`}
         >
-          <span className="relative flex items-center justify-center w-8 h-8 rounded-full bg-white/20">
-            <Sparkles className="w-5 h-5" aria-hidden="true" />
-            <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-400 border-2 border-primary" />
-          </span>
-          <span className="text-sm font-semibold whitespace-nowrap hidden sm:inline">
-            {labels.title}
-          </span>
+          <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-40 animate-ping" />
+          <Sparkles className="relative w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
+          <span className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-green-400 border-2 border-white" />
         </button>
       )}
 
