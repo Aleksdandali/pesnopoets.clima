@@ -252,7 +252,7 @@ export default async function CatalogPage({
                   key={product.id}
                   product={product}
                   locale={locale}
-                  currency="BGN"
+                  currency="EUR"
                   dictionary={dictionary}
                 />
               ))}

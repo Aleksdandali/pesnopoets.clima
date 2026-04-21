@@ -475,7 +475,7 @@ export default async function HomePage({ params }: HomePageProps) {
                   key={product.slug}
                   product={product}
                   locale={locale}
-                  currency="BGN"
+                  currency="EUR"
                   dictionary={dictionary}
                 />
               ))}

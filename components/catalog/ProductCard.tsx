@@ -105,7 +105,7 @@ export default function ProductCard({
   const upToLabel = dictionary?.common.upTo || (locale === "en" ? "up to" : "до");
   const sqmLabel = dictionary?.common.sqm || (locale === "en" ? "sq.m" : "кв.м");
   const promoBadge = dictionary?.common.promoBadge || "PROMO";
-  const currencyLabel = dictionary?.common.currency.bgn;
+  const currencyLabel = dictionary?.common.currency.eur || "€";
 
 
   const goToPrev = useCallback(

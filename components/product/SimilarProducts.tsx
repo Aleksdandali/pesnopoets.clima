@@ -77,7 +77,7 @@ export default async function SimilarProducts({
             key={product.id}
             className="min-w-[240px] sm:min-w-[280px] lg:min-w-0 snap-start"
           >
-            <ProductCard product={product} locale={locale} currency="BGN" dictionary={dictionary} />
+            <ProductCard product={product} locale={locale} currency="EUR" dictionary={dictionary} />
           </div>
         ))}
       </div>
