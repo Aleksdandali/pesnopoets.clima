@@ -198,13 +198,14 @@ export default async function BlogPostPage({ params }: PageProps) {
 
       {/* Featured image */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 sm:-mt-10 relative z-10">
-        <div className="relative aspect-[16/9] rounded-2xl overflow-hidden shadow-xl bg-muted">
+        <div className="rounded-2xl overflow-hidden shadow-xl bg-muted">
           <Image
             src={post.image}
             alt={post.title[loc]}
-            fill
+            width={1200}
+            height={800}
             sizes="(max-width: 896px) 100vw, 896px"
-            className="object-cover"
+            className="w-full h-auto"
             priority
           />
         </div>
