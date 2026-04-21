@@ -20,6 +20,7 @@ interface HeaderProps {
         brands: string;
         about: string;
         contact: string;
+        blog?: string;
       };
       siteName: string;
       siteNameFirst: string;
@@ -107,6 +108,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
     { href: `/${locale}/montazh`, label: t.nav.installation || "Installation" },
     { href: `/${locale}/uslugi`, label: t.nav.services || "Services" },
     { href: `/${locale}/brands`, label: t.nav.brands },
+    { href: `/${locale}/blog`, label: t.nav.blog || "Blog" },
     { href: `/${locale}/za-nas`, label: t.nav.about },
     { href: `/${locale}/kontakti`, label: t.nav.contact },
   ];

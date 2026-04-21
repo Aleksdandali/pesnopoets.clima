@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { createClient } from "@supabase/supabase-js";
+import { getAllPosts } from "@/lib/blog/posts";
 
 const locales = ["bg", "en", "ru", "ua"];
 
@@ -71,6 +72,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           priority: 0.8,
         });
       }
+    }
+  }
+
+  // Blog listing + individual posts
+  const blogPosts = getAllPosts();
+  for (const locale of locales) {
+    entries.push({
+      url: `${siteUrl}/${locale}/blog`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    });
+
+    for (const post of blogPosts) {
+      entries.push({
+        url: `${siteUrl}/${locale}/blog/${post.slug}`,
+        lastModified: new Date(post.date),
+        changeFrequency: "monthly",
+        priority: 0.6,
+      });
     }
   }
 
