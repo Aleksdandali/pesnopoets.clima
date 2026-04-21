@@ -105,13 +105,14 @@ export default async function MontazhPage({ params }: PageProps) {
       <section className="bg-muted/50 border-y border-border/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div className="relative aspect-[4/3] sm:aspect-[3/2] rounded-2xl overflow-hidden shadow-xl">
+            <div className="rounded-2xl overflow-hidden shadow-xl">
               <Image
                 src="/images/montazh/installation-process.jpg"
                 alt={t.processImageAlt || "Installation process"}
-                fill
+                width={600}
+                height={800}
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover object-[50%_35%]"
+                className="w-full h-auto"
                 priority
               />
             </div>
