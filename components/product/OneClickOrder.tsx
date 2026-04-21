@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Phone, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { trackConversion } from "@/lib/gtag";
 
 interface OneClickOrderProps {
   locale: string;
@@ -102,6 +103,7 @@ export default function OneClickOrder({
 
       if (!res.ok) throw new Error("Failed");
       setStatus("success");
+      trackConversion();
     } catch {
       setStatus("error");
     }
