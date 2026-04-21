@@ -29,7 +29,8 @@ interface ProductCardData {
   slug: string;
   title: string;
   manufacturer: string | null;
-  price_bgn: number;
+  price_eur: number;
+  price_bgn?: number;
   btu: number | null;
   noise_db_indoor: number | null;
   energy_class: string | null;
@@ -496,7 +497,7 @@ function MessageBubble({
                   </div>
                   <div className="flex items-center justify-between mt-1">
                     <span className="text-sm font-bold text-foreground tabular-nums">
-                      {p.price_bgn} {labels.viewPrice}
+                      {p.price_eur ?? p.price_bgn} {labels.viewPrice}
                     </span>
                     <span className="text-[10px] text-primary font-semibold group-hover:underline">
                       {labels.viewProduct} →

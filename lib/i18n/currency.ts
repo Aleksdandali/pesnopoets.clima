@@ -8,11 +8,11 @@ export function convertEurToBgn(eur: number): number {
 
 export function formatPrice(
   eurPrice: number,
-  currency: Currency = "BGN"
+  currency: Currency = "EUR"
 ): string {
   if (currency === "BGN") {
     const bgn = convertEurToBgn(eurPrice);
     return `${bgn.toFixed(0)} лв.`;
   }
-  return `${eurPrice.toFixed(2)} €`;
+  return `${eurPrice.toFixed(0)} €`;
 }

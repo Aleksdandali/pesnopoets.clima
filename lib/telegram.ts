@@ -49,14 +49,12 @@ async function sendTelegramMessage(text: string): Promise<void> {
   }
 }
 
-const EUR_TO_BGN = 1.95583;
-
 export async function sendInquiryNotification(
   inquiry: InquiryData
 ): Promise<void> {
   const priceLine =
     inquiry.productPrice != null
-      ? `\n💰 Цена: ${(inquiry.productPrice * EUR_TO_BGN).toFixed(0)} лв.`
+      ? `\n💰 Цена: ${inquiry.productPrice.toFixed(0)} €`
       : "";
 
   const text = [

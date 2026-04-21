@@ -9,14 +9,12 @@ import { useCart, type CartItem } from "@/contexts/CartContext";
 interface StickyProductHeaderProps {
   locale: string;
   title: string;
-  priceBGN: string;
-  priceEUR?: string;
+  priceEUR: string;
   cartItem: Omit<CartItem, "quantity">;
   labels: {
     buy: string;          // "Купи" / "Buy"
     added: string;        // "Добавено" / "Added"
     inquiry: string;      // "Запитване" / "Inquiry"
-    bgn: string;
     eur: string;
   };
 }
@@ -35,7 +33,6 @@ interface StickyProductHeaderProps {
 export default function StickyProductHeader({
   locale,
   title,
-  priceBGN,
   priceEUR,
   cartItem,
   labels,
@@ -95,15 +92,10 @@ export default function StickyProductHeader({
           </p>
 
           {/* Price — always visible; on mobile it's the main info element */}
-          <div className="flex flex-col items-start sm:items-end leading-tight shrink-0 sm:flex-row sm:items-baseline sm:gap-2 flex-1 sm:flex-none min-w-0">
+          <div className="flex items-baseline leading-tight shrink-0 flex-1 sm:flex-none min-w-0">
             <span className="text-sm sm:text-base font-extrabold text-foreground tabular-nums whitespace-nowrap">
-              {priceBGN} {labels.bgn}
+              {priceEUR} {labels.eur}
             </span>
-            {priceEUR && (
-              <span className="text-[10px] sm:text-xs text-muted-foreground tabular-nums whitespace-nowrap">
-                ≈ {priceEUR} {labels.eur}
-              </span>
-            )}
           </div>
 
           {/* Secondary: Inquiry (text/ghost on desktop, icon hidden on very narrow) */}

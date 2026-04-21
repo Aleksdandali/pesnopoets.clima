@@ -41,13 +41,13 @@ interface CheckoutViewProps {
       includesInstallation: string;
     };
     common: {
-      currency: { bgn: string };
+      currency: { eur: string };
     };
   };
 }
 
-function formatBgn(eur: number, label: string): string {
-  return `${(eur * EUR_TO_BGN).toFixed(0)} ${label}`;
+function formatEur(eur: number, label: string): string {
+  return `${eur.toFixed(0)} ${label}`;
 }
 
 export default function CheckoutView({ locale, dictionary }: CheckoutViewProps) {
@@ -57,7 +57,7 @@ export default function CheckoutView({ locale, dictionary }: CheckoutViewProps) 
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [form, setForm] = useState({ name: "", phone: "", email: "", comment: "" });
   const t = dictionary.checkout;
-  const bgnLabel = dictionary.common.currency.bgn;
+  const eurLabel = dictionary.common.currency.eur;
 
   // Redirect if cart empty (only after hydration)
   useEffect(() => {
@@ -314,11 +314,11 @@ export default function CheckoutView({ locale, dictionary }: CheckoutViewProps) 
                 <div className="min-w-0">
                   <p className="font-medium text-foreground line-clamp-2">{item.title}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    {item.quantity} × {formatBgn(item.priceEur, bgnLabel)}
+                    {item.quantity} × {formatEur(item.priceEur, eurLabel)}
                   </p>
                 </div>
                 <span className="font-semibold whitespace-nowrap text-foreground">
-                  {formatBgn(item.priceEur * item.quantity, bgnLabel)}
+                  {formatEur(item.priceEur * item.quantity, eurLabel)}
                 </span>
               </li>
             ))}
@@ -326,7 +326,7 @@ export default function CheckoutView({ locale, dictionary }: CheckoutViewProps) 
           <div className="flex items-baseline justify-between mb-1">
             <span className="text-sm font-semibold text-foreground">{t.total}</span>
             <span className="text-2xl font-extrabold text-foreground">
-              {formatBgn(subtotalEur, bgnLabel)}
+              {formatEur(subtotalEur, eurLabel)}
             </span>
           </div>
         </div>

@@ -104,7 +104,7 @@ function getConsultantLabels(locale: string): ConsultantLabels {
       errorGeneric: "Възникна грешка. Опитайте пак или се обадете на телефона.",
       disclaimer: "AI съветник — може да допуска грешки. За точна информация се свържете с нас.",
       viewProduct: "Виж продукта",
-      viewPrice: "лв",
+      viewPrice: "€",
     }),
     en: buildLabels({
       triggerAria: "Open AI consultant",
@@ -119,7 +119,7 @@ function getConsultantLabels(locale: string): ConsultantLabels {
       errorGeneric: "Something went wrong. Please try again or call us.",
       disclaimer: "AI assistant — may make mistakes. For accurate info, contact us directly.",
       viewProduct: "View product",
-      viewPrice: "BGN",
+      viewPrice: "€",
     }),
     ru: buildLabels({
       triggerAria: "Открыть AI консультанта",
@@ -134,7 +134,7 @@ function getConsultantLabels(locale: string): ConsultantLabels {
       errorGeneric: "Произошла ошибка. Попробуйте снова или позвоните нам.",
       disclaimer: "AI помощник — может ошибаться. Для точной информации свяжитесь с нами.",
       viewProduct: "Смотреть товар",
-      viewPrice: "лв",
+      viewPrice: "€",
     }),
     ua: buildLabels({
       triggerAria: "Відкрити AI консультанта",
@@ -149,7 +149,7 @@ function getConsultantLabels(locale: string): ConsultantLabels {
       errorGeneric: "Сталася помилка. Спробуйте знову або зателефонуйте нам.",
       disclaimer: "AI помічник — може помилятися. Для точної інформації зв'яжіться з нами.",
       viewProduct: "Дивитись товар",
-      viewPrice: "лв",
+      viewPrice: "€",
     }),
   };
   return map[locale] ?? map.bg;

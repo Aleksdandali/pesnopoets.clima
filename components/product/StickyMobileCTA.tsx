@@ -7,15 +7,13 @@ import { useCart, type CartItem } from "@/contexts/CartContext";
 
 interface StickyMobileCTAProps {
   locale: string;
-  priceBGN: string;
-  priceEUR?: string;
+  priceEUR: string;
   phoneNumber: string;
   cartItem: Omit<CartItem, "quantity">;
   labels: {
     call: string;
     buy: string;
     added: string;
-    bgn: string;
     eur: string;
   };
 }
@@ -27,7 +25,6 @@ interface StickyMobileCTAProps {
  */
 export default function StickyMobileCTA({
   locale,
-  priceBGN,
   priceEUR,
   phoneNumber,
   cartItem,
@@ -57,16 +54,11 @@ export default function StickyMobileCTA({
     <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden" data-sticky-mobile-cta>
       <div className="bg-white/95 backdrop-blur-xl border-t border-border shadow-[0_-4px_20px_rgb(0_0_0/0.08)]">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3">
-          {/* Price: BGN primary + EUR secondary */}
+          {/* Price: EUR */}
           <div className="flex-1 min-w-0 flex flex-col leading-tight">
             <span className="text-base sm:text-lg font-extrabold text-foreground tabular-nums">
-              {priceBGN} {labels.bgn}
+              {priceEUR} {labels.eur}
             </span>
-            {priceEUR && (
-              <span className="text-[11px] text-muted-foreground tabular-nums">
-                ≈ {priceEUR} {labels.eur}
-              </span>
-            )}
           </div>
 
           {/* Call button — min 44px tap target */}

@@ -55,14 +55,9 @@ interface ProductCardProps {
   };
 }
 
-const EUR_TO_BGN = 1.95583;
-
-function formatPrice(price: number, currency: "EUR" | "BGN", currencyLabel?: string): string {
-  if (currency === "BGN") {
-    const bgn = price * EUR_TO_BGN;
-    return `${bgn.toFixed(0)} ${currencyLabel || "лв."}`;
-  }
-  return `${price.toFixed(2)} \u20AC`;
+function formatPrice(price: number, _currency: "EUR" | "BGN", currencyLabel?: string): string {
+  // Primary currency is EUR (as received from Bittel API)
+  return `${price.toFixed(0)} ${currencyLabel || "€"}`;
 }
 
 const availabilityStyles: Record<string, { bg: string; text: string; dictKey: "inStock" | "limited" | "outOfStock" }> = {

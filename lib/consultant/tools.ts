@@ -241,7 +241,7 @@ async function searchProducts(
 
   const products = (data as ProductListRow[])
     .map((p) => {
-      // price_client from Bittel is in EUR — convert to BGN for display
+      // price_client from Bittel is in EUR — primary display currency
       const priceEur = Number(
         p.price_override ?? (p.is_promo && p.price_promo ? p.price_promo : p.price_client)
       );
@@ -252,8 +252,8 @@ async function searchProducts(
         slug: p.slug,
         title,
         manufacturer: p.manufacturer,
+        price_eur: Math.round(priceEur),
         price_bgn: Math.round(priceEur * EUR_TO_BGN),
-        price_eur: Math.round(priceEur * 100) / 100,
         btu: p.btu,
         area_m2: p.area_m2,
         noise_db_indoor: p.noise_db_indoor,
@@ -307,14 +307,12 @@ async function getCatalogSummary(
     const brand = (p.manufacturer as string) || "Unknown";
     brandCounts[brand] = (brandCounts[brand] || 0) + 1;
 
-    // price_client from Bittel is in EUR — convert to BGN
     const priceEur = Number(
       p.price_override ?? (p.is_promo && p.price_promo ? p.price_promo : p.price_client)
     );
-    const priceBgn = priceEur * EUR_TO_BGN;
-    if (priceBgn > 0) {
-      if (priceBgn < minPrice) minPrice = priceBgn;
-      if (priceBgn > maxPrice) maxPrice = priceBgn;
+    if (priceEur > 0) {
+      if (priceEur < minPrice) minPrice = priceEur;
+      if (priceEur > maxPrice) maxPrice = priceEur;
     }
     if (p.btu) {
       if ((p.btu as number) < minBtu) minBtu = p.btu as number;
@@ -330,7 +328,7 @@ async function getCatalogSummary(
   return {
     total: data.length,
     brands,
-    price_range_bgn: { min: Math.round(minPrice), max: Math.round(maxPrice) },
+    price_range_eur: { min: Math.round(minPrice), max: Math.round(maxPrice) },
     btu_range: { min: minBtu === Infinity ? null : minBtu, max: maxBtu === 0 ? null : maxBtu },
     energy_classes: [...energyClasses].sort(),
   };
@@ -350,7 +348,7 @@ async function getProductDetails(
   if (error) return { error: error.message };
   if (!data) return { error: "Product not found" };
 
-  // price_client from Bittel is in EUR — convert to BGN
+  // price_client from Bittel is in EUR — primary display currency
   const priceEur = Number(
     data.price_override ?? (data.is_promo && data.price_promo ? data.price_promo : data.price_client)
   );
@@ -359,8 +357,8 @@ async function getProductDetails(
     title: pickTitle(data, ctx.locale),
     manufacturer: data.manufacturer,
     description: pickDescription(data, ctx.locale),
+    price_eur: Math.round(priceEur),
     price_bgn: Math.round(priceEur * EUR_TO_BGN),
-    price_eur: Math.round(priceEur * 100) / 100,
     btu: data.btu,
     area_m2: data.area_m2,
     noise_db_indoor: data.noise_db_indoor,

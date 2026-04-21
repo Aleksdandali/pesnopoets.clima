@@ -123,8 +123,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const displayDescription = product.description_override || localeDesc || product.description;
   const displayPrice = product.price_override || product.price_client;
 
-  // Price — clean API price (no client-side additions). Bittel is the source of truth.
-  const priceBGN = (displayPrice * EUR_TO_BGN).toFixed(0);
+  // Price — clean API price in EUR (no conversion). Bittel is the source of truth.
+  const priceEUR = displayPrice.toFixed(0);
 
   // Extract total shipping weight from transport_packages (sum of all packages)
   const totalWeightKg: number | null = (() => {
@@ -303,7 +303,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="bg-muted rounded-xl p-4 sm:p-5 mb-4">
               <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
                 <span className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-                  {priceBGN} {dictionary.common.currency.bgn}
+                  {priceEUR} €
                 </span>
                 <span className="text-sm sm:text-base text-muted-foreground">
                   ({displayPrice.toFixed(2)} &euro;)
@@ -619,8 +619,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <StickyProductHeader
         locale={locale}
         title={displayTitle}
-        priceBGN={priceBGN}
-        priceEUR={displayPrice.toFixed(0)}
+        priceEUR={priceEUR}
         cartItem={{
           id: product.id,
           slug: product.slug,
@@ -650,7 +649,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
               ? "Добавлено"
               : "Добавено"),
           inquiry: dictionary.stickyBar.inquiry,
-          bgn: dictionary.common.currency.bgn,
           eur: dictionary.common.currency.eur,
         }}
       />
@@ -658,8 +656,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       {/* Sticky mobile CTA (bottom, mobile-only) */}
       <StickyMobileCTA
         locale={locale}
-        priceBGN={priceBGN}
-        priceEUR={displayPrice.toFixed(0)}
+        priceEUR={priceEUR}
         phoneNumber={BUSINESS_PHONE_DISPLAY}
         cartItem={{
           id: product.id,
@@ -690,7 +687,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
               : locale === "ru"
               ? "Добавлено"
               : "Добавено"),
-          bgn: dictionary.common.currency.bgn,
           eur: dictionary.common.currency.eur,
         }}
       />

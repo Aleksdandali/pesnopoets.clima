@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
-import { EUR_TO_BGN } from "@/lib/pricing";
 
 interface CartViewProps {
   locale: string;
@@ -28,7 +27,7 @@ interface CartViewProps {
       clearConfirm?: string;
     };
     common: {
-      currency: { bgn: string };
+      currency: { eur: string };
     };
   };
 }
@@ -37,15 +36,15 @@ function t(locale: string, bg: string, en: string, ru: string, ua: string): stri
   return locale === "en" ? en : locale === "ru" ? ru : locale === "ua" ? ua : bg;
 }
 
-function formatBgn(eur: number, label: string): string {
-  return `${(eur * EUR_TO_BGN).toFixed(0)} ${label}`;
+function formatEur(eur: number, label: string): string {
+  return `${eur.toFixed(0)} ${label}`;
 }
 
 export default function CartView({ locale, dictionary }: CartViewProps) {
   const { items, itemCount, subtotalEur, updateQuantity, removeItem, clear, hydrated } =
     useCart();
   const d = dictionary.cart;
-  const bgnLabel = dictionary.common.currency.bgn;
+  const eurLabel = dictionary.common.currency.eur;
 
   const decreaseLabel = d.decrease || t(locale, "Намали количеството", "Decrease quantity", "Уменьшить количество", "Зменшити кількість");
   const increaseLabel = d.increase || t(locale, "Увеличи количеството", "Increase quantity", "Увеличить количество", "Збільшити кількість");
@@ -77,7 +76,7 @@ export default function CartView({ locale, dictionary }: CartViewProps) {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
       {/* SR-only live region — announces cart changes */}
       <div className="sr-only" role="status" aria-live="polite" aria-atomic="true">
-        {itemCount} {itemCount === 1 ? d.item : d.items} · {formatBgn(subtotalEur, bgnLabel)}
+        {itemCount} {itemCount === 1 ? d.item : d.items} · {formatEur(subtotalEur, eurLabel)}
       </div>
 
       {/* Items list */}
@@ -143,11 +142,11 @@ export default function CartView({ locale, dictionary }: CartViewProps) {
                 {/* Price */}
                 <div className="text-right">
                   <p className="text-sm sm:text-base font-extrabold text-foreground tabular-nums">
-                    {formatBgn(item.priceEur * item.quantity, bgnLabel)}
+                    {formatEur(item.priceEur * item.quantity, eurLabel)}
                   </p>
                   {item.quantity > 1 && (
                     <p className="text-[10px] text-muted-foreground tabular-nums">
-                      {formatBgn(item.priceEur, bgnLabel)} × {item.quantity}
+                      {formatEur(item.priceEur, eurLabel)} × {item.quantity}
                     </p>
                   )}
                 </div>
@@ -196,7 +195,7 @@ export default function CartView({ locale, dictionary }: CartViewProps) {
           <div className="flex items-baseline justify-between mb-1">
             <span className="text-sm font-semibold text-foreground">{d.subtotal}</span>
             <span className="text-2xl font-extrabold text-foreground tabular-nums">
-              {formatBgn(subtotalEur, bgnLabel)}
+              {formatEur(subtotalEur, eurLabel)}
             </span>
           </div>
           <div className="mb-5" />

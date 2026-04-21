@@ -1,5 +1,3 @@
-const EUR_TO_BGN = 1.95583;
-
 interface ProductForSchema {
   title: string;
   title_override?: string | null;
@@ -26,7 +24,7 @@ export function generateProductJsonLd(
   const name = product.title_override || product.title;
   const description = product.description_override || product.description || name;
   const price = product.price_override || product.price_client;
-  const priceBGN = (price * EUR_TO_BGN).toFixed(2);
+  const priceEUR = price.toFixed(2);
   const url = `${siteUrl}/${locale}/klimatici/${product.slug}`;
 
   const availabilityMap: Record<string, string> = {
@@ -48,8 +46,8 @@ export function generateProductJsonLd(
     offers: {
       "@type": "Offer",
       url,
-      priceCurrency: "BGN",
-      price: priceBGN,
+      priceCurrency: "EUR",
+      price: priceEUR,
       availability: availabilityMap[product.availability] || availabilityMap["Неналичен"],
       seller: {
         "@type": "Organization",
@@ -71,12 +69,12 @@ export function generateProductJsonLd(
 
   // Add promo price
   if (product.is_promo && product.price_promo && product.price_promo > 0) {
-    const promoBGN = (product.price_promo * EUR_TO_BGN).toFixed(2);
-    (jsonLd.offers as Record<string, unknown>).price = promoBGN;
+    const promoEUR = product.price_promo.toFixed(2);
+    (jsonLd.offers as Record<string, unknown>).price = promoEUR;
     (jsonLd.offers as Record<string, unknown>).priceSpecification = {
       "@type": "PriceSpecification",
-      price: promoBGN,
-      priceCurrency: "BGN",
+      price: promoEUR,
+      priceCurrency: "EUR",
     };
   }
 
