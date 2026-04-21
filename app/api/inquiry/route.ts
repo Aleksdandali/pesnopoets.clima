@@ -17,6 +17,12 @@ import {
 } from "@/lib/security";
 
 export async function POST(request: Request) {
+  // CSRF: reject requests from foreign origins
+  const origin = request.headers.get("origin");
+  if (origin && !origin.includes("pesnopoets")) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   // Rate limiting
   const rateLimit = await checkRateLimit();
   if (!rateLimit.allowed) {

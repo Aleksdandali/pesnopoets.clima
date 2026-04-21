@@ -12,6 +12,36 @@ interface ProductDescriptionProps {
 
 const COLLAPSE_THRESHOLD = 200; // px height before collapsing
 
+/** Strip dangerous tags/attributes from Bittel HTML, keep safe formatting. */
+function sanitizeHtml(dirty: string): string {
+  const ALLOWED_TAGS = new Set([
+    "p", "br", "b", "strong", "i", "em", "u", "ul", "ol", "li",
+    "h1", "h2", "h3", "h4", "h5", "h6", "span", "div", "table",
+    "thead", "tbody", "tr", "th", "td", "a", "img", "sup", "sub",
+  ]);
+  // Remove <script>, <iframe>, <object>, <embed>, <form>, event handlers
+  return dirty
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<iframe[\s\S]*?<\/iframe>/gi, "")
+    .replace(/<object[\s\S]*?<\/object>/gi, "")
+    .replace(/<embed[^>]*>/gi, "")
+    .replace(/<form[\s\S]*?<\/form>/gi, "")
+    .replace(/\son\w+\s*=\s*["'][^"']*["']/gi, "") // onclick, onerror, etc.
+    .replace(/javascript\s*:/gi, "")
+    .replace(/<\/?(\w+)([^>]*)>/g, (match, tag, attrs) => {
+      if (!ALLOWED_TAGS.has(tag.toLowerCase())) return "";
+      // Strip all attributes except href, src, alt, class
+      const safeAttrs = (attrs as string).replace(
+        /\s(\w+)\s*=\s*["'][^"']*["']/g,
+        (attrMatch: string, attrName: string) => {
+          if (["href", "src", "alt", "class", "colspan", "rowspan"].includes(attrName.toLowerCase())) return attrMatch;
+          return "";
+        }
+      );
+      return `<${match.startsWith("</") ? "/" : ""}${tag.toLowerCase()}${safeAttrs}>`;
+    });
+}
+
 export default function ProductDescription({
   html,
   title,
@@ -57,7 +87,7 @@ export default function ProductDescription({
       >
         <div
           className="prose prose-sm max-w-none text-muted-foreground prose-headings:text-foreground prose-strong:text-foreground prose-a:text-primary"
-          dangerouslySetInnerHTML={{ __html: html }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }}
         />
         {needsCollapse && !isExpanded && (
           <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent pointer-events-none" />

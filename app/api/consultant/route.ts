@@ -45,7 +45,12 @@ export async function POST(req: Request) {
   }
 
   const locale = normalizeLocale(body.locale);
-  const messages = Array.isArray(body.messages) ? body.messages : [];
+  const MAX_MSG_LENGTH = 2000;
+  const messages = (Array.isArray(body.messages) ? body.messages : []).map((m) => ({
+    ...m,
+    content:
+      typeof m.content === "string" ? m.content.slice(0, MAX_MSG_LENGTH) : m.content,
+  }));
   if (messages.length === 0) {
     return new Response(JSON.stringify({ error: "No messages" }), { status: 400 });
   }

@@ -31,6 +31,12 @@ interface CartItemPayload {
  * Persisted into the existing `inquiries` table with a cart summary in `message`.
  */
 export async function POST(request: Request) {
+  // CSRF: reject requests from foreign origins
+  const origin = request.headers.get("origin");
+  if (origin && !origin.includes("pesnopoets")) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   const rateLimit = await checkRateLimit();
   if (!rateLimit.allowed) {
     return NextResponse.json(
