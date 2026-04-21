@@ -241,7 +241,8 @@ async function searchProducts(
 
   const products = (data as ProductListRow[])
     .map((p) => {
-      const effectivePrice = Number(
+      // price_client from Bittel is in EUR — convert to BGN for display
+      const priceEur = Number(
         p.price_override ?? (p.is_promo && p.price_promo ? p.price_promo : p.price_client)
       );
       const title = pickTitle(p, ctx.locale);
@@ -251,8 +252,8 @@ async function searchProducts(
         slug: p.slug,
         title,
         manufacturer: p.manufacturer,
-        price_bgn: Math.round(effectivePrice),
-        price_eur: Math.round((effectivePrice / EUR_TO_BGN) * 100) / 100,
+        price_bgn: Math.round(priceEur * EUR_TO_BGN),
+        price_eur: Math.round(priceEur * 100) / 100,
         btu: p.btu,
         area_m2: p.area_m2,
         noise_db_indoor: p.noise_db_indoor,
@@ -306,12 +307,14 @@ async function getCatalogSummary(
     const brand = (p.manufacturer as string) || "Unknown";
     brandCounts[brand] = (brandCounts[brand] || 0) + 1;
 
-    const price = Number(
+    // price_client from Bittel is in EUR — convert to BGN
+    const priceEur = Number(
       p.price_override ?? (p.is_promo && p.price_promo ? p.price_promo : p.price_client)
     );
-    if (price > 0) {
-      if (price < minPrice) minPrice = price;
-      if (price > maxPrice) maxPrice = price;
+    const priceBgn = priceEur * EUR_TO_BGN;
+    if (priceBgn > 0) {
+      if (priceBgn < minPrice) minPrice = priceBgn;
+      if (priceBgn > maxPrice) maxPrice = priceBgn;
     }
     if (p.btu) {
       if ((p.btu as number) < minBtu) minBtu = p.btu as number;
@@ -347,7 +350,8 @@ async function getProductDetails(
   if (error) return { error: error.message };
   if (!data) return { error: "Product not found" };
 
-  const effectivePrice = Number(
+  // price_client from Bittel is in EUR — convert to BGN
+  const priceEur = Number(
     data.price_override ?? (data.is_promo && data.price_promo ? data.price_promo : data.price_client)
   );
   return {
@@ -355,8 +359,8 @@ async function getProductDetails(
     title: pickTitle(data, ctx.locale),
     manufacturer: data.manufacturer,
     description: pickDescription(data, ctx.locale),
-    price_bgn: Math.round(effectivePrice),
-    price_eur: Math.round((effectivePrice / EUR_TO_BGN) * 100) / 100,
+    price_bgn: Math.round(priceEur * EUR_TO_BGN),
+    price_eur: Math.round(priceEur * 100) / 100,
     btu: data.btu,
     area_m2: data.area_m2,
     noise_db_indoor: data.noise_db_indoor,
