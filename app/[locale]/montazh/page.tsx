@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import {
   ArrowRight,
@@ -98,6 +99,44 @@ export default async function MontazhPage({ params }: PageProps) {
             </li>
           ))}
         </ul>
+      </section>
+
+      {/* Installation process showcase */}
+      <section className="bg-muted/50 border-y border-border/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div className="relative aspect-[3/4] sm:aspect-[4/5] rounded-2xl overflow-hidden shadow-xl">
+              <Image
+                src="/images/montazh/installation-process.jpg"
+                alt={t.processImageAlt || "Installation process"}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+                priority
+              />
+            </div>
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4">
+                {t.processTitle || (locale === "ru" ? "Качественная установка" : locale === "ua" ? "Якісна установка" : locale === "en" ? "Quality installation" : "Качествен монтаж")}
+              </h2>
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6">
+                {t.processDesc || (locale === "ru" ? "Чисто в вашей квартире. Аккуратно и по стандартам. Надежно — с заботой о деталях." : locale === "ua" ? "Чисто у вашій квартирі. Акуратно і за стандартами. Надійно — з турботою про деталі." : locale === "en" ? "Clean in your apartment. Neat and to standards. Reliable — with attention to detail." : "Чисто в апартамента ви. Акуратно и по стандарти. Надеждно — с грижа за детайлите.")}
+              </p>
+              <ul className="space-y-3">
+                {[
+                  { icon: "clean", text: locale === "ru" ? "Чисто в вашей квартире" : locale === "ua" ? "Чисто у вашій квартирі" : locale === "en" ? "Clean in your apartment" : "Чисто в апартамента ви" },
+                  { icon: "neat", text: locale === "ru" ? "Аккуратно и по стандартам" : locale === "ua" ? "Акуратно і за стандартами" : locale === "en" ? "Neat and to standards" : "Акуратно и по стандарти" },
+                  { icon: "reliable", text: locale === "ru" ? "Надежно — с заботой о деталях" : locale === "ua" ? "Надійно — з турботою про деталі" : locale === "en" ? "Reliable — with attention to detail" : "Надеждно — с грижа за детайлите" },
+                ].map((item) => (
+                  <li key={item.icon} className="flex items-center gap-3 p-3 bg-white border border-border/60 rounded-xl">
+                    <CheckCircle2 className="w-5 h-5 text-primary shrink-0" aria-hidden="true" />
+                    <span className="text-sm font-medium text-foreground">{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Price table */}
