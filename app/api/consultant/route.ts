@@ -20,7 +20,7 @@ export const runtime = "nodejs";
 export const maxDuration = 60;
 
 const MODEL = "claude-sonnet-4-6";
-const MAX_TOKENS = 1024;
+const MAX_TOKENS = 2048;
 const MAX_TOOL_TURNS = 6; // prevent runaway tool loops
 
 type IncomingMessage = {

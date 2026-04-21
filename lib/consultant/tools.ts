@@ -14,7 +14,7 @@ export const TOOL_DEFINITIONS: Anthropic.Tool[] = [
   {
     name: "search_products",
     description:
-      "Search the catalog for air conditioners matching given criteria. Returns up to 8 products with id, slug, title, manufacturer, price (BGN), BTU, area_m2, noise_db_indoor, energy_class, availability, and image. Use this whenever you need to recommend products. ALL parameters are optional — omit what's unknown.",
+      "Search the catalog for air conditioners matching given criteria. Returns up to 8 products with id, slug, title, manufacturer, price (BGN), BTU, area_m2, noise_db_indoor, energy_class, availability, image, and semantic enrichment (selling_points, best_for, warnings). noise_db_indoor may be null for some products — do NOT claim a noise level you don't have. Use this whenever you need to recommend products. ALL parameters are optional — omit what's unknown.",
     input_schema: {
       type: "object" as const,
       properties: {
@@ -47,6 +47,20 @@ export const TOOL_DEFINITIONS: Anthropic.Tool[] = [
           description: "Sort order. Default: price_asc.",
         },
         limit: { type: "number", description: "Max results. Default 6, cap 8." },
+      },
+    },
+  },
+  {
+    name: "get_catalog_summary",
+    description:
+      "Get a high-level overview of the entire catalog: total product count, list of brands with product counts, price range (BGN), BTU range, and energy classes available. Use this when the customer asks 'what brands do you carry?', 'how many ACs do you have?', 'what's your price range?', or any overview question. Do NOT guess catalog contents — always call this tool first.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        only_in_stock: {
+          type: "boolean",
+          description: "If true, only count products currently in stock. Default false.",
+        },
       },
     },
   },
@@ -159,6 +173,8 @@ export async function executeTool(
   switch (toolName) {
     case "search_products":
       return searchProducts(input, ctx);
+    case "get_catalog_summary":
+      return getCatalogSummary(input);
     case "get_product_details":
       return getProductDetails(input as { slug: string }, ctx);
     case "calculate_btu":
@@ -192,7 +208,11 @@ async function searchProducts(
   if (input.btu_min) q = q.gte("btu", input.btu_min as number);
   if (input.btu_max) q = q.lte("btu", input.btu_max as number);
   if (input.area_m2_min) q = q.gte("area_m2", input.area_m2_min as number);
-  if (input.max_noise_db) q = q.lte("noise_db_indoor", input.max_noise_db as number);
+  // Null-safe: include products where noise data is missing (they might be quiet
+  // but the spec wasn't parsed). The AI can note "noise data unavailable" for those.
+  if (input.max_noise_db) {
+    q = q.or(`noise_db_indoor.lte.${input.max_noise_db},noise_db_indoor.is.null`);
+  }
   if (input.manufacturers && Array.isArray(input.manufacturers)) {
     q = q.in("manufacturer", input.manufacturers as string[]);
   }
@@ -256,6 +276,61 @@ async function searchProducts(
     .slice(0, limit);
 
   return { products, count: products.length };
+}
+
+async function getCatalogSummary(
+  input: Record<string, unknown>
+): Promise<unknown> {
+  const supabase = await createClient();
+  let q = supabase
+    .from("products")
+    .select("manufacturer, price_client, price_override, price_promo, is_promo, btu, energy_class, stock_size")
+    .eq("is_active", true)
+    .eq("is_hidden", false);
+
+  if (input.only_in_stock) q = q.gt("stock_size", 0);
+
+  const { data, error } = await q;
+  if (error) return { error: error.message };
+  if (!data || data.length === 0) return { total: 0, brands: [], note: "Catalog is empty." };
+
+  // Aggregate brands with counts
+  const brandCounts: Record<string, number> = {};
+  let minPrice = Infinity;
+  let maxPrice = 0;
+  let minBtu = Infinity;
+  let maxBtu = 0;
+  const energyClasses = new Set<string>();
+
+  for (const p of data) {
+    const brand = (p.manufacturer as string) || "Unknown";
+    brandCounts[brand] = (brandCounts[brand] || 0) + 1;
+
+    const price = Number(
+      p.price_override ?? (p.is_promo && p.price_promo ? p.price_promo : p.price_client)
+    );
+    if (price > 0) {
+      if (price < minPrice) minPrice = price;
+      if (price > maxPrice) maxPrice = price;
+    }
+    if (p.btu) {
+      if ((p.btu as number) < minBtu) minBtu = p.btu as number;
+      if ((p.btu as number) > maxBtu) maxBtu = p.btu as number;
+    }
+    if (p.energy_class) energyClasses.add(p.energy_class as string);
+  }
+
+  const brands = Object.entries(brandCounts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([name, count]) => ({ name, count }));
+
+  return {
+    total: data.length,
+    brands,
+    price_range_bgn: { min: Math.round(minPrice), max: Math.round(maxPrice) },
+    btu_range: { min: minBtu === Infinity ? null : minBtu, max: maxBtu === 0 ? null : maxBtu },
+    energy_classes: [...energyClasses].sort(),
+  };
 }
 
 async function getProductDetails(
