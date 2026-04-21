@@ -199,7 +199,7 @@ export default function CartView({ locale, dictionary }: CartViewProps) {
               {formatBgn(subtotalEur, bgnLabel)}
             </span>
           </div>
-          <p className="text-[11px] text-muted-foreground mb-5">{d.includesInstallation}</p>
+          <div className="mb-5" />
           <Link
             href={`/${locale}/checkout`}
             className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary-dark transition-colors min-h-[48px]"

@@ -327,9 +327,6 @@ export default function CheckoutView({ locale, dictionary }: CheckoutViewProps) 
               {formatBgn(subtotalEur, bgnLabel)}
             </span>
           </div>
-          <p className="text-[11px] text-muted-foreground">
-            {itemCount} × {dictionary.cart.includesInstallation.toLowerCase()}
-          </p>
         </div>
       </aside>
     </form>

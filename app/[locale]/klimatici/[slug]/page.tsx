@@ -13,7 +13,6 @@ import { generateProductJsonLd, generateBreadcrumbJsonLd } from "@/lib/seo/jsonl
 import { generateBadges } from "@/lib/bittel/badges";
 import ProductBadges from "@/components/catalog/ProductBadges";
 import AddToCartButton from "@/components/cart/AddToCartButton";
-import { getBaseInstallationBgn, EUR_TO_BGN as EUR_TO_BGN_RATE } from "@/lib/pricing";
 import { BUSINESS_PHONE_DISPLAY } from "@/lib/constants";
 import {
   Zap,
@@ -124,21 +123,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const displayDescription = product.description_override || localeDesc || product.description;
   const displayPrice = product.price_override || product.price_client;
 
-  // Price WITH base installation (Varna tiered rates, BGN-native)
-  const installationBgn = getBaseInstallationBgn(product.btu);
-  const installationEur = installationBgn / EUR_TO_BGN_RATE;
-  const priceWithInstallEur = displayPrice + installationEur;
-  const priceBGN = (priceWithInstallEur * EUR_TO_BGN).toFixed(0);
-  const priceBGNNoInstall = (displayPrice * EUR_TO_BGN).toFixed(0);
-  const withInstallLabel =
-    t?.withInstallation ||
-    (locale === "en"
-      ? "with base installation"
-      : locale === "ua"
-      ? "з базовим монтажем"
-      : locale === "ru"
-      ? "с базовым монтажом"
-      : "с базов монтаж");
+  // Price — clean API price (no client-side additions). Bittel is the source of truth.
+  const priceBGN = (displayPrice * EUR_TO_BGN).toFixed(0);
 
   // Extract total shipping weight from transport_packages (sum of all packages)
   const totalWeightKg: number | null = (() => {
@@ -313,23 +299,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
               )}
             </div>
 
-            {/* 4. Price Block (large, prominent) — price WITH base installation */}
+            {/* 4. Price Block (large, prominent) — clean API price */}
             <div className="bg-muted rounded-xl p-4 sm:p-5 mb-4">
               <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
                 <span className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
                   {priceBGN} {dictionary.common.currency.bgn}
                 </span>
                 <span className="text-sm sm:text-base text-muted-foreground">
-                  ({priceWithInstallEur.toFixed(2)} &euro;)
+                  ({displayPrice.toFixed(2)} &euro;)
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-muted-foreground mt-1 leading-snug">
-                {withInstallLabel}
-                <span className="mx-1.5 opacity-40">·</span>
-                <span className="whitespace-nowrap">
-                  {priceBGNNoInstall} + {installationBgn.toFixed(0)} {dictionary.common.currency.bgn}
-                </span>
-              </p>
               {product.is_promo && product.price_promo > 0 && (
                 <p className="text-sm text-danger font-semibold mt-1">
                   {dictionary.common.promoPrice}
@@ -433,7 +412,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   slug: product.slug,
                   title: displayTitle,
                   manufacturer: product.manufacturer,
-                  priceEur: priceWithInstallEur,
+                  priceEur: displayPrice,
                   image: product.gallery?.[0],
                   btu: product.btu ?? null,
                 }}
@@ -641,13 +620,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
         locale={locale}
         title={displayTitle}
         priceBGN={priceBGN}
-        priceEUR={priceWithInstallEur.toFixed(0)}
+        priceEUR={displayPrice.toFixed(0)}
         cartItem={{
           id: product.id,
           slug: product.slug,
           title: displayTitle,
           manufacturer: product.manufacturer,
-          priceEur: priceWithInstallEur,
+          priceEur: displayPrice,
           image: product.gallery?.[0],
           btu: product.btu ?? null,
         }}
@@ -680,14 +659,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <StickyMobileCTA
         locale={locale}
         priceBGN={priceBGN}
-        priceEUR={priceWithInstallEur.toFixed(0)}
+        priceEUR={displayPrice.toFixed(0)}
         phoneNumber={BUSINESS_PHONE_DISPLAY}
         cartItem={{
           id: product.id,
           slug: product.slug,
           title: displayTitle,
           manufacturer: product.manufacturer,
-          priceEur: priceWithInstallEur,
+          priceEur: displayPrice,
           image: product.gallery?.[0],
           btu: product.btu ?? null,
         }}

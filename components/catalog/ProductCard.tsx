@@ -8,7 +8,6 @@ import OneClickCardButton from "@/components/catalog/OneClickCardButton";
 import AddToCartButton from "@/components/cart/AddToCartButton";
 import ProductBadges from "@/components/catalog/ProductBadges";
 import { generateBadges } from "@/lib/bittel/badges";
-import { getBaseInstallationBgn, EUR_TO_BGN as EUR_TO_BGN_RATE } from "@/lib/pricing";
 
 interface ProductCardProps {
   product: {
@@ -113,20 +112,6 @@ export default function ProductCard({
   const promoBadge = dictionary?.common.promoBadge || "PROMO";
   const currencyLabel = dictionary?.common.currency.bgn;
 
-  // Installation base price (Varna rates) — stored in BGN; formatPrice expects EUR
-  // internally, so convert once here.
-  const installationBgn = getBaseInstallationBgn(product.btu);
-  const installationEur = installationBgn / EUR_TO_BGN_RATE;
-  const priceWithInstall = displayPrice + installationEur;
-  const withInstallLabel =
-    dictionary?.product.withInstallation ||
-    (locale === "en"
-      ? "with base installation"
-      : locale === "ua"
-      ? "з базовим монтажем"
-      : locale === "ru"
-      ? "с базовым монтажом"
-      : "с базов монтаж");
 
   const goToPrev = useCallback(
     (e: React.MouseEvent) => {
@@ -309,22 +294,19 @@ export default function ProductCard({
           )}
         </div>
 
-        {/* Price block — simplified: single total + breakdown line */}
+        {/* Price block — API price only, no client-side additions */}
         <div className="mt-auto flex items-end justify-between gap-3 pt-3 sm:pt-4 border-t border-border">
           <div className="flex flex-col gap-0.5 min-w-0">
             <div className="flex items-baseline gap-1.5 flex-wrap">
               <span className="text-base sm:text-xl font-extrabold text-foreground">
-                {formatPrice(priceWithInstall, currency, currencyLabel)}
+                {formatPrice(displayPrice, currency, currencyLabel)}
               </span>
               {product.is_promo && product.price_promo && product.price_promo > 0 && (
                 <span className="text-xs sm:text-sm text-muted-foreground line-through">
-                  {formatPrice(product.price_client + installationEur, currency, currencyLabel)}
+                  {formatPrice(product.price_client, currency, currencyLabel)}
                 </span>
               )}
             </div>
-            <span className="text-[10px] sm:text-[11px] text-muted-foreground">
-              {withInstallLabel}
-            </span>
           </div>
 
           {/* Action buttons — siblings of Link, z-[5] keeps them above ::before */}
@@ -336,7 +318,7 @@ export default function ProductCard({
                 slug: product.slug,
                 title: displayTitle,
                 manufacturer: product.manufacturer,
-                priceEur: priceWithInstall,
+                priceEur: displayPrice,
                 image: imageUrl,
                 btu: product.btu ?? null,
               }}
