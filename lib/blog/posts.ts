@@ -1,7 +1,8 @@
 import type { BlogPost, Locale } from "./types";
 import { heatingWithAc } from "./posts/heating-with-ac";
+import { howToChooseAc } from "./posts/how-to-choose-ac";
 
-const allPosts: BlogPost[] = [heatingWithAc];
+const allPosts: BlogPost[] = [heatingWithAc, howToChooseAc];
 
 // Sort by date descending
 allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
