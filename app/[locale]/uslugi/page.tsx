@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import {
   ArrowRight,
@@ -145,6 +146,21 @@ export default async function UslugiPage({ params }: PageProps) {
           </div>
         </div>
       </section>
+
+      {/* Services cover image */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 sm:-mt-10 relative z-10">
+        <div className="rounded-2xl overflow-hidden shadow-xl">
+          <Image
+            src="/images/services-cover.jpg"
+            alt={t.pageTitle}
+            width={1200}
+            height={630}
+            sizes="(max-width: 1280px) 100vw, 1280px"
+            className="w-full h-auto"
+            priority
+          />
+        </div>
+      </div>
 
       {/* Services grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">

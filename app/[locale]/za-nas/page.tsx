@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Shield, Truck, Wrench, Award } from "lucide-react";
 
 async function getDictionary(locale: string) {
@@ -21,6 +22,19 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">{c.title}</h1>
       <p className="text-lg text-muted-foreground leading-relaxed mb-8">{c.subtitle}</p>
+
+      {/* Team photo */}
+      <div className="rounded-2xl overflow-hidden shadow-xl mb-10">
+        <Image
+          src="/images/about-team.jpg"
+          alt={c.title}
+          width={1200}
+          height={800}
+          sizes="(max-width: 896px) 100vw, 896px"
+          className="w-full h-auto"
+          priority
+        />
+      </div>
 
       {/* Team paragraph */}
       <p className="text-base text-muted-foreground leading-relaxed mb-10">{c.teamParagraph}</p>
