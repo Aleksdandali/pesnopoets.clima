@@ -48,7 +48,7 @@ async function getProduct(slug: string) {
   const supabase = await createClient();
   const { data } = await supabase
     .from("products")
-    .select("id, slug, title, title_override, title_en, title_ru, title_ua, manufacturer, description, description_override, description_en, description_ru, description_ua, price_client, price_override, price_promo, is_promo, availability, gallery, btu, area_m2, noise_db_indoor, energy_class, refrigerant, seer, scop, warranty_months, stock_size, features, transport_packages, barcode, meta_title, meta_description, categories(slug, group_name, subgroup_name, name_en, name_ru, name_ua)")
+    .select("id, slug, title, title_override, title_en, title_ru, title_ua, manufacturer, description, description_override, description_en, description_ru, description_ua, price_client, price_override, price_promo, is_promo, availability, gallery, btu, area_m2, noise_db_indoor, energy_class, refrigerant, seer, scop, warranty_months, stock_size, features, transport_packages, barcode, meta_title, meta_description, category_id, color, is_hidden, categories(slug, group_name, subgroup_name, name_en, name_ru, name_ua)")
     .eq("slug", slug)
     .eq("is_active", true)
     .single();
