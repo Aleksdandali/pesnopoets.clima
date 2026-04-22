@@ -341,7 +341,7 @@ async function getProductDetails(
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("products")
-    .select("*")
+    .select("slug, title, title_override, title_en, title_ru, title_ua, manufacturer, description, description_override, price_client, price_override, price_promo, is_promo, availability, gallery, btu, area_m2, noise_db_indoor, energy_class, refrigerant, seer, scop, stock_size, features, selling_points, best_for, warnings")
     .eq("slug", input.slug)
     .eq("is_active", true)
     .maybeSingle();

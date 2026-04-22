@@ -29,6 +29,17 @@ type IncomingMessage = {
 };
 
 export async function POST(req: Request) {
+  // CSRF: reject requests from foreign origins
+  const origin = req.headers.get("origin");
+  const allowedOrigins = [
+    "https://pesnopoets-clima.com",
+    "https://www.pesnopoets-clima.com",
+    process.env.NEXT_PUBLIC_SITE_URL,
+  ].filter(Boolean);
+  if (origin && !allowedOrigins.includes(origin)) {
+    return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403 });
+  }
+
   const rateLimit = await checkRateLimit();
   if (!rateLimit.allowed) {
     return new Response(JSON.stringify({ error: "Too many requests" }), {
