@@ -57,6 +57,37 @@ const serviceIconMap: Record<string, React.ComponentType<{ className?: string }>
 
 const whyIconMap = [MapPin, BadgeCheck, ShieldCheck];
 
+const uslugiFaq: Record<string, { q: string; a: string }[]> = {
+  bg: [
+    { q: "Колко струва профилактиката на климатик?", a: "Годишната профилактика започва от 70 лв. на уред. Включва почистване на филтри и топлообменник, проверка на дренажа, налягането на фреона и тест на производителността." },
+    { q: "Колко често трябва да правя профилактика?", a: "Препоръчваме веднъж годишно, най-добре преди лятото (април–май). Ако използвате климатика и за отопление, втора профилактика през есента е добра идея." },
+    { q: "Ремонтирате ли всички марки?", a: "Да, обслужваме и ремонтираме всички марки климатици — не само тези, които продаваме. Нашите техници работят с Daikin, Mitsubishi, Gree, Toshiba и всички други." },
+    { q: "Колко струва диагностиката?", a: "Диагностиката струва 40 лв. Включва пълна проверка на системата, прочитане на кодове за грешки и оценка на работата. Таксата се приспада, ако поръчате ремонт." },
+    { q: "Зареждате ли фреон?", a: "Да, зареждаме R-32 и R-410A. Цената зависи от необходимото количество, което определяме при диагностиката. Използваме само фабричен фреон." },
+  ],
+  en: [
+    { q: "How much does AC maintenance cost?", a: "Annual maintenance starts from 70 BGN per unit. It includes filter and coil cleaning, drainage check, refrigerant pressure check, and performance testing." },
+    { q: "How often should I maintain my AC?", a: "We recommend once a year, ideally before summer (April–May). If you also use your AC for heating, a second maintenance in autumn is a good idea." },
+    { q: "Do you repair all brands?", a: "Yes, we service and repair all AC brands — not just the ones we sell. Our technicians work with Daikin, Mitsubishi, Gree, Toshiba, and all other major manufacturers." },
+    { q: "What does diagnostics cost?", a: "Diagnostics costs 40 BGN. It includes a complete system check, error code reading, and performance assessment. The fee is waived if you proceed with the repair." },
+    { q: "Do you refill freon?", a: "Yes, we refill both R-32 and R-410A refrigerants. The cost depends on the amount needed, assessed during diagnostics. We only use factory-spec refrigerant." },
+  ],
+  ru: [
+    { q: "Сколько стоит обслуживание кондиционера?", a: "Ежегодное обслуживание (профилактика) — от 70 лв. за блок. Включает чистку фильтров и теплообменника, проверку дренажа, давления фреона и тест производительности." },
+    { q: "Как часто нужно делать профилактику?", a: "Рекомендуем раз в год, лучше всего перед летом (апрель–май). Если вы используете кондиционер и для отопления, вторая профилактика осенью будет полезна." },
+    { q: "Вы ремонтируете все марки?", a: "Да, мы обслуживаем и ремонтируем все марки кондиционеров — не только те, которые продаём. Наши техники работают с Daikin, Mitsubishi, Gree, Toshiba и другими." },
+    { q: "Сколько стоит диагностика?", a: "Диагностика стоит 40 лв. Включает полную проверку системы, считывание кодов ошибок и оценку работы. Стоимость диагностики вычитается при заказе ремонта." },
+    { q: "Вы заправляете фреон?", a: "Да, заправляем R-32 и R-410A. Стоимость зависит от необходимого количества, которое определяется при диагностике. Используем только заводской фреон." },
+  ],
+  ua: [
+    { q: "Скільки коштує обслуговування кондиціонера?", a: "Щорічне обслуговування (профілактика) — від 70 лв. за блок. Включає чистку фільтрів і теплообмінника, перевірку дренажу, тиску фреону та тест продуктивності." },
+    { q: "Як часто потрібно робити профілактику?", a: "Рекомендуємо раз на рік, найкраще перед літом (квітень–травень). Якщо ви використовуєте кондиціонер і для опалення, друга профілактика восени буде корисною." },
+    { q: "Ви ремонтуєте всі марки?", a: "Так, ми обслуговуємо та ремонтуємо всі марки кондиціонерів — не лише ті, що продаємо. Наші техніки працюють з Daikin, Mitsubishi, Gree, Toshiba та іншими." },
+    { q: "Скільки коштує діагностика?", a: "Діагностика коштує 40 лв. Включає повну перевірку системи, зчитування кодів помилок та оцінку роботи. Вартість діагностики вираховується при замовленні ремонту." },
+    { q: "Ви заправляєте фреон?", a: "Так, заправляємо R-32 та R-410A. Вартість залежить від необхідної кількості, яку визначаємо під час діагностики. Використовуємо лише заводський фреон." },
+  ],
+};
+
 export default async function UslugiPage({ params }: PageProps) {
   const { locale } = await params;
   const dict = await getDictionary(locale);
@@ -65,8 +96,27 @@ export default async function UslugiPage({ params }: PageProps) {
   const services: ServiceEntry[] = t.services;
   const whyItems: WhyItem[] = t.whyItems;
 
+  const faqItems = uslugiFaq[locale] || uslugiFaq.bg;
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
       {/* Hero */}
       <section className="bg-gradient-to-br from-[#0a1628] via-[#0c1e3a] to-[#0a1628] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">

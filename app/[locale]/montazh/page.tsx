@@ -41,14 +41,64 @@ function formatPowerLabel(maxBtu: number): string {
   return `≤ ${(maxBtu / 1000).toFixed(0)}K BTU (~${kw} kW)`;
 }
 
+const montazhFaq: Record<string, { q: string; a: string }[]> = {
+  bg: [
+    { q: "Колко струва монтажът на климатик?", a: "Стандартният монтаж започва от 300 лв. за уреди до 14 000 BTU, 370 лв. за до 24 000 BTU и 440 лв. за до 33 000 BTU. Цената включва 3 м тръба, материали, вакуумиране и пускане в експлоатация." },
+    { q: "Какво включва стандартният монтаж?", a: "Стандартният монтаж включва до 3 метра медна тръба, всички материали и фитинги, вакуумиране, електрическо свързване, монтаж на вътрешно и външно тяло и пускане в експлоатация." },
+    { q: "Колко бързо можете да монтирате?", a: "Предлагаме монтаж в същия ден, ако се свържете с нас преди обяд. Типичният монтаж отнема 2–4 часа." },
+    { q: "Давате ли гаранция за монтажа?", a: "Да, предоставяме 12 месеца гаранция върху монтажните дейности. При проблем, свързан с монтажа, го отстраняваме безплатно." },
+    { q: "Какви райони покривате?", a: "Покриваме всички квартали на Варна и околността в радиус до около 30 км по договаряне." },
+  ],
+  en: [
+    { q: "How much does AC installation cost?", a: "Standard installation starts from 300 BGN for units up to 14,000 BTU, 370 BGN for up to 24,000 BTU, and 440 BGN for up to 33,000 BTU. Price includes 3m pipe, materials, vacuum, and commissioning." },
+    { q: "What does standard installation include?", a: "Standard installation includes up to 3 meters of copper pipe, all fittings and materials, vacuum evacuation, electrical connection, mounting of indoor and outdoor units, and commissioning." },
+    { q: "How fast can you install?", a: "We offer same-day installation if you contact us before noon. Typical installation takes 2–4 hours." },
+    { q: "Do you offer warranty on installation?", a: "Yes, we provide 12 months warranty on all installation work. Any installation-related issue within that period is fixed at no charge." },
+    { q: "What areas do you cover?", a: "We cover all neighborhoods in Varna city and the surrounding region up to approximately 30km by arrangement." },
+  ],
+  ru: [
+    { q: "Сколько стоит установка кондиционера?", a: "Стандартная установка — от 300 лв. для моделей до 14 000 BTU, 370 лв. до 24 000 BTU и 440 лв. до 33 000 BTU. В цену входят 3 м трубы, материалы, вакуумирование и пусконаладка." },
+    { q: "Что входит в стандартную установку?", a: "Стандартная установка включает до 3 метров медной трубы, все материалы и фитинги, вакуумирование, электроподключение, монтаж внутреннего и наружного блоков и пусконаладку." },
+    { q: "Как быстро вы можете установить?", a: "Мы предлагаем установку в тот же день, если вы свяжетесь с нами до обеда. Типичная установка занимает 2–4 часа." },
+    { q: "Даёте ли вы гарантию на монтаж?", a: "Да, мы предоставляем 12 месяцев гарантии на монтажные работы. Любая проблема, связанная с монтажом, устраняется бесплатно." },
+    { q: "Какие районы вы обслуживаете?", a: "Мы обслуживаем все районы Варны и окрестности в радиусе до 30 км по договорённости." },
+  ],
+  ua: [
+    { q: "Скільки коштує монтаж кондиціонера?", a: "Стандартний монтаж — від 300 лв. для моделей до 14 000 BTU, 370 лв. до 24 000 BTU та 440 лв. до 33 000 BTU. Ціна включає 3 м труби, матеріали, вакуумування та пусконалагодження." },
+    { q: "Що входить у стандартний монтаж?", a: "Стандартний монтаж включає до 3 метрів мідної труби, всі матеріали та фітинги, вакуумування, електропідключення, монтаж внутрішнього та зовнішнього блоків і пусконалагодження." },
+    { q: "Як швидко ви можете встановити?", a: "Ми пропонуємо монтаж у той самий день, якщо ви зв'яжетесь до обіду. Типовий монтаж займає 2–4 години." },
+    { q: "Чи надаєте гарантію на монтаж?", a: "Так, ми надаємо 12 місяців гарантії на монтажні роботи. Будь-яка проблема, пов'язана з монтажем, усувається безкоштовно." },
+    { q: "Які райони ви обслуговуєте?", a: "Ми обслуговуємо всі райони Варни та околиці в радіусі до 30 км за домовленістю." },
+  ],
+};
+
 export default async function MontazhPage({ params }: PageProps) {
   const { locale } = await params;
   const dict = await getDictionary(locale);
   const t = dict.montazh;
   const common = dict.common;
 
+  const faqItems = montazhFaq[locale] || montazhFaq.bg;
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
       {/* Hero */}
       <section className="bg-gradient-to-br from-[#0a1628] via-[#0c1e3a] to-[#0a1628] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
