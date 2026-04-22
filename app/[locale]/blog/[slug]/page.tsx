@@ -240,7 +240,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       </div>
 
       {/* Article body */}
-      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 overflow-hidden">
         <div className="blog-article max-w-none">
           <ContentComponent />
         </div>

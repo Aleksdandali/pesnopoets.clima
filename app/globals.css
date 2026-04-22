@@ -269,15 +269,33 @@ main {
 .blog-article table {
   border-collapse: collapse;
   width: 100%;
+  min-width: 480px;
 }
 .blog-article td, .blog-article th {
   border: 1px solid var(--border);
-  padding: 0.75rem 1rem;
-  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+@media (min-width: 640px) {
+  .blog-article td, .blog-article th {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    white-space: normal;
+  }
 }
 .blog-article th {
   font-weight: 600;
   text-align: left;
+}
+/* Force article content to not overflow */
+.blog-article {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.blog-article img {
+  max-width: 100%;
+  height: auto;
 }
 
 /* Ensure proper touch target sizing for iOS Safari */
