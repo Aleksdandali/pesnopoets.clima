@@ -144,7 +144,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
   })();
 
   // Category info for breadcrumb — use translated name if available
-  const catData = product.categories;
+  // categories relation returns array from explicit select; take first item
+  const catData = Array.isArray(product.categories) ? product.categories[0] : product.categories;
   const categoryName = locale === "en" ? catData?.name_en : locale === "ru" ? catData?.name_ru : locale === "ua" ? catData?.name_ua : null;
   const categoryNameFinal = categoryName || catData?.subgroup_name;
   const categoryGroupName = catData?.group_name;
