@@ -17,9 +17,14 @@ import {
 } from "@/lib/security";
 
 export async function POST(request: Request) {
-  // CSRF: reject requests from foreign origins
+  // CSRF: reject requests from foreign origins (exact match, not substring)
   const origin = request.headers.get("origin");
-  if (origin && !origin.includes("pesnopoets")) {
+  const allowedOrigins = [
+    "https://pesnopoets-clima.com",
+    "https://www.pesnopoets-clima.com",
+    process.env.NEXT_PUBLIC_SITE_URL,
+  ].filter(Boolean);
+  if (origin && !allowedOrigins.includes(origin)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
