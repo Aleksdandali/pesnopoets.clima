@@ -266,7 +266,7 @@ function ContentBG() {
       </p>
       <p>
         Вижте{" "}
-        <a href="/catalog" className="text-primary underline underline-offset-4 hover:text-primary/80">
+        <a href="/klimatici" className="text-primary underline underline-offset-4 hover:text-primary/80">
           актуалните цени и наличности в каталога
         </a>.
       </p>
@@ -596,7 +596,7 @@ function ContentEN() {
       </p>
       <p>
         Check{" "}
-        <a href="/catalog" className="text-primary underline underline-offset-4 hover:text-primary/80">
+        <a href="/klimatici" className="text-primary underline underline-offset-4 hover:text-primary/80">
           current prices and availability in our catalog
         </a>.
       </p>
@@ -856,7 +856,7 @@ function ContentRU() {
       <p>
         Конкретный пример: кондиционер A+++ против A+ при 8 месяцах использования
         экономит порядка <strong>200 лв в год</strong> на электричестве. За 10 лет —
-        2000 лв (примерно 1000 евро). Разница в цене между A+ и A+++ моделью
+        2000 лв (примерно 1000 евро). Разница в цене между моделями A+ и A+++
         редко превышает 500-800 лв.
       </p>
       <p>
@@ -923,7 +923,7 @@ function ContentRU() {
       </p>
       <p>
         Смотрите{" "}
-        <a href="/catalog" className="text-primary underline underline-offset-4 hover:text-primary/80">
+        <a href="/klimatici" className="text-primary underline underline-offset-4 hover:text-primary/80">
           актуальные цены и наличие в каталоге
         </a>.
       </p>
@@ -1251,7 +1251,7 @@ function ContentUA() {
       </p>
       <p>
         Дивіться{" "}
-        <a href="/catalog" className="text-primary underline underline-offset-4 hover:text-primary/80">
+        <a href="/klimatici" className="text-primary underline underline-offset-4 hover:text-primary/80">
           актуальні ціни та наявність у каталозі
         </a>.
       </p>
