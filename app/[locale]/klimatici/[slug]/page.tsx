@@ -210,7 +210,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 pb-28 sm:pb-28 lg:pb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 pb-28 sm:pb-28 lg:pb-8">
         {/* Breadcrumb */}
         <nav className="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-5 overflow-x-auto scrollbar-hide" role="navigation" aria-label="Breadcrumb">
           <ol className="flex items-center whitespace-nowrap gap-0 min-w-0">

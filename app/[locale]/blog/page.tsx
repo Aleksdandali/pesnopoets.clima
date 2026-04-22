@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
-import { Calendar, Clock, ArrowRight } from "lucide-react";
+import { Calendar, Clock, ArrowRight, ChevronRight } from "lucide-react";
 import { getAllPosts } from "@/lib/blog/posts";
 import type { Locale } from "@/lib/blog/types";
 
@@ -65,11 +65,11 @@ export default async function BlogPage({ params }: PageProps) {
       {/* Hero */}
       <section className="bg-gradient-to-br from-[#0a1628] via-[#0c1e3a] to-[#0a1628] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
-          <nav className="text-xs text-white/50 mb-5" aria-label="breadcrumb">
+          <nav className="text-xs text-white/50 mb-5 flex items-center gap-1.5" aria-label="breadcrumb">
             <Link href={`/${locale}`} className="hover:text-white/80">
               {t.breadcrumbHome}
             </Link>
-            <span className="mx-2">/</span>
+            <ChevronRight className="w-3 h-3" aria-hidden="true" />
             <span className="text-white/80">{t.heading}</span>
           </nav>
           <h1 className="text-3xl sm:text-5xl font-bold leading-tight">

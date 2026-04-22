@@ -23,6 +23,7 @@ const labels: Record<
     consultantCta: string;
     consultantCtaDesc: string;
     catalogButton: string;
+    consultantButton: string;
   }
 > = {
   bg: {
@@ -34,6 +35,7 @@ const labels: Record<
     consultantCta: "Попитайте AI консултанта",
     consultantCtaDesc: "Ще подбере модел за вашата стая и бюджет",
     catalogButton: "Към каталога",
+    consultantButton: "Към консултанта",
   },
   en: {
     breadcrumbHome: "Home",
@@ -44,6 +46,7 @@ const labels: Record<
     consultantCta: "Ask the AI Consultant",
     consultantCtaDesc: "Get personalized recommendations for your room and budget",
     catalogButton: "Go to catalog",
+    consultantButton: "Ask consultant",
   },
   ru: {
     breadcrumbHome: "Главная",
@@ -54,6 +57,7 @@ const labels: Record<
     consultantCta: "Спросите AI консультанта",
     consultantCtaDesc: "Подберет модель для вашей комнаты и бюджета",
     catalogButton: "В каталог",
+    consultantButton: "Спросить",
   },
   ua: {
     breadcrumbHome: "Головна",
@@ -64,6 +68,7 @@ const labels: Record<
     consultantCta: "Запитайте AI консультанта",
     consultantCtaDesc: "Підбере модель для вашої кімнати та бюджету",
     catalogButton: "До каталогу",
+    consultantButton: "Запитати",
   },
 };
 
@@ -186,7 +191,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
       {/* Hero */}
       <section className="bg-gradient-to-br from-[#0a1628] via-[#0c1e3a] to-[#0a1628] text-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
           {/* Breadcrumbs */}
           <nav className="text-xs text-white/50 mb-5 flex items-center gap-1.5 flex-wrap" aria-label="breadcrumb">
             <Link href={`/${locale}`} className="hover:text-white/80">
@@ -269,7 +274,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               {t.consultantCtaDesc}
             </p>
             <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
-              {t.catalogButton}
+              {t.consultantButton}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" aria-hidden="true" />
             </span>
           </Link>

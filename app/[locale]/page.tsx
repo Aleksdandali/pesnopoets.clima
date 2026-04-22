@@ -404,10 +404,10 @@ export default async function HomePage({ params }: HomePageProps) {
       </section>
 
       {/* Categories */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="flex items-end justify-between mb-8 sm:mb-10">
           <div>
-            <h2 className="text-xl sm:text-3xl font-bold text-foreground">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground">
               {labels.categories}
             </h2>
           </div>
@@ -456,9 +456,9 @@ export default async function HomePage({ params }: HomePageProps) {
       {/* Popular Products */}
       {featuredProducts.length > 0 && (
         <section className="bg-muted/50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
             <div className="flex items-end justify-between mb-8 sm:mb-10">
-              <h2 className="text-xl sm:text-3xl font-bold text-foreground">
+              <h2 className="text-xl sm:text-2xl font-bold text-foreground">
                 {labels.popular}
               </h2>
               <Link
@@ -495,9 +495,9 @@ export default async function HomePage({ params }: HomePageProps) {
 
       {/* Features / Why Us */}
       <section className="bg-gradient-to-b from-white to-[#f8fafc]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="text-center mb-10 sm:mb-12">
-            <h2 className="text-xl sm:text-3xl font-bold text-foreground">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground">
               {labels.whyUs}
             </h2>
             <div className="mt-3 mx-auto w-12 h-1 bg-primary rounded-full" />
@@ -508,7 +508,7 @@ export default async function HomePage({ params }: HomePageProps) {
               return (
                 <div
                   key={feat.title}
-                  className="relative p-5 sm:p-10 bg-white border border-border/60 rounded-2xl shadow-[0_4px_20px_rgb(0_0_0/0.03)] hover:shadow-[0_8px_30px_rgb(0_0_0/0.06)] transition-shadow duration-300"
+                  className="relative p-5 sm:p-7 bg-white border border-border/60 rounded-2xl shadow-[0_4px_20px_rgb(0_0_0/0.03)] hover:shadow-[0_8px_30px_rgb(0_0_0/0.06)] transition-shadow duration-300"
                 >
                   <div className="flex items-start gap-4 sm:gap-5">
                     <div className="w-12 h-12 sm:w-14 sm:h-14 bg-primary-light/60 rounded-2xl flex items-center justify-center shrink-0">
@@ -543,7 +543,7 @@ export default async function HomePage({ params }: HomePageProps) {
             backgroundSize: "40px 40px",
           }}
         />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8">
             <div className="text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 border border-white/20 rounded-full mb-4 sm:mb-5">
@@ -552,7 +552,7 @@ export default async function HomePage({ params }: HomePageProps) {
                   {labels.freeConsultation}
                 </span>
               </div>
-              <h2 className="text-xl sm:text-3xl font-bold text-white leading-tight">
+              <h2 className="text-xl sm:text-2xl font-bold text-white leading-tight">
                 {labels.ctaTitle}
               </h2>
               <p className="mt-3 sm:mt-4 text-sm sm:text-base text-white/80 leading-relaxed max-w-lg mx-auto lg:mx-0">
@@ -574,7 +574,7 @@ export default async function HomePage({ params }: HomePageProps) {
 
       {/* Brands */}
       <section className="border-t border-border/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
           <p className="text-xs sm:text-sm font-medium text-muted-foreground text-center mb-8 sm:mb-12 tracking-wide uppercase">
             {labels.brands}
           </p>

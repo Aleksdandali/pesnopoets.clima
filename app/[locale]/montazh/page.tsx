@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import {
   ArrowRight,
   CheckCircle2,
+  ChevronRight,
   Info,
   Sparkles,
   Wrench,
@@ -103,11 +104,11 @@ export default async function MontazhPage({ params }: PageProps) {
       <section className="bg-gradient-to-br from-[#0a1628] via-[#0c1e3a] to-[#0a1628] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
           {/* Breadcrumbs */}
-          <nav className="text-xs text-white/50 mb-5" aria-label="breadcrumb">
+          <nav className="text-xs text-white/50 mb-5 flex items-center gap-1.5" aria-label="breadcrumb">
             <Link href={`/${locale}`} className="hover:text-white/80">
               {t.breadcrumbHome}
             </Link>
-            <span className="mx-2">/</span>
+            <ChevronRight className="w-3 h-3" aria-hidden="true" />
             <span className="text-white/80">{t.breadcrumbMontazh}</span>
           </nav>
 
@@ -345,7 +346,7 @@ export default async function MontazhPage({ params }: PageProps) {
             </div>
             <Link
               href={`/${locale}/inquiry`}
-              className="shrink-0 inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-white text-[var(--primary-dark)] font-semibold rounded-xl hover:bg-white/90 transition-all duration-200 shadow-[0_4px_14px_0_rgb(0_0_0/0.15)] min-h-[48px]"
+              className="shrink-0 inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-white text-[var(--primary-dark)] font-semibold rounded-xl hover:bg-white/90 hover:-translate-y-0.5 transition-all duration-200 shadow-[0_4px_14px_0_rgb(0_0_0/0.15)] min-h-[48px]"
             >
               {t.ctaButton}
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
