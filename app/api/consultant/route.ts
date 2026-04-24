@@ -12,9 +12,17 @@
  */
 
 import Anthropic from "@anthropic-ai/sdk";
+import { createClient } from "@supabase/supabase-js";
 import { buildSystemPrompt } from "@/lib/consultant/system-prompt";
 import { TOOL_DEFINITIONS, executeTool, type ToolContext } from "@/lib/consultant/tools";
 import { checkRateLimit } from "@/lib/security";
+
+function createAnonClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+}
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -92,6 +100,9 @@ export async function POST(req: Request) {
           content: typeof m.content === "string" ? m.content : m.content,
         }));
 
+        // Track tool usage for session logging
+        const allToolNames = new Set<string>();
+
         // Agentic loop: model may emit tool_use → we execute → send tool_result → repeat
         for (let turn = 0; turn < MAX_TOOL_TURNS; turn++) {
           const assistantBlocks: Anthropic.ContentBlock[] = [];
@@ -129,6 +140,7 @@ export async function POST(req: Request) {
 
           const toolResultBlocks: Anthropic.ToolResultBlockParam[] = [];
           for (const tu of toolUses) {
+            allToolNames.add(tu.name);
             send({ type: "tool_use", name: tu.name, input: tu.input });
             let output: unknown;
             try {
@@ -152,6 +164,21 @@ export async function POST(req: Request) {
         }
 
         send({ type: "done" });
+
+        // Log session metadata to Supabase (non-blocking, no PII)
+        const userMessageCount = messages.filter((m) => m.role === "user").length;
+        const toolsUsed = Array.from(allToolNames);
+        const leadCollected = allToolNames.has("collect_lead");
+        Promise.resolve(
+          createAnonClient()
+            .from("chat_sessions")
+            .insert({
+              locale,
+              messages_count: userMessageCount,
+              tools_used: toolsUsed,
+              lead_collected: leadCollected,
+            })
+        ).catch(() => {});
       } catch (err) {
         const message = err instanceof Error ? err.message : "Unknown error";
         send({ type: "error", message });

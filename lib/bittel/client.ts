@@ -29,10 +29,6 @@ export async function fetchAllProducts(): Promise<BittelProduct[]> {
     (p) => p.type === "Климатици"
   );
 
-  console.log(
-    `[Bittel] Fetched ${allProducts.length} total, ${klimatici.length} klimatici from ${totalPages} pages`
-  );
-
   return klimatici;
 }
 

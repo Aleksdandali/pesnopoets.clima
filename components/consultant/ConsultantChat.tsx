@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { MessageCircle, X, Send, Sparkles, Loader2 } from "lucide-react";
+import { MessageCircle, X, Send, Square, Sparkles, Loader2 } from "lucide-react";
+import { trackChatLead } from "@/lib/gtag";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -276,6 +277,10 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
               // a follow-up drilldown can add to the last search result.
               pendingProducts.push(out as unknown as ProductCardData);
             }
+            // Track collect_lead conversions
+            if (out && out.success === true && event.name === "collect_lead") {
+              trackChatLead();
+            }
           } else if (event.type === "error") {
             setError(String(event.message ?? labels.errorGeneric));
           }
@@ -420,19 +425,26 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
               disabled={streaming}
               className="flex-1 resize-none min-h-[44px] max-h-[120px] px-3 py-2.5 text-sm border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-60"
             />
-            <button
-              type="button"
-              onClick={sendMessage}
-              disabled={!input.trim() || streaming}
-              aria-label={labels.send}
-              className="flex items-center justify-center w-11 h-11 rounded-xl bg-primary text-primary-foreground hover:bg-primary-dark disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            >
-              {streaming ? (
-                <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
-              ) : (
+            {streaming ? (
+              <button
+                type="button"
+                onClick={() => abortRef.current?.abort()}
+                aria-label="Stop"
+                className="flex items-center justify-center w-11 h-11 rounded-xl bg-red-500 text-white hover:bg-red-600 transition-colors"
+              >
+                <Square className="w-4 h-4" aria-hidden="true" />
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={sendMessage}
+                disabled={!input.trim()}
+                aria-label={labels.send}
+                className="flex items-center justify-center w-11 h-11 rounded-xl bg-primary text-primary-foreground hover:bg-primary-dark disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
                 <Send className="w-5 h-5" aria-hidden="true" />
-              )}
-            </button>
+              </button>
+            )}
           </div>
         </div>
       )}

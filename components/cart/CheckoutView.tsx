@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { CheckCircle2, AlertCircle, Loader2, ShieldCheck, ShoppingBag, ArrowRight } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { EUR_TO_BGN } from "@/lib/pricing";
-import { trackConversion } from "@/lib/gtag";
+import { trackCartSubmit } from "@/lib/gtag";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -102,7 +102,7 @@ export default function CheckoutView({ locale, dictionary }: CheckoutViewProps) 
 
       clear();
       setStatus("success");
-      trackConversion();
+      trackCartSubmit(items.length);
     } catch (err) {
       console.error(err);
       setErrorMsg(err instanceof Error ? err.message : t.error);

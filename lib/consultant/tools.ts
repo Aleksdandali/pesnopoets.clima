@@ -5,6 +5,7 @@
 
 import type Anthropic from "@anthropic-ai/sdk";
 import { createClient } from "@/lib/supabase/server";
+import { sendInquiryNotification } from "@/lib/telegram";
 import { FAQ, recommendBTU } from "./knowledge";
 import { EUR_TO_BGN, getBaseInstallationBgn } from "@/lib/pricing";
 
@@ -417,15 +418,19 @@ async function collectLead(input: CollectLeadInput, ctx: ToolContext): Promise<u
     phone = `+359${phone}`;
   }
 
-  // Resolve product_id if slug given
+  // Resolve product_id (and title/price for Telegram) if slug given
   let productId: number | null = null;
+  let productTitle: string | null = null;
+  let productPrice: number | null = null;
   if (input.product_slug) {
     const { data } = await supabase
       .from("products")
-      .select("id")
+      .select("id, title, title_override, price_client, price_override")
       .eq("slug", input.product_slug)
       .maybeSingle();
     productId = data?.id ?? null;
+    productTitle = data?.title_override ?? data?.title ?? null;
+    productPrice = data ? Number(data.price_override ?? data.price_client) : null;
   }
 
   const { data, error } = await supabase
@@ -443,6 +448,17 @@ async function collectLead(input: CollectLeadInput, ctx: ToolContext): Promise<u
     .single();
 
   if (error) return { success: false, error: error.message };
+
+  // Telegram notification — non-blocking, same pattern as /api/inquiry
+  sendInquiryNotification({
+    name: input.name,
+    phone,
+    message: input.message,
+    productTitle,
+    productPrice,
+    locale: ctx.locale,
+  }).catch(() => {});
+
   return {
     success: true,
     inquiry_id: data?.id,

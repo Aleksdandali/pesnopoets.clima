@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Phone, Loader2, CheckCircle2, X } from "lucide-react";
-import { trackConversion } from "@/lib/gtag";
+import { trackInquirySubmit } from "@/lib/gtag";
 
 interface OneClickCardButtonProps {
   locale: string;
@@ -84,7 +84,7 @@ export default function OneClickCardButton({
 
       if (!res.ok) throw new Error("Failed");
       setStatus("success");
-      trackConversion();
+      trackInquirySubmit("one-click-card");
       setTimeout(() => setStatus("idle"), 3000);
     } catch {
       setStatus("error");

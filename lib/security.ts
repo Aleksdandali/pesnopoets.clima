@@ -1,19 +1,23 @@
+import crypto from "node:crypto";
 import { headers } from "next/headers";
 
 /**
  * Verify that a cron request comes from Vercel Cron
- * Uses CRON_SECRET env var as shared secret
+ * Uses CRON_SECRET env var as shared secret (timing-safe comparison)
  */
 export async function verifyCronSecret(request: Request): Promise<boolean> {
   const authHeader = request.headers.get("authorization");
   if (!authHeader) return false;
   const token = authHeader.replace("Bearer ", "");
-  return token === process.env.CRON_SECRET;
+  const secret = process.env.CRON_SECRET;
+  if (!secret || token.length !== secret.length) return false;
+  return crypto.timingSafeEqual(Buffer.from(token), Buffer.from(secret));
 }
 
 /**
  * Simple in-memory rate limiter for form submissions
  * In production, use Vercel KV or Supabase for distributed rate limiting
+ * NOTE: per-instance only — resets on cold start and not shared across serverless instances
  */
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 

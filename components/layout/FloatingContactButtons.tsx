@@ -8,6 +8,7 @@ import {
   BUSINESS_PHONE_TEL,
   BUSINESS_PHONE_DISPLAY,
 } from "@/lib/constants";
+import { trackPhoneClick, trackMessengerClick } from "@/lib/gtag";
 
 interface FloatingContactButtonsProps {
   whatsappLabel: string;
@@ -160,7 +161,12 @@ export default function FloatingContactButtons({
             aria-label={`${item.label} — ${item.sub}`}
             title={`${item.label} · ${item.sub}`}
             tabIndex={expanded && effectivelyVisible ? 0 : -1}
-            onClick={() => setExpanded(false)}
+            onClick={() => {
+              if (item.key === "call") trackPhoneClick();
+              else if (item.key === "whatsapp") trackMessengerClick("whatsapp");
+              else if (item.key === "viber") trackMessengerClick("viber");
+              setExpanded(false);
+            }}
             style={{
               transitionDelay: expanded ? `${i * 40}ms` : "0ms",
             }}

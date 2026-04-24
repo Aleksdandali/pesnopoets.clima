@@ -13,9 +13,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    console.log("[Sync] Starting product sync...");
     const report = await syncProducts();
-    console.log("[Sync] Complete:", report);
 
     // Send Telegram notification
     await sendSyncReport(report).catch((err) =>

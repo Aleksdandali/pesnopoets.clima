@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Send, Loader2, CheckCircle2, AlertCircle, Clock } from "lucide-react";
-import { trackConversion } from "@/lib/gtag";
+import { trackInquirySubmit } from "@/lib/gtag";
 
 interface InquiryFormProps {
   locale: string;
@@ -97,7 +97,7 @@ export default function InquiryForm({
       }
 
       setStatus("success");
-      trackConversion();
+      trackInquirySubmit("inquiry-form");
       (e.target as HTMLFormElement).reset();
     } catch {
       setStatus("error");

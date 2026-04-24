@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown, Globe, Phone } from "lucide-react";
 import HeaderCartBadge from "@/components/cart/HeaderCartBadge";
+import SearchDialog from "@/components/search/SearchDialog";
 import { BUSINESS_PHONE_DISPLAY, BUSINESS_PHONE_TEL } from "@/lib/constants";
 
 interface HeaderProps {
@@ -181,6 +182,9 @@ export default function Header({ locale, dictionary }: HeaderProps) {
 
             {/* Right side: lang + CTA + mobile */}
             <div className="flex items-center gap-1 sm:gap-2">
+              {/* Search */}
+              <SearchDialog locale={locale} />
+
               {/* Cart badge */}
               <HeaderCartBadge locale={locale} label={t.cart || "Cart"} />
 
