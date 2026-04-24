@@ -3,12 +3,10 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import FloatingContactButtons from "@/components/layout/FloatingContactButtons";
-import ConsultantChat from "@/components/consultant/ConsultantChat";
-import CookieConsent from "@/components/CookieConsent";
 import PageProgress from "@/components/PageProgress";
 import LocalBusinessJsonLd from "@/components/seo/LocalBusinessJsonLd";
 import { CartProvider } from "@/contexts/CartContext";
+import LazyOverlays from "@/components/layout/LazyOverlays";
 
 const locales = ["bg", "en", "ru", "ua"] as const;
 type Locale = (typeof locales)[number];
@@ -200,16 +198,14 @@ export default async function LocaleLayout({
         <Header locale={locale} dictionary={dictionary} />
         <main id="main" tabIndex={-1} className="flex-1">{children}</main>
         <Footer locale={locale} dictionary={dictionary} />
-        <FloatingContactButtons
+        <LazyOverlays
+          locale={locale as "bg" | "en" | "ru" | "ua"}
+          consultantLabels={getConsultantLabels(locale)}
           whatsappLabel={dictionary.contact?.whatsapp || "WhatsApp"}
           viberLabel={dictionary.contact?.viber || "Viber"}
-          locale={locale as "bg" | "en" | "ru" | "ua"}
+          cookieLocale={locale}
+          cookieDictionary={dictionary}
         />
-        <ConsultantChat
-          locale={locale as "bg" | "en" | "ru" | "ua"}
-          labels={getConsultantLabels(locale)}
-        />
-        <CookieConsent locale={locale} dictionary={dictionary} />
       </CartProvider>
     </>
   );

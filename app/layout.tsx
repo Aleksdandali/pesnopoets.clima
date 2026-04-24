@@ -48,6 +48,9 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <link rel="preconnect" href="https://gzdcbkrtpbqcugqgrqut.supabase.co" />
+        <link rel="dns-prefetch" href="https://gzdcbkrtpbqcugqgrqut.supabase.co" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
           strategy="afterInteractive"
