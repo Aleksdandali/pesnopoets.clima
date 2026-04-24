@@ -213,6 +213,32 @@ main {
   }
 }
 
+/* Search dialog animations — backdrop fade + panel slide-down */
+@keyframes searchBackdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes searchPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-search-backdrop-in {
+  animation: searchBackdropIn 0.2s ease-out;
+}
+
+.animate-search-panel-in {
+  animation: searchPanelIn 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform-origin: top center;
+}
+
 /* Blog article typography */
 .blog-article h2 {
   font-size: 1.375rem;

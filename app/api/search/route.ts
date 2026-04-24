@@ -43,7 +43,8 @@ export async function GET(request: NextRequest) {
   }
 
   const supabase = createAnonClient();
-  const pattern = `%${q}%`;
+  const escaped = q.replace(/[%_\\]/g, "\\$&");
+  const pattern = `%${escaped}%`;
 
   const { data, error } = await supabase
     .from("products")
@@ -53,7 +54,7 @@ export async function GET(request: NextRequest) {
     .eq("is_active", true)
     .eq("is_hidden", false)
     .or(
-      `title.ilike.${pattern},title_override.ilike.${pattern},manufacturer.ilike.${pattern},slug.ilike.${pattern}`
+      `title.ilike.${pattern},title_override.ilike.${pattern},title_en.ilike.${pattern},title_ru.ilike.${pattern},title_ua.ilike.${pattern},manufacturer.ilike.${pattern},slug.ilike.${pattern}`
     )
     .limit(8);
 
