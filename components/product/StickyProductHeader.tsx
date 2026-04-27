@@ -37,10 +37,10 @@ export default function StickyProductHeader({
   cartItem,
   labels,
 }: StickyProductHeaderProps) {
-  const { addItem } = useCart();
+  const { addItem, items } = useCart();
   const router = useRouter();
   const [visible, setVisible] = useState(false);
-  const [justAdded, setJustAdded] = useState(false);
+  const isInCart = items.some((i) => i.id === cartItem.id);
 
   useEffect(() => {
     function onScroll() {
@@ -52,14 +52,11 @@ export default function StickyProductHeader({
   }, []);
 
   function handleBuy() {
-    if (justAdded) {
-      // Second click — go to cart for checkout
+    if (isInCart) {
       router.push(`/${locale}/cart`);
       return;
     }
     addItem(cartItem, 1);
-    setJustAdded(true);
-    setTimeout(() => setJustAdded(false), 2500);
   }
 
   function scrollToInquiry() {
@@ -108,24 +105,24 @@ export default function StickyProductHeader({
             {labels.inquiry}
           </button>
 
-          {/* Primary: Buy / Add to cart */}
+          {/* Primary: Buy / Go to cart */}
           <button
             type="button"
             onClick={handleBuy}
             tabIndex={visible ? 0 : -1}
-            aria-label={justAdded ? labels.added : labels.buy}
+            aria-label={isInCart ? labels.added : labels.buy}
             className={`shrink-0 inline-flex items-center justify-center gap-1.5 px-4 sm:px-5 min-h-[40px] text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 shadow-sm ${
-              justAdded
+              isInCart
                 ? "bg-success text-white"
                 : "bg-primary text-primary-foreground hover:bg-primary-dark"
             }`}
           >
-            {justAdded ? (
+            {isInCart ? (
               <Check className="w-4 h-4" aria-hidden="true" />
             ) : (
               <ShoppingCart className="w-4 h-4" aria-hidden="true" />
             )}
-            <span>{justAdded ? labels.added : labels.buy}</span>
+            <span>{isInCart ? labels.added : labels.buy}</span>
           </button>
         </div>
       </div>

@@ -44,28 +44,28 @@ function formatPowerLabel(maxBtu: number): string {
 
 const montazhFaq: Record<string, { q: string; a: string }[]> = {
   bg: [
-    { q: "Колко струва монтажът на климатик?", a: "Стандартният монтаж започва от 300 лв. за уреди до 14 000 BTU, 370 лв. за до 24 000 BTU и 440 лв. за до 33 000 BTU. Цената включва 3 м тръба, материали, вакуумиране и пускане в експлоатация." },
+    { q: "Колко струва монтажът на климатик?", a: "Стандартният монтаж започва от 372 лв. за уреди до 14 000 BTU и 450 лв. за до 24 000 BTU. Цената включва 3 м тръба, материали, вакуумиране и пускане в експлоатация." },
     { q: "Какво включва стандартният монтаж?", a: "Стандартният монтаж включва до 3 метра медна тръба, всички материали и фитинги, вакуумиране, електрическо свързване, монтаж на вътрешно и външно тяло и пускане в експлоатация." },
     { q: "Колко бързо можете да монтирате?", a: "Предлагаме монтаж в същия ден, ако се свържете с нас преди обяд. Типичният монтаж отнема 2–4 часа." },
     { q: "Давате ли гаранция за монтажа?", a: "Да, предоставяме 12 месеца гаранция върху монтажните дейности. При проблем, свързан с монтажа, го отстраняваме безплатно." },
     { q: "Какви райони покривате?", a: "Покриваме всички квартали на Варна и околността в радиус до около 30 км по договаряне." },
   ],
   en: [
-    { q: "How much does AC installation cost?", a: "Standard installation starts from 300 BGN for units up to 14,000 BTU, 370 BGN for up to 24,000 BTU, and 440 BGN for up to 33,000 BTU. Price includes 3m pipe, materials, vacuum, and commissioning." },
+    { q: "How much does AC installation cost?", a: "Standard installation starts from 372 BGN for units up to 14,000 BTU and 450 BGN for up to 24,000 BTU. Price includes 3m pipe, materials, vacuum, and commissioning." },
     { q: "What does standard installation include?", a: "Standard installation includes up to 3 meters of copper pipe, all fittings and materials, vacuum evacuation, electrical connection, mounting of indoor and outdoor units, and commissioning." },
     { q: "How fast can you install?", a: "We offer same-day installation if you contact us before noon. Typical installation takes 2–4 hours." },
     { q: "Do you offer warranty on installation?", a: "Yes, we provide 12 months warranty on all installation work. Any installation-related issue within that period is fixed at no charge." },
     { q: "What areas do you cover?", a: "We cover all neighborhoods in Varna city and the surrounding region up to approximately 30km by arrangement." },
   ],
   ru: [
-    { q: "Сколько стоит установка кондиционера?", a: "Стандартная установка — от 300 лв. для моделей до 14 000 BTU, 370 лв. до 24 000 BTU и 440 лв. до 33 000 BTU. В цену входят 3 м трубы, материалы, вакуумирование и пусконаладка." },
+    { q: "Сколько стоит установка кондиционера?", a: "Стандартная установка — от 372 лв. для моделей до 14 000 BTU и 450 лв. до 24 000 BTU. В цену входят 3 м трубы, материалы, вакуумирование и пусконаладка." },
     { q: "Что входит в стандартную установку?", a: "Стандартная установка включает до 3 метров медной трубы, все материалы и фитинги, вакуумирование, электроподключение, монтаж внутреннего и наружного блоков и пусконаладку." },
     { q: "Как быстро вы можете установить?", a: "Мы предлагаем установку в тот же день, если вы свяжетесь с нами до обеда. Типичная установка занимает 2–4 часа." },
     { q: "Даёте ли вы гарантию на монтаж?", a: "Да, мы предоставляем 12 месяцев гарантии на монтажные работы. Любая проблема, связанная с монтажом, устраняется бесплатно." },
     { q: "Какие районы вы обслуживаете?", a: "Мы обслуживаем все районы Варны и окрестности в радиусе до 30 км по договорённости." },
   ],
   ua: [
-    { q: "Скільки коштує монтаж кондиціонера?", a: "Стандартний монтаж — від 300 лв. для моделей до 14 000 BTU, 370 лв. до 24 000 BTU та 440 лв. до 33 000 BTU. Ціна включає 3 м труби, матеріали, вакуумування та пусконалагодження." },
+    { q: "Скільки коштує монтаж кондиціонера?", a: "Стандартний монтаж — від 372 лв. для моделей до 14 000 BTU та 450 лв. до 24 000 BTU. Ціна включає 3 м труби, матеріали, вакуумування та пусконалагодження." },
     { q: "Що входить у стандартний монтаж?", a: "Стандартний монтаж включає до 3 метрів мідної труби, всі матеріали та фітинги, вакуумування, електропідключення, монтаж внутрішнього та зовнішнього блоків і пусконалагодження." },
     { q: "Як швидко ви можете встановити?", a: "Ми пропонуємо монтаж у той самий день, якщо ви зв'яжетесь до обіду. Типовий монтаж займає 2–4 години." },
     { q: "Чи надаєте гарантію на монтаж?", a: "Так, ми надаємо 12 місяців гарантії на монтажні роботи. Будь-яка проблема, пов'язана з монтажем, усувається безкоштовно." },
@@ -160,8 +160,8 @@ export default async function MontazhPage({ params }: PageProps) {
               <Image
                 src="/images/montazh/installation-process.jpg"
                 alt={t.processImageAlt || "Installation process"}
-                width={600}
-                height={800}
+                width={1731}
+                height={909}
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="w-full h-auto"
                 priority
@@ -254,30 +254,39 @@ export default async function MontazhPage({ params }: PageProps) {
             <p className="text-sm text-muted-foreground mb-4 sm:mb-5">
               {t.extrasSubtitle}
             </p>
-            <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <li className="flex items-baseline justify-between p-4 bg-white border border-border/60 rounded-xl">
-                <span className="text-sm text-foreground pr-2">{t.extraChasing}</span>
+                <span className="text-sm text-foreground pr-2">{t.extraDismantleSmall}</span>
                 <span className="whitespace-nowrap">
                   <span className="text-base font-bold text-foreground">
-                    {EXTRA_SERVICES_BGN.chasingPerM}
-                  </span>
-                  <span className="ml-1 text-xs text-muted-foreground">{t.bgnPerM}</span>
-                </span>
-              </li>
-              <li className="flex items-baseline justify-between p-4 bg-white border border-border/60 rounded-xl">
-                <span className="text-sm text-foreground pr-2">{t.extraWallDrill}</span>
-                <span className="whitespace-nowrap">
-                  <span className="text-base font-bold text-foreground">
-                    {EXTRA_SERVICES_BGN.wallDrill}
+                    {EXTRA_SERVICES_BGN.dismantleSmall}
                   </span>
                   <span className="ml-1 text-xs text-muted-foreground">{t.bgn}</span>
                 </span>
               </li>
               <li className="flex items-baseline justify-between p-4 bg-white border border-border/60 rounded-xl">
-                <span className="text-sm text-foreground pr-2">{t.extraDismantle}</span>
+                <span className="text-sm text-foreground pr-2">{t.extraDismantleLarge}</span>
                 <span className="whitespace-nowrap">
                   <span className="text-base font-bold text-foreground">
-                    {EXTRA_SERVICES_BGN.dismantle}
+                    {EXTRA_SERVICES_BGN.dismantleLarge}
+                  </span>
+                  <span className="ml-1 text-xs text-muted-foreground">{t.bgn}</span>
+                </span>
+              </li>
+              <li className="flex items-baseline justify-between p-4 bg-white border border-border/60 rounded-xl">
+                <span className="text-sm text-foreground pr-2">{t.extraDiagnostic}</span>
+                <span className="whitespace-nowrap">
+                  <span className="text-base font-bold text-foreground">
+                    {EXTRA_SERVICES_BGN.diagnostic}
+                  </span>
+                  <span className="ml-1 text-xs text-muted-foreground">{t.bgn}</span>
+                </span>
+              </li>
+              <li className="flex items-baseline justify-between p-4 bg-white border border-border/60 rounded-xl">
+                <span className="text-sm text-foreground pr-2">{t.extraInspection}</span>
+                <span className="whitespace-nowrap">
+                  <span className="text-base font-bold text-foreground">
+                    {EXTRA_SERVICES_BGN.inspection}
                   </span>
                   <span className="ml-1 text-xs text-muted-foreground">{t.bgn}</span>
                 </span>
@@ -311,16 +320,21 @@ export default async function MontazhPage({ params }: PageProps) {
           </p>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
-          {/* Placeholder slots — owner will replace srcs later */}
           <BeforeAfterSlider
+            beforeSrc="/images/montazh/before-indoor.jpg"
+            afterSrc="/images/montazh/after-indoor.jpg"
             beforeLabel={t.beforeLabel}
             afterLabel={t.afterLabel}
             dragHint={t.dragHint}
+            alt={locale === "ru" ? "Монтаж внутреннего блока" : locale === "ua" ? "Монтаж внутрішнього блоку" : locale === "en" ? "Indoor unit installation" : "Монтаж на вътрешно тяло"}
           />
           <BeforeAfterSlider
+            beforeSrc="/images/montazh/before-outdoor.jpg"
+            afterSrc="/images/montazh/after-outdoor.jpg"
             beforeLabel={t.beforeLabel}
             afterLabel={t.afterLabel}
             dragHint={t.dragHint}
+            alt={locale === "ru" ? "Монтаж наружного блока" : locale === "ua" ? "Монтаж зовнішнього блоку" : locale === "en" ? "Outdoor unit installation" : "Монтаж на външно тяло"}
           />
         </div>
       </section>

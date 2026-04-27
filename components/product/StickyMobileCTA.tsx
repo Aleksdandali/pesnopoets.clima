@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Phone, Check, ShoppingCart } from "lucide-react";
 import { useCart, type CartItem } from "@/contexts/CartContext";
@@ -30,9 +30,9 @@ export default function StickyMobileCTA({
   cartItem,
   labels,
 }: StickyMobileCTAProps) {
-  const { addItem } = useCart();
+  const { addItem, items } = useCart();
   const router = useRouter();
-  const [justAdded, setJustAdded] = useState(false);
+  const isInCart = items.some((i) => i.id === cartItem.id);
 
   // Tell floating WA/Viber buttons to lift above this bar (on mobile).
   useEffect(() => {
@@ -41,13 +41,11 @@ export default function StickyMobileCTA({
   }, []);
 
   function handleBuy() {
-    if (justAdded) {
+    if (isInCart) {
       router.push(`/${locale}/cart`);
       return;
     }
     addItem(cartItem, 1);
-    setJustAdded(true);
-    setTimeout(() => setJustAdded(false), 2500);
   }
 
   return (
@@ -71,23 +69,23 @@ export default function StickyMobileCTA({
             <span className="hidden sm:inline">{labels.call}</span>
           </a>
 
-          {/* Buy / Add-to-cart — primary */}
+          {/* Buy / Go to cart — primary */}
           <button
             type="button"
             onClick={handleBuy}
-            aria-label={justAdded ? labels.added : labels.buy}
+            aria-label={isInCart ? labels.added : labels.buy}
             className={`flex items-center justify-center gap-1.5 px-4 sm:px-5 min-h-[44px] text-sm font-semibold rounded-xl transition-colors shadow-sm ${
-              justAdded
+              isInCart
                 ? "bg-success text-white"
                 : "bg-primary text-primary-foreground hover:bg-primary-dark"
             }`}
           >
-            {justAdded ? (
+            {isInCart ? (
               <Check className="w-4 h-4" aria-hidden="true" />
             ) : (
               <ShoppingCart className="w-4 h-4" aria-hidden="true" />
             )}
-            <span>{justAdded ? labels.added : labels.buy}</span>
+            <span>{isInCart ? labels.added : labels.buy}</span>
           </button>
         </div>
       </div>

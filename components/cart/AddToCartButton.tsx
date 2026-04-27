@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ShoppingCart, Check } from "lucide-react";
+import { ShoppingCart, Check, ArrowRight } from "lucide-react";
 import { useCart, type CartItem } from "@/contexts/CartContext";
 
 interface AddToCartButtonProps {
@@ -22,44 +22,50 @@ export default function AddToCartButton({
   className = "",
   variant = "icon",
 }: AddToCartButtonProps) {
-  const { addItem } = useCart();
+  const { addItem, items } = useCart();
   const router = useRouter();
+  const isInCart = items.some((i) => i.id === item.id);
   const [justAdded, setJustAdded] = useState(false);
 
   function handleClick(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
+
+    if (isInCart || justAdded) {
+      router.push(`/${locale}/cart`);
+      return;
+    }
+
     addItem(item, 1);
     setJustAdded(true);
-    setTimeout(() => setJustAdded(false), 1600);
   }
 
-  function handleDoubleTarget(e: React.MouseEvent) {
-    // allow right-click / aux → go to cart
-    if (e.detail === 2) {
-      router.push(`/${locale}/cart`);
-    }
-  }
+  const showGoToCart = isInCart || justAdded;
+
+  const goToCartLabel: Record<string, string> = {
+    bg: "Към количката",
+    en: "Go to cart",
+    ru: "В корзину",
+    ua: "До кошика",
+  };
 
   if (variant === "full") {
     return (
       <button
         type="button"
-        onClick={(e) => {
-          handleClick(e);
-          handleDoubleTarget(e);
-        }}
+        onClick={handleClick}
         className={`inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold transition-all duration-200 min-h-[48px] ${
-          justAdded
-            ? "bg-success text-white"
+          showGoToCart
+            ? "bg-success text-white hover:bg-success/90"
             : "bg-primary text-primary-foreground hover:bg-primary-dark shadow-sm hover:shadow-md"
         } ${className}`}
-        aria-label={justAdded ? addedLabel : label}
+        aria-label={showGoToCart ? (goToCartLabel[locale] || goToCartLabel.bg) : label}
       >
-        {justAdded ? (
+        {showGoToCart ? (
           <>
             <Check className="w-5 h-5" aria-hidden="true" />
-            {addedLabel}
+            {goToCartLabel[locale] || goToCartLabel.bg}
+            <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </>
         ) : (
           <>
@@ -76,14 +82,14 @@ export default function AddToCartButton({
       type="button"
       onClick={handleClick}
       className={`flex items-center justify-center w-11 h-11 rounded-full shadow-md transition-all duration-200 ${
-        justAdded
+        showGoToCart
           ? "bg-success text-white scale-105"
           : "bg-white text-primary border border-primary/20 hover:bg-primary hover:text-white hover:scale-105"
       } ${className}`}
-      aria-label={justAdded ? addedLabel : label}
-      title={label}
+      aria-label={showGoToCart ? (goToCartLabel[locale] || goToCartLabel.bg) : label}
+      title={showGoToCart ? (goToCartLabel[locale] || goToCartLabel.bg) : label}
     >
-      {justAdded ? (
+      {showGoToCart ? (
         <Check className="w-5 h-5" aria-hidden="true" />
       ) : (
         <ShoppingCart className="w-5 h-5" aria-hidden="true" />

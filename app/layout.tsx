@@ -50,6 +50,8 @@ export default async function RootLayout({
       <head>
         <link rel="preconnect" href="https://gzdcbkrtpbqcugqgrqut.supabase.co" />
         <link rel="dns-prefetch" href="https://gzdcbkrtpbqcugqgrqut.supabase.co" />
+        <link rel="preconnect" href="https://www.bittel.bg" />
+        <link rel="dns-prefetch" href="https://www.bittel.bg" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}

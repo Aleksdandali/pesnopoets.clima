@@ -34,14 +34,14 @@
 ### Installation Price Tiers (BGN):
 | AC Capacity        | Base Price | Extra Pipe (per metre) |
 |--------------------|-----------|----------------------|
-| Up to 14,000 BTU   | 300 BGN   | 60 BGN/m             |
-| Up to 24,000 BTU   | 370 BGN   | 70 BGN/m             |
-| Up to 33,000 BTU   | 440 BGN   | 80 BGN/m             |
+| Up to 14,000 BTU   | 372 BGN   | 59 BGN/m             |
+| Up to 24,000 BTU   | 450 BGN   | 69 BGN/m             |
 
 ### Extra Services:
-- Wall chasing (штробене): 15 BGN per metre
-- Drill through wall: 40 BGN per hole
-- Dismantle old unit: 80 BGN
+- Dismantle/reinstall up to 14K BTU: 63 BGN
+- Dismantle/reinstall 15–24K BTU: 117 BGN
+- Diagnostics: 40 BGN
+- On-site inspection: 49 BGN (deducted from order)
 - Vacuum service: included in base price
 
 ### Installation Notes:
@@ -54,7 +54,7 @@
 ## Maintenance Service — Detailed
 
 ### Annual Maintenance (Profilaktika):
-- Price: from 70 BGN per unit
+- Price: from 82 BGN per unit
 - Recommended: once a year, ideally before summer season (April–May)
 - Includes: filter cleaning, coil cleaning, drainage check, refrigerant pressure check, performance test
 - Duration: approximately 30–60 minutes per unit
@@ -85,7 +85,7 @@
 ## FAQ — Installation
 
 Q: How much does AC installation cost in Varna?
-A: Standard installation starts from 300 BGN for units up to 14,000 BTU, 370 BGN for up to 24,000 BTU, and 440 BGN for up to 33,000 BTU. This includes 3m of copper pipe, all materials, vacuum service, and commissioning.
+A: Standard installation starts from 372 BGN for units up to 14,000 BTU and 450 BGN for up to 24,000 BTU. This includes 3m of copper pipe, all materials, vacuum service, and commissioning.
 
 Q: What does standard installation include?
 A: Standard installation includes up to 3 meters of copper pipe, all fittings and materials, proper vacuum evacuation, electrical connection, mounting of both indoor and outdoor units, and commissioning with a full performance test.
@@ -100,12 +100,12 @@ Q: What areas do you cover for installation?
 A: We cover all neighborhoods in Varna city and the surrounding region up to approximately 30km by arrangement.
 
 Q: What if my pipe run is longer than 3 meters?
-A: Each additional metre of pipe costs 60-80 BGN depending on your AC capacity (60 BGN/m for units up to 14K BTU, 70 BGN/m for up to 24K BTU, 80 BGN/m for up to 33K BTU).
+A: Each additional metre of pipe costs 59–69 BGN depending on your AC capacity (59 BGN/m for units up to 14K BTU, 69 BGN/m for up to 24K BTU).
 
 ## FAQ — Maintenance & Repair
 
 Q: How much does AC maintenance cost?
-A: Annual maintenance (profilaktika) starts from 70 BGN per unit. This includes filter and coil cleaning, drainage check, refrigerant pressure check, and performance testing.
+A: Annual maintenance (profilaktika) starts from 82 BGN per unit. This includes filter and coil cleaning, drainage check, refrigerant pressure check, and performance testing.
 
 Q: How often should I maintain my AC?
 A: We recommend annual maintenance, ideally before the summer season (April–May). If you use your AC for heating in winter too, a second maintenance in autumn can be beneficial.

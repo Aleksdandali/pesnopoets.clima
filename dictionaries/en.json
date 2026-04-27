@@ -240,7 +240,7 @@
           "Vacuum clean-up after work",
           "12-month workmanship warranty"
         ],
-        "priceFrom": "from 300 BGN",
+        "priceFrom": "from 372 BGN",
         "ctaLabel": "Rates & details",
         "ctaHref": "/montazh"
       },
@@ -355,9 +355,10 @@
     "thExtraPipe": "Extra per metre",
     "extrasTitle": "Add-on services",
     "extrasSubtitle": "Added to the base when needed — always agreed in advance.",
-    "extraChasing": "Wall chasing for pipe (per metre)",
-    "extraWallDrill": "External wall core drill",
-    "extraDismantle": "Dismantle old AC unit",
+    "extraDismantleSmall": "Dismantle/reinstall up to 14,000 BTU",
+    "extraDismantleLarge": "Dismantle/reinstall 15–24,000 BTU",
+    "extraDiagnostic": "Diagnostics",
+    "extraInspection": "On-site inspection (deducted from order)",
     "bgnPerM": "BGN/m",
     "bgn": "BGN",
     "beforeAfterTitle": "Our work in Varna",

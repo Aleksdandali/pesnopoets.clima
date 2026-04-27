@@ -1,10 +1,10 @@
 /**
  * Installation pricing for Varna, Bulgaria.
  *
- * Source: average rates from splitservice.eu (2025), standard install includes
+ * Source: vimax.bg (2025/2026) — standard install includes
  * 3 m copper pipe, materials, commissioning — no chasing/hidden work.
  *
- * All amounts are in BGN. Owner will tune these later.
+ * All amounts are in BGN.
  */
 
 export interface InstallationTier {
@@ -21,28 +21,48 @@ export interface InstallationTier {
  * Tiers are checked in order; first whose `maxBtu` >= product BTU wins.
  */
 export const INSTALLATION_TIERS: InstallationTier[] = [
-  { maxBtu: 14_000, price: 300, extraPipePerM: 60 },
-  { maxBtu: 24_000, price: 370, extraPipePerM: 70 },
-  { maxBtu: 33_000, price: 440, extraPipePerM: 80 },
+  { maxBtu: 14_000, price: 372, extraPipePerM: 59 },
+  { maxBtu: 24_000, price: 450, extraPipePerM: 69 },
 ];
 
 /** Fallback when BTU is missing or out of range. */
 export const INSTALLATION_FALLBACK: InstallationTier = {
   maxBtu: Infinity,
-  price: 440,
-  extraPipePerM: 80,
+  price: 450,
+  extraPipePerM: 69,
 };
 
-/** Extra services (BGN) — average Varna rates, 2025. */
+/** Extra services (BGN) — vimax.bg rates, 2025/2026. */
 export const EXTRA_SERVICES_BGN = {
-  /** Chasing per metre (штробене / штробление). */
-  chasingPerM: 15,
-  /** Drill-through one wall (дупка в стена). */
-  wallDrill: 40,
-  /** Dismantle old unit. */
-  dismantle: 80,
+  /** Dismantle/reinstall up to 14K BTU. */
+  dismantleSmall: 63,
+  /** Dismantle/reinstall 15–24K BTU. */
+  dismantleLarge: 117,
+  /** Diagnostic fee. */
+  diagnostic: 40,
+  /** On-site inspection (приспада се от поръчката). */
+  inspection: 49,
+  /** Service call-out without valid reason. */
+  calloutFee: 49,
   /** Vacuum cleaning / vacuum pump for clean install. */
   vacuumService: 0, // included in base
+} as const;
+
+/** Preventive maintenance prices (BGN) — vimax.bg rates, 2025/2026. */
+export const PROFILAKTIKA_BGN = {
+  /** One-time maintenance. */
+  single: 82,
+  /** Full annual service at service center. */
+  fullService: 160,
+  /** 3-year subscription 7–14K BTU. */
+  subscription3y_small: 223,
+  /** 3-year subscription 15–24K BTU. */
+  subscription3y_large: 239,
+  /** Turbine cleaning (from–to). */
+  turbineCleanMin: 49,
+  turbineCleanMax: 117,
+  /** Outdoor unit cleaning. */
+  outdoorUnitClean: 59,
 } as const;
 
 export function getInstallationTier(btu: number | null | undefined): InstallationTier {

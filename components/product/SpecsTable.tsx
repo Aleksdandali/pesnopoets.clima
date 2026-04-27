@@ -97,7 +97,7 @@ export default function SpecsTable({ features, locale }: SpecsTableProps) {
               </div>
               {translateSectionName(group.name, locale)}
             </h3>
-            <div className="rounded-xl border border-border/80 overflow-hidden">
+            <dl className="rounded-xl border border-border/80 overflow-hidden">
               {group.items.map((item, i) => {
                 const SpecIcon = getSpecIcon(item.name);
                 const highlight = getHighlight(item.name);
@@ -106,7 +106,7 @@ export default function SpecsTable({ features, locale }: SpecsTableProps) {
                   <div
                     key={i}
                     className={`flex items-start sm:items-center gap-2.5 sm:gap-3 px-3 sm:px-5 py-2.5 sm:py-3 ${
-                      i % 2 === 0 ? "bg-muted/30" : "bg-white"
+                      i % 2 === 0 ? "bg-muted/60" : "bg-white"
                     } ${i < group.items.length - 1 ? "border-b border-border/30" : ""}`}
                   >
                     {/* Icon */}
@@ -118,23 +118,23 @@ export default function SpecsTable({ features, locale }: SpecsTableProps) {
 
                     {/* Name + Value — stacked on mobile, side by side on desktop */}
                     <div className="flex-1 min-w-0 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5 sm:gap-4">
-                      <span className="text-xs sm:text-sm text-muted-foreground leading-snug">
+                      <dt className="text-xs sm:text-sm text-muted-foreground leading-snug">
                         {translateFeatureName(item.name, locale)}
-                      </span>
+                      </dt>
                       {highlight ? (
-                        <span className={`inline-flex self-start sm:self-auto px-2.5 py-0.5 rounded-full text-xs font-semibold ${highlight} whitespace-nowrap`}>
+                        <dd className={`inline-flex self-start sm:self-auto px-2.5 py-0.5 rounded-full text-xs font-semibold ${highlight} whitespace-nowrap`}>
                           {item.value.trim()}
-                        </span>
+                        </dd>
                       ) : (
-                        <span className="text-xs sm:text-sm font-medium text-foreground font-mono break-words sm:whitespace-nowrap">
+                        <dd className="text-xs sm:text-sm font-medium text-foreground font-mono break-words sm:whitespace-nowrap">
                           {item.value.trim()}
-                        </span>
+                        </dd>
                       )}
                     </div>
                   </div>
                 );
               })}
-            </div>
+            </dl>
           </div>
         );
       })}

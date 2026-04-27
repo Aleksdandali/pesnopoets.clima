@@ -102,15 +102,11 @@ function ContentBG() {
           <tbody>
             <tr>
               <td className="px-4 py-3 border border-border/60">До 14 000 BTU (малка стая)</td>
-              <td className="text-right px-4 py-3 border border-border/60 font-semibold">300 лв</td>
+              <td className="text-right px-4 py-3 border border-border/60 font-semibold">372 лв</td>
             </tr>
             <tr className="bg-muted/30">
               <td className="px-4 py-3 border border-border/60">До 24 000 BTU (хол, голяма стая)</td>
-              <td className="text-right px-4 py-3 border border-border/60 font-semibold">370 лв</td>
-            </tr>
-            <tr>
-              <td className="px-4 py-3 border border-border/60">До 33 000 BTU (голямо помещение, офис)</td>
-              <td className="text-right px-4 py-3 border border-border/60 font-semibold">440 лв</td>
+              <td className="text-right px-4 py-3 border border-border/60 font-semibold">450 лв</td>
             </tr>
           </tbody>
         </table>
@@ -436,15 +432,11 @@ function ContentEN() {
           <tbody>
             <tr>
               <td className="px-4 py-3 border border-border/60">Up to 14,000 BTU (small room)</td>
-              <td className="text-right px-4 py-3 border border-border/60 font-semibold">300 BGN</td>
+              <td className="text-right px-4 py-3 border border-border/60 font-semibold">372 BGN</td>
             </tr>
             <tr className="bg-muted/30">
               <td className="px-4 py-3 border border-border/60">Up to 24,000 BTU (living room)</td>
-              <td className="text-right px-4 py-3 border border-border/60 font-semibold">370 BGN</td>
-            </tr>
-            <tr>
-              <td className="px-4 py-3 border border-border/60">Up to 33,000 BTU (large room/office)</td>
-              <td className="text-right px-4 py-3 border border-border/60 font-semibold">440 BGN</td>
+              <td className="text-right px-4 py-3 border border-border/60 font-semibold">450 BGN</td>
             </tr>
           </tbody>
         </table>
@@ -775,15 +767,11 @@ function ContentRU() {
           <tbody>
             <tr>
               <td className="px-4 py-3 border border-border/60">До 14 000 BTU (маленькая комната)</td>
-              <td className="text-right px-4 py-3 border border-border/60 font-semibold">300 лв</td>
+              <td className="text-right px-4 py-3 border border-border/60 font-semibold">372 лв</td>
             </tr>
             <tr className="bg-muted/30">
               <td className="px-4 py-3 border border-border/60">До 24 000 BTU (гостиная, большая комната)</td>
-              <td className="text-right px-4 py-3 border border-border/60 font-semibold">370 лв</td>
-            </tr>
-            <tr>
-              <td className="px-4 py-3 border border-border/60">До 33 000 BTU (большое помещение, офис)</td>
-              <td className="text-right px-4 py-3 border border-border/60 font-semibold">440 лв</td>
+              <td className="text-right px-4 py-3 border border-border/60 font-semibold">450 лв</td>
             </tr>
           </tbody>
         </table>
@@ -1114,15 +1102,11 @@ function ContentUA() {
           <tbody>
             <tr>
               <td className="px-4 py-3 border border-border/60">До 14 000 BTU (мала кімната)</td>
-              <td className="text-right px-4 py-3 border border-border/60 font-semibold">300 лв (~4300 грн)</td>
+              <td className="text-right px-4 py-3 border border-border/60 font-semibold">372 лв (~5300 грн)</td>
             </tr>
             <tr className="bg-muted/30">
               <td className="px-4 py-3 border border-border/60">До 24 000 BTU (вітальня, велика кімната)</td>
-              <td className="text-right px-4 py-3 border border-border/60 font-semibold">370 лв (~5300 грн)</td>
-            </tr>
-            <tr>
-              <td className="px-4 py-3 border border-border/60">До 33 000 BTU (велике приміщення, офіс)</td>
-              <td className="text-right px-4 py-3 border border-border/60 font-semibold">440 лв (~6300 грн)</td>
+              <td className="text-right px-4 py-3 border border-border/60 font-semibold">450 лв (~6400 грн)</td>
             </tr>
           </tbody>
         </table>
@@ -1389,28 +1373,28 @@ export const installationCostsVarna: BlogPost = {
   },
   faq: {
     bg: [
-      { question: "Колко струва стандартен монтаж на климатик във Варна?", answer: "300-440 лв в зависимост от мощността (BTU). Цената включва 3 м медна тръба, всички материали, вакуумиране и пускане в експлоатация." },
+      { question: "Колко струва стандартен монтаж на климатик във Варна?", answer: "372–450 лв в зависимост от мощността (BTU). Цената включва 3 м медна тръба, всички материали, вакуумиране и пускане в експлоатация." },
       { question: "Какви скрити разходи да очаквам?", answer: "Най-честите: допълнителна тръба (60-80 лв/м), пробиване на стена (40 лв), демонтаж на стар уред (80 лв). Повечето монтажи изискват 4-6 м тръба вместо стандартните 3 м." },
       { question: "Колко време отнема монтажът?", answer: "Стандартен монтаж: 2-4 часа. Предлагаме и монтаж в същия ден при наличност." },
       { question: "Лошият монтаж анулира ли гаранцията?", answer: "Да. Производителите изискват професионален монтаж с вакуумиране за валидна гаранция. Пазете фактурата за монтажа." },
       { question: "Трябва ли разрешение от етажната собственост за монтаж?", answer: "В някои варненски блокове — да, необходимо е съгласие от общото събрание за поставяне на външно тяло на фасадата. Можем да ви консултираме." },
     ],
     en: [
-      { question: "How much does standard AC installation cost in Varna?", answer: "300-440 BGN depending on BTU capacity. The price includes 3 m copper pipe, all materials, vacuum evacuation, and commissioning." },
+      { question: "How much does standard AC installation cost in Varna?", answer: "372–450 BGN depending on BTU capacity. The price includes 3 m copper pipe, all materials, vacuum evacuation, and commissioning." },
       { question: "What hidden costs should I expect?", answer: "Most common: extra pipe (60-80 BGN/m), wall drilling (40 BGN), old unit removal (80 BGN). Most installations need 4-6 m of pipe instead of the standard 3 m." },
       { question: "How long does installation take?", answer: "Standard installation: 2-4 hours. Same-day service available." },
       { question: "Does bad installation void warranty?", answer: "Yes. Manufacturers require professional installation with vacuum evacuation for warranty coverage. Keep your installation invoice." },
       { question: "Do I need permission from the building to install AC?", answer: "Some Varna apartment buildings require HOA approval for outdoor unit placement on the facade. We can advise on your specific situation." },
     ],
     ru: [
-      { question: "Сколько стоит стандартный монтаж кондиционера в Варне?", answer: "300-440 лв в зависимости от мощности (BTU). Цена включает 3 м медной трубы, все материалы, вакуумирование и пуско-наладку." },
+      { question: "Сколько стоит стандартный монтаж кондиционера в Варне?", answer: "372–450 лв в зависимости от мощности (BTU). Цена включает 3 м медной трубы, все материалы, вакуумирование и пуско-наладку." },
       { question: "Какие скрытые расходы ожидать?", answer: "Самые частые: дополнительная труба (60-80 лв/м), сверление стены (40 лв), демонтаж старого аппарата (80 лв). Большинство монтажей требуют 4-6 м трубы вместо стандартных 3 м." },
       { question: "Сколько времени занимает монтаж?", answer: "Стандартный монтаж: 2-4 часа. Возможен монтаж в тот же день при наличии." },
       { question: "Плохой монтаж аннулирует гарантию?", answer: "Да. Производители требуют профессиональный монтаж с вакуумированием для действия гарантии. Сохраняйте счёт за монтаж." },
       { question: "Нужно ли разрешение от домоуправления для установки?", answer: "В некоторых варненских домах — да, требуется согласие общего собрания на размещение наружного блока на фасаде. Аналог решения ТСЖ. Мы можем проконсультировать." },
     ],
     ua: [
-      { question: "Скільки коштує стандартний монтаж кондиціонера у Варні?", answer: "300-440 лв (~4300-6300 грн) залежно від потужності (BTU). Ціна включає 3 м мідної труби, всі матеріали, вакуумування та пуско-налагодження." },
+      { question: "Скільки коштує стандартний монтаж кондиціонера у Варні?", answer: "372–450 лв (~5300–6400 грн) залежно від потужності (BTU). Ціна включає 3 м мідної труби, всі матеріали, вакуумування та пуско-налагодження." },
       { question: "Які приховані витрати очікувати?", answer: "Найчастіші: додаткова труба (60-80 лв/м), свердління стіни (40 лв), демонтаж старого апарата (80 лв). Більшість монтажів потребують 4-6 м труби замість стандартних 3 м." },
       { question: "Скільки часу займає монтаж?", answer: "Стандартний монтаж: 2-4 години. Можливий монтаж того ж дня за наявності." },
       { question: "Поганий монтаж анулює гарантію?", answer: "Так. Виробники вимагають професійний монтаж з вакуумуванням для дії гарантії. Зберігайте рахунок за монтаж." },
