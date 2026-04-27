@@ -17,17 +17,6 @@ function getPassword(req: NextRequest): string | null {
 /** GET /api/admin/settings?pw=xxx — read all settings */
 export async function GET(req: NextRequest) {
   const pw = getPassword(req);
-  // Temporary debug — remove after fixing
-  if (req.nextUrl.searchParams.get("debug") === "1") {
-    return NextResponse.json({
-      hasPw: !!pw,
-      pwLen: pw?.length,
-      envLen: ADMIN_PASSWORD?.length,
-      match: pw === ADMIN_PASSWORD,
-      envFirst3: ADMIN_PASSWORD?.slice(0, 3),
-      pwFirst3: pw?.slice(0, 3),
-    });
-  }
   if (pw !== ADMIN_PASSWORD) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
