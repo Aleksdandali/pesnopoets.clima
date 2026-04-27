@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useMiniApp } from "../layout";
+import { useMiniApp } from "../TgShell";
 import { useTelegram } from "../../../telegram-miniapp/hooks/useTelegram";
 import { Loader2, Sparkles, ArrowLeft, User, Bot } from "lucide-react";
 
