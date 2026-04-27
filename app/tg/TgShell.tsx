@@ -121,7 +121,7 @@ export default function TgShell({ children }: { children: React.ReactNode }) {
 
   return (
     <MiniAppContext.Provider value={ctx}>
-      <div className="min-h-screen flex flex-col" style={{ background: tg.theme.bgSecondary, color: tg.theme.text, fontFamily: "-apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif" }}>
+      <div className="min-h-screen flex flex-col" style={{ background: tg.theme.bgSecondary, color: tg.theme.text, fontFamily: "'Inter', -apple-system, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" }}>
         {/* Content */}
         <main className="flex-1 pb-16 overflow-y-auto">
           {children}
