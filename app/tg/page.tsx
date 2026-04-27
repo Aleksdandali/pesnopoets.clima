@@ -66,10 +66,10 @@ export default function TgHomePage() {
     <div>
       {/* Greeting */}
       <div className="px-4 pt-5 pb-4" style={{ background: tg.theme.bg }}>
-        <h1 className="text-[22px] font-bold" style={{ color: tg.theme.text, letterSpacing: "-0.02em" }}>
+        <h1 className="text-[28px] font-extrabold leading-tight" style={{ color: tg.theme.text, letterSpacing: "-0.03em" }}>
           Привет, {user?.firstName}!
         </h1>
-        <p className="text-[13px] mt-0.5" style={{ color: tg.theme.hint }}>
+        <p className="text-[15px] mt-1" style={{ color: tg.theme.hint }}>
           Панель управления
         </p>
       </div>
@@ -78,17 +78,17 @@ export default function TgHomePage() {
       {kpi && (
         <div className="px-4 pb-4 flex gap-2.5" style={{ background: tg.theme.bg }}>
           <div className="flex-1 rounded-2xl p-3.5" style={{ background: kpi.leadsNew > 0 ? "#dcfce7" : tg.theme.bgSecondary }}>
-            <p className="text-[22px] font-bold" style={{ color: kpi.leadsNew > 0 ? "#15803d" : tg.theme.text }}>{kpi.leadsNew}</p>
-            <p className="text-[11px] mt-0.5" style={{ color: kpi.leadsNew > 0 ? "#15803d" : tg.theme.hint }}>новых</p>
+            <p className="text-[26px] font-extrabold" style={{ color: kpi.leadsNew > 0 ? "#15803d" : tg.theme.text }}>{kpi.leadsNew}</p>
+            <p className="text-[13px] mt-0.5 font-medium" style={{ color: kpi.leadsNew > 0 ? "#15803d" : tg.theme.hint }}>новых</p>
           </div>
           <div className="flex-1 rounded-2xl p-3.5" style={{ background: tg.theme.bgSecondary }}>
-            <p className="text-[22px] font-bold" style={{ color: tg.theme.text }}>{kpi.leadsToday}</p>
-            <p className="text-[11px] mt-0.5" style={{ color: tg.theme.hint }}>сегодня</p>
+            <p className="text-[26px] font-extrabold" style={{ color: tg.theme.text }}>{kpi.leadsToday}</p>
+            <p className="text-[13px] mt-0.5 font-medium" style={{ color: tg.theme.hint }}>сегодня</p>
           </div>
           {kpi.leadsOverdue > 0 && (
             <div className="flex-1 rounded-2xl p-3.5" style={{ background: "#fee2e2" }}>
-              <p className="text-[22px] font-bold" style={{ color: "#b91c1c" }}>{kpi.leadsOverdue}</p>
-              <p className="text-[11px] mt-0.5" style={{ color: "#b91c1c" }}>ждут &gt;1ч</p>
+              <p className="text-[26px] font-extrabold" style={{ color: "#b91c1c" }}>{kpi.leadsOverdue}</p>
+              <p className="text-[13px] mt-0.5 font-medium" style={{ color: "#b91c1c" }}>ждут &gt;1ч</p>
             </div>
           )}
         </div>
@@ -171,8 +171,8 @@ function SectionCard({ href, icon: Icon, color, title, subtitle, badge, tg }: {
         )}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-[15px] font-semibold" style={{ color: tg.theme.text }}>{title}</p>
-        <p className="text-[13px]" style={{ color: tg.theme.hint }}>{subtitle}</p>
+        <p className="text-[17px] font-bold" style={{ color: tg.theme.text }}>{title}</p>
+        <p className="text-[14px]" style={{ color: tg.theme.hint }}>{subtitle}</p>
       </div>
       <ChevronRight className="w-4 h-4 shrink-0" style={{ color: `${tg.theme.hint}60` }} />
     </Link>

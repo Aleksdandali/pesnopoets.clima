@@ -123,12 +123,12 @@ export default function TgShell({ children }: { children: React.ReactNode }) {
     <MiniAppContext.Provider value={ctx}>
       <div className="min-h-screen flex flex-col" style={{ background: tg.theme.bgSecondary, color: tg.theme.text, fontFamily: "-apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif" }}>
         {/* Content */}
-        <main className="flex-1 pb-20 overflow-y-auto">
+        <main className="flex-1 pb-16 overflow-y-auto">
           {children}
         </main>
 
-        {/* Bottom nav */}
-        <nav className="fixed bottom-0 left-0 right-0 flex border-t" style={{ background: tg.theme.bg, borderColor: tg.theme.isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)", paddingBottom: "env(safe-area-inset-bottom)" }}>
+        {/* Bottom nav — compact, closer together */}
+        <nav className="fixed bottom-0 left-0 right-0 flex" style={{ background: tg.theme.bg, boxShadow: "0 -1px 0 " + (tg.theme.isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)"), paddingBottom: "env(safe-area-inset-bottom)" }}>
           {NAV.map((item) => {
             const active = pathname === item.href || (item.href !== "/tg" && pathname.startsWith(item.href));
             const Icon = item.icon;
@@ -136,11 +136,11 @@ export default function TgShell({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex-1 flex flex-col items-center justify-center py-2"
+                className="flex-1 flex flex-col items-center justify-center py-1.5"
                 onClick={() => tg.haptic.select()}
               >
-                <Icon className="w-5 h-5" style={{ color: active ? tg.theme.link : tg.theme.hint }} />
-                <span className="text-[10px] mt-0.5" style={{ color: active ? tg.theme.link : tg.theme.hint, fontWeight: active ? 600 : 400 }}>{item.label}</span>
+                <Icon className="w-[22px] h-[22px]" style={{ color: active ? tg.theme.link : tg.theme.hint }} />
+                <span className="text-[10px] leading-tight mt-0.5" style={{ color: active ? tg.theme.link : tg.theme.hint, fontWeight: active ? 700 : 500 }}>{item.label}</span>
               </Link>
             );
           })}
