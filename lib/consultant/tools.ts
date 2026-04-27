@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { sendInquiryNotification } from "@/lib/telegram";
 import { FAQ, recommendBTU } from "./knowledge";
 import { EUR_TO_BGN, getBaseInstallationBgn } from "@/lib/pricing";
+import { upsertClient } from "@/lib/clients";
 
 type Locale = "bg" | "en" | "ru" | "ua";
 
@@ -433,17 +434,23 @@ async function collectLead(input: CollectLeadInput, ctx: ToolContext): Promise<u
     productPrice = data ? Number(data.price_override ?? data.price_client) : null;
   }
 
+  // Upsert client (non-blocking)
+  const clientId = await upsertClient(supabase, { phone, name: input.name, locale: ctx.locale });
+
+  const insertData: Record<string, unknown> = {
+    name: input.name,
+    phone,
+    message: input.message,
+    locale: ctx.locale,
+    source: "consultant-chat",
+    product_id: productId,
+    status: "new",
+  };
+  if (clientId) insertData.client_id = clientId;
+
   const { data, error } = await supabase
     .from("inquiries")
-    .insert({
-      name: input.name,
-      phone,
-      message: input.message,
-      locale: ctx.locale,
-      source: "consultant-chat",
-      product_id: productId,
-      status: "new",
-    })
+    .insert(insertData)
     .select("id")
     .single();
 
