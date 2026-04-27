@@ -83,7 +83,22 @@ export async function POST(req: Request) {
   }
 
   const client = new Anthropic({ apiKey });
-  const systemPrompt = buildSystemPrompt(locale);
+
+  // Load owner's custom knowledge from DB (non-blocking fallback)
+  let extraKnowledge = "";
+  try {
+    const db = createAnonClient();
+    const { data } = await db
+      .from("ai_knowledge")
+      .select("title, content")
+      .eq("is_active", true)
+      .order("created_at");
+    if (data && data.length > 0) {
+      extraKnowledge = data.map((k) => `### ${k.title}\n${k.content}`).join("\n\n");
+    }
+  } catch { /* silent — proceed without extra knowledge */ }
+
+  const systemPrompt = buildSystemPrompt(locale, extraKnowledge || undefined);
   const ctx: ToolContext = { locale };
 
   const encoder = new TextEncoder();
@@ -165,19 +180,56 @@ export async function POST(req: Request) {
 
         send({ type: "done" });
 
-        // Log session metadata to Supabase (non-blocking, no PII)
+        // Log session + messages to Supabase (non-blocking)
         const userMessageCount = messages.filter((m) => m.role === "user").length;
         const toolsUsed = Array.from(allToolNames);
         const leadCollected = allToolNames.has("collect_lead");
+        const db = createAnonClient();
         Promise.resolve(
-          createAnonClient()
-            .from("chat_sessions")
-            .insert({
-              locale,
-              messages_count: userMessageCount,
-              tools_used: toolsUsed,
-              lead_collected: leadCollected,
-            })
+          (async () => {
+            // Insert session and get ID
+            const { data: session } = await db
+              .from("chat_sessions")
+              .insert({
+                locale,
+                messages_count: userMessageCount,
+                tools_used: toolsUsed,
+                lead_collected: leadCollected,
+              })
+              .select("id")
+              .single();
+
+            if (!session?.id) return;
+
+            // Save user messages + assistant responses
+            const chatMessages: Array<{ session_id: string; role: string; content: string }> = [];
+
+            // Original user messages
+            for (const m of messages) {
+              if (m.role === "user" && typeof m.content === "string") {
+                chatMessages.push({ session_id: session.id, role: "user", content: m.content.slice(0, 5000) });
+              }
+            }
+
+            // Assistant text from conversation (accumulated during streaming)
+            for (const turn of conversation) {
+              if (turn.role === "assistant") {
+                const text = Array.isArray(turn.content)
+                  ? turn.content
+                      .filter((b: { type: string }) => b.type === "text")
+                      .map((b: { type: string; text?: string }) => b.text || "")
+                      .join("")
+                  : typeof turn.content === "string" ? turn.content : "";
+                if (text) {
+                  chatMessages.push({ session_id: session.id, role: "assistant", content: text.slice(0, 10000) });
+                }
+              }
+            }
+
+            if (chatMessages.length > 0) {
+              await db.from("chat_messages").insert(chatMessages);
+            }
+          })()
         ).catch(() => {});
       } catch (err) {
         const message = err instanceof Error ? err.message : "Unknown error";

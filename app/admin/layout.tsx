@@ -10,6 +10,8 @@ import {
   Settings,
   ExternalLink,
   LogOut,
+  MessageCircle,
+  Brain,
 } from "lucide-react";
 
 /* ─── Auth Context ─── */
@@ -31,6 +33,8 @@ const NAV = [
   { href: "/admin", label: "Главная", icon: LayoutDashboard },
   { href: "/admin/leads", label: "Заявки", icon: Inbox },
   { href: "/admin/products", label: "Товары", icon: Package },
+  { href: "/admin/chats", label: "Чаты AI", icon: MessageCircle },
+  { href: "/admin/knowledge", label: "Обучение AI", icon: Brain },
   { href: "/admin/settings", label: "Настройки", icon: Settings },
 ] as const;
 

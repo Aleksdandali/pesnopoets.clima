@@ -15,7 +15,7 @@
 
 import { BUSINESS_PHONE_DISPLAY, BUSINESS_EMAIL } from "@/lib/constants";
 
-export function buildSystemPrompt(locale: string): string {
+export function buildSystemPrompt(locale: string, extraKnowledge?: string): string {
   const lang = localeNames[locale as keyof typeof localeNames] ?? "Bulgarian";
 
   return `You are the AI consultant for Песнопоец Клима (pesnopoets-clima.com), an air-conditioner retailer and installer based in Varna, Bulgaria.
@@ -175,7 +175,15 @@ NEVER guess catalog contents — the catalog changes with every Bittel sync.
 - Channels: web catalog, Viber, WhatsApp, phone.
 
 For exact warranty years, install prices, service prices, delivery times → \`get_faq\`. Do not cite these from memory even though they're stable.
+${extraKnowledge ? `
+═══════════════════════════════════════════════════════
+## ADDITIONAL KNOWLEDGE FROM OWNER
+═══════════════════════════════════════════════════════
 
+The business owner has added the following knowledge entries. Use them when relevant to customer questions. These are authoritative — treat them the same as Fixed Company Context above.
+
+${extraKnowledge}
+` : ""}
 ═══════════════════════════════════════════════════════
 ## FIRST MESSAGE
 
