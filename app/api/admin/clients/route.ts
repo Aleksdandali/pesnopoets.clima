@@ -43,6 +43,45 @@ export async function GET(req: NextRequest) {
   });
 }
 
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+  const { name, phone, email, notes, tags, password } = body as {
+    name?: string; phone?: string; email?: string; notes?: string; tags?: string[]; password?: string;
+  };
+
+  const auth = verifyAdminWithBody(req, password);
+  if (!auth.ok) return auth.response;
+
+  if (!phone?.trim() || phone.trim().length < 6) {
+    return NextResponse.json({ error: "Телефон обязателен" }, { status: 400 });
+  }
+
+  const cleanPhone = phone.trim().replace(/\s/g, "");
+
+  const supabase = createAdminClient();
+
+  // Check if exists
+  const { data: existing } = await supabase.from("clients").select("id").eq("phone", cleanPhone).single();
+  if (existing) {
+    return NextResponse.json({ error: "Клиент с этим телефоном уже существует", existingId: existing.id }, { status: 409 });
+  }
+
+  const { data, error } = await supabase.from("clients").insert({
+    phone: cleanPhone,
+    name: name?.trim().slice(0, 200) || "",
+    email: email?.trim().slice(0, 200) || null,
+    notes: notes?.trim().slice(0, 1000) || null,
+    tags: Array.isArray(tags) ? tags.map((t) => String(t).trim().slice(0, 50)).filter(Boolean).slice(0, 10) : [],
+  }).select("id").single();
+
+  if (error) {
+    console.error("Client create error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+
+  return NextResponse.json({ ok: true, id: data?.id });
+}
+
 export async function PATCH(req: NextRequest) {
   const body = await req.json();
   const { id, password, ...fields } = body as Record<string, unknown>;

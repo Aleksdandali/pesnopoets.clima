@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useAdmin } from "../layout";
-import { Users, Search, Loader2, Phone, Mail, Tag, ChevronLeft, ChevronRight, MessageSquare } from "lucide-react";
+import { Users, Search, Loader2, Phone, Mail, Tag, ChevronLeft, ChevronRight, MessageSquare, Plus } from "lucide-react";
 
 interface Client {
   id: number;
@@ -45,6 +45,16 @@ export default function ClientsPage() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const debounce = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  // Add new client
+  const [showAdd, setShowAdd] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newPhone, setNewPhone] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [newNotes, setNewNotes] = useState("");
+  const [newTags, setNewTags] = useState("");
+  const [addError, setAddError] = useState("");
+  const [addSaving, setAddSaving] = useState(false);
 
   // Editing
   const [editId, setEditId] = useState<number | null>(null);
@@ -89,6 +99,38 @@ export default function ClientsPage() {
     load(search, page);
   }
 
+  async function handleAddClient() {
+    if (!newPhone.trim()) { setAddError("Телефон обязателен"); return; }
+    setAddSaving(true);
+    setAddError("");
+    try {
+      const res = await fetch("/api/admin/clients", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newName,
+          phone: newPhone,
+          email: newEmail || undefined,
+          notes: newNotes || undefined,
+          tags: newTags ? newTags.split(",").map((t) => t.trim()).filter(Boolean) : [],
+          password,
+        }),
+      });
+      if (res.status === 409) {
+        setAddError("Клиент с этим телефоном уже существует");
+        return;
+      }
+      if (!res.ok) throw new Error();
+      setShowAdd(false);
+      setNewName(""); setNewPhone(""); setNewEmail(""); setNewNotes(""); setNewTags("");
+      load(search, 1);
+    } catch {
+      setAddError("Ошибка создания");
+    } finally {
+      setAddSaving(false);
+    }
+  }
+
   function startEdit(c: Client) {
     setEditId(c.id);
     setEditNotes(c.notes || "");
@@ -97,15 +139,82 @@ export default function ClientsPage() {
 
   return (
     <div>
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-lg bg-[var(--primary-light)] flex items-center justify-center">
-          <Users className="w-5 h-5 text-[var(--primary)]" />
+      <div className="flex items-start justify-between gap-3 mb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-[var(--primary-light)] flex items-center justify-center">
+            <Users className="w-5 h-5 text-[var(--primary)]" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-[var(--foreground)]">Клиенты</h1>
+            <p className="text-sm text-[var(--muted-foreground)]">{total} клиентов в базе</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-xl font-bold text-[var(--foreground)]">Клиенты</h1>
-          <p className="text-sm text-[var(--muted-foreground)]">{total} клиентов в базе</p>
-        </div>
+        <button
+          onClick={() => setShowAdd(!showAdd)}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--primary)] text-white text-sm font-semibold rounded-lg hover:bg-[var(--primary-dark)] transition-colors"
+        >
+          <Plus className="w-4 h-4" />
+          <span className="hidden sm:inline">Добавить</span>
+        </button>
       </div>
+
+      {/* Add client form */}
+      {showAdd && (
+        <div className="bg-[var(--background)] rounded-xl border border-[var(--primary)]/30 p-5 mb-6 shadow-sm space-y-3">
+          <p className="text-sm font-semibold text-[var(--foreground)]">Новый клиент</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input
+              type="text"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              placeholder="Имя"
+              className="px-4 py-2.5 border border-[var(--border)] rounded-lg text-sm bg-[var(--background)] text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)]"
+            />
+            <input
+              type="tel"
+              value={newPhone}
+              onChange={(e) => { setNewPhone(e.target.value); setAddError(""); }}
+              placeholder="Телефон *"
+              className="px-4 py-2.5 border border-[var(--border)] rounded-lg text-sm bg-[var(--background)] text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)]"
+            />
+            <input
+              type="email"
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+              placeholder="Email"
+              className="px-4 py-2.5 border border-[var(--border)] rounded-lg text-sm bg-[var(--background)] text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)]"
+            />
+            <input
+              type="text"
+              value={newTags}
+              onChange={(e) => setNewTags(e.target.value)}
+              placeholder="Теги (через запятую)"
+              className="px-4 py-2.5 border border-[var(--border)] rounded-lg text-sm bg-[var(--background)] text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)]"
+            />
+          </div>
+          <input
+            type="text"
+            value={newNotes}
+            onChange={(e) => setNewNotes(e.target.value)}
+            placeholder="Заметка"
+            className="w-full px-4 py-2.5 border border-[var(--border)] rounded-lg text-sm bg-[var(--background)] text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)]"
+          />
+          {addError && <p className="text-sm text-[var(--danger)]">{addError}</p>}
+          <div className="flex gap-2">
+            <button
+              onClick={handleAddClient}
+              disabled={addSaving || !newPhone.trim()}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--primary)] text-white text-sm font-semibold rounded-lg hover:bg-[var(--primary-dark)] disabled:opacity-50 transition-colors"
+            >
+              {addSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+              Сохранить
+            </button>
+            <button onClick={() => { setShowAdd(false); setAddError(""); }} className="px-4 py-2.5 text-sm text-[var(--muted-foreground)]">
+              Отмена
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Search */}
       <div className="relative mb-6">
