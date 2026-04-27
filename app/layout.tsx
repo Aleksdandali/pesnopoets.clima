@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { GA_ID } from "@/lib/gtag";
+import TrackingPixels from "@/components/seo/TrackingPixels";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -65,6 +67,9 @@ export default async function RootLayout({
             gtag('config', '${GA_ID}');
           `}
         </Script>
+        <Suspense fallback={null}>
+          <TrackingPixels />
+        </Suspense>
       </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
