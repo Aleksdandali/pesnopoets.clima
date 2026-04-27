@@ -184,53 +184,44 @@ export async function POST(req: Request) {
         const userMessageCount = messages.filter((m) => m.role === "user").length;
         const toolsUsed = Array.from(allToolNames);
         const leadCollected = allToolNames.has("collect_lead");
+
+        // Collect messages to save
+        const chatMsgs: Array<{ role: string; content: string }> = [];
+        for (const m of messages) {
+          if (m.role === "user" && typeof m.content === "string") {
+            chatMsgs.push({ role: "user", content: m.content.slice(0, 5000) });
+          }
+        }
+        for (const turn of conversation) {
+          if (turn.role === "assistant") {
+            const blocks = Array.isArray(turn.content) ? turn.content : [];
+            const text = blocks
+              .filter((b: { type: string }) => b.type === "text")
+              .map((b: { type: string; text?: string }) => b.text || "")
+              .join("");
+            if (text) chatMsgs.push({ role: "assistant", content: text.slice(0, 10000) });
+          }
+        }
+
+        // Save to DB (fire-and-forget)
         const db = createAnonClient();
         Promise.resolve(
-          (async () => {
-            // Insert session and get ID
-            const { data: session } = await db
-              .from("chat_sessions")
-              .insert({
-                locale,
-                messages_count: userMessageCount,
-                tools_used: toolsUsed,
-                lead_collected: leadCollected,
-              })
-              .select("id")
-              .single();
-
-            if (!session?.id) return;
-
-            // Save user messages + assistant responses
-            const chatMessages: Array<{ session_id: string; role: string; content: string }> = [];
-
-            // Original user messages
-            for (const m of messages) {
-              if (m.role === "user" && typeof m.content === "string") {
-                chatMessages.push({ session_id: session.id, role: "user", content: m.content.slice(0, 5000) });
-              }
-            }
-
-            // Assistant text from conversation (accumulated during streaming)
-            for (const turn of conversation) {
-              if (turn.role === "assistant") {
-                const text = Array.isArray(turn.content)
-                  ? turn.content
-                      .filter((b: { type: string }) => b.type === "text")
-                      .map((b: { type: string; text?: string }) => b.text || "")
-                      .join("")
-                  : typeof turn.content === "string" ? turn.content : "";
-                if (text) {
-                  chatMessages.push({ session_id: session.id, role: "assistant", content: text.slice(0, 10000) });
-                }
-              }
-            }
-
-            if (chatMessages.length > 0) {
-              await db.from("chat_messages").insert(chatMessages);
-            }
-          })()
-        ).catch(() => {});
+          db.from("chat_sessions")
+            .insert({ locale, messages_count: userMessageCount, tools_used: toolsUsed, lead_collected: leadCollected })
+            .select("id")
+            .single()
+        ).then(({ data: session, error: sessionErr }) => {
+          if (sessionErr || !session?.id) {
+            console.error("Chat session save error:", sessionErr);
+            return;
+          }
+          if (chatMsgs.length > 0) {
+            const rows = chatMsgs.map((m) => ({ session_id: session.id, role: m.role, content: m.content }));
+            Promise.resolve(db.from("chat_messages").insert(rows)).then(({ error: msgErr }) => {
+              if (msgErr) console.error("Chat messages save error:", msgErr);
+            });
+          }
+        }).catch((err) => console.error("Chat save error:", err));
       } catch (err) {
         const message = err instanceof Error ? err.message : "Unknown error";
         send({ type: "error", message });
