@@ -13,6 +13,7 @@ import ProductDescription from "@/components/product/ProductDescription";
 import { generateProductJsonLd, generateBreadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { generateBadges } from "@/lib/bittel/badges";
 import ProductBadges from "@/components/catalog/ProductBadges";
+import ProductViewTracker from "@/components/product/ProductViewTracker";
 import AddToCartButton from "@/components/cart/AddToCartButton";
 import { BUSINESS_PHONE_DISPLAY } from "@/lib/constants";
 import {
@@ -170,6 +171,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
           __html: JSON.stringify(breadcrumbJsonLd),
         }}
       />
+
+      <ProductViewTracker productId={product.id} title={displayTitle} priceEur={displayPrice} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 pb-28 sm:pb-28 lg:pb-8">
         {/* Breadcrumb */}

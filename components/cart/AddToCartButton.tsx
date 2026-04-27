@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ShoppingCart, Check, ArrowRight } from "lucide-react";
 import { useCart, type CartItem } from "@/contexts/CartContext";
+import { trackAddToCart } from "@/lib/gtag";
 
 interface AddToCartButtonProps {
   locale: string;
@@ -38,6 +39,7 @@ export default function AddToCartButton({
 
     addItem(item, 1);
     setJustAdded(true);
+    trackAddToCart(item.id, item.title, item.priceEur);
   }
 
   const showGoToCart = isInCart || justAdded;
