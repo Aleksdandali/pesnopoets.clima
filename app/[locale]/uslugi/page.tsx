@@ -153,8 +153,8 @@ export default async function UslugiPage({ params }: PageProps) {
           <Image
             src="/images/services-cover.jpg"
             alt={t.pageTitle}
-            width={1200}
-            height={630}
+            width={1774}
+            height={887}
             sizes="(max-width: 1280px) 100vw, 1280px"
             className="w-full h-auto"
             priority

@@ -28,8 +28,8 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
         <Image
           src="/images/about-team.jpg"
           alt={c.title}
-          width={1200}
-          height={800}
+          width={1254}
+          height={1254}
           sizes="(max-width: 896px) 100vw, 896px"
           className="w-full h-auto"
           priority
