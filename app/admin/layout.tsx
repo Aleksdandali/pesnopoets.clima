@@ -12,6 +12,7 @@ import {
   LogOut,
   MessageCircle,
   Brain,
+  Bot,
 } from "lucide-react";
 
 /* ─── Auth Context ─── */
@@ -35,6 +36,7 @@ const NAV = [
   { href: "/admin/products", label: "Товары", icon: Package },
   { href: "/admin/chats", label: "Чаты AI", icon: MessageCircle },
   { href: "/admin/knowledge", label: "Обучение AI", icon: Brain },
+  { href: "/admin/ai-config", label: "Мозг AI", icon: Bot },
   { href: "/admin/settings", label: "Настройки", icon: Settings },
 ] as const;
 
