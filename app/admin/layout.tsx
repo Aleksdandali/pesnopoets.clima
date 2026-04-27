@@ -72,7 +72,7 @@ function LoginScreen({ onLogin }: { onLogin: (pw: string) => void }) {
           <img src="/logo.png" alt="Pesnopoets Clima" className="w-10 h-10 rounded-xl" />
           <div>
             <h1 className="text-lg font-bold text-[var(--foreground)]">Админ-панель</h1>
-            <p className="text-xs text-[var(--muted-foreground)]">Pesnopoets Clima · DANGROW</p>
+            <p className="text-xs text-[var(--muted-foreground)]">Pesnopoets Clima</p>
           </div>
         </div>
         <form onSubmit={handleSubmit}>
@@ -97,6 +97,24 @@ function LoginScreen({ onLogin }: { onLogin: (pw: string) => void }) {
             {loading ? "Проверка..." : "Войти"}
           </button>
         </form>
+        <div className="mt-6 flex justify-center">
+          <a
+            href="https://dangrow.agency"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[var(--muted)] border border-[var(--border)] rounded-full hover:bg-[var(--border)] transition-colors"
+          >
+            <svg viewBox="0 0 64 64" width="13" height="13" aria-hidden="true">
+              <rect width="64" height="64" rx="14" fill="#CCFF00"/>
+              <path d="M21 44 L32 20 L43 44" stroke="#06060A" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              <line x1="32" y1="20" x2="32" y2="14" stroke="#06060A" strokeWidth="5" strokeLinecap="round"/>
+              <line x1="27" y1="18" x2="32" y2="14" stroke="#06060A" strokeWidth="4" strokeLinecap="round"/>
+              <line x1="37" y1="18" x2="32" y2="14" stroke="#06060A" strokeWidth="4" strokeLinecap="round"/>
+            </svg>
+            <span className="text-[10px] text-[var(--muted-foreground)]">powered by</span>
+            <span className="text-[10px] font-extrabold text-[var(--foreground)] tracking-wide">DAN<span style={{ color: "#CCFF00" }}>GROW</span></span>
+          </a>
+        </div>
       </div>
     </div>
   );
@@ -167,7 +185,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <img src="/logo.png" alt="" className="w-9 h-9 rounded-lg" />
             <div>
               <p className="text-sm font-bold text-white">Pesnopoets</p>
-              <p className="text-[10px] text-white/40 uppercase tracking-widest">DANGROW · Admin</p>
+              <p className="text-[10px] text-white/40 uppercase tracking-widest">Admin Panel</p>
             </div>
           </div>
 
@@ -209,6 +227,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <LogOut className="w-4 h-4" />
               Выйти
             </button>
+            <a
+              href="https://dangrow.agency"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-1.5 px-3 py-2 mt-2 bg-white/[0.04] border border-white/[0.08] rounded-full hover:bg-white/[0.07] transition-colors"
+            >
+              <svg viewBox="0 0 64 64" width="13" height="13" aria-hidden="true">
+                <rect width="64" height="64" rx="14" fill="#CCFF00"/>
+                <path d="M21 44 L32 20 L43 44" stroke="#06060A" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                <line x1="32" y1="20" x2="32" y2="14" stroke="#06060A" strokeWidth="5" strokeLinecap="round"/>
+                <line x1="27" y1="18" x2="32" y2="14" stroke="#06060A" strokeWidth="4" strokeLinecap="round"/>
+                <line x1="37" y1="18" x2="32" y2="14" stroke="#06060A" strokeWidth="4" strokeLinecap="round"/>
+              </svg>
+              <span className="text-[10px] text-white/35">powered by</span>
+              <span className="text-[10px] font-extrabold text-white tracking-wide">DAN<span style={{ color: "#CCFF00" }}>GROW</span></span>
+            </a>
           </div>
         </aside>
 
