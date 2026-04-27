@@ -44,9 +44,7 @@ export default function AdminPage() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("/api/admin/settings", {
-        headers: { Authorization: `Bearer ${pw}` },
-      });
+      const res = await fetch(`/api/admin/settings?pw=${encodeURIComponent(pw)}`);
       if (!res.ok) {
         if (res.status === 401) {
           setAuthed(false);
@@ -81,11 +79,8 @@ export default function AdminPage() {
     try {
       const res = await fetch("/api/admin/settings", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${password}`,
-        },
-        body: JSON.stringify({ settings }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ settings, password }),
       });
       if (!res.ok) throw new Error("Save failed");
       setMessage("Сохранено! Изменения появятся на сайте в течение 1-2 минут.");

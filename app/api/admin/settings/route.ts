@@ -3,16 +3,21 @@ import { createAdminClient } from "@/lib/supabase/admin";
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "pesnopoets2026";
 
-function isAuthorized(req: NextRequest): boolean {
+function getPassword(req: NextRequest): string | null {
+  // From Authorization header
   const auth = req.headers.get("authorization");
-  if (!auth) return false;
-  const token = auth.replace("Bearer ", "");
-  return token === ADMIN_PASSWORD;
+  if (auth) {
+    return auth.replace(/^Bearer\s+/i, "").trim();
+  }
+  // From query param
+  const url = new URL(req.url);
+  return url.searchParams.get("pw");
 }
 
-/** GET /api/admin/settings — read all settings */
+/** GET /api/admin/settings?pw=xxx — read all settings */
 export async function GET(req: NextRequest) {
-  if (!isAuthorized(req)) {
+  const pw = getPassword(req);
+  if (pw !== ADMIN_PASSWORD) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -31,12 +36,14 @@ export async function GET(req: NextRequest) {
 
 /** POST /api/admin/settings — update settings */
 export async function POST(req: NextRequest) {
-  if (!isAuthorized(req)) {
+  const body = await req.json();
+  const { settings, password } = body as { settings: Record<string, string>; password?: string };
+
+  // Auth from body or header
+  const pw = password || getPassword(req);
+  if (pw !== ADMIN_PASSWORD) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-
-  const body = await req.json();
-  const { settings } = body as { settings: Record<string, string> };
 
   if (!settings || typeof settings !== "object") {
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
