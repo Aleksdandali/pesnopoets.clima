@@ -66,11 +66,11 @@ export default function TgHomePage() {
     <div>
       {/* Greeting */}
       <div className="px-4 pt-5 pb-4" style={{ background: tg.theme.bg }}>
-        <h1 className="text-[28px] font-bold leading-tight" style={{ color: tg.theme.text, letterSpacing: "-0.025em" }}>
+        <h1 className="text-[32px] font-bold leading-[1.1]" style={{ color: tg.theme.text, letterSpacing: "-0.025em" }}>
           Привет, {user?.firstName}!
         </h1>
-        <p className="text-[15px] mt-1" style={{ color: tg.theme.hint }}>
-          Панель управления
+        <p className="text-[15px] mt-1.5" style={{ color: tg.theme.hint }}>
+          Журнал команды
         </p>
       </div>
 
@@ -181,7 +181,7 @@ function SectionCard({ href, icon: Icon, color, title, subtitle, badge, tg }: {
         )}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-[17px] font-bold" style={{ color: tg.theme.text }}>{title}</p>
+        <p className="text-[18px] font-semibold" style={{ color: tg.theme.text }}>{title}</p>
         <p className="text-[14px]" style={{ color: tg.theme.hint }}>{subtitle}</p>
       </div>
       <ChevronRight className="w-4 h-4 shrink-0" style={{ color: `${tg.theme.hint}60` }} />
