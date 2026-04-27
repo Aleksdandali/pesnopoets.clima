@@ -28,7 +28,7 @@ export function useAdmin(): AdminCtx {
 
 /* ─── Nav items ─── */
 const NAV = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin", label: "Главная", icon: LayoutDashboard },
   { href: "/admin/leads", label: "Заявки", icon: Inbox },
   { href: "/admin/products", label: "Товары", icon: Package },
   { href: "/admin/settings", label: "Настройки", icon: Settings },

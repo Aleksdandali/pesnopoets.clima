@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import Link from "next/link";
 import { useAdmin } from "../layout";
-import { Search, Loader2, ChevronLeft, ChevronRight, ImageOff } from "lucide-react";
+import { Search, Loader2, ChevronLeft, ChevronRight, ImageOff, Pencil } from "lucide-react";
 
 interface Product {
   id: number;
@@ -175,6 +176,7 @@ export default function ProductsPage() {
                   <th className="text-right px-4 py-3 font-medium text-[var(--muted-foreground)] text-xs uppercase">Надбавка €</th>
                   <th className="text-center px-4 py-3 font-medium text-[var(--muted-foreground)] text-xs uppercase">Наличие</th>
                   <th className="text-center px-4 py-3 font-medium text-[var(--muted-foreground)] text-xs uppercase">Активен</th>
+                  <th className="text-center px-4 py-3 font-medium text-[var(--muted-foreground)] text-xs uppercase w-12"></th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[var(--border)]">
@@ -184,7 +186,7 @@ export default function ProductsPage() {
                       <div className="flex items-center gap-3">
                         <Thumb src={p.gallery?.[0]} />
                         <div className="min-w-0">
-                          <p className="font-medium text-[var(--foreground)] truncate max-w-[280px]">{p.title_override || p.title}</p>
+                          <Link href={`/admin/products/${p.id}`} className="font-medium text-[var(--foreground)] hover:text-[var(--primary)] truncate max-w-[280px] block transition-colors">{p.title_override || p.title}</Link>
                           <p className="text-xs text-[var(--muted-foreground)]">{p.manufacturer} · {p.bittel_id}</p>
                         </div>
                       </div>
@@ -201,6 +203,11 @@ export default function ProductsPage() {
                     <td className="px-4 py-3 text-center">
                       <Toggle checked={p.is_active} onChange={(v) => handleActive(p.id, v)} />
                     </td>
+                    <td className="px-4 py-3 text-center">
+                      <Link href={`/admin/products/${p.id}`} className="p-2 rounded-lg hover:bg-[var(--muted)] transition-colors inline-flex" title="Редактировать">
+                        <Pencil className="w-4 h-4 text-[var(--muted-foreground)]" />
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -214,7 +221,7 @@ export default function ProductsPage() {
                 <div className="flex items-start gap-3 mb-3">
                   <Thumb src={p.gallery?.[0]} />
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-[var(--foreground)] text-sm leading-snug">{p.title_override || p.title}</p>
+                    <Link href={`/admin/products/${p.id}`} className="font-medium text-[var(--foreground)] hover:text-[var(--primary)] text-sm leading-snug block transition-colors">{p.title_override || p.title}</Link>
                     <p className="text-xs text-[var(--muted-foreground)]">{p.manufacturer}</p>
                   </div>
                   <Toggle checked={p.is_active} onChange={(v) => handleActive(p.id, v)} />
