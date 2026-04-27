@@ -3,6 +3,7 @@ import ProductCard from "@/components/catalog/ProductCard";
 import FilterBar from "@/components/catalog/FilterBar";
 import CategorySidebar from "@/components/catalog/CategorySidebar";
 import { translateGroupName } from "@/lib/i18n/feature-names";
+import CatalogViewTracker from "@/components/catalog/CatalogViewTracker";
 
 interface CatalogPageProps {
   params: Promise<{ locale: string }>;
@@ -192,6 +193,7 @@ export default async function CatalogPage({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 overflow-x-hidden">
+      <CatalogViewTracker />
       {/* Breadcrumb */}
       <nav className="text-xs sm:text-sm text-muted-foreground mb-4 overflow-x-auto scrollbar-hide" role="navigation" aria-label="Breadcrumb">
         <ol className="flex items-center whitespace-nowrap">
