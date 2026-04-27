@@ -32,9 +32,8 @@ export function withTgAuth(handler: AuthHandler, options: Options = {}) {
         return NextResponse.json({ error: "Phone verification required" }, { status: 403 });
       }
 
-      if (session.type === "session" && !session.clientId) {
-        return NextResponse.json({ error: "Invalid session" }, { status: 403 });
-      }
+      // clientId is null for admin sessions (team Mini App) — that's OK
+      // clientId is set for client sessions (future client Mini App)
 
       // Per-user rate limit: 60 req/min
       if (isRateLimited(`tg-api:${session.tgId}`, 60, 60)) {

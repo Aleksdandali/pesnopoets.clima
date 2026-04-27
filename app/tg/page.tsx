@@ -66,7 +66,7 @@ export default function TgHomePage() {
     <div>
       {/* Greeting */}
       <div className="px-4 pt-5 pb-4" style={{ background: tg.theme.bg }}>
-        <h1 className="text-[28px] font-extrabold leading-tight" style={{ color: tg.theme.text, letterSpacing: "-0.03em" }}>
+        <h1 className="text-[28px] font-bold leading-tight" style={{ color: tg.theme.text, letterSpacing: "-0.025em" }}>
           Привет, {user?.firstName}!
         </h1>
         <p className="text-[15px] mt-1" style={{ color: tg.theme.hint }}>
