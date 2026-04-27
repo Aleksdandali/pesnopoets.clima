@@ -7,9 +7,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const webhookUrl = process.env.TELEGRAM_WEBHOOK_URL || `${process.env.NEXT_PUBLIC_SITE_URL}/api/telegram/webhook`;
-  const secret = process.env.TELEGRAM_WEBHOOK_SECRET;
+  const token = process.env.TELEGRAM_BOT_TOKEN?.trim();
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "").trim();
+  const webhookUrl = (process.env.TELEGRAM_WEBHOOK_URL || `${siteUrl}/api/telegram/webhook`).trim();
+  const secret = process.env.TELEGRAM_WEBHOOK_SECRET?.trim();
 
   if (!token) {
     return NextResponse.json({ error: "TELEGRAM_BOT_TOKEN not set" }, { status: 500 });

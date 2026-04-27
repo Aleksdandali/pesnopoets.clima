@@ -10,7 +10,7 @@ let botInstance: Bot | null = null;
 export function createBot(): Bot {
   if (botInstance) return botInstance;
 
-  const token = process.env.TELEGRAM_BOT_TOKEN || "";
+  const token = (process.env.TELEGRAM_BOT_TOKEN || "").trim();
   if (!token) {
     console.warn("TELEGRAM_BOT_TOKEN not set — bot disabled");
     const dummy = new Bot("placeholder:token");
