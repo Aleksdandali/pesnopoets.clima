@@ -430,7 +430,7 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
                 type="button"
                 onClick={() => abortRef.current?.abort()}
                 aria-label="Stop"
-                className="flex items-center justify-center w-11 h-11 rounded-xl bg-red-500 text-white hover:bg-red-600 transition-colors"
+                className="flex items-center justify-center w-11 h-11 rounded-xl bg-muted text-muted-foreground hover:bg-border transition-colors"
               >
                 <Square className="w-4 h-4" aria-hidden="true" />
               </button>
