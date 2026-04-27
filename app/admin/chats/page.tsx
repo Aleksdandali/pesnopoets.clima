@@ -60,18 +60,36 @@ export default function ChatsPage() {
 
   useEffect(() => { loadSessions(1); }, [loadSessions]);
 
-  async function openSession(session: Session) {
-    setActiveSession(session);
-    setLoadingMessages(true);
+  // Auto-refresh sessions every 15 seconds
+  useEffect(() => {
+    if (activeSession) return;
+    const interval = setInterval(() => loadSessions(page), 15000);
+    return () => clearInterval(interval);
+  }, [activeSession, page, loadSessions]);
+
+  const loadMessages = useCallback(async (sessionId: string, showSpinner = true) => {
+    if (showSpinner) setLoadingMessages(true);
     try {
-      const res = await fetchApi(`/api/admin/chats?session_id=${session.id}`);
+      const res = await fetchApi(`/api/admin/chats?session_id=${sessionId}`);
       if (res.ok) {
         const data = await res.json();
         setMessages(data.messages);
       }
     } catch { /* silent */ }
     finally { setLoadingMessages(false); }
+  }, [fetchApi]);
+
+  async function openSession(session: Session) {
+    setActiveSession(session);
+    loadMessages(session.id, true);
   }
+
+  // Auto-refresh active chat every 10 seconds
+  useEffect(() => {
+    if (!activeSession) return;
+    const interval = setInterval(() => loadMessages(activeSession.id, false), 10000);
+    return () => clearInterval(interval);
+  }, [activeSession, loadMessages]);
 
   // Detail view
   if (activeSession) {

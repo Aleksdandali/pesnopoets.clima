@@ -62,7 +62,7 @@ export default function AIConfigPage() {
         </Section>
 
         {/* Hard Rules */}
-        <Section title="Жёсткие правила (10 штук)" icon={ShieldCheck}>
+        <Section title="Жёсткие правила (11 штук)" icon={ShieldCheck}>
           <div className="mt-3 space-y-2 text-sm text-[var(--foreground)]">
             <p><strong>R1.</strong> Отвечает ТОЛЬКО на языке текущей локали сайта</p>
             <p><strong>R2.</strong> Не упоминает товар без вызова инструмента (search_products)</p>
@@ -74,6 +74,7 @@ export default function AIConfigPage() {
             <p><strong>R8.</strong> Не обещает скидки, онлайн-оплату, рассрочку</p>
             <p><strong>R9.</strong> Передаёт менеджеру через collect_lead при интенте на покупку</p>
             <p><strong>R10.</strong> Использует selling_points/best_for/warnings из карточки товара</p>
+            <p><strong>R11.</strong> Проактивно просит номер телефона — после рекомендации или 2+ вопросов предлагает связь с менеджером. Не навязчиво в первом сообщении, но настойчиво после.</p>
           </div>
         </Section>
 
