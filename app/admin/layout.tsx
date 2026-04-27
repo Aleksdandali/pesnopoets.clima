@@ -11,6 +11,7 @@ import {
   ExternalLink,
   LogOut,
   Bot,
+  Users,
 } from "lucide-react";
 
 /* ─── Auth Context ─── */
@@ -34,6 +35,7 @@ const NAV: NavItem[] = [
   { href: "/admin", label: "Главная", icon: LayoutDashboard },
   { href: "/admin/leads", label: "Заявки", icon: Inbox },
   { href: "/admin/products", label: "Товары", icon: Package },
+  { href: "/admin/clients", label: "Клиенты", icon: Users },
   { href: "/admin/ai", label: "ИИ", icon: Bot },
   { href: "/admin/settings", label: "Настройки", icon: Settings },
 ];

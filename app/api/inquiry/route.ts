@@ -9,6 +9,7 @@ function createAnonClient() {
   );
 }
 import { sendInquiryNotification } from "@/lib/telegram";
+import { upsertClient } from "@/lib/clients";
 import {
   checkRateLimit,
   sanitizeInput,
@@ -95,19 +96,24 @@ export async function POST(request: Request) {
       }
     }
 
+    // Upsert client (non-blocking)
+    const clientId = await upsertClient(supabase, { phone, name, email: email || undefined, locale });
+
     // Insert inquiry
+    const insertData: Record<string, unknown> = {
+      product_id: productId,
+      name,
+      phone,
+      message,
+      locale,
+      source: ["one-click", "one-click-card", "inquiry-page", "product-page"].includes(body.source) ? body.source : null,
+      status: "new",
+    };
+    if (email) insertData.email = email;
+    if (clientId) insertData.client_id = clientId;
     const { data: inquiry, error } = await supabase
       .from("inquiries")
-      .insert({
-        product_id: productId,
-        name,
-        phone,
-        email,
-        message,
-        locale,
-        source: ["one-click", "one-click-card", "inquiry-page", "product-page"].includes(body.source) ? body.source : null,
-        status: "new",
-      })
+      .insert(insertData)
       .select()
       .single();
 
