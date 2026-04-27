@@ -10,8 +10,6 @@ import {
   Settings,
   ExternalLink,
   LogOut,
-  MessageCircle,
-  Brain,
   Bot,
 } from "lucide-react";
 
@@ -31,34 +29,14 @@ export function useAdmin(): AdminCtx {
 
 /* ─── Nav items ─── */
 interface NavItem { href: string; label: string; icon: React.ComponentType<{ className?: string }> }
-interface NavGroup { group: string; items: NavItem[] }
 
-const NAV_GROUPS: NavGroup[] = [
-  {
-    group: "",
-    items: [
-      { href: "/admin", label: "Главная", icon: LayoutDashboard },
-      { href: "/admin/leads", label: "Заявки", icon: Inbox },
-      { href: "/admin/products", label: "Товары", icon: Package },
-    ],
-  },
-  {
-    group: "ИИ",
-    items: [
-      { href: "/admin/chats", label: "Чаты", icon: MessageCircle },
-      { href: "/admin/knowledge", label: "Обучение", icon: Brain },
-      { href: "/admin/ai-config", label: "Мозг", icon: Bot },
-    ],
-  },
-  {
-    group: "",
-    items: [
-      { href: "/admin/settings", label: "Настройки", icon: Settings },
-    ],
-  },
+const NAV: NavItem[] = [
+  { href: "/admin", label: "Главная", icon: LayoutDashboard },
+  { href: "/admin/leads", label: "Заявки", icon: Inbox },
+  { href: "/admin/products", label: "Товары", icon: Package },
+  { href: "/admin/ai", label: "ИИ", icon: Bot },
+  { href: "/admin/settings", label: "Настройки", icon: Settings },
 ];
-
-const ALL_NAV: NavItem[] = NAV_GROUPS.flatMap((g) => g.items);
 
 /* ─── Login Screen ─── */
 function LoginScreen({ onLogin }: { onLogin: (pw: string) => void }) {
@@ -160,32 +138,25 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <p className="text-xs text-[var(--primary-light)] mt-0.5">Админ</p>
           </div>
 
-          <nav className="flex-1 py-3 px-2 space-y-1">
-            {NAV_GROUPS.map((group, gi) => (
-              <div key={gi}>
-                {group.group && (
-                  <p className="px-3 pt-3 pb-1 text-[10px] font-bold text-white/30 uppercase tracking-widest">{group.group}</p>
-                )}
-                {group.items.map((item) => {
-                  const active = pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
-                  const Icon = item.icon;
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                        active
-                          ? "bg-[var(--primary)]/15 text-white border-l-2 border-[var(--primary-light)]"
-                          : "text-white/50 hover:text-white/80 hover:bg-white/5"
-                      }`}
-                    >
-                      <Icon className="w-5 h-5 shrink-0" />
-                      {item.label}
-                    </Link>
-                  );
-                })}
-              </div>
-            ))}
+          <nav className="flex-1 py-3 px-2 space-y-0.5">
+            {NAV.map((item) => {
+              const active = pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    active
+                      ? "bg-[var(--primary)]/15 text-white border-l-2 border-[var(--primary-light)]"
+                      : "text-white/50 hover:text-white/80 hover:bg-white/5"
+                  }`}
+                >
+                  <Icon className="w-5 h-5 shrink-0" />
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="p-3 border-t border-white/10 space-y-1">
@@ -227,7 +198,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Bottom tabs — mobile */}
         <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[var(--background)] border-t border-[var(--border)] flex" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
-          {ALL_NAV.slice(0, 5).map((item) => {
+          {NAV.map((item) => {
             const active = pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
             const Icon = item.icon;
             return (

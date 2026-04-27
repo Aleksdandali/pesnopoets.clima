@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useAdmin } from "../layout";
+import { useAdmin } from "../../layout";
 import { MessageCircle, Loader2, ChevronLeft, ChevronRight, ArrowLeft, User, Bot, Sparkles } from "lucide-react";
 
 interface Session {
