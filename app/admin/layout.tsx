@@ -65,10 +65,16 @@ function LoginScreen({ onLogin }: { onLogin: (pw: string) => void }) {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--muted)] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#0a1628] flex items-center justify-center p-4">
       <div className="w-full max-w-sm bg-[var(--background)] rounded-2xl border border-[var(--border)] shadow-[var(--shadow)] p-8">
-        <h1 className="text-xl font-bold text-[var(--foreground)] mb-1">Админ-панель</h1>
-        <p className="text-sm text-[var(--muted-foreground)] mb-6">Pesnopoets Clima</p>
+        <div className="flex items-center gap-3 mb-6">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="Pesnopoets Clima" className="w-10 h-10 rounded-xl" />
+          <div>
+            <h1 className="text-lg font-bold text-[var(--foreground)]">Админ-панель</h1>
+            <p className="text-xs text-[var(--muted-foreground)]">Pesnopoets Clima · DANGROW</p>
+          </div>
+        </div>
         <form onSubmit={handleSubmit}>
           <label htmlFor="admin-pw" className="block text-sm font-medium text-[var(--foreground)] mb-2">
             Пароль
@@ -96,14 +102,30 @@ function LoginScreen({ onLogin }: { onLogin: (pw: string) => void }) {
   );
 }
 
+/* ─── Splash screen ─── */
+function SplashScreen() {
+  return (
+    <div className="min-h-screen bg-[#0a1628] flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-12 h-12 rounded-xl bg-[var(--primary)]/20 flex items-center justify-center mx-auto mb-4 animate-pulse">
+          <Bot className="w-6 h-6 text-[var(--primary)]" />
+        </div>
+        <p className="text-white/40 text-sm">Загрузка...</p>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Shell ─── */
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [password, setPassword] = useState<string | null>(null);
+  const [hydrated, setHydrated] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     const saved = sessionStorage.getItem("admin_pw");
     if (saved) setPassword(saved);
+    setHydrated(true);
   }, []);
 
   const handleLogin = useCallback((pw: string) => {
@@ -124,6 +146,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     [password]
   );
 
+  // Show splash while checking sessionStorage
+  if (!hydrated) {
+    return <SplashScreen />;
+  }
+
   if (!password) {
     return <LoginScreen onLogin={handleLogin} />;
   }
@@ -135,9 +162,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="min-h-screen bg-[var(--muted)] flex">
         {/* Sidebar — desktop */}
         <aside className="hidden lg:flex flex-col w-60 bg-[#0a1628] text-white shrink-0 fixed inset-y-0 left-0 z-50">
-          <div className="p-5 border-b border-white/10">
-            <p className="text-sm font-bold">Pesnopoets Clima</p>
-            <p className="text-xs text-[var(--primary-light)] mt-0.5">Админ</p>
+          <div className="p-4 border-b border-white/10 flex items-center gap-3">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/logo.png" alt="" className="w-9 h-9 rounded-lg" />
+            <div>
+              <p className="text-sm font-bold text-white">Pesnopoets</p>
+              <p className="text-[10px] text-white/40 uppercase tracking-widest">DANGROW · Admin</p>
+            </div>
           </div>
 
           <nav className="flex-1 py-3 px-2 space-y-0.5">
