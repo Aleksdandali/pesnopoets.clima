@@ -139,10 +139,20 @@ export default function TgHomePage() {
       )}
 
       {/* Footer */}
-      <div className="px-4 pt-4 pb-6 text-center">
-        <p className="text-[11px]" style={{ color: tg.theme.hint }}>
-          powered by <span className="font-bold">DAN<span style={{ color: "#CCFF00" }}>GROW</span></span>
-        </p>
+      <div className="px-4 pt-4 pb-6 flex justify-center">
+        <a href="https://dangrow.agency" target="_blank" rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full"
+          style={{ background: tg.theme.isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.04)" }}>
+          <svg viewBox="0 0 64 64" width="14" height="14">
+            <rect width="64" height="64" rx="14" fill="#CCFF00"/>
+            <path d="M21 44 L32 20 L43 44" stroke="#06060A" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+            <line x1="32" y1="20" x2="32" y2="14" stroke="#06060A" strokeWidth="5" strokeLinecap="round"/>
+            <line x1="27" y1="18" x2="32" y2="14" stroke="#06060A" strokeWidth="4" strokeLinecap="round"/>
+            <line x1="37" y1="18" x2="32" y2="14" stroke="#06060A" strokeWidth="4" strokeLinecap="round"/>
+          </svg>
+          <span className="text-[11px]" style={{ color: tg.theme.hint }}>powered by</span>
+          <span className="text-[11px] font-extrabold" style={{ color: tg.theme.text }}>DAN<span style={{ color: tg.theme.isDark ? "#CCFF00" : "#65a30d" }}>GROW</span></span>
+        </a>
       </div>
     </div>
   );
