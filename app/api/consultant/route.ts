@@ -180,7 +180,7 @@ export async function POST(req: Request) {
 
         send({ type: "done" });
 
-        // Log session + messages to Supabase (non-blocking)
+        // Log session + messages to Supabase (MUST await before controller.close)
         const userMessageCount = messages.filter((m) => m.role === "user").length;
         const toolsUsed = Array.from(allToolNames);
         const leadCollected = allToolNames.has("collect_lead");
@@ -205,23 +205,23 @@ export async function POST(req: Request) {
 
         // Save to DB (fire-and-forget)
         const db = createAnonClient();
-        Promise.resolve(
-          db.from("chat_sessions")
+        try {
+          const { data: session, error: sessionErr } = await db
+            .from("chat_sessions")
             .insert({ locale, messages_count: userMessageCount, tools_used: toolsUsed, lead_collected: leadCollected })
             .select("id")
-            .single()
-        ).then(({ data: session, error: sessionErr }) => {
-          if (sessionErr || !session?.id) {
-            console.error("Chat session save error:", sessionErr);
-            return;
-          }
-          if (chatMsgs.length > 0) {
+            .single();
+
+          if (sessionErr) console.error("Chat session save error:", sessionErr);
+
+          if (session?.id && chatMsgs.length > 0) {
             const rows = chatMsgs.map((m) => ({ session_id: session.id, role: m.role, content: m.content }));
-            Promise.resolve(db.from("chat_messages").insert(rows)).then(({ error: msgErr }) => {
-              if (msgErr) console.error("Chat messages save error:", msgErr);
-            });
+            const { error: msgErr } = await db.from("chat_messages").insert(rows);
+            if (msgErr) console.error("Chat messages save error:", msgErr);
           }
-        }).catch((err) => console.error("Chat save error:", err));
+        } catch (saveErr) {
+          console.error("Chat save error:", saveErr);
+        }
       } catch (err) {
         const message = err instanceof Error ? err.message : "Unknown error";
         send({ type: "error", message });
