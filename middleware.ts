@@ -12,6 +12,7 @@ const publicPaths = [
   "/robots.txt",
   "/sitemap.xml",
   "/admin",
+  "/tg",
 ];
 
 function getLocaleFromHeaders(request: NextRequest): string {
