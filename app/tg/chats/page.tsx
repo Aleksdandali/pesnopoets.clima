@@ -66,20 +66,26 @@ export default function TgChatsPage() {
         ) : messages.length === 0 ? (
           <p className="text-center py-16 text-[13px]" style={{ color: tg.theme.hint }}>Сообщения не сохранены</p>
         ) : (
-          <div className="px-4 py-3 space-y-2.5">
+          <div className="px-4 py-3 space-y-3">
             {messages.map((m) => (
-              <div key={m.id} className={`flex gap-2 ${m.role === "user" ? "" : "flex-row-reverse"}`}>
-                <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: m.role === "user" ? tg.theme.bgSecondary : `${tg.theme.link}15` }}>
-                  {m.role === "user" ? <User className="w-3.5 h-3.5" style={{ color: tg.theme.hint }} /> : <Bot className="w-3.5 h-3.5" style={{ color: tg.theme.link }} />}
-                </div>
-                <div className="max-w-[80%] rounded-2xl px-3.5 py-2.5 text-[14px] leading-relaxed" style={{
-                  background: m.role === "user" ? tg.theme.bgSecondary : `${tg.theme.link}10`,
-                  color: tg.theme.text,
-                  borderBottomLeftRadius: m.role === "assistant" ? 6 : undefined,
-                  borderBottomRightRadius: m.role === "user" ? 6 : undefined,
+              <div key={m.id} className={`flex gap-2.5 ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+                {m.role === "assistant" && (
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5" style={{ background: `${tg.theme.link}15` }}>
+                    <Bot className="w-4 h-4" style={{ color: tg.theme.link }} />
+                  </div>
+                )}
+                <div className={`max-w-[80%] rounded-2xl px-4 py-3 text-[15px] leading-relaxed ${m.role === "user" ? "rounded-br-md" : "rounded-bl-md"}`} style={{
+                  background: m.role === "user" ? tg.theme.link : tg.theme.bg,
+                  color: m.role === "user" ? "#ffffff" : tg.theme.text,
+                  border: m.role === "assistant" ? `1px solid ${tg.theme.isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)"}` : "none",
                 }}>
                   <p className="whitespace-pre-wrap break-words">{m.content}</p>
                 </div>
+                {m.role === "user" && (
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5" style={{ background: tg.theme.bgSecondary }}>
+                    <User className="w-4 h-4" style={{ color: tg.theme.hint }} />
+                  </div>
+                )}
               </div>
             ))}
           </div>

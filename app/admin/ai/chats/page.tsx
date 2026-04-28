@@ -134,26 +134,27 @@ export default function ChatsPage() {
         ) : (
           <div className="space-y-3">
             {messages.map((msg) => (
-              <div key={msg.id} className={`flex gap-3 ${msg.role === "user" ? "" : "flex-row-reverse"}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-                  msg.role === "user" ? "bg-[var(--muted)]" : "bg-[var(--primary-light)]"
-                }`}>
-                  {msg.role === "user" ? (
-                    <User className="w-4 h-4 text-[var(--muted-foreground)]" />
-                  ) : (
+              <div key={msg.id} className={`flex gap-2.5 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                {msg.role === "assistant" && (
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 bg-[var(--primary-light)] mt-0.5">
                     <Bot className="w-4 h-4 text-[var(--primary)]" />
-                  )}
-                </div>
-                <div className={`flex-1 max-w-[80%] rounded-xl p-3 text-sm ${
+                  </div>
+                )}
+                <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm ${
                   msg.role === "user"
-                    ? "bg-[var(--muted)] text-[var(--foreground)]"
-                    : "bg-[var(--primary-light)] text-[var(--foreground)]"
+                    ? "bg-[var(--primary)] text-white rounded-br-md"
+                    : "bg-[var(--muted)] text-[var(--foreground)] rounded-bl-md"
                 }`}>
                   <p className="whitespace-pre-wrap break-words">{msg.content}</p>
-                  <p className="text-[10px] text-[var(--muted-foreground)] mt-1">
+                  <p className={`text-[10px] mt-1 ${msg.role === "user" ? "text-white/60" : "text-[var(--muted-foreground)]"}`}>
                     {new Date(msg.created_at).toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
                   </p>
                 </div>
+                {msg.role === "user" && (
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 bg-[var(--muted)] mt-0.5">
+                    <User className="w-4 h-4 text-[var(--muted-foreground)]" />
+                  </div>
+                )}
               </div>
             ))}
           </div>
