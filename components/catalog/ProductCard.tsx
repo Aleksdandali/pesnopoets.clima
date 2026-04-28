@@ -8,6 +8,7 @@ import OneClickCardButton from "@/components/catalog/OneClickCardButton";
 import AddToCartButton from "@/components/cart/AddToCartButton";
 import ProductBadges from "@/components/catalog/ProductBadges";
 import { generateBadges } from "@/lib/bittel/badges";
+import { getInstallationEur, getPackagePriceEur, getBaseInstallationBgn, EUR_TO_BGN } from "@/lib/pricing";
 
 interface ProductCardProps {
   product: {
@@ -49,8 +50,10 @@ interface ProductCardProps {
         outOfStock: string;
       };
       withInstallation?: string;
+      withoutInstallation?: string;
       addToCart?: string;
       addedToCart?: string;
+      youSave?: string;
     };
   };
 }
@@ -92,7 +95,9 @@ export default function ProductCard({
   const localeTitle = locale === "en" ? product.title_en : locale === "ru" ? product.title_ru : locale === "ua" ? product.title_ua : null;
   const displayTitle = product.title_override || localeTitle || product.title;
   const displayPrice = product.price_override || product.price_client;
-  const badges = generateBadges(product, locale, 3);
+  const packagePrice = getPackagePriceEur(displayPrice, product.btu);
+  const installEur = getInstallationEur(product.btu);
+  const badges = generateBadges(product, locale, 3, { showInstallBadge: true });
   const gallery = product.gallery || [];
   const hasMultipleImages = gallery.length > 1;
   const imageUrl = gallery[currentIndex] || gallery[0];
@@ -289,19 +294,33 @@ export default function ProductCard({
           )}
         </div>
 
-        {/* Price block — API price only, no client-side additions */}
+        {/* Price block — package pricing (product + installation) */}
         <div className="mt-auto flex items-end justify-between gap-3 pt-3 sm:pt-4 border-t border-border">
           <div className="flex flex-col gap-0.5 min-w-0">
+            {/* Package price — primary, large */}
             <div className="flex items-baseline gap-1.5 flex-wrap">
               <span className="text-base sm:text-xl font-extrabold text-foreground">
+                {formatPrice(Math.round(packagePrice), currency, currencyLabel)}
+              </span>
+              <span className="text-[10px] sm:text-xs text-muted-foreground font-medium">
+                {dictionary?.product.withInstallation || (locale === "en" ? "with installation" : locale === "ru" ? "с монтажом" : locale === "ua" ? "з монтажем" : "с монтаж")}
+              </span>
+            </div>
+            {/* Product-only price — secondary, smaller, muted */}
+            <div className="flex items-baseline gap-1 flex-wrap">
+              <span className="text-[10px] sm:text-xs text-muted-foreground">
                 {formatPrice(displayPrice, currency, currencyLabel)}
               </span>
-              {product.is_promo && product.price_promo && product.price_promo > 0 && (
-                <span className="text-xs sm:text-sm text-muted-foreground line-through">
-                  {formatPrice(product.price_client, currency, currencyLabel)}
-                </span>
-              )}
+              <span className="text-[10px] sm:text-xs text-muted-foreground/70">
+                {dictionary?.product.withoutInstallation || (locale === "en" ? "without installation" : locale === "ru" ? "без монтажа" : locale === "ua" ? "без монтажу" : "без монтаж")}
+              </span>
             </div>
+            {/* Promo savings */}
+            {product.is_promo && product.price_promo && product.price_promo > 0 && (
+              <span className="text-[10px] sm:text-xs font-bold text-danger">
+                {dictionary?.product.youSave || (locale === "en" ? "You save" : locale === "ru" ? "Экономия" : locale === "ua" ? "Економія" : "Спестявате")}: {Math.round(product.price_client - displayPrice)} {currencyLabel}
+              </span>
+            )}
           </div>
 
           {/* Action buttons — siblings of Link, z-[5] keeps them above ::before */}

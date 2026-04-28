@@ -126,10 +126,18 @@
     "power": "Power",
     "noiseLevel": "Noise Level",
     "similarProducts": "Similar Products",
-    "withInstallation": "with base installation",
+    "withInstallation": "with installation",
     "sku": "SKU",
     "weight": "Weight",
-    "kg": "kg"
+    "kg": "kg",
+    "withoutInstallation": "without installation",
+    "installationIncluded": "+ INSTALLATION INCLUDED",
+    "packagePrice": "Price with installation",
+    "productOnly": "Unit only",
+    "youSave": "You save",
+    "googleRating": "4.9 on Google",
+    "googleReviews": "reviews",
+    "installationPrice": "Standard installation"
   },
   "inquiry": {
     "title": "Make an Inquiry",

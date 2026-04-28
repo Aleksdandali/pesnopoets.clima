@@ -85,3 +85,13 @@ export const EUR_TO_BGN = 1.95583;
 export function bgnToEur(bgn: number): number {
   return bgn / EUR_TO_BGN;
 }
+
+/** Installation price in EUR for given BTU. */
+export function getInstallationEur(btu: number | null | undefined): number {
+  return bgnToEur(getBaseInstallationBgn(btu));
+}
+
+/** Package price: product EUR + standard installation (converted to EUR). */
+export function getPackagePriceEur(productPriceEur: number, btu: number | null | undefined): number {
+  return productPriceEur + getInstallationEur(btu);
+}

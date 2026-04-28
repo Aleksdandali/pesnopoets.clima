@@ -17,11 +17,18 @@ import ProductViewTracker from "@/components/product/ProductViewTracker";
 import AddToCartButton from "@/components/cart/AddToCartButton";
 import { BUSINESS_PHONE_DISPLAY } from "@/lib/constants";
 import {
+  getPackagePriceEur,
+  getInstallationEur,
+  getBaseInstallationBgn,
+  EUR_TO_BGN as PRICING_EUR_TO_BGN,
+} from "@/lib/pricing";
+import {
   Zap,
   Maximize,
   Volume2,
   CheckCircle2,
   Leaf,
+  Wrench,
 } from "lucide-react";
 
 // ISR: revalidate product pages every 10 minutes
@@ -31,7 +38,7 @@ interface ProductPageProps {
   params: Promise<{ locale: string; slug: string }>;
 }
 
-const EUR_TO_BGN = 1.95583;
+const EUR_TO_BGN = PRICING_EUR_TO_BGN;
 
 async function getDictionary(locale: string) {
   try {
@@ -111,6 +118,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   // Price — clean API price in EUR (no conversion). Bittel is the source of truth.
   const priceEUR = displayPrice.toFixed(0);
+
+  // Package pricing: product + standard installation
+  const installEur = getInstallationEur(product.btu);
+  const installBgn = getBaseInstallationBgn(product.btu);
+  const packagePriceEur = getPackagePriceEur(displayPrice, product.btu);
+  const packagePriceEurStr = Math.round(packagePriceEur).toFixed(0);
 
   // Category info for breadcrumb — use translated name if available
   // categories relation returns array from explicit select; take first item
@@ -223,7 +236,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             {/* Product Badges */}
             {(() => {
-              const badges = generateBadges(product, locale, 6);
+              const badges = generateBadges(product, locale, 6, { showInstallBadge: true });
               return badges.length > 0 ? (
                 <div className="mb-2">
                   <ProductBadges badges={badges} max={6} />
@@ -264,25 +277,53 @@ export default async function ProductPage({ params }: ProductPageProps) {
               )}
             </div>
 
-            {/* 4. Price Block (large, prominent) — EUR + BGN equivalent */}
+            {/* 4. Price Block — Package pricing (product + installation) */}
             <div className="bg-muted rounded-xl p-4 sm:p-5 mb-4">
+              {/* Package price — primary */}
               <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
                 <span className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-                  {priceEUR} €
+                  {packagePriceEurStr} €
                 </span>
                 <span className="text-sm sm:text-base text-muted-foreground">
-                  ({Math.round(displayPrice * EUR_TO_BGN)} лв.)
+                  ({Math.round(packagePriceEur * EUR_TO_BGN)} лв.)
+                </span>
+                <span className="text-xs sm:text-sm font-semibold text-emerald-600">
+                  {t?.withInstallation || "с монтаж"}
                 </span>
               </div>
+
+              {/* Breakdown: product + installation */}
+              <div className="mt-2.5 pt-2.5 border-t border-border/50 space-y-1">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">{t?.productOnly || "Само климатик"}</span>
+                  <span className="font-medium text-foreground">{priceEUR} € <span className="text-muted-foreground font-normal">({Math.round(displayPrice * EUR_TO_BGN)} лв.)</span></span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="flex items-center gap-1.5 text-muted-foreground">
+                    <Wrench className="w-3.5 h-3.5 text-emerald-600" aria-hidden="true" />
+                    {t?.installationPrice || "Стандартен монтаж"}
+                  </span>
+                  <span className="font-medium text-emerald-600">{Math.round(installEur)} € <span className="text-muted-foreground font-normal">({installBgn} лв.)</span></span>
+                </div>
+              </div>
+
+              {/* Promo savings */}
               {product.is_promo && product.price_promo > 0 && (
-                <p className="text-sm text-danger font-semibold mt-1">
-                  {dictionary.common.promoPrice}
-                </p>
+                <div className="mt-2 flex items-center gap-2">
+                  <span className="text-sm line-through text-muted-foreground">
+                    {Math.round(product.price_client + installEur)} €
+                  </span>
+                  <span className="text-sm font-bold text-danger">
+                    {t?.youSave || "Спестявате"}: {Math.round(product.price_client - displayPrice)} €
+                  </span>
+                </div>
               )}
-              <p className="text-xs text-muted-foreground mt-1.5">
+
+              <p className="text-xs text-muted-foreground mt-2">
                 {t?.priceVat}
               </p>
             </div>
+
 
             {/* 5. Trust Block — before CTA for reassurance */}
             <ul role="list" className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
@@ -476,7 +517,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <StickyProductHeader
         locale={locale}
         title={displayTitle}
-        priceEUR={priceEUR}
+        priceEUR={packagePriceEurStr}
         cartItem={{
           id: product.id,
           slug: product.slug,
@@ -513,7 +554,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       {/* Sticky mobile CTA (bottom, mobile-only) */}
       <StickyMobileCTA
         locale={locale}
-        priceEUR={priceEUR}
+        priceEUR={packagePriceEurStr}
         phoneNumber={BUSINESS_PHONE_DISPLAY}
         cartItem={{
           id: product.id,

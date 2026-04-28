@@ -126,10 +126,18 @@
     "power": "Мощность",
     "noiseLevel": "Уровень шума",
     "similarProducts": "Похожие товары",
-    "withInstallation": "с базовым монтажом",
+    "withInstallation": "с монтажом",
     "sku": "Код",
     "weight": "Вес",
-    "kg": "кг"
+    "kg": "кг",
+    "withoutInstallation": "без монтажа",
+    "installationIncluded": "+ МОНТАЖ ВКЛЮЧЁН",
+    "packagePrice": "Цена с монтажом",
+    "productOnly": "Только кондиционер",
+    "youSave": "Экономия",
+    "googleRating": "4.9 в Google",
+    "googleReviews": "отзывов",
+    "installationPrice": "Стандартный монтаж"
   },
   "inquiry": {
     "title": "Оставить заявку",

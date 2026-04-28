@@ -14,7 +14,8 @@ export type BadgeType =
   | "btu"
   | "promo"
   | "low_stock"
-  | "cold_climate";
+  | "cold_climate"
+  | "install";
 
 export interface Badge {
   type: BadgeType;
@@ -50,7 +51,9 @@ type Locale = "bg" | "en" | "ru" | "ua";
 
 const badgeLabels: Record<string, Record<Locale, string>> = {
   silent: { bg: "Безшумен", en: "Silent", ru: "Бесшумный", ua: "Безшумний" },
-  wifi: { bg: "WiFi", en: "WiFi", ru: "WiFi", ua: "WiFi" },
+  wifi: { bg: "WiFi управление", en: "WiFi Control", ru: "WiFi управление", ua: "WiFi керування" },
+  install: { bg: "+ ВКЛЮЧЕН МОНТАЖ", en: "+ INSTALLATION INCL.", ru: "+ МОНТАЖ ВКЛЮЧЁН", ua: "+ МОНТАЖ ВКЛЮЧЕНО" },
+  heatingTo: { bg: "Отопление до", en: "Heating to", ru: "Обогрев до", ua: "Обігрів до" },
   inverter: { bg: "Инвертор", en: "Inverter", ru: "Инвертор", ua: "Інвертор" },
   eco: { bg: "R-32", en: "R-32", ru: "R-32", ua: "R-32" },
   promo: { bg: "Промо", en: "Promo", ru: "Акция", ua: "Акція" },
@@ -79,6 +82,7 @@ const badgeColors: Record<BadgeType, string> = {
   promo: "bg-red-500 text-white",
   low_stock: "bg-amber-500 text-white",
   cold_climate: "bg-sky-700 text-white",
+  install: "bg-emerald-600 text-white",
 };
 
 // ---------------------------------------------------------------------------
@@ -168,10 +172,21 @@ function hasColdClimateSupport(product: BadgeableProduct): boolean {
 export function generateBadges(
   product: BadgeableProduct,
   locale: string = "bg",
-  maxBadges: number = 4
+  maxBadges: number = 4,
+  options?: { showInstallBadge?: boolean }
 ): Badge[] {
   const loc = (["bg", "en", "ru", "ua"].includes(locale) ? locale : "bg") as Locale;
   const badges: Badge[] = [];
+
+  // --- Installation badge (highest priority) ---
+  if (options?.showInstallBadge) {
+    badges.push({
+      type: "install",
+      label: t("install", loc),
+      color: badgeColors.install,
+      priority: 0,
+    });
+  }
 
   // --- Dynamic / status badges (highest priority) ---
 
@@ -226,7 +241,7 @@ export function generateBadges(
   if (hasColdClimateSupport(product)) {
     badges.push({
       type: "cold_climate",
-      label: "-25°C",
+      label: `${t("heatingTo", loc)} -25°C`,
       color: badgeColors.cold_climate,
       priority: 4.5,
     });

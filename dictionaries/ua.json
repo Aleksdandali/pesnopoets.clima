@@ -126,10 +126,18 @@
     "power": "Потужність",
     "noiseLevel": "Рівень шуму",
     "similarProducts": "Схожі товари",
-    "withInstallation": "з базовим монтажем",
+    "withInstallation": "з монтажем",
     "sku": "Код",
     "weight": "Вага",
-    "kg": "кг"
+    "kg": "кг",
+    "withoutInstallation": "без монтажу",
+    "installationIncluded": "+ МОНТАЖ ВКЛЮЧЕНО",
+    "packagePrice": "Ціна з монтажем",
+    "productOnly": "Тільки кондиціонер",
+    "youSave": "Економія",
+    "googleRating": "4.9 у Google",
+    "googleReviews": "відгуків",
+    "installationPrice": "Стандартний монтаж"
   },
   "inquiry": {
     "title": "Залишити заявку",

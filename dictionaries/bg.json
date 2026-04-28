@@ -126,10 +126,18 @@
     "power": "Мощност",
     "noiseLevel": "Ниво на шум",
     "similarProducts": "Подобни продукти",
-    "withInstallation": "с базов монтаж",
+    "withInstallation": "с монтаж",
     "sku": "Код",
     "weight": "Тегло",
-    "kg": "кг"
+    "kg": "кг",
+    "withoutInstallation": "без монтаж",
+    "installationIncluded": "+ ВКЛЮЧЕН МОНТАЖ",
+    "packagePrice": "Цена с монтаж",
+    "productOnly": "Само климатик",
+    "youSave": "Спестявате",
+    "googleRating": "4.9 в Google",
+    "googleReviews": "отзива",
+    "installationPrice": "Стандартен монтаж"
   },
   "inquiry": {
     "title": "Направете запитване",
