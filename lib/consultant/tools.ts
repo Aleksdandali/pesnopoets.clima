@@ -4,7 +4,14 @@
  */
 
 import type Anthropic from "@anthropic-ai/sdk";
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
+
+function createAnonClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+}
 import { sendInquiryNotification } from "@/lib/telegram";
 import { FAQ, recommendBTU } from "./knowledge";
 import { EUR_TO_BGN, getBaseInstallationBgn } from "@/lib/pricing";
@@ -196,7 +203,7 @@ async function searchProducts(
   input: Record<string, unknown>,
   ctx: ToolContext
 ): Promise<unknown> {
-  const supabase = await createClient();
+  const supabase = createAnonClient();
   const limit = Math.min((input.limit as number) ?? 6, 8);
 
   let q = supabase
@@ -284,7 +291,7 @@ async function searchProducts(
 async function getCatalogSummary(
   input: Record<string, unknown>
 ): Promise<unknown> {
-  const supabase = await createClient();
+  const supabase = createAnonClient();
   let q = supabase
     .from("products")
     .select("manufacturer, price_client, price_override, price_promo, is_promo, btu, energy_class, stock_size")
@@ -340,7 +347,7 @@ async function getProductDetails(
   input: { slug: string },
   ctx: ToolContext
 ): Promise<unknown> {
-  const supabase = await createClient();
+  const supabase = createAnonClient();
   const { data, error } = await supabase
     .from("products")
     .select("slug, title, title_override, title_en, title_ru, title_ua, manufacturer, description, description_override, price_client, price_override, price_promo, is_promo, availability, gallery, btu, area_m2, noise_db_indoor, energy_class, refrigerant, seer, scop, stock_size, features, selling_points, best_for, warnings")
@@ -410,7 +417,7 @@ interface CollectLeadInput {
 }
 
 async function collectLead(input: CollectLeadInput, ctx: ToolContext): Promise<unknown> {
-  const supabase = await createClient();
+  const supabase = createAnonClient();
 
   // Normalize phone: strip spaces/dashes/parens, prepend +359 if local
   let phone = input.phone.replace(/[\s\-()]/g, "");
