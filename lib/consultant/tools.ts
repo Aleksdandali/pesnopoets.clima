@@ -441,7 +441,7 @@ async function collectLead(input: CollectLeadInput, ctx: ToolContext): Promise<u
     productPrice = data ? Number(data.price_override ?? data.price_client) : null;
   }
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("inquiries")
     .insert({
       name: input.name,
@@ -451,16 +451,14 @@ async function collectLead(input: CollectLeadInput, ctx: ToolContext): Promise<u
       source: "consultant-chat",
       product_id: productId,
       status: "new",
-    })
-    .select("id")
-    .single();
+    });
+
+  if (error) return { success: false, error: error.message };
 
   // Upsert client (non-blocking, after inquiry saved)
   upsertClient(supabase, { phone, name: input.name, locale: ctx.locale }).catch(() => {});
 
-  if (error) return { success: false, error: error.message };
-
-  // Telegram notification — non-blocking, same pattern as /api/inquiry
+  // Telegram notification — non-blocking
   sendInquiryNotification({
     name: input.name,
     phone,
@@ -472,7 +470,6 @@ async function collectLead(input: CollectLeadInput, ctx: ToolContext): Promise<u
 
   return {
     success: true,
-    inquiry_id: data?.id,
     message_to_customer:
       ctx.locale === "bg"
         ? "Благодарим! Нашият специалист ще Ви звънне скоро."
