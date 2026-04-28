@@ -441,25 +441,22 @@ async function collectLead(input: CollectLeadInput, ctx: ToolContext): Promise<u
     productPrice = data ? Number(data.price_override ?? data.price_client) : null;
   }
 
-  // Upsert client (non-blocking)
-  const clientId = await upsertClient(supabase, { phone, name: input.name, locale: ctx.locale });
-
-  const insertData: Record<string, unknown> = {
-    name: input.name,
-    phone,
-    message: input.message,
-    locale: ctx.locale,
-    source: "consultant-chat",
-    product_id: productId,
-    status: "new",
-  };
-  if (clientId) insertData.client_id = clientId;
-
   const { data, error } = await supabase
     .from("inquiries")
-    .insert(insertData)
+    .insert({
+      name: input.name,
+      phone,
+      message: input.message,
+      locale: ctx.locale,
+      source: "consultant-chat",
+      product_id: productId,
+      status: "new",
+    })
     .select("id")
     .single();
+
+  // Upsert client (non-blocking, after inquiry saved)
+  upsertClient(supabase, { phone, name: input.name, locale: ctx.locale }).catch(() => {});
 
   if (error) return { success: false, error: error.message };
 
