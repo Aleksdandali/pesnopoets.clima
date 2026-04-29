@@ -93,7 +93,7 @@ export default function HeroCarousel({
     <section
       aria-roledescription="carousel"
       aria-label="Hero banners"
-      className="relative overflow-hidden h-[65vh] min-h-[380px] max-h-[650px] sm:h-[70vh] sm:min-h-[480px] sm:max-h-[750px] bg-[#0a1628]"
+      className="relative overflow-hidden bg-[#0a1628] sm:h-[70vh] sm:min-h-[480px] sm:max-h-[750px]"
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
@@ -102,11 +102,38 @@ export default function HeroCarousel({
         {`Slide ${current + 1} of ${total}: ${title}`}
       </div>
 
-      {/* Background images */}
+      {/* Mobile: image area with fixed aspect ratio */}
+      <div className="relative aspect-[4/3] sm:hidden">
+        {banners.map((b, i) => (
+          <div
+            key={`m-${b.id}`}
+            className={`absolute inset-0 transition-opacity duration-700 ${
+              i === current ? "opacity-100" : "opacity-0 pointer-events-none"
+            }`}
+            aria-hidden={i !== current}
+          >
+            {(b.image_mobile || b.image_desktop) && (
+              <Image
+                src={b.image_mobile || b.image_desktop || ""}
+                alt={b.title[locale] || b.title.bg || ""}
+                fill
+                className="object-cover"
+                sizes="100vw"
+                priority={i === 0}
+                quality={85}
+              />
+            )}
+          </div>
+        ))}
+        {/* Subtle bottom fade for smooth transition to text area */}
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#0a1628] to-transparent" />
+      </div>
+
+      {/* Desktop: full-screen background images */}
       {banners.map((b, i) => (
         <div
           key={b.id}
-          className={`absolute inset-0 transition-opacity duration-700 ${
+          className={`hidden sm:block absolute inset-0 transition-opacity duration-700 ${
             i === current ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
           aria-hidden={i !== current}
@@ -116,30 +143,19 @@ export default function HeroCarousel({
               src={b.image_desktop}
               alt={b.title[locale] || b.title.bg || ""}
               fill
-              className={`object-cover ${b.image_mobile ? "hidden sm:block" : ""}`}
+              className="object-cover"
               sizes="100vw"
               priority={i === 0}
               quality={85}
             />
           )}
-          {b.image_mobile && (
-            <Image
-              src={b.image_mobile}
-              alt={b.title[locale] || b.title.bg || ""}
-              fill
-              className="object-cover sm:hidden"
-              sizes="100vw"
-              priority={i === 0}
-              quality={85}
-            />
-          )}
-          {/* Gradient — full coverage on mobile for text readability, left-right on desktop */}
-          <div className="absolute inset-0 bg-[#0a1628]/60 sm:bg-transparent sm:bg-gradient-to-r sm:from-[#0a1628]/75 sm:via-[#0a1628]/35 sm:to-transparent" />
+          {/* Desktop gradient — left to right */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/75 via-[#0a1628]/35 to-transparent" />
         </div>
       ))}
 
-      {/* Content — centered on all devices */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center pb-14 sm:pb-16">
+      {/* Content — below image on mobile, overlay on desktop */}
+      <div className="relative px-4 py-5 sm:max-w-7xl sm:mx-auto sm:px-6 lg:px-8 sm:h-full sm:flex sm:flex-col sm:justify-center sm:pb-16">
         <div className="max-w-xl lg:max-w-2xl">
           <h1
             key={`title-${current}`}
@@ -195,15 +211,15 @@ export default function HeroCarousel({
           <button
             type="button"
             onClick={() => navigate(current - 1)}
-            className={`hidden sm:flex absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 w-11 h-11 lg:w-12 lg:h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 items-center justify-center text-white hover:bg-white/20 transition-all z-10 ${focusRing}`}
+            className={`hidden sm:flex absolute left-4 lg:left-8 top-[30%] sm:top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 lg:w-12 lg:h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 items-center justify-center text-white hover:bg-white/20 transition-all z-10 ${focusRing}`}
             aria-label="Previous slide"
           >
-            <ChevronLeft className="w-5 h-5 lg:w-6 lg:h-6" />
+            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
           </button>
           <button
             type="button"
             onClick={() => navigate(current + 1)}
-            className={`hidden sm:flex absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 w-11 h-11 lg:w-12 lg:h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 items-center justify-center text-white hover:bg-white/20 transition-all z-10 ${focusRing}`}
+            className={`hidden sm:flex absolute right-4 lg:right-8 top-[30%] sm:top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 lg:w-12 lg:h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 items-center justify-center text-white hover:bg-white/20 transition-all z-10 ${focusRing}`}
             aria-label="Next slide"
           >
             <ChevronRight className="w-5 h-5 lg:w-6 lg:h-6" />
@@ -211,9 +227,9 @@ export default function HeroCarousel({
         </>
       )}
 
-      {/* Dots + pause/play */}
+      {/* Dots + pause/play — relative on mobile, absolute on desktop */}
       {total > 1 && (
-        <div className="absolute bottom-4 sm:bottom-7 left-1/2 -translate-x-1/2 flex items-center gap-1 z-10">
+        <div className="flex items-center justify-center gap-1 py-3 sm:py-0 sm:absolute sm:bottom-7 sm:left-1/2 sm:-translate-x-1/2 z-10">
           <button
             type="button"
             onClick={() => setPaused(p => !p)}
