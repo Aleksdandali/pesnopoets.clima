@@ -464,12 +464,7 @@ export default async function HomePage({ params }: HomePageProps) {
         </div>
       </section>
 
-      {/* Banner Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <BannerGrid locale={locale} />
-      </div>
-
-      {/* Popular Products */}
+      {/* Popular Products — above banners for faster access to prices (PPC optimization) */}
       {featuredProducts.length > 0 && (
         <section className="bg-muted/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
@@ -508,6 +503,11 @@ export default async function HomePage({ params }: HomePageProps) {
           </div>
         </section>
       )}
+
+      {/* Banner Grid — lifestyle navigation tiles */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <BannerGrid locale={locale} />
+      </div>
 
       {/* Features / Why Us */}
       <section className="bg-gradient-to-b from-white to-[#f8fafc]">
