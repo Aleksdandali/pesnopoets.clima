@@ -152,8 +152,9 @@ export default function HeroCarousel({
             </p>
           )}
 
-          {/* CTAs */}
+          {/* CTAs — key forces re-render when slide changes */}
           <div
+            key={`cta-${current}`}
             className="mt-5 sm:mt-7 flex flex-col sm:flex-row gap-2.5 sm:gap-4 animate-fade-in-up"
             style={{ animationDelay: "200ms" }}
           >
