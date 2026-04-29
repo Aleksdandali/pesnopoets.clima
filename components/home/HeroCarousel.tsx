@@ -125,8 +125,8 @@ export default function HeroCarousel({
               quality={85}
             />
           )}
-          {/* Dark gradient overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/90 via-[#0a1628]/60 to-[#0a1628]/20 sm:to-transparent" />
+          {/* Gradient overlay — light enough to show images, dark enough for text */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/75 via-[#0a1628]/35 to-transparent" />
         </div>
       ))}
 
