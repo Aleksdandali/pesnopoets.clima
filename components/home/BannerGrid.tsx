@@ -49,23 +49,23 @@ function BannerContent({
         />
       )}
 
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+      {/* Gradient overlay -- deeper, more cinematic */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/5" />
 
       {/* Text */}
       <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
-        <h3 className="text-white font-bold text-base sm:text-lg leading-tight drop-shadow-md">
+        <h3 className="text-white font-bold text-base sm:text-lg leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]">
           {title}
         </h3>
         {subtitle && (
-          <p className="text-white/80 text-xs sm:text-sm mt-0.5 drop-shadow-sm">
+          <p className="text-white/75 text-xs sm:text-sm mt-1 leading-relaxed">
             {subtitle}
           </p>
         )}
       </div>
 
-      {/* Hover arrow */}
-      <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+      {/* Hover arrow -- visible by default on mobile, animated on desktop */}
+      <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center sm:opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:bg-white/20">
         <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
         </svg>
@@ -107,7 +107,7 @@ export default async function BannerGrid({ locale }: { locale: string }) {
             <Link
               key={banner.id}
               href={`/${locale}${banner.link}`}
-              className="group relative block aspect-[580/300] rounded-xl overflow-hidden bg-muted"
+              className="group relative block aspect-[580/300] rounded-2xl overflow-hidden bg-muted shadow-[0_2px_12px_rgb(0_0_0/0.06)] hover:shadow-[0_12px_40px_rgb(0_0_0/0.12)] transition-shadow duration-300"
             >
               <BannerContent title={title} subtitle={subtitle} imgDesktop={imgDesktop} imgMobile={imgMobile} />
             </Link>

@@ -413,7 +413,7 @@
   },
   "trustNumbers": [
     { "value": "200+", "label": "монтажів", "icon": "shield" },
-    { "value": "4.9★", "label": "у Google", "icon": "star" },
+    { "value": "4.9", "label": "у Google", "icon": "star" },
     { "value": "10", "label": "брендів", "icon": "award" },
     { "value": "24/7", "label": "AI помічник", "icon": "sparkles" },
     { "value": "В день", "label": "звернення", "icon": "truck" }

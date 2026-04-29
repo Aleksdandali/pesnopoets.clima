@@ -392,20 +392,22 @@ export default async function HomePage({ params }: HomePageProps) {
       {seasonal && <SeasonalBanner locale={locale} labels={seasonal} />}
 
       {/* Trust Strip — numbers + social proof */}
-      <section className="border-b border-border/60 bg-white">
+      <section className="border-b border-border/60 bg-gradient-to-b from-white to-[#fafbfc]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex gap-4 sm:gap-6 lg:gap-8 py-3.5 sm:py-4 overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 sm:justify-center">
+          <div className="flex gap-3 sm:gap-4 lg:gap-6 py-4 sm:py-5 overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 sm:justify-center">
             {(trustNumbers || []).map((item: { value: string; label: string; icon: string }, i: number) => {
               const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
                 shield: Shield, star: Star, award: Award, sparkles: Sparkles, truck: Truck,
               };
               const Icon = iconMap[item.icon] || Shield;
               return (
-                <div key={i} className="flex items-center gap-2 shrink-0">
-                  <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-primary" aria-hidden="true" />
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-sm sm:text-base font-bold text-foreground whitespace-nowrap">{item.value}</span>
-                    <span className="text-[10px] sm:text-xs text-muted-foreground whitespace-nowrap">{item.label}</span>
+                <div key={i} className="flex items-center gap-2.5 shrink-0 px-3 sm:px-4 py-2 sm:py-2.5 bg-white border border-border/60 rounded-xl shadow-[0_1px_3px_rgb(0_0_0/0.03)]">
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-primary/[0.08] flex items-center justify-center shrink-0">
+                    <Icon className="w-4 h-4 sm:w-[18px] sm:h-[18px] text-primary" aria-hidden="true" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm sm:text-base font-bold text-foreground whitespace-nowrap leading-tight">{item.value}</span>
+                    <span className="text-[10px] sm:text-xs text-muted-foreground whitespace-nowrap leading-tight">{item.label}</span>
                   </div>
                 </div>
               );
@@ -431,11 +433,13 @@ export default async function HomePage({ params }: HomePageProps) {
               <Link
                 key={cat.slug}
                 href={`/${locale}/klimatici?category=${cat.slug}`}
-                className="group relative p-3 sm:p-6 bg-white border border-border/80 rounded-2xl hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0_0_0/0.04)] transition-all duration-300 overflow-hidden"
+                className="group relative p-3 sm:p-6 bg-white border border-border/60 rounded-2xl hover:border-primary/30 hover:shadow-[0_12px_40px_rgb(2_132_199/0.08)] transition-all duration-300 overflow-hidden"
               >
+                {/* Top accent line on hover */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary to-accent scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                 {/* Category representative image */}
                 {catImage && (
-                  <div className="relative w-full h-20 sm:h-28 mb-3 sm:mb-4 rounded-xl bg-[#fafbfc] overflow-hidden">
+                  <div className="relative w-full h-20 sm:h-28 mb-3 sm:mb-4 rounded-xl bg-gradient-to-br from-[#f0f9ff] to-[#f8fafc] overflow-hidden">
                     <Image
                       src={catImage}
                       alt={cat.name}
@@ -447,7 +451,7 @@ export default async function HomePage({ params }: HomePageProps) {
                   </div>
                 )}
                 {!catImage && (
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary-light/60 rounded-xl flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-primary-light group-hover:scale-105 transition-all duration-300">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-primary-light to-[#e0f2fe] rounded-xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-105 transition-all duration-300 shadow-[0_2px_8px_rgb(2_132_199/0.1)]">
                     <IconComp className="w-5 h-5 sm:w-6 sm:h-6 text-primary" aria-hidden="true" />
                   </div>
                 )}
@@ -457,7 +461,9 @@ export default async function HomePage({ params }: HomePageProps) {
                 <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed hidden sm:block">
                   {cat.desc}
                 </p>
-                <ChevronRight className="absolute top-4 sm:top-6 right-3 sm:right-5 w-4 h-4 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" aria-hidden="true" />
+                <div className="absolute top-4 sm:top-6 right-3 sm:right-5 w-7 h-7 rounded-full bg-transparent group-hover:bg-primary/[0.08] flex items-center justify-center transition-all duration-200">
+                  <ChevronRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200" aria-hidden="true" />
+                </div>
               </Link>
             );
           })}
@@ -510,24 +516,27 @@ export default async function HomePage({ params }: HomePageProps) {
       </div>
 
       {/* Features / Why Us */}
-      <section className="bg-gradient-to-b from-white to-[#f8fafc]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-          <div className="text-center mb-10 sm:mb-12">
+      <section className="bg-gradient-to-b from-white via-[#f8fafc] to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+          <div className="text-center mb-10 sm:mb-14">
             <h2 className="text-xl sm:text-2xl font-bold text-foreground">
               {labels.whyUs}
             </h2>
-            <div className="mt-3 mx-auto w-12 h-1 bg-primary rounded-full" />
+            <div className="mt-3 mx-auto w-10 h-1 bg-gradient-to-r from-primary to-accent rounded-full" />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
             {feats.map((feat, index) => {
               const IconComp = iconMap[feat.icon] || Shield;
               return (
                 <div
                   key={feat.title}
-                  className="relative p-5 sm:p-7 bg-white border border-border/60 rounded-2xl shadow-[0_4px_20px_rgb(0_0_0/0.03)] hover:shadow-[0_8px_30px_rgb(0_0_0/0.06)] transition-shadow duration-300"
+                  className="group relative p-5 sm:p-7 bg-white border border-border/60 rounded-2xl shadow-[0_2px_12px_rgb(0_0_0/0.03)] hover:shadow-[0_12px_40px_rgb(0_0_0/0.07)] transition-all duration-300 hover:-translate-y-0.5 overflow-hidden"
                 >
+                  {/* Left accent stripe */}
+                  <div className="absolute top-0 left-0 w-[3px] h-full bg-gradient-to-b from-primary to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
                   <div className="flex items-start gap-4 sm:gap-5">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-primary-light/60 rounded-2xl flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-primary/[0.08] to-accent/[0.05] rounded-2xl flex items-center justify-center shrink-0 group-hover:from-primary/[0.12] group-hover:to-accent/[0.08] transition-all duration-300">
                       <IconComp className="w-6 h-6 sm:w-7 sm:h-7 text-primary" aria-hidden="true" />
                     </div>
                     <div>
@@ -539,8 +548,8 @@ export default async function HomePage({ params }: HomePageProps) {
                       </p>
                     </div>
                   </div>
-                  {/* Subtle number */}
-                  <span className="absolute top-4 sm:top-5 right-4 sm:right-6 text-5xl sm:text-7xl font-bold text-primary/[0.04] select-none" aria-hidden="true">
+                  {/* Subtle number -- slightly more visible */}
+                  <span className="absolute top-3 sm:top-4 right-4 sm:right-6 text-5xl sm:text-7xl font-bold text-primary/[0.06] select-none" aria-hidden="true">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                 </div>
@@ -555,36 +564,43 @@ export default async function HomePage({ params }: HomePageProps) {
 
       {/* CTA Banner */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--primary-dark)] to-[var(--primary)]" />
-        <div className="absolute inset-0 opacity-10"
+        <div className="absolute inset-0 bg-gradient-to-br from-[#053b5e] via-[var(--primary-dark)] to-[var(--primary)]" />
+        {/* Decorative radial glow */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] opacity-20"
           style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
-            backgroundSize: "40px 40px",
+            background: "radial-gradient(circle at center, rgba(14,165,233,0.4) 0%, transparent 60%)",
           }}
         />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8">
+        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] opacity-10"
+          style={{
+            background: "radial-gradient(circle at center, rgba(13,148,136,0.5) 0%, transparent 60%)",
+          }}
+        />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 sm:gap-10">
             <div className="text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 border border-white/20 rounded-full mb-4 sm:mb-5">
-                <Phone className="w-3.5 h-3.5 text-white" aria-hidden="true" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/[0.08] border border-white/15 rounded-full mb-5 sm:mb-6 backdrop-blur-sm">
+                <div className="w-5 h-5 rounded-full bg-white/15 flex items-center justify-center">
+                  <Phone className="w-3 h-3 text-white" aria-hidden="true" />
+                </div>
                 <span className="text-xs font-medium text-white/90 tracking-wide">
                   {labels.freeConsultation}
                 </span>
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-white leading-tight">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white leading-tight">
                 {labels.ctaTitle}
               </h2>
-              <p className="mt-3 sm:mt-4 text-sm sm:text-base text-white/80 leading-relaxed max-w-lg mx-auto lg:mx-0">
+              <p className="mt-3 sm:mt-4 text-sm sm:text-base text-white/70 leading-relaxed max-w-lg mx-auto lg:mx-0">
                 {labels.ctaSubtitle}
               </p>
             </div>
             <div className="shrink-0 w-full sm:w-auto">
               <Link
                 href={`/${locale}/inquiry`}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-white text-[var(--primary-dark)] font-semibold rounded-xl hover:bg-white/90 transition-all duration-200 shadow-[0_4px_14px_0_rgb(0_0_0/0.15)] hover:shadow-[0_6px_20px_0_rgb(0_0_0/0.2)] hover:-translate-y-0.5 min-h-[48px]"
+                className="group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-white text-[var(--primary-dark)] font-semibold rounded-xl hover:bg-white/95 transition-all duration-200 shadow-[0_4px_20px_0_rgb(0_0_0/0.2)] hover:shadow-[0_8px_30px_0_rgb(0_0_0/0.25)] hover:-translate-y-0.5 min-h-[48px]"
               >
                 {labels.ctaButton}
-                <ArrowRight className="w-4.5 h-4.5" aria-hidden="true" />
+                <ArrowRight className="w-4.5 h-4.5 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
               </Link>
             </div>
           </div>
@@ -592,9 +608,9 @@ export default async function HomePage({ params }: HomePageProps) {
       </section>
 
       {/* Brands */}
-      <section className="border-t border-border/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-          <p className="text-xs sm:text-sm font-medium text-muted-foreground text-center mb-8 sm:mb-12 tracking-wide uppercase">
+      <section className="border-t border-border/40 bg-gradient-to-b from-[#fafbfc] to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
+          <p className="text-xs sm:text-sm font-medium text-muted-foreground text-center mb-8 sm:mb-12 tracking-widest uppercase">
             {labels.brands}
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
@@ -602,11 +618,11 @@ export default async function HomePage({ params }: HomePageProps) {
               <Link
                 key={brand.name}
                 href={`/${locale}/klimatici?brand=${encodeURIComponent(brand.name)}`}
-                className="group relative flex flex-col items-center gap-2 sm:gap-3 p-4 sm:p-5 bg-white border border-border/80 rounded-2xl hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0_0_0/0.04)] transition-all duration-300"
+                className="group relative flex flex-col items-center gap-2 sm:gap-3 p-4 sm:p-5 bg-white border border-border/60 rounded-2xl hover:border-primary/30 hover:shadow-[0_12px_40px_rgb(2_132_199/0.08)] transition-all duration-300 hover:-translate-y-0.5"
               >
                 {/* Brand representative image */}
                 {brand.image ? (
-                  <div className="relative w-full h-16 sm:h-20 rounded-xl bg-[#fafbfc] overflow-hidden">
+                  <div className="relative w-full h-16 sm:h-20 rounded-xl bg-gradient-to-br from-[#f0f9ff]/50 to-[#f8fafc] overflow-hidden">
                     <Image
                       src={brand.image}
                       alt={`${brand.name} air conditioner`}
@@ -617,7 +633,7 @@ export default async function HomePage({ params }: HomePageProps) {
                     />
                   </div>
                 ) : (
-                  <div className="w-full h-16 sm:h-20 rounded-xl bg-[#fafbfc] flex items-center justify-center">
+                  <div className="w-full h-16 sm:h-20 rounded-xl bg-gradient-to-br from-[#f0f9ff]/50 to-[#f8fafc] flex items-center justify-center">
                     <Snowflake className="w-7 h-7 sm:w-8 sm:h-8 text-muted-foreground/20" aria-hidden="true" />
                   </div>
                 )}

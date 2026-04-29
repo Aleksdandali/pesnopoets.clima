@@ -190,7 +190,7 @@ export default function BannersPage() {
           <div className="px-3 py-2 rounded-lg bg-[var(--muted)] text-[var(--muted-foreground)] text-center">Полоска доверия</div>
           <div className="px-3 py-2 rounded-lg bg-[var(--muted)] text-[var(--muted-foreground)] text-center">Категории</div>
           <div className="px-3 py-2.5 rounded-lg bg-[var(--primary)] text-white text-center font-bold ring-2 ring-[var(--primary)]/30">
-            ★ Баннерная сетка (2×3 на десктопе, 1 колонка на мобиле)
+            Баннерная сетка (2x3 на десктопе, 1 колонка на мобиле)
           </div>
           <div className="px-3 py-2 rounded-lg bg-[var(--muted)] text-[var(--muted-foreground)] text-center">Популярные товары</div>
           <div className="px-3 py-2 rounded-lg bg-[var(--muted)] text-[var(--muted-foreground)] text-center">Почему мы / Бренды / Футер</div>

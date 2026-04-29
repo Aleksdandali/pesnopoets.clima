@@ -179,6 +179,12 @@ h3 {
   display: none;
 }
 
+/* Seasonal banner shimmer */
+@keyframes shimmer {
+  0%, 100% { background-position: 200% 0; }
+  50% { background-position: -200% 0; }
+}
+
 /* Subtle page transition */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(4px); }

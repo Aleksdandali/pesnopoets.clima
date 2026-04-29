@@ -94,7 +94,7 @@ function getConsultantLabels(locale: string): ConsultantLabels {
       title: "AI консултант",
       subtitle: "Онлайн • Отговаря веднага",
       greeting:
-        "Здравейте! 👋 Аз съм AI консултантът на Песнопоец Клима. Мога да Ви помогна да изберете климатик за Вашия дом. За каква стая търсите — спалня, хол, офис? И колко е приблизително квадратурата?",
+        "Здравейте!Аз съм AI консултантът на Песнопоец Клима. Мога да Ви помогна да изберете климатик за Вашия дом. За каква стая търсите — спалня, хол, офис? И колко е приблизително квадратурата?",
       placeholder: "Напишете въпрос...",
       send: "Изпрати",
       close: "Затвори",
@@ -109,7 +109,7 @@ function getConsultantLabels(locale: string): ConsultantLabels {
       title: "AI Consultant",
       subtitle: "Online • Replies instantly",
       greeting:
-        "Hi! 👋 I'm the AI consultant for Pesnopoets Klima. I can help you pick the right AC for your space. What room is it for — bedroom, living room, office? And roughly what size (m²)?",
+        "Hi!I'm the AI consultant for Pesnopoets Klima. I can help you pick the right AC for your space. What room is it for — bedroom, living room, office? And roughly what size (m²)?",
       placeholder: "Type your question...",
       send: "Send",
       close: "Close",
@@ -124,7 +124,7 @@ function getConsultantLabels(locale: string): ConsultantLabels {
       title: "AI консультант",
       subtitle: "Онлайн • Отвечает мгновенно",
       greeting:
-        "Здравствуйте! 👋 Я AI консультант Песнопоец Клима. Помогу подобрать климатик под вашу ситуацию. Для какой комнаты — спальня, гостиная, офис? И сколько примерно квадратов?",
+        "Здравствуйте!Я AI консультант Песнопоец Клима. Помогу подобрать климатик под вашу ситуацию. Для какой комнаты — спальня, гостиная, офис? И сколько примерно квадратов?",
       placeholder: "Напишите вопрос...",
       send: "Отправить",
       close: "Закрыть",
@@ -139,7 +139,7 @@ function getConsultantLabels(locale: string): ConsultantLabels {
       title: "AI консультант",
       subtitle: "Онлайн • Відповідає миттєво",
       greeting:
-        "Вітаю! 👋 Я AI консультант Песнопоец Клима. Допоможу підібрати кондиціонер під вашу ситуацію. Для якої кімнати — спальня, вітальня, офіс? І приблизно скільки квадратів?",
+        "Вітаю!Я AI консультант Песнопоец Клима. Допоможу підібрати кондиціонер під вашу ситуацію. Для якої кімнати — спальня, вітальня, офіс? І приблизно скільки квадратів?",
       placeholder: "Напишіть запитання...",
       send: "Надіслати",
       close: "Закрити",

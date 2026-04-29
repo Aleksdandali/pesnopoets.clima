@@ -413,7 +413,7 @@
   },
   "trustNumbers": [
     { "value": "200+", "label": "installations", "icon": "shield" },
-    { "value": "4.9★", "label": "on Google", "icon": "star" },
+    { "value": "4.9", "label": "on Google", "icon": "star" },
     { "value": "10", "label": "brands", "icon": "award" },
     { "value": "24/7", "label": "AI assistant", "icon": "sparkles" },
     { "value": "Same day", "label": "service", "icon": "truck" }
