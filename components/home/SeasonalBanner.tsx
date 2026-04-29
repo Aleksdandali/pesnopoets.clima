@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Clock, Flame, Snowflake } from "lucide-react";
+import { CalendarClock, Flame, Snowflake } from "lucide-react";
 
 interface SeasonalBannerProps {
   locale: string;
@@ -13,20 +13,21 @@ interface SeasonalBannerProps {
 }
 
 function getSeasonConfig(month: number) {
-  // May-August: peak cooling season
-  if (month >= 4 && month <= 7) {
-    return { type: "peak" as const, slots: 6, icon: Flame };
+  // month is 0-indexed: 0=Jan, 3=Apr, 4=May, 7=Aug
+  // Apr-Aug (3-7): peak cooling season — installations booming
+  if (month >= 3 && month <= 7) {
+    return { type: "peak" as const, freeDates: 4, icon: Flame };
   }
-  // Nov-Feb: heating season
+  // Nov-Feb (10-1): heating season
   if (month >= 10 || month <= 1) {
-    return { type: "heating" as const, slots: 8, icon: Snowflake };
+    return { type: "heating" as const, freeDates: 8, icon: Snowflake };
   }
-  // Mar-Apr, Sep-Oct: off-season
-  return { type: "offSeason" as const, slots: 12, icon: Clock };
+  // Sep-Oct, Mar: pre/post season
+  return { type: "offSeason" as const, freeDates: 10, icon: CalendarClock };
 }
 
 export default function SeasonalBanner({ locale, labels }: SeasonalBannerProps) {
-  const month = new Date().getMonth(); // 0-indexed
+  const month = new Date().getMonth();
   const config = getSeasonConfig(month);
   const Icon = config.icon;
 
@@ -36,20 +37,20 @@ export default function SeasonalBanner({ locale, labels }: SeasonalBannerProps) 
     ? labels.heating
     : labels.offSeason;
 
-  const slotsText = labels.slots.replace("{count}", String(config.slots));
+  const slotsText = labels.slots.replace("{count}", String(config.freeDates));
 
   return (
-    <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 text-white">
+    <div className="bg-gradient-to-r from-primary-dark via-primary to-primary-dark text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex items-center justify-center gap-3 sm:gap-4 flex-wrap text-center">
         <div className="flex items-center gap-2">
-          <Icon className="w-4 h-4 shrink-0 animate-pulse" aria-hidden="true" />
+          <Icon className="w-4 h-4 shrink-0" aria-hidden="true" />
           <span className="text-xs sm:text-sm font-semibold">{message}</span>
         </div>
-        <span className="hidden sm:inline text-white/60">•</span>
-        <span className="text-xs sm:text-sm font-medium text-white/90">{slotsText}</span>
+        <span className="hidden sm:inline text-white/40">·</span>
+        <span className="text-xs sm:text-sm font-medium text-white/80">{slotsText}</span>
         <Link
           href={`/${locale}/inquiry`}
-          className="inline-flex items-center px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-bold rounded-full hover:bg-white/30 transition-colors border border-white/30"
+          className="inline-flex items-center px-3.5 py-1.5 bg-white text-primary text-xs font-bold rounded-full hover:bg-white/90 transition-colors"
         >
           {labels.cta} →
         </Link>
