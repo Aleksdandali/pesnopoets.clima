@@ -93,7 +93,7 @@ export default function HeroCarousel({
     <section
       aria-roledescription="carousel"
       aria-label="Hero banners"
-      className="relative overflow-hidden bg-[#0a1628] sm:h-[60vh] sm:min-h-[420px] sm:max-h-[600px]"
+      className="relative overflow-hidden bg-[#0a1628] sm:aspect-[2.4/1] sm:max-h-[550px]"
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
