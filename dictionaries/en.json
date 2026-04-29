@@ -419,11 +419,11 @@
     { "value": "Same day", "label": "service", "icon": "truck" }
   ],
   "seasonal": {
-    "peak": "Installation season — book your date early",
-    "slots": "{count} dates available this week",
+    "peak": "Book your installation — season has started",
+    "slots": "Only {count} installation dates left this week",
     "heating": "Winter heating? An inverter AC is the perfect solution",
     "offSeason": "Best prices before the season starts",
-    "cta": "Reserve"
+    "cta": "Book now"
   },
   "aiConsultant": {
     "title": "AI Assistant",

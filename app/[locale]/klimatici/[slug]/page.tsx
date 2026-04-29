@@ -279,24 +279,26 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
             {/* Urgency signals */}
             <div className="flex flex-wrap gap-2 mt-1">
-              {product.stock_size && product.stock_size <= 3 && product.stock_size > 1 && (
-                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-                  ⚡ {(dictionary.urgency?.lastItems || "Последние {count} шт!").replace("{count}", String(product.stock_size))}
+              {product.stock_size && product.stock_size <= 3 && product.stock_size > 1 && dictionary.urgency?.lastItems && (
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-[var(--warning-light)] text-[var(--warning)]">
+                  {dictionary.urgency.lastItems.replace("{count}", String(product.stock_size))}
                 </span>
               )}
-              {product.stock_size === 1 && (
-                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200">
-                  🔥 {dictionary.urgency?.lastOne || "Последний экземпляр!"}
+              {product.stock_size === 1 && dictionary.urgency?.lastOne && (
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-[var(--danger-light)] text-[var(--danger)]">
+                  {dictionary.urgency.lastOne}
                 </span>
               )}
-              {(() => { const m = new Date().getMonth(); return m >= 4 && m <= 7; })() && (
-                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-orange-50 text-orange-700 border border-orange-200">
-                  {dictionary.urgency?.peakSeason || "Пиковый сезон — забронируйте монтаж сейчас"}
+              {(() => { const m = new Date().getMonth(); return m >= 3 && m <= 7; })() && dictionary.urgency?.peakSeason && (
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[var(--primary-light)] text-[var(--primary)]">
+                  {dictionary.urgency.peakSeason}
                 </span>
               )}
-              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
-                🚚 {dictionary.urgency?.delivery || "Доставка и монтаж: 1-3 рабочих дня"}
-              </span>
+              {dictionary.urgency?.delivery && (
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-[var(--primary-light)] text-[var(--primary)]">
+                  {dictionary.urgency.delivery}
+                </span>
+              )}
             </div>
 
             {/* 4. Price Block — Package pricing (product + installation) */}
