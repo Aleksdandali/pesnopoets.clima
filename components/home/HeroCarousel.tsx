@@ -103,7 +103,7 @@ export default function HeroCarousel({
       </div>
 
       {/* Mobile: image area with fixed aspect ratio */}
-      <div className="relative aspect-[4/3] sm:hidden">
+      <div className="relative aspect-[3/2] sm:hidden">
         {banners.map((b, i) => (
           <div
             key={`m-${b.id}`}
