@@ -376,22 +376,18 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
             className="absolute top-full right-0 mt-1.5 px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-sm text-[9px] sm:text-[10px] font-semibold text-foreground shadow-sm border border-border/60 whitespace-nowrap pointer-events-none select-none"
             aria-hidden="true"
           >
-            AI · {labels.title}
+            {labels.title}
           </span>
-          {/* Teaser bubble */}
+          {/* Teaser bubble — localized by locale prop */}
           {showTeaser && (
             <button
               type="button"
               onClick={() => { setShowTeaser(false); setOpen(true); }}
-              className="absolute bottom-full right-0 mb-2 px-3 py-2 bg-white rounded-xl shadow-lg border border-border/60 text-xs font-medium text-foreground whitespace-nowrap animate-fade-in-up cursor-pointer hover:bg-muted/50 transition-colors"
+              className="absolute bottom-full right-0 mb-2 px-3 py-2 bg-white rounded-xl shadow-lg border border-border/60 text-xs font-medium text-foreground whitespace-nowrap cursor-pointer hover:bg-muted/50 transition-colors"
               style={{ animation: "fadeInUp 0.3s ease-out" }}
             >
               <span className="absolute -bottom-1 right-4 w-2 h-2 bg-white border-r border-b border-border/60 rotate-45" />
-              {labels.triggerAria.includes("консултант") || labels.triggerAria.includes("consultant")
-                ? (typeof window !== "undefined" && document.documentElement.lang === "en"
-                  ? "Need help choosing?"
-                  : "Нужна помощь с выбором?")
-                : "Нужна помощь с выбором?"}
+              {{ bg: "Нуждаете се от помощ?", en: "Need help choosing?", ru: "Нужна помощь с выбором?", ua: "Потрібна допомога?" }[locale]}
             </button>
           )}
         </div>
