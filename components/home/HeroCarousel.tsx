@@ -133,13 +133,13 @@ export default function HeroCarousel({
               quality={85}
             />
           )}
-          {/* Gradient — bottom-up mobile, left-right desktop */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/95 via-[#0a1628]/60 to-[#0a1628]/15 sm:bg-gradient-to-r sm:from-[#0a1628]/75 sm:via-[#0a1628]/35 sm:to-transparent" />
+          {/* Gradient — full coverage on mobile for text readability, left-right on desktop */}
+          <div className="absolute inset-0 bg-[#0a1628]/60 sm:bg-transparent sm:bg-gradient-to-r sm:from-[#0a1628]/75 sm:via-[#0a1628]/35 sm:to-transparent" />
         </div>
       ))}
 
-      {/* Content — bottom on mobile, center on desktop */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-end sm:justify-center pb-16 sm:pb-20">
+      {/* Content — centered on all devices */}
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center pb-14 sm:pb-16">
         <div className="max-w-xl lg:max-w-2xl">
           <h1
             key={`title-${current}`}
