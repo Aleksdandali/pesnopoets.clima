@@ -18,9 +18,9 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import ProductCard from "@/components/catalog/ProductCard";
-import BannerGrid from "@/components/home/BannerGrid";
 import SeasonalBanner from "@/components/home/SeasonalBanner";
 import AiConsultantSection from "@/components/home/AiConsultantSection";
+import HeroCarousel from "@/components/home/HeroCarousel";
 
 // Revalidate homepage every 5 minutes for fresh product data
 export const revalidate = 300;
@@ -304,89 +304,42 @@ export default async function HomePage({ params }: HomePageProps) {
   const cats = categories[locale] || categories.bg;
   const labels = sectionLabels[locale] || sectionLabels.bg;
 
-  const [featuredProducts, brands, categoryImages] = await Promise.all([
+  // Fetch hero banners from Supabase
+  async function getHeroBanners() {
+    try {
+      const supabase = await createClient();
+      const { data } = await supabase
+        .from("banners")
+        .select("id, title, subtitle, image_desktop, image_mobile, link")
+        .eq("is_active", true)
+        .order("sort_order", { ascending: true })
+        .limit(8);
+      return data || [];
+    } catch {
+      return [];
+    }
+  }
+
+  const [featuredProducts, brands, categoryImages, heroBanners] = await Promise.all([
     getFeaturedProducts(),
     getBrandsWithImages(),
     getCategoryImages(),
+    getHeroBanners(),
   ]);
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden min-h-[520px] sm:min-h-[640px] lg:min-h-[740px]">
-        {/* Background image — purely decorative; hero text already conveys meaning */}
-        <Image
-          src="/hero-bg.jpg"
-          alt=""
-          role="presentation"
-          fill
-          className="object-cover object-bottom"
-          sizes="100vw"
-          priority
-          quality={85}
-        />
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/90 via-[#0a1628]/70 to-[#0a1628]/5" />
-        {/* Bottom fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white/30 to-transparent" />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-28 lg:py-36">
-          <div className="max-w-2xl">
-            {/* Logo + badge — stacked on small screens, row on larger */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-6 sm:mb-8">
-              <Image
-                src="/logo.png"
-                alt={dictionary.common.siteName}
-                width={56}
-                height={56}
-                className="w-11 h-11 sm:w-14 sm:h-14 rounded-xl shadow-lg"
-              />
-              <div className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full">
-                <Snowflake className="w-3.5 h-3.5 text-white" aria-hidden="true" />
-                <span className="text-xs font-medium text-white/90 tracking-wide">
-                  {dictionary.common.authorizedDealer}
-                </span>
-              </div>
-            </div>
-
-            <h1 className="text-[1.65rem] leading-[1.15] sm:text-4xl lg:text-[3.5rem] font-bold text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)]">
-              {hero.title}
-            </h1>
-            <p className="mt-3 sm:mt-6 text-sm sm:text-lg text-white/70 leading-relaxed max-w-lg">
-              {hero.subtitle}
-            </p>
-
-            {/* Service pills */}
-            <div className="mt-5 sm:mt-6 flex flex-wrap gap-2 sm:gap-3">
-              {(dictionary.common.services || []).map((service: string) => (
-                <span
-                  key={service}
-                  className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 bg-white/10 backdrop-blur-sm border border-white/15 rounded-lg text-xs sm:text-sm font-medium text-white/90"
-                >
-                  <span className="w-1.5 h-1.5 bg-primary rounded-full" aria-hidden="true" />
-                  {service}
-                </span>
-              ))}
-            </div>
-
-            <div className="mt-6 sm:mt-10 flex flex-col sm:flex-row gap-3">
-              <Link
-                href={`/${locale}/klimatici`}
-                className="inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 sm:py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-[0_4px_20px_0_rgb(2_132_199/0.4)] hover:shadow-[0_6px_24px_0_rgb(2_132_199/0.5)] hover:-translate-y-0.5 min-h-[48px] text-sm sm:text-base"
-              >
-                {hero.cta}
-                <ArrowRight className="w-4.5 h-4.5" aria-hidden="true" />
-              </Link>
-              <Link
-                href={`/${locale}/inquiry`}
-                className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-white/10 backdrop-blur-md text-white font-semibold rounded-xl border border-white/30 hover:bg-white/20 transition-all duration-200 min-h-[48px] text-sm sm:text-base"
-              >
-                {hero.ctaSecondary}
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero Carousel — managed via /admin/banners */}
+      <HeroCarousel
+        banners={heroBanners}
+        locale={locale}
+        fallbackTitle={hero.title}
+        fallbackSubtitle={hero.subtitle}
+        ctaLabel={hero.cta}
+        ctaSecondaryLabel={hero.ctaSecondary}
+        ctaLink="/klimatici"
+        ctaSecondaryLink="/inquiry"
+      />
 
       {/* Seasonal Urgency Banner */}
       {seasonal && <SeasonalBanner locale={locale} labels={seasonal} />}
@@ -509,11 +462,6 @@ export default async function HomePage({ params }: HomePageProps) {
           </div>
         </section>
       )}
-
-      {/* Banner Grid — lifestyle navigation tiles */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <BannerGrid locale={locale} />
-      </div>
 
       {/* Features / Why Us */}
       <section className="bg-gradient-to-b from-white via-[#f8fafc] to-white">
