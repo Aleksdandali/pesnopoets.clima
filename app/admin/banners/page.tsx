@@ -182,6 +182,22 @@ export default function BannersPage() {
         </button>
       </div>
 
+      {/* Page layout schema */}
+      <div className="mb-6 bg-[var(--background)] rounded-xl border border-[var(--border)] p-4 sm:p-5">
+        <p className="text-xs font-semibold text-[var(--muted-foreground)] uppercase tracking-wider mb-3">Расположение на главной странице</p>
+        <div className="flex flex-col gap-1.5 text-xs">
+          <div className="px-3 py-2 rounded-lg bg-[var(--muted)] text-[var(--muted-foreground)] text-center">Hero-баннер</div>
+          <div className="px-3 py-2 rounded-lg bg-[var(--muted)] text-[var(--muted-foreground)] text-center">Полоска доверия</div>
+          <div className="px-3 py-2 rounded-lg bg-[var(--muted)] text-[var(--muted-foreground)] text-center">Категории</div>
+          <div className="px-3 py-2.5 rounded-lg bg-[var(--primary)] text-white text-center font-bold ring-2 ring-[var(--primary)]/30">
+            ★ Баннерная сетка (2×3 на десктопе, 1 колонка на мобиле)
+          </div>
+          <div className="px-3 py-2 rounded-lg bg-[var(--muted)] text-[var(--muted-foreground)] text-center">Популярные товары</div>
+          <div className="px-3 py-2 rounded-lg bg-[var(--muted)] text-[var(--muted-foreground)] text-center">Почему мы / Бренды / Футер</div>
+        </div>
+        <p className="text-[11px] text-[var(--muted-foreground)] mt-3">Размеры картинок: Desktop <span className="font-mono font-semibold">580×300 px</span> · Mobile <span className="font-mono font-semibold">375×200 px</span> (необяз.) · WebP до 80 KB</p>
+      </div>
+
       {message && (
         <div className="mb-4 px-4 py-2 rounded-lg bg-[var(--success-light)] text-[var(--success)] text-sm font-medium">
           {message}
