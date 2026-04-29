@@ -81,12 +81,12 @@ export default function AiConsultantSection({ labels }: AiConsultantSectionProps
               className="group inline-flex items-center gap-2.5 px-7 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-xl hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 shadow-[0_4px_20px_0_rgb(16_185_129/0.35)] hover:shadow-[0_8px_30px_0_rgb(16_185_129/0.45)] hover:-translate-y-0.5 text-sm sm:text-base"
             >
               {labels.cta}
-              <ArrowRight className="w-4.5 h-4.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+              <ArrowRight className="w-[18px] h-[18px] transition-transform duration-200 group-hover:translate-x-0.5" />
             </button>
           </div>
 
           {/* Right -- modern chat mockup visual */}
-          <div className="flex-shrink-0 w-72 sm:w-80 lg:w-[340px]">
+          <div className="flex-shrink-0 w-full max-w-[300px] sm:w-80 lg:w-[340px]" aria-hidden="true">
             <div className="relative">
               {/* Main card -- chat window mockup */}
               <div className="bg-white rounded-2xl shadow-[0_8px_40px_rgb(0_0_0/0.08)] border border-emerald-100/80 overflow-hidden">

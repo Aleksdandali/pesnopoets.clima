@@ -346,15 +346,16 @@ export default async function HomePage({ params }: HomePageProps) {
 
       {/* Trust Strip — numbers + social proof */}
       <section className="border-b border-border/60 bg-gradient-to-b from-white to-[#fafbfc]">
+        <h2 className="sr-only">Trust indicators</h2>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex gap-3 sm:gap-4 lg:gap-6 py-4 sm:py-5 overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 sm:justify-center">
+          <div role="region" aria-label="Trust indicators" tabIndex={0} className="flex gap-3 sm:gap-4 lg:gap-6 py-4 sm:py-5 overflow-x-auto scrollbar-hide snap-x snap-mandatory -mx-4 px-4 sm:mx-0 sm:px-0 sm:justify-center">
             {(trustNumbers || []).map((item: { value: string; label: string; icon: string }, i: number) => {
               const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
                 shield: Shield, star: Star, award: Award, sparkles: Sparkles, truck: Truck,
               };
               const Icon = iconMap[item.icon] || Shield;
               return (
-                <div key={i} className="flex items-center gap-2.5 shrink-0 px-3 sm:px-4 py-2 sm:py-2.5 bg-white border border-border/60 rounded-xl shadow-[0_1px_3px_rgb(0_0_0/0.03)]">
+                <div key={i} className="flex items-center gap-2.5 shrink-0 snap-start px-3 sm:px-4 py-2 sm:py-2.5 bg-white border border-border/60 rounded-xl shadow-[0_1px_3px_rgb(0_0_0/0.03)]">
                   <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-primary/[0.08] flex items-center justify-center shrink-0">
                     <Icon className="w-4 h-4 sm:w-[18px] sm:h-[18px] text-primary" aria-hidden="true" />
                   </div>
@@ -548,7 +549,7 @@ export default async function HomePage({ params }: HomePageProps) {
                 className="group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-white text-[var(--primary-dark)] font-semibold rounded-xl hover:bg-white/95 transition-all duration-200 shadow-[0_4px_20px_0_rgb(0_0_0/0.2)] hover:shadow-[0_8px_30px_0_rgb(0_0_0/0.25)] hover:-translate-y-0.5 min-h-[48px]"
               >
                 {labels.ctaButton}
-                <ArrowRight className="w-4.5 h-4.5 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
+                <ArrowRight className="w-[18px] h-[18px] transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden="true" />
               </Link>
             </div>
           </div>

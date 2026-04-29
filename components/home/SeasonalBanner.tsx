@@ -58,10 +58,10 @@ export default function SeasonalBanner({ locale, labels }: SeasonalBannerProps) 
           <span className="text-xs sm:text-sm font-semibold">{message}</span>
         </div>
         <span className="hidden sm:inline text-white/20">|</span>
-        <span className="text-xs sm:text-sm font-medium text-white/70">{slotsText}</span>
+        <span className="text-xs sm:text-sm font-medium text-white/90">{slotsText}</span>
         <Link
           href={`/${locale}/inquiry`}
-          className="inline-flex items-center px-4 py-1.5 bg-white text-primary-dark text-xs font-bold rounded-full hover:bg-white/90 transition-all duration-200 shadow-[0_2px_8px_rgb(0_0_0/0.15)] hover:shadow-[0_4px_12px_rgb(0_0_0/0.2)]"
+          className="inline-flex items-center px-4 py-2.5 min-h-[44px] bg-white text-primary-dark text-xs font-bold rounded-full hover:bg-white/90 transition-all duration-200 shadow-[0_2px_8px_rgb(0_0_0/0.15)] hover:shadow-[0_4px_12px_rgb(0_0_0/0.2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
         >
           {labels.cta}
           <svg className="w-3 h-3 ml-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
