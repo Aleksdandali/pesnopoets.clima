@@ -91,7 +91,7 @@ export default function BannersPage() {
       const res = await fetch("/api/admin/banners", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: banner.id, password, ...banner }),
+        body: JSON.stringify({ password, ...banner }),
       });
       if (!res.ok) throw new Error();
       showMsg("Сохранено");
