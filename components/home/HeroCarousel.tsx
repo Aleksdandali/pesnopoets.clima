@@ -125,13 +125,13 @@ export default function HeroCarousel({
               quality={85}
             />
           )}
-          {/* Gradient overlay — light enough to show images, dark enough for text */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/75 via-[#0a1628]/35 to-transparent" />
+          {/* Gradient overlay — bottom-up on mobile (text at bottom), left-to-right on desktop */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/90 via-[#0a1628]/50 to-[#0a1628]/10 sm:bg-gradient-to-r sm:from-[#0a1628]/75 sm:via-[#0a1628]/35 sm:to-transparent" />
         </div>
       ))}
 
-      {/* Content overlay */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center pb-14 sm:pb-16">
+      {/* Content overlay — bottom on mobile, center on desktop */}
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-end sm:justify-center pb-12 sm:pb-16">
         <div className="max-w-xl lg:max-w-2xl">
           {/* Title */}
           <h1
