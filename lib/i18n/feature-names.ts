@@ -1,13 +1,18 @@
 // Translation map for Bittel API feature names (Bulgarian → en/ru/ua)
 // These are the ~30 unique spec names that appear in product features
 
+// Normalize confusable Cyrillic chars: Ukrainian "і" (U+0456) ↔ Bulgarian "и" (U+0438)
+function normalize(s: string): string {
+  return s.replace(/і/g, "и").replace(/ї/g, "и").trim();
+}
+
 const featureTranslations: Record<string, { en: string; ru: string; ua: string }> = {
   // Основни характеристики (Main specs)
   "Основни характеристики": { en: "Main Specifications", ru: "Основные характеристики", ua: "Основні характеристики" },
   "Отдавана мощност на охлаждане (Мін./Ном./Макс)": { en: "Cooling capacity (Min/Nom/Max)", ru: "Мощность охлаждения (Мин./Ном./Макс.)", ua: "Потужність охолодження (Мін./Ном./Макс.)" },
   "Отдавана мощност на отопление (Мін./Ном./Макс)": { en: "Heating capacity (Min/Nom/Max)", ru: "Мощность обогрева (Мин./Ном./Макс.)", ua: "Потужність обігріву (Мін./Ном./Макс.)" },
   "Консумирана мощност на охлаждане (Мін./Ном./Макс)": { en: "Power consumption cooling (Min/Nom/Max)", ru: "Потребляемая мощность охлаждения (Мин./Ном./Макс.)", ua: "Споживана потужність охолодження (Мін./Ном./Макс.)" },
-  "Консумирана мощност на отопление (Мін./Ном./Макс)": { en: "Power consumption heating (Min/Nom/Max)", ru: "Потребляемая мощность обогрева (Мин./Ном./Макс.)", ua: "Споживана потужність обігріву (Мін./Ном./Макс.)" },
+  "Консумирана мощност на отопление (Мін./Ном./Макс)": { en: "Power consumption heating (Min/Nom/Max)", ru: "Потребляемая мощность обогрева (Мін./Ном./Макс.)", ua: "Споживана потужність обігріву (Мін./Ном./Макс.)" },
   "Мощност (BTU)": { en: "Power (BTU)", ru: "Мощность (BTU)", ua: "Потужність (BTU)" },
   "EER (хладилен коефициент на охлаждане)": { en: "EER (cooling efficiency ratio)", ru: "EER (коэффициент охлаждения)", ua: "EER (коефіцієнт охолодження)" },
   "SEER (сезонен коефициент на охлаждане)": { en: "SEER (seasonal cooling efficiency)", ru: "SEER (сезонный коэффициент охлаждения)", ua: "SEER (сезонний коефіцієнт охолодження)" },
@@ -22,6 +27,7 @@ const featureTranslations: Record<string, { en: string; ru: string; ua: string }
   "Хладилен агент": { en: "Refrigerant", ru: "Хладагент", ua: "Холодоагент" },
   "Захранване (Фаза/Честота/Напрежение)": { en: "Power supply (Phase/Frequency/Voltage)", ru: "Электропитание (Фаза/Частота/Напряжение)", ua: "Електроживлення (Фаза/Частота/Напруга)" },
   "Максимален брой вътрешни тела": { en: "Maximum indoor units", ru: "Максимум внутренних блоков", ua: "Максимум внутрішніх блоків" },
+  "Wi-Fi модул в комплекта": { en: "Wi-Fi module included", ru: "Wi-Fi модуль в комплекте", ua: "Wi-Fi модуль у комплекті" },
 
   // Вътрешно тяло (Indoor unit)
   "Вътрешно тяло": { en: "Indoor Unit", ru: "Внутренний блок", ua: "Внутрішній блок" },
@@ -36,6 +42,12 @@ const featureTranslations: Record<string, { en: string; ru: string; ua: string }
   "Тръбни връзки - течна / газообразна фаза": { en: "Pipe connections - liquid / gas phase", ru: "Трубные соединения - жидкая / газообразная фаза", ua: "Трубні з'єднання - рідка / газоподібна фаза" },
 };
 
+// Build a normalized lookup map for fast matching
+const normalizedMap = new Map<string, { en: string; ru: string; ua: string }>();
+for (const [key, val] of Object.entries(featureTranslations)) {
+  normalizedMap.set(normalize(key), val);
+}
+
 // Section name translations
 const sectionTranslations: Record<string, { en: string; ru: string; ua: string }> = {
   "Основни характеристики": { en: "Main Specifications", ru: "Основные характеристики", ua: "Основні характеристики" },
@@ -43,17 +55,32 @@ const sectionTranslations: Record<string, { en: string; ru: string; ua: string }
   "Външно тяло": { en: "Outdoor Unit", ru: "Наружный блок", ua: "Зовнішній блок" },
 };
 
+const normalizedSectionMap = new Map<string, { en: string; ru: string; ua: string }>();
+for (const [key, val] of Object.entries(sectionTranslations)) {
+  normalizedSectionMap.set(normalize(key), val);
+}
+
+// Common Bulgarian value patterns → translations
+const valueTranslations: Record<string, Record<string, string>> = {
+  "месеца": { en: "months", ru: "месяцев", ua: "місяців" },
+  "месец": { en: "month", ru: "месяц", ua: "місяць" },
+};
+
 export function translateFeatureName(bgName: string, locale: string): string {
   if (locale === "bg") return bgName;
 
-  // Exact match
-  const exact = featureTranslations[bgName];
-  if (exact) return exact[locale as "en" | "ru" | "ua"] || bgName;
+  const loc = locale as "en" | "ru" | "ua";
+  const norm = normalize(bgName);
+
+  // Exact normalized match
+  const exact = normalizedMap.get(norm);
+  if (exact) return exact[loc] || bgName;
 
   // Partial match (some names have slight variations)
   for (const [key, translations] of Object.entries(featureTranslations)) {
-    if (bgName.includes(key) || key.includes(bgName)) {
-      return translations[locale as "en" | "ru" | "ua"] || bgName;
+    const normKey = normalize(key);
+    if (norm.includes(normKey) || normKey.includes(norm)) {
+      return translations[loc] || bgName;
     }
   }
 
@@ -62,8 +89,19 @@ export function translateFeatureName(bgName: string, locale: string): string {
 
 export function translateSectionName(bgName: string, locale: string): string {
   if (locale === "bg") return bgName;
-  const tr = sectionTranslations[bgName];
+  const tr = normalizedSectionMap.get(normalize(bgName));
   return tr ? tr[locale as "en" | "ru" | "ua"] || bgName : bgName;
+}
+
+export function translateFeatureValue(bgValue: string, locale: string): string {
+  if (locale === "bg") return bgValue;
+  let result = bgValue;
+  for (const [bgPattern, translations] of Object.entries(valueTranslations)) {
+    if (result.includes(bgPattern)) {
+      result = result.replace(bgPattern, translations[locale as "en" | "ru" | "ua"] || bgPattern);
+    }
+  }
+  return result;
 }
 
 // Category GROUP name translations (for sidebar headers)

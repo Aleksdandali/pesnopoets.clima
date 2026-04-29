@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import ProductCard from "@/components/catalog/ProductCard";
+import BannerGrid from "@/components/home/BannerGrid";
 
 // Revalidate homepage every 5 minutes for fresh product data
 export const revalidate = 300;
@@ -452,6 +453,11 @@ export default async function HomePage({ params }: HomePageProps) {
           })}
         </div>
       </section>
+
+      {/* Banner Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <BannerGrid locale={locale} />
+      </div>
 
       {/* Popular Products */}
       {featuredProducts.length > 0 && (

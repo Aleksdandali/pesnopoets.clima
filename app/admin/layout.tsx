@@ -12,6 +12,7 @@ import {
   LogOut,
   Bot,
   Users,
+  Image as ImageIcon,
 } from "lucide-react";
 
 /* ─── Auth Context ─── */
@@ -36,6 +37,7 @@ const NAV: NavItem[] = [
   { href: "/admin/leads", label: "Заявки", icon: Inbox },
   { href: "/admin/products", label: "Товары", icon: Package },
   { href: "/admin/clients", label: "Клиенты", icon: Users },
+  { href: "/admin/banners", label: "Баннеры", icon: ImageIcon },
   { href: "/admin/ai", label: "ИИ", icon: Bot },
   { href: "/admin/settings", label: "Настройки", icon: Settings },
 ];

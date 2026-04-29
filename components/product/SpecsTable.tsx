@@ -1,4 +1,4 @@
-import { translateFeatureName, translateSectionName } from "@/lib/i18n/feature-names";
+import { translateFeatureName, translateSectionName, translateFeatureValue } from "@/lib/i18n/feature-names";
 import {
   Zap,
   Home,
@@ -123,11 +123,11 @@ export default function SpecsTable({ features, locale }: SpecsTableProps) {
                       </dt>
                       {highlight ? (
                         <dd className={`inline-flex self-start sm:self-auto px-2.5 py-0.5 rounded-full text-xs font-semibold ${highlight} whitespace-nowrap`}>
-                          {item.value.trim()}
+                          {translateFeatureValue(item.value.trim(), locale)}
                         </dd>
                       ) : (
                         <dd className="text-xs sm:text-sm font-medium text-foreground font-mono break-words sm:whitespace-nowrap">
-                          {item.value.trim()}
+                          {translateFeatureValue(item.value.trim(), locale)}
                         </dd>
                       )}
                     </div>
