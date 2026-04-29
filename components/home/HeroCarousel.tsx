@@ -91,7 +91,7 @@ export default function HeroCarousel({
 
   return (
     <section
-      className="relative overflow-hidden min-h-[480px] sm:min-h-[560px] lg:min-h-[640px] bg-[#0a1628]"
+      className="relative overflow-hidden h-[70vh] min-h-[420px] max-h-[700px] sm:h-[75vh] sm:min-h-[500px] sm:max-h-[800px] bg-[#0a1628]"
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
@@ -131,12 +131,12 @@ export default function HeroCarousel({
       ))}
 
       {/* Content overlay */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32 flex flex-col justify-center min-h-[480px] sm:min-h-[560px] lg:min-h-[640px]">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center pb-14 sm:pb-16">
         <div className="max-w-xl lg:max-w-2xl">
           {/* Title */}
           <h1
             key={`title-${current}`}
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight animate-fade-in-up"
+            className="text-2xl sm:text-3xl lg:text-5xl font-bold text-white leading-tight animate-fade-in-up"
           >
             {title}
           </h1>
@@ -145,7 +145,7 @@ export default function HeroCarousel({
           {subtitle && (
             <p
               key={`sub-${current}`}
-              className="mt-4 sm:mt-5 text-base sm:text-lg text-white/80 leading-relaxed max-w-lg animate-fade-in-up"
+              className="mt-3 sm:mt-4 text-sm sm:text-base lg:text-lg text-white/80 leading-relaxed max-w-lg animate-fade-in-up"
               style={{ animationDelay: "100ms" }}
             >
               {subtitle}
@@ -154,28 +154,28 @@ export default function HeroCarousel({
 
           {/* CTAs */}
           <div
-            className="mt-7 sm:mt-8 flex flex-wrap gap-3 sm:gap-4 animate-fade-in-up"
+            className="mt-5 sm:mt-7 flex flex-col sm:flex-row gap-2.5 sm:gap-4 animate-fade-in-up"
             style={{ animationDelay: "200ms" }}
           >
             {isAiConsultant ? (
               <button
                 type="button"
                 onClick={handleClick}
-                className="inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 sm:py-4 bg-emerald-500 text-white font-semibold rounded-xl hover:bg-emerald-600 transition-all duration-200 shadow-[0_4px_20px_rgb(16_185_129/0.4)] hover:-translate-y-0.5 text-sm sm:text-base"
+                className="inline-flex items-center justify-center gap-2.5 px-5 sm:px-7 py-3 sm:py-3.5 bg-emerald-500 text-white font-semibold rounded-xl hover:bg-emerald-600 transition-all duration-200 shadow-[0_4px_20px_rgb(16_185_129/0.4)] hover:-translate-y-0.5 text-xs sm:text-sm"
               >
                 {ctaLabel}
               </button>
             ) : (
               <Link
                 href={banner.link.startsWith("/") ? `/${locale}${banner.link}` : banner.link}
-                className="inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 sm:py-4 bg-primary text-white font-semibold rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-[0_4px_20px_rgb(2_132_199/0.4)] hover:-translate-y-0.5 text-sm sm:text-base"
+                className="inline-flex items-center justify-center gap-2.5 px-5 sm:px-7 py-3 sm:py-3.5 bg-primary text-white font-semibold rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-[0_4px_20px_rgb(2_132_199/0.4)] hover:-translate-y-0.5 text-xs sm:text-sm"
               >
                 {ctaLabel}
               </Link>
             )}
             <Link
               href={`/${locale}${ctaSecondaryLink}`}
-              className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-white/10 backdrop-blur-md text-white font-semibold rounded-xl border border-white/30 hover:bg-white/20 transition-all duration-200 text-sm sm:text-base"
+              className="inline-flex items-center justify-center gap-2 px-5 sm:px-7 py-3 sm:py-3.5 bg-white/10 backdrop-blur-md text-white font-semibold rounded-xl border border-white/30 hover:bg-white/20 transition-all duration-200 text-xs sm:text-sm"
             >
               {ctaSecondaryLabel}
             </Link>
