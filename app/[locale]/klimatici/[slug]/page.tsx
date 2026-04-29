@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import ProductGallery from "@/components/product/ProductGallery";
 import SpecsTable from "@/components/product/SpecsTable";
+import ProductFaq from "@/components/product/ProductFaq";
 import InquiryForm from "@/components/forms/InquiryForm";
 import OneClickOrder from "@/components/product/OneClickOrder";
 import SimilarProducts from "@/components/product/SimilarProducts";
@@ -276,6 +277,27 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </span>
               )}
             </div>
+            {/* Urgency signals */}
+            <div className="flex flex-wrap gap-2 mt-1">
+              {product.stock_size && product.stock_size <= 3 && product.stock_size > 1 && (
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                  ⚡ {(dictionary.urgency?.lastItems || "Последние {count} шт!").replace("{count}", String(product.stock_size))}
+                </span>
+              )}
+              {product.stock_size === 1 && (
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200">
+                  🔥 {dictionary.urgency?.lastOne || "Последний экземпляр!"}
+                </span>
+              )}
+              {(() => { const m = new Date().getMonth(); return m >= 4 && m <= 7; })() && (
+                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-orange-50 text-orange-700 border border-orange-200">
+                  {dictionary.urgency?.peakSeason || "Пиковый сезон — забронируйте монтаж сейчас"}
+                </span>
+              )}
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                🚚 {dictionary.urgency?.delivery || "Доставка и монтаж: 1-3 рабочих дня"}
+              </span>
+            </div>
 
             {/* 4. Price Block — Package pricing (product + installation) */}
             <div className="bg-muted rounded-xl p-4 sm:p-5 mb-4">
@@ -481,6 +503,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </h2>
           <SpecsTable features={product.features} locale={locale} />
         </section>
+
+        {/* Product FAQ */}
+        {dictionary.productFaq && (
+          <section className="mt-10 sm:mt-12">
+            <ProductFaq locale={locale} labels={dictionary.productFaq} productName={displayTitle} />
+          </section>
+        )}
 
         {/* Mobile-only Inquiry Form — before Similar Products so it's reachable */}
         <section

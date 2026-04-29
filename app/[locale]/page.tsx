@@ -12,10 +12,15 @@ import {
   ChevronRight,
   Phone,
   Headphones,
+  Sparkles,
+  Star,
+  Award,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import ProductCard from "@/components/catalog/ProductCard";
 import BannerGrid from "@/components/home/BannerGrid";
+import SeasonalBanner from "@/components/home/SeasonalBanner";
+import AiConsultantSection from "@/components/home/AiConsultantSection";
 
 // Revalidate homepage every 5 minutes for fresh product data
 export const revalidate = 300;
@@ -292,6 +297,9 @@ export default async function HomePage({ params }: HomePageProps) {
   const dictionary = await getDictionary(locale);
   const hero = dictionary.hero;
   const trust = dictionary.trust;
+  const trustNumbers = dictionary.trustNumbers;
+  const seasonal = dictionary.seasonal;
+  const aiConsultant = dictionary.aiConsultant;
   const feats = features[locale] || features.bg;
   const cats = categories[locale] || categories.bg;
   const labels = sectionLabels[locale] || sectionLabels.bg;
@@ -380,26 +388,28 @@ export default async function HomePage({ params }: HomePageProps) {
         </div>
       </section>
 
-      {/* Trust Strip */}
+      {/* Seasonal Urgency Banner */}
+      {seasonal && <SeasonalBanner locale={locale} labels={seasonal} />}
+
+      {/* Trust Strip — numbers + social proof */}
       <section className="border-b border-border/60 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex gap-5 sm:gap-8 py-3.5 sm:py-4 overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 sm:justify-center">
-            <div className="flex items-center gap-2 shrink-0">
-              <Truck className="w-4 h-4 sm:w-5 sm:h-5 text-primary" aria-hidden="true" />
-              <span className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">{trust.delivery}</span>
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <Wrench className="w-4 h-4 sm:w-5 sm:h-5 text-primary" aria-hidden="true" />
-              <span className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">{trust.installation}</span>
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-primary" aria-hidden="true" />
-              <span className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">{trust.warranty}</span>
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <Headphones className="w-4 h-4 sm:w-5 sm:h-5 text-primary" aria-hidden="true" />
-              <span className="text-xs sm:text-sm font-medium text-foreground whitespace-nowrap">{trust.consultation}</span>
-            </div>
+          <div className="flex gap-4 sm:gap-6 lg:gap-8 py-3.5 sm:py-4 overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 sm:justify-center">
+            {(trustNumbers || []).map((item: { value: string; label: string; icon: string }, i: number) => {
+              const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+                shield: Shield, star: Star, award: Award, sparkles: Sparkles, truck: Truck,
+              };
+              const Icon = iconMap[item.icon] || Shield;
+              return (
+                <div key={i} className="flex items-center gap-2 shrink-0">
+                  <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-primary" aria-hidden="true" />
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-sm sm:text-base font-bold text-foreground whitespace-nowrap">{item.value}</span>
+                    <span className="text-[10px] sm:text-xs text-muted-foreground whitespace-nowrap">{item.label}</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -539,6 +549,9 @@ export default async function HomePage({ params }: HomePageProps) {
           </div>
         </div>
       </section>
+
+      {/* AI Consultant Section */}
+      {aiConsultant && <AiConsultantSection labels={aiConsultant} />}
 
       {/* CTA Banner */}
       <section className="relative overflow-hidden">

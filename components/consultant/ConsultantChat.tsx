@@ -97,6 +97,7 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
   const [error, setError] = useState<string | null>(null);
   const [stickyCta, setStickyCta] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const [showTeaser, setShowTeaser] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
@@ -118,6 +119,31 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
     setMessages(stored && stored.length > 0 ? stored : []);
     setHydrated(true);
   }, [locale]);
+
+  // Global event listener — allows external buttons to open the consultant
+  useEffect(() => {
+    function handleOpenEvent() { setOpen(true); }
+    window.addEventListener("pesnopoets:open-consultant", handleOpenEvent);
+    return () => window.removeEventListener("pesnopoets:open-consultant", handleOpenEvent);
+  }, []);
+
+  // Show teaser bubble after 8s if chat hasn't been opened yet
+  useEffect(() => {
+    if (open) return;
+    const hasOpened = sessionStorage.getItem("consultant-opened");
+    if (hasOpened) return;
+    const timer = setTimeout(() => setShowTeaser(true), 8000);
+    const hideTimer = setTimeout(() => setShowTeaser(false), 13000);
+    return () => { clearTimeout(timer); clearTimeout(hideTimer); };
+  }, [open]);
+
+  // Mark as opened when chat opens
+  useEffect(() => {
+    if (open) {
+      setShowTeaser(false);
+      sessionStorage.setItem("consultant-opened", "1");
+    }
+  }, [open]);
 
   // Persist messages whenever they change (after hydration, to avoid wiping storage with empty state)
   useEffect(() => {
@@ -350,8 +376,24 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
             className="absolute top-full right-0 mt-1.5 px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-sm text-[9px] sm:text-[10px] font-semibold text-foreground shadow-sm border border-border/60 whitespace-nowrap pointer-events-none select-none"
             aria-hidden="true"
           >
-            {labels.title}
+            AI · {labels.title}
           </span>
+          {/* Teaser bubble */}
+          {showTeaser && (
+            <button
+              type="button"
+              onClick={() => { setShowTeaser(false); setOpen(true); }}
+              className="absolute bottom-full right-0 mb-2 px-3 py-2 bg-white rounded-xl shadow-lg border border-border/60 text-xs font-medium text-foreground whitespace-nowrap animate-fade-in-up cursor-pointer hover:bg-muted/50 transition-colors"
+              style={{ animation: "fadeInUp 0.3s ease-out" }}
+            >
+              <span className="absolute -bottom-1 right-4 w-2 h-2 bg-white border-r border-b border-border/60 rotate-45" />
+              {labels.triggerAria.includes("консултант") || labels.triggerAria.includes("consultant")
+                ? (typeof window !== "undefined" && document.documentElement.lang === "en"
+                  ? "Need help choosing?"
+                  : "Нужна помощь с выбором?")
+                : "Нужна помощь с выбором?"}
+            </button>
+          )}
         </div>
       )}
 

@@ -410,5 +410,48 @@
   "seo": {
     "titleTemplate": "%s | Clima — Air Conditioners for Your Home",
     "defaultDescription": "Air conditioners from leading brands — Daikin, Mitsubishi, Toshiba. Delivery and installation across Bulgaria."
+  },
+  "trustNumbers": [
+    { "value": "200+", "label": "installations", "icon": "shield" },
+    { "value": "4.9★", "label": "on Google", "icon": "star" },
+    { "value": "10", "label": "brands", "icon": "award" },
+    { "value": "24/7", "label": "AI consultant", "icon": "sparkles" },
+    { "value": "Same day", "label": "installation", "icon": "truck" }
+  ],
+  "seasonal": {
+    "peak": "Reserve your installation slot for May/June",
+    "slots": "{count} slots left this week",
+    "heating": "Winter heating? An inverter AC is the perfect solution",
+    "offSeason": "Best prices before the season starts",
+    "cta": "Reserve"
+  },
+  "aiConsultant": {
+    "title": "AI Assistant",
+    "subtitle": "Find your ideal AC in 2 minutes",
+    "desc": "Our AI consultant knows all 458 products, compares models and finds the best option for your budget and room size.",
+    "features": [
+      "Instant response 24/7",
+      "Knows all products and prices",
+      "Compares models for you"
+    ],
+    "cta": "Ask AI",
+    "teaser": "Need help choosing?"
+  },
+  "productFaq": {
+    "title": "Frequently Asked Questions",
+    "items": [
+      { "q": "How long does installation take?", "a": "Standard installation takes 2-4 hours. Includes mounting indoor and outdoor units, pipe routing up to 3 m, vacuuming and testing." },
+      { "q": "Is delivery included?", "a": "Yes, delivery within Varna and the region is free when purchased with installation." },
+      { "q": "What warranty is provided?", "a": "Manufacturer warranty of 24-36 months (depends on brand) + 12 months installation warranty from our team." },
+      { "q": "Can it be installed in winter?", "a": "Yes, AC installation is possible year-round. Inverter models efficiently heat down to -15°C and below." },
+      { "q": "What does standard installation include?", "a": "Indoor and outdoor unit mounting, copper pipe up to 3 m with insulation, power cable, brackets, vacuuming, startup and cleanup." },
+      { "q": "Will there be additional costs?", "a": "Standard installation has a fixed price. Extra charges apply only for non-standard conditions (pipe over 3 m, difficult access). Everything is agreed in advance." }
+    ]
+  },
+  "urgency": {
+    "lastItems": "Only {count} left!",
+    "lastOne": "Last one in stock!",
+    "peakSeason": "Peak season — reserve your installation now",
+    "delivery": "Delivery & installation: 1-3 business days"
   }
 }
