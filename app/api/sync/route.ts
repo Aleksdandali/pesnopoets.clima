@@ -5,8 +5,9 @@ import { verifyCronSecret } from "@/lib/security";
 
 export const maxDuration = 60; // Vercel function timeout
 
-export async function POST(request: Request) {
-  // Verify cron secret
+// Vercel Cron always sends GET with `Authorization: Bearer <CRON_SECRET>`.
+// Previously this was POST — cron was silently 405'ing for 25+ days.
+export async function GET(request: Request) {
   const isAuthorized = await verifyCronSecret(request);
   if (!isAuthorized) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -14,20 +15,12 @@ export async function POST(request: Request) {
 
   try {
     const report = await syncProducts();
-
-    // Send Telegram notification
     await sendSyncReport(report).catch((err) =>
       console.error("[Sync] Telegram notification failed:", err)
     );
-
     return NextResponse.json(report);
   } catch (err) {
     console.error("[Sync] Fatal error:", err);
-    return NextResponse.json(
-      { error: "Sync failed" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Sync failed" }, { status: 500 });
   }
 }
-
-// Sync is POST-only, triggered by Vercel Cron
