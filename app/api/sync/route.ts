@@ -3,7 +3,8 @@ import { syncProducts } from "@/lib/bittel/sync";
 import { sendSyncReport } from "@/lib/telegram";
 import { verifyCronSecret } from "@/lib/security";
 
-export const maxDuration = 60; // Vercel function timeout
+// 458 products × ~0.4s each ≈ 180s, give headroom (Vercel Pro max 300s).
+export const maxDuration = 300;
 
 // Vercel Cron always sends GET with `Authorization: Bearer <CRON_SECRET>`.
 // Previously this was POST — cron was silently 405'ing for 25+ days.
