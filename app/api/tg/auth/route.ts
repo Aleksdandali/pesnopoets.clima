@@ -13,6 +13,21 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json().catch(() => null);
+
+    // Dev mode: allow browser testing with admin password
+    if (body?.devPassword && body.devPassword === process.env.ADMIN_PASSWORD) {
+      const token = createToken({
+        tgId: 0,
+        clientId: null,
+        name: "Dev",
+        type: "session",
+      });
+      return NextResponse.json({
+        token,
+        user: { id: 0, firstName: "Dev", lastName: undefined, username: "dev", languageCode: "ru" },
+      });
+    }
+
     if (!body?.initData || typeof body.initData !== "string") {
       return NextResponse.json({ error: "Missing initData" }, { status: 400 });
     }

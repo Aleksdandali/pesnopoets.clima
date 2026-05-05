@@ -5,7 +5,7 @@ import { useMiniApp } from "./TgShell";
 import { useTelegram } from "../../telegram-miniapp/hooks/useTelegram";
 import Link from "next/link";
 import {
-  Inbox, Package, Users, MessageCircle, ChevronRight,
+  Inbox, Package, Users, MessageCircle, ChevronRight, Calculator,
   TrendingUp, AlertTriangle, Bot, Phone, Loader2,
 } from "lucide-react";
 
@@ -96,6 +96,7 @@ export default function TgHomePage() {
 
       {/* Main sections */}
       <div className="px-4 mt-2 space-y-2.5">
+        <SectionCard href="/tg/estimates/new" icon={Calculator} color="#15803d" title="Новый просчёт" subtitle="Голосовой расчёт монтажа" tg={tg} />
         <SectionCard href="/tg/leads" icon={Inbox} color="#0284c7" title="Заявки" subtitle={`${kpi?.leadsNew || 0} новых`} badge={kpi?.leadsNew} tg={tg} />
         <SectionCard href="/tg/chats" icon={MessageCircle} color="#0d9488" title="Чаты AI" subtitle="Диалоги с клиентами" tg={tg} />
         <SectionCard href="/tg/products" icon={Package} color="#7c3aed" title="Каталог" subtitle={`${kpi?.productsActive || 0} товаров`} tg={tg} />

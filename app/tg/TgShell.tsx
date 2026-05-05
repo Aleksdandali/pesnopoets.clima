@@ -4,7 +4,7 @@ import { useState, useEffect, createContext, useContext, useCallback } from "rea
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
-  LayoutDashboard, Inbox, Package, Users, MessageCircle, Loader2,
+  LayoutDashboard, Inbox, Package, Users, MessageCircle, Calculator, Loader2,
 } from "lucide-react";
 import { useTelegram } from "../../telegram-miniapp/hooks/useTelegram";
 import { setToken, tgFetch } from "../../telegram-miniapp/lib/api";
@@ -25,10 +25,10 @@ export function useMiniApp() {
 /* ─── Nav ─── */
 const NAV = [
   { href: "/tg", icon: LayoutDashboard, label: "Главная" },
+  { href: "/tg/estimates", icon: Calculator, label: "Просчёты" },
   { href: "/tg/leads", icon: Inbox, label: "Заявки" },
   { href: "/tg/products", icon: Package, label: "Товары" },
   { href: "/tg/clients", icon: Users, label: "Клиенты" },
-  { href: "/tg/chats", icon: MessageCircle, label: "Чаты" },
 ];
 
 /* ─── Layout ─── */
@@ -40,16 +40,32 @@ export default function TgShell({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Detect estimate chat page — hide nav for full-screen chat
+  const isEstimateChat = /^\/tg\/estimates\/\d+/.test(pathname);
+
   // Auth on mount
   useEffect(() => {
     if (!tg.ready) return;
 
     async function auth() {
       try {
+        // Dev mode: no Telegram context — use admin password
+        const isDev = !tg.initData || tg.user?.id === 0;
+        const bodyPayload = isDev
+          ? { devPassword: prompt("Admin password for dev mode:") }
+          : { initData: tg.initData };
+
+        // Skip if user cancelled prompt
+        if (isDev && !bodyPayload.devPassword) {
+          setError("Требуется пароль для dev-режима");
+          setLoading(false);
+          return;
+        }
+
         const res = await fetch("/api/tg/auth", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ initData: tg.initData }),
+          body: JSON.stringify(bodyPayload),
         });
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
@@ -94,7 +110,7 @@ export default function TgShell({ children }: { children: React.ReactNode }) {
   // Loading
   if (loading) {
     return (
-      <div style={{ background: tg.theme.bg, color: tg.theme.text }} className="min-h-screen flex items-center justify-center">
+      <div style={{ background: tg.theme.bg, color: tg.theme.text }} className="h-full flex items-center justify-center overflow-hidden">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin mx-auto mb-3" style={{ color: tg.theme.link }} />
           <p className="text-sm" style={{ color: tg.theme.hint }}>Загрузка...</p>
@@ -106,9 +122,9 @@ export default function TgShell({ children }: { children: React.ReactNode }) {
   // Error
   if (error) {
     return (
-      <div style={{ background: tg.theme.bg, color: tg.theme.text }} className="min-h-screen flex items-center justify-center p-6">
+      <div style={{ background: tg.theme.bg, color: tg.theme.text }} className="h-full flex items-center justify-center p-6 overflow-hidden">
         <div className="text-center">
-          <p className="text-base font-semibold mb-2">⛔ {error}</p>
+          <p className="text-base font-semibold mb-2">{error}</p>
           <p className="text-sm" style={{ color: tg.theme.hint }}>Этот Mini App доступен только для команды</p>
         </div>
       </div>
@@ -121,30 +137,32 @@ export default function TgShell({ children }: { children: React.ReactNode }) {
 
   return (
     <MiniAppContext.Provider value={ctx}>
-      <div className="min-h-screen flex flex-col" style={{ background: tg.theme.bgSecondary, color: tg.theme.text, fontFamily: "'Inter', -apple-system, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" }}>
+      <div className="flex flex-col h-full overflow-hidden" style={{ background: tg.theme.bgSecondary, color: tg.theme.text, fontFamily: "'Inter', -apple-system, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" }}>
         {/* Content */}
-        <main className="flex-1 pb-16 overflow-y-auto">
+        <main className={`flex-1 min-h-0 ${isEstimateChat ? "overflow-hidden" : "overflow-y-auto pb-14"}`}>
           {children}
         </main>
 
-        {/* Bottom nav — compact, closer together */}
-        <nav className="fixed bottom-0 left-0 right-0 flex" style={{ background: tg.theme.bg, boxShadow: "0 -1px 0 " + (tg.theme.isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)"), paddingBottom: "env(safe-area-inset-bottom)" }}>
-          {NAV.map((item) => {
-            const active = pathname === item.href || (item.href !== "/tg" && pathname.startsWith(item.href));
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="flex-1 flex flex-col items-center justify-center py-1.5"
-                onClick={() => tg.haptic.select()}
-              >
-                <Icon className="w-[22px] h-[22px]" style={{ color: active ? tg.theme.link : tg.theme.hint }} />
-                <span className="text-[10px] leading-tight mt-0.5" style={{ color: active ? tg.theme.link : tg.theme.hint, fontWeight: active ? 700 : 500 }}>{item.label}</span>
-              </Link>
-            );
-          })}
-        </nav>
+        {/* Bottom nav — hidden during estimate chat */}
+        {!isEstimateChat && (
+          <nav className="fixed bottom-0 left-0 right-0 flex" style={{ background: tg.theme.bg, boxShadow: "0 -1px 0 " + (tg.theme.isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)"), paddingBottom: "max(env(safe-area-inset-bottom, 0px), 16px)" }}>
+            {NAV.map((item) => {
+              const active = pathname === item.href || (item.href !== "/tg" && pathname.startsWith(item.href));
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="flex-1 flex flex-col items-center justify-center py-1"
+                  onClick={() => tg.haptic.select()}
+                >
+                  <Icon className="w-5 h-5" style={{ color: active ? tg.theme.link : tg.theme.hint }} />
+                  <span className="text-[9px] leading-tight mt-0.5" style={{ color: active ? tg.theme.link : tg.theme.hint, fontWeight: active ? 700 : 500 }}>{item.label}</span>
+                </Link>
+              );
+            })}
+          </nav>
+        )}
       </div>
     </MiniAppContext.Provider>
   );

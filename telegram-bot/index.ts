@@ -3,6 +3,7 @@ import { isTeamMember } from "./services/auth";
 import { handleStart } from "./commands/start";
 import { handleDashboard } from "./commands/dashboard";
 import { handleLeads, handleNext } from "./commands/leads";
+import { handleEstimateCommand, handleVoiceMessage } from "./commands/estimate";
 import { handleLeadCallback, handleNoteText, handleNoteCancel } from "./callbacks/lead-actions";
 
 let botInstance: Bot | null = null;
@@ -40,12 +41,15 @@ export function createBot(): Bot {
   bot.command("leads", handleLeads);
   bot.command("next", handleNext);
   bot.command("n", handleNext);
+  bot.command("estimate", handleEstimateCommand);
+  bot.command("e", handleEstimateCommand);
   bot.command("help", async (ctx) => {
     await ctx.reply(
       "📋 <b>Команды:</b>\n\n" +
       "/dashboard (или /d) — Сводка KPI\n" +
       "/leads — Список новых заявок\n" +
       "/next (или /n) — Следующий клиент\n" +
+      "/estimate (или /e) — Новый просчёт\n" +
       "/help — Эта справка",
       { parse_mode: "HTML" }
     );
@@ -61,6 +65,16 @@ export function createBot(): Bot {
   bot.callbackQuery(/^cmd:next$/, async (ctx) => {
     await ctx.answerCallbackQuery();
     await handleNext(ctx);
+  });
+  bot.callbackQuery(/^cmd:estimate$/, async (ctx) => {
+    await ctx.answerCallbackQuery();
+    await handleEstimateCommand(ctx);
+  });
+
+  // Voice messages — estimate from voice
+  bot.on("message:voice", async (ctx, next) => {
+    const handled = await handleVoiceMessage(ctx);
+    if (!handled) await next();
   });
 
   // Text messages — check if user is adding a note
