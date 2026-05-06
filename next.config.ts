@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "dealers.bittel.bg",
+        pathname: "/web/files/**",
+      },
+      {
+        protocol: "https",
         hostname: "gzdcbkrtpbqcugqgrqut.supabase.co",
         pathname: "/storage/**",
       },
