@@ -45,9 +45,21 @@ async function getDictionary(locale: string) {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   const dict = await getDictionary(locale);
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
   return {
     title: `${dict.uslugi.pageTitle} | ${dict.common.siteName}`,
     description: dict.uslugi.pageSubtitle,
+    alternates: {
+      canonical: `${siteUrl}/${locale}/uslugi`,
+      languages: {
+        bg: `${siteUrl}/bg/uslugi`,
+        en: `${siteUrl}/en/uslugi`,
+        ru: `${siteUrl}/ru/uslugi`,
+        uk: `${siteUrl}/ua/uslugi`,
+        "x-default": `${siteUrl}/bg/uslugi`,
+      },
+    },
   };
 }
 

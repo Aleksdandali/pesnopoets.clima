@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 
 // Revalidate brands page every 10 minutes
@@ -13,6 +14,32 @@ async function getDictionary(locale: string) {
     const dict = await import(`@/dictionaries/bg.json`);
     return dict.default;
   }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const dictionary = await getDictionary(locale);
+  const t = dictionary.brands;
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
+  return {
+    title: `${t.title} | ${dictionary.common.siteName}`,
+    description: t.subtitle,
+    alternates: {
+      canonical: `${siteUrl}/${locale}/brands`,
+      languages: {
+        bg: `${siteUrl}/bg/brands`,
+        en: `${siteUrl}/en/brands`,
+        ru: `${siteUrl}/ru/brands`,
+        uk: `${siteUrl}/ua/brands`,
+        "x-default": `${siteUrl}/bg/brands`,
+      },
+    },
+  };
 }
 
 export default async function BrandsPage({ params }: { params: Promise<{ locale: string }> }) {

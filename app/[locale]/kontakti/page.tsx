@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Mail, MapPin, Clock, MessageCircle, Phone } from "lucide-react";
 import InquiryForm from "@/components/forms/InquiryForm";
 import {
@@ -12,6 +13,32 @@ import {
 
 async function getDictionary(locale: string) {
   try { return (await import(`@/dictionaries/${locale}.json`)).default; } catch { return (await import(`@/dictionaries/bg.json`)).default; }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const dictionary = await getDictionary(locale);
+  const c = dictionary.contact;
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
+  return {
+    title: `${c.title} | ${dictionary.common.siteName}`,
+    description: c.subtitle,
+    alternates: {
+      canonical: `${siteUrl}/${locale}/kontakti`,
+      languages: {
+        bg: `${siteUrl}/bg/kontakti`,
+        en: `${siteUrl}/en/kontakti`,
+        ru: `${siteUrl}/ru/kontakti`,
+        uk: `${siteUrl}/ua/kontakti`,
+        "x-default": `${siteUrl}/bg/kontakti`,
+      },
+    },
+  };
 }
 
 export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {

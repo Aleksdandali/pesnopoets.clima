@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import ProductCard from "@/components/catalog/ProductCard";
 import FilterBar from "@/components/catalog/FilterBar";
@@ -19,6 +20,57 @@ interface CatalogPageProps {
 }
 
 const PRODUCTS_PER_PAGE = 24;
+
+const catalogMeta: Record<string, { title: string; description: string }> = {
+  bg: {
+    title:
+      "Каталог климатици Варна — Daikin, Mitsubishi, Gree | Песнопоец Клима",
+    description:
+      "Каталог на инверторни и мулти-сплит климатици във Варна. Daikin, Mitsubishi, Gree, Toshiba — продажба, доставка и монтаж под ключ. Фиксирани цени.",
+  },
+  en: {
+    title: "Air Conditioners Catalog Varna — Daikin, Mitsubishi, Gree",
+    description:
+      "Catalog of inverter and multi-split air conditioners in Varna. Daikin, Mitsubishi, Gree, Toshiba — sales, delivery and turnkey installation. Fixed prices.",
+  },
+  ru: {
+    title:
+      "Каталог кондиционеров Варна — Daikin, Mitsubishi, Gree | Песнопоец Клима",
+    description:
+      "Каталог инверторных и мульти-сплит кондиционеров в Варне. Daikin, Mitsubishi, Gree, Toshiba — продажа, доставка и монтаж под ключ. Фиксированные цены.",
+  },
+  ua: {
+    title:
+      "Каталог кондиціонерів Варна — Daikin, Mitsubishi, Gree | Піснопоєць Кліма",
+    description:
+      "Каталог інверторних та мульти-спліт кондиціонерів у Варні. Daikin, Mitsubishi, Gree, Toshiba — продаж, доставка та монтаж під ключ. Фіксовані ціни.",
+  },
+};
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const m = catalogMeta[locale] || catalogMeta.bg;
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
+  return {
+    title: m.title,
+    description: m.description,
+    alternates: {
+      canonical: `${siteUrl}/${locale}/klimatici`,
+      languages: {
+        bg: `${siteUrl}/bg/klimatici`,
+        en: `${siteUrl}/en/klimatici`,
+        ru: `${siteUrl}/ru/klimatici`,
+        uk: `${siteUrl}/ua/klimatici`,
+        "x-default": `${siteUrl}/bg/klimatici`,
+      },
+    },
+  };
+}
 
 async function getDictionary(locale: string) {
   try {

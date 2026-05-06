@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 async function getDictionary(locale: string) {
   try {
     const dict = await import(`@/dictionaries/${locale}.json`);
@@ -6,6 +8,32 @@ async function getDictionary(locale: string) {
     const dict = await import(`@/dictionaries/bg.json`);
     return dict.default;
   }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const dictionary = await getDictionary(locale);
+  const t = dictionary.privacy;
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
+  return {
+    title: `${t.title} | ${dictionary.common.siteName}`,
+    description: t.intro,
+    alternates: {
+      canonical: `${siteUrl}/${locale}/privacy`,
+      languages: {
+        bg: `${siteUrl}/bg/privacy`,
+        en: `${siteUrl}/en/privacy`,
+        ru: `${siteUrl}/ru/privacy`,
+        uk: `${siteUrl}/ua/privacy`,
+        "x-default": `${siteUrl}/bg/privacy`,
+      },
+    },
+  };
 }
 
 export default async function PrivacyPage({ params }: { params: Promise<{ locale: string }> }) {

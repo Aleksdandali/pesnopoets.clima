@@ -41,9 +41,15 @@ export async function generateMetadata({
 }: InquiryPageProps): Promise<Metadata> {
   const { locale } = await params;
   const meta = metaContent[locale] || metaContent.bg;
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
   return {
     title: meta.metaTitle,
     description: meta.metaDesc,
+    robots: { index: false, follow: true },
+    alternates: {
+      canonical: `${siteUrl}/${locale}/inquiry`,
+    },
   };
 }
 

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import { Shield, Truck, Wrench, Award } from "lucide-react";
 
 async function getDictionary(locale: string) {
@@ -9,6 +10,32 @@ async function getDictionary(locale: string) {
     const dict = await import(`@/dictionaries/bg.json`);
     return dict.default;
   }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const dictionary = await getDictionary(locale);
+  const c = dictionary.about;
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
+  return {
+    title: `${c.title} | ${dictionary.common.siteName}`,
+    description: c.subtitle,
+    alternates: {
+      canonical: `${siteUrl}/${locale}/za-nas`,
+      languages: {
+        bg: `${siteUrl}/bg/za-nas`,
+        en: `${siteUrl}/en/za-nas`,
+        ru: `${siteUrl}/ru/za-nas`,
+        uk: `${siteUrl}/ua/za-nas`,
+        "x-default": `${siteUrl}/bg/za-nas`,
+      },
+    },
+  };
 }
 
 const icons = [Shield, Truck, Wrench, Award];

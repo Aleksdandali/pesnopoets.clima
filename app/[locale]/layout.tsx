@@ -57,9 +57,12 @@ export async function generateMetadata({
     keywords: keywords[locale] || keywords.bg,
     alternates: {
       canonical: `${siteUrl}/${locale}`,
-      languages: Object.fromEntries(
-        locales.map((l) => [l === "ua" ? "uk" : l, `${siteUrl}/${l}`])
-      ),
+      languages: {
+        ...Object.fromEntries(
+          locales.map((l) => [l === "ua" ? "uk" : l, `${siteUrl}/${l}`])
+        ),
+        "x-default": `${siteUrl}/bg`,
+      },
     },
     openGraph: {
       locale: locale === "bg" ? "bg_BG" : locale === "ru" ? "ru_RU" : locale === "ua" ? "uk_UA" : "en_US",
