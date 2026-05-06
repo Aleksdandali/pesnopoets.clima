@@ -16,6 +16,16 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.pesnopoets-clima.com" }],
+        destination: "https://pesnopoets-clima.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     const securityHeaders = [
       { key: "X-Content-Type-Options", value: "nosniff" },
