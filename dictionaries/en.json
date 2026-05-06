@@ -137,7 +137,10 @@
     "youSave": "You save",
     "googleRating": "4.9 on Google",
     "googleReviews": "reviews",
-    "installationPrice": "Standard installation"
+    "installationPrice": "Standard installation",
+    "addInstallToggle": "Add standard installation",
+    "addInstallNote": "3 m copper line, materials and commissioning",
+    "total": "Total"
   },
   "inquiry": {
     "title": "Make an Inquiry",
@@ -187,13 +190,13 @@
     "inquiry": "Inquiry"
   },
   "brands": {
-    "title": "Brands",
-    "subtitle": "We work with world-leading air conditioning manufacturers.",
+    "title": "AC Brands in Varna",
+    "subtitle": "We work with world-leading air conditioning manufacturers — sales and installation in Varna and the region.",
     "productsCount": "products"
   },
   "about": {
     "title": "About Us",
-    "subtitle": "Pesnopoets Clima is an authorized dealer of leading air conditioning brands in Bulgaria. We offer a full range of services — from consultation and selection, through delivery, to professional installation and warranty service.",
+    "subtitle": "Pesnopoets Clima is an authorized dealer of leading air conditioning brands in Varna, Bulgaria. We offer a full range of services — from consultation and selection, through delivery, to professional installation and warranty service.",
     "teamParagraph": "Behind Pesnopoets Clima is a team of specialists with years of experience in HVAC systems. Our priority is to offer every client a solution tailored to their space and budget — honestly, professionally, and without pressure.",
     "stats": [
       {
@@ -233,8 +236,8 @@
     ]
   },
   "uslugi": {
-    "pageTitle": "Services",
-    "pageSubtitle": "Installation, maintenance and repair of air conditioners by our own crew in Varna.",
+    "pageTitle": "Services in Varna",
+    "pageSubtitle": "Installation, maintenance and repair of air conditioners by our own crew in Varna and the region.",
     "breadcrumbHome": "Home",
     "breadcrumbServices": "Services",
     "services": [
@@ -248,7 +251,7 @@
           "Vacuum clean-up after work",
           "12-month workmanship warranty"
         ],
-        "priceFrom": "from 372 BGN",
+        "priceFrom": "from 190 €",
         "ctaLabel": "Rates & details",
         "ctaHref": "/montazh"
       },
@@ -262,7 +265,7 @@
           "Refrigerant & pressure check",
           "Indoor unit disinfection"
         ],
-        "priceFrom": "from 70 BGN",
+        "priceFrom": "from 36 €",
         "ctaLabel": "Request",
         "ctaHref": "/inquiry?service=profilaktika"
       },
@@ -276,7 +279,7 @@
           "Compressor & board replacement",
           "Refill with R-32 / R-410A"
         ],
-        "priceFrom": "diagnostics 40 BGN",
+        "priceFrom": "diagnostics 20 €",
         "ctaLabel": "Request",
         "ctaHref": "/inquiry?service=remont"
       }
@@ -381,8 +384,8 @@
     "ctaButton": "Request survey"
   },
   "contact": {
-    "title": "Contact",
-    "subtitle": "Get in touch for consultation, quotes or questions.",
+    "title": "Contact in Varna",
+    "subtitle": "Get in touch with us in Varna — consultation, quotes or questions about air conditioners and installation.",
     "phone": "Phone",
     "email": "Email",
     "address": "Address",

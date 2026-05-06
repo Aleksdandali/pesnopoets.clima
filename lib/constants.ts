@@ -6,9 +6,18 @@
 export const BUSINESS_PHONE_DISPLAY = "+359 87 799 8795";
 export const BUSINESS_PHONE_TEL = "+359877998795"; // for tel: links
 export const BUSINESS_EMAIL = "pesnopoetsklima@gmail.com";
-export const BUSINESS_ADDRESS_CITY = "Varna";
-export const BUSINESS_ADDRESS_REGION = "Varna Province";
+
+// Address — must EXACTLY match Google Business Profile (NAP consistency).
+// GBP submitted in Bulgarian; we mirror that for citation matching.
+export const BUSINESS_STREET = "ул. Хисарлъка 6";
+export const BUSINESS_ADDRESS_CITY = "Варна";
+export const BUSINESS_ADDRESS_REGION = "Варненска област";
+export const BUSINESS_POSTAL_CODE = "9000";
 export const BUSINESS_COUNTRY = "BG";
+
+// Geo coordinates (centroid for Varna; refine after GBP verification reveals exact pin).
+export const BUSINESS_LAT = 43.2141;
+export const BUSINESS_LNG = 27.9147;
 
 /** Viber & WhatsApp deep links derived from BUSINESS_PHONE_TEL. */
 export const WHATSAPP_URL = `https://wa.me/${BUSINESS_PHONE_TEL.replace(/^\+/, "")}`;

@@ -11,19 +11,19 @@ interface PageProps {
 
 const meta: Record<string, { title: string; description: string }> = {
   bg: {
-    title: "Блог | Песнопоец Клима",
+    title: "Блог за климатици във Варна | Песнопоец Клима",
     description: "Полезни статии за климатици, отопление, монтаж и поддръжка. Практични съвети за Варна и област.",
   },
   en: {
-    title: "Blog | Pesnopoets Clima",
+    title: "AC Blog — Varna | Pesnopoets Clima",
     description: "Useful articles about air conditioners, heating, installation and maintenance. Practical tips for Varna and the region.",
   },
   ru: {
-    title: "Блог | Песнопоец Клима",
+    title: "Блог о кондиционерах в Варне | Песнопоец Клима",
     description: "Полезные статьи о кондиционерах, отоплении, монтаже и обслуживании. Практические советы для Варны и области.",
   },
   ua: {
-    title: "Блог | Піснопоєць Кліма",
+    title: "Блог про кондиціонери у Варні | Піснопоєць Кліма",
     description: "Корисні статті про кондиціонери, опалення, монтаж та обслуговування. Практичні поради для Варни та області.",
   },
 };

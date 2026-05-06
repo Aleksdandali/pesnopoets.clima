@@ -183,6 +183,16 @@ export default async function LocaleLayout({
     ua: "Офіційний дилер Daikin, Mitsubishi, Gree у Варні. Професійний монтаж під ключ власною бригадою.",
   };
 
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${siteUrl}/#website`,
+    url: siteUrl,
+    name: dictionary.common.siteName,
+    inLanguage: locale === "bg" ? "bg-BG" : locale === "en" ? "en-US" : locale === "ru" ? "ru-RU" : "uk-UA",
+    publisher: { "@id": `${siteUrl}/#business` },
+  };
+
   return (
     <>
       <LocalBusinessJsonLd
@@ -190,6 +200,10 @@ export default async function LocaleLayout({
         siteUrl={siteUrl}
         siteName={dictionary.common.siteName}
         description={seoDescriptions[locale] || seoDescriptions.bg}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
       />
       <CartProvider>
         <a href="#main" className="skip-link">

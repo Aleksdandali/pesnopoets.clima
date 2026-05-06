@@ -1,4 +1,15 @@
-import { BUSINESS_EMAIL, BUSINESS_PHONE_TEL, INSTAGRAM_URL } from "@/lib/constants";
+import {
+  BUSINESS_ADDRESS_CITY,
+  BUSINESS_ADDRESS_REGION,
+  BUSINESS_COUNTRY,
+  BUSINESS_EMAIL,
+  BUSINESS_LAT,
+  BUSINESS_LNG,
+  BUSINESS_PHONE_TEL,
+  BUSINESS_POSTAL_CODE,
+  BUSINESS_STREET,
+  INSTAGRAM_URL,
+} from "@/lib/constants";
 
 interface LocalBusinessJsonLdProps {
   locale: string;
@@ -31,26 +42,23 @@ export default function LocalBusinessJsonLd({
     logo: `${siteUrl}/logo.png`,
     address: {
       "@type": "PostalAddress",
-      streetAddress: "ul. Varna, 1",
-      addressLocality: "Varna",
-      addressRegion: "Varna",
-      postalCode: "9000",
-      addressCountry: "BG",
+      streetAddress: BUSINESS_STREET,
+      addressLocality: BUSINESS_ADDRESS_CITY,
+      addressRegion: BUSINESS_ADDRESS_REGION,
+      postalCode: BUSINESS_POSTAL_CODE,
+      addressCountry: BUSINESS_COUNTRY,
     },
     geo: {
       "@type": "GeoCoordinates",
-      latitude: 43.2141,
-      longitude: 27.9147,
+      latitude: BUSINESS_LAT,
+      longitude: BUSINESS_LNG,
     },
     areaServed: [
-      {
-        "@type": "City",
-        name: "Varna",
-      },
-      {
-        "@type": "AdministrativeArea",
-        name: "Varna Province",
-      },
+      { "@type": "City", name: "Варна" },
+      { "@type": "City", name: "Девня" },
+      { "@type": "City", name: "Аксаково" },
+      { "@type": "City", name: "Белослав" },
+      { "@type": "AdministrativeArea", name: "Варненска област" },
     ],
     openingHoursSpecification: [
       {

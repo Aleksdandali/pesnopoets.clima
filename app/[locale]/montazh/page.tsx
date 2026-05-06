@@ -11,7 +11,11 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import BeforeAfterSlider from "@/components/montazh/BeforeAfterSlider";
-import { INSTALLATION_TIERS, EXTRA_SERVICES_BGN } from "@/lib/pricing";
+import {
+  INSTALLATION_TIERS,
+  EXTRA_SERVICES_EUR,
+  bgnToEur,
+} from "@/lib/pricing";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -30,9 +34,21 @@ async function getDictionary(locale: string) {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   const dict = await getDictionary(locale);
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
   return {
     title: `${dict.montazh.pageTitle} | ${dict.common.siteName}`,
     description: dict.montazh.pageSubtitle,
+    alternates: {
+      canonical: `${siteUrl}/${locale}/montazh`,
+      languages: {
+        bg: `${siteUrl}/bg/montazh`,
+        en: `${siteUrl}/en/montazh`,
+        ru: `${siteUrl}/ru/montazh`,
+        uk: `${siteUrl}/ua/montazh`,
+        "x-default": `${siteUrl}/bg/montazh`,
+      },
+    },
   };
 }
 
@@ -44,28 +60,28 @@ function formatPowerLabel(maxBtu: number): string {
 
 const montazhFaq: Record<string, { q: string; a: string }[]> = {
   bg: [
-    { q: "Колко струва монтажът на климатик?", a: "Стандартният монтаж започва от 372 лв. за уреди до 14 000 BTU и 450 лв. за до 24 000 BTU. Цената включва 3 м тръба, материали, вакуумиране и пускане в експлоатация." },
+    { q: "Колко струва монтажът на климатик?", a: "Стандартният монтаж започва от 190 € за уреди до 14 000 BTU и 230 € за до 24 000 BTU. Цената включва 3 м тръба, материали, вакуумиране и пускане в експлоатация." },
     { q: "Какво включва стандартният монтаж?", a: "Стандартният монтаж включва до 3 метра медна тръба, всички материали и фитинги, вакуумиране, електрическо свързване, монтаж на вътрешно и външно тяло и пускане в експлоатация." },
     { q: "Колко бързо можете да монтирате?", a: "Предлагаме монтаж в същия ден, ако се свържете с нас преди обяд. Типичният монтаж отнема 2–4 часа." },
     { q: "Давате ли гаранция за монтажа?", a: "Да, предоставяме 12 месеца гаранция върху монтажните дейности. При проблем, свързан с монтажа, го отстраняваме безплатно." },
     { q: "Какви райони покривате?", a: "Покриваме всички квартали на Варна и околността в радиус до около 30 км по договаряне." },
   ],
   en: [
-    { q: "How much does AC installation cost?", a: "Standard installation starts from 372 BGN for units up to 14,000 BTU and 450 BGN for up to 24,000 BTU. Price includes 3m pipe, materials, vacuum, and commissioning." },
+    { q: "How much does AC installation cost?", a: "Standard installation starts from 190 € for units up to 14,000 BTU and 230 € for up to 24,000 BTU. Price includes 3m pipe, materials, vacuum, and commissioning." },
     { q: "What does standard installation include?", a: "Standard installation includes up to 3 meters of copper pipe, all fittings and materials, vacuum evacuation, electrical connection, mounting of indoor and outdoor units, and commissioning." },
     { q: "How fast can you install?", a: "We offer same-day installation if you contact us before noon. Typical installation takes 2–4 hours." },
     { q: "Do you offer warranty on installation?", a: "Yes, we provide 12 months warranty on all installation work. Any installation-related issue within that period is fixed at no charge." },
     { q: "What areas do you cover?", a: "We cover all neighborhoods in Varna city and the surrounding region up to approximately 30km by arrangement." },
   ],
   ru: [
-    { q: "Сколько стоит установка кондиционера?", a: "Стандартная установка — от 372 лв. для моделей до 14 000 BTU и 450 лв. до 24 000 BTU. В цену входят 3 м трубы, материалы, вакуумирование и пусконаладка." },
+    { q: "Сколько стоит установка кондиционера?", a: "Стандартная установка — от 190 € для моделей до 14 000 BTU и 230 € до 24 000 BTU. В цену входят 3 м трубы, материалы, вакуумирование и пусконаладка." },
     { q: "Что входит в стандартную установку?", a: "Стандартная установка включает до 3 метров медной трубы, все материалы и фитинги, вакуумирование, электроподключение, монтаж внутреннего и наружного блоков и пусконаладку." },
     { q: "Как быстро вы можете установить?", a: "Мы предлагаем установку в тот же день, если вы свяжетесь с нами до обеда. Типичная установка занимает 2–4 часа." },
     { q: "Даёте ли вы гарантию на монтаж?", a: "Да, мы предоставляем 12 месяцев гарантии на монтажные работы. Любая проблема, связанная с монтажом, устраняется бесплатно." },
     { q: "Какие районы вы обслуживаете?", a: "Мы обслуживаем все районы Варны и окрестности в радиусе до 30 км по договорённости." },
   ],
   ua: [
-    { q: "Скільки коштує монтаж кондиціонера?", a: "Стандартний монтаж — від 372 лв. для моделей до 14 000 BTU та 450 лв. до 24 000 BTU. Ціна включає 3 м труби, матеріали, вакуумування та пусконалагодження." },
+    { q: "Скільки коштує монтаж кондиціонера?", a: "Стандартний монтаж — від 190 € для моделей до 14 000 BTU та 230 € до 24 000 BTU. Ціна включає 3 м труби, матеріали, вакуумування та пусконалагодження." },
     { q: "Що входить у стандартний монтаж?", a: "Стандартний монтаж включає до 3 метрів мідної труби, всі матеріали та фітинги, вакуумування, електропідключення, монтаж внутрішнього та зовнішнього блоків і пусконалагодження." },
     { q: "Як швидко ви можете встановити?", a: "Ми пропонуємо монтаж у той самий день, якщо ви зв'яжетесь до обіду. Типовий монтаж займає 2–4 години." },
     { q: "Чи надаєте гарантію на монтаж?", a: "Так, ми надаємо 12 місяців гарантії на монтажні роботи. Будь-яка проблема, пов'язана з монтажем, усувається безкоштовно." },
@@ -93,11 +109,64 @@ export default async function MontazhPage({ params }: PageProps) {
     })),
   };
 
+  const siteUrl = "https://pesnopoets-clima.com";
+  const serviceJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    serviceType: "Монтаж на климатици",
+    provider: { "@id": `${siteUrl}/#business` },
+    areaServed: [
+      { "@type": "City", name: "Варна" },
+      { "@type": "City", name: "Девня" },
+      { "@type": "City", name: "Аксаково" },
+      { "@type": "AdministrativeArea", name: "Варненска област" },
+    ],
+    name: t.pageTitle,
+    description: t.pageSubtitle,
+    url: `${siteUrl}/${locale}/montazh`,
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "EUR",
+      price: "190",
+      priceSpecification: {
+        "@type": "PriceSpecification",
+        priceCurrency: "EUR",
+        price: "190",
+        valueAddedTaxIncluded: true,
+        description:
+          locale === "bg"
+            ? "От 190 € за стандартен монтаж до 3м тръба"
+            : locale === "en"
+            ? "From €190 for standard install up to 3m line set"
+            : locale === "ru"
+            ? "От 190 € за стандартный монтаж до 3м трассы"
+            : "Від 190 € за стандартний монтаж до 3м траси",
+      },
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: dict.common?.home || "Home", item: `${siteUrl}/${locale}` },
+      { "@type": "ListItem", position: 2, name: t.pageTitle, item: `${siteUrl}/${locale}/montazh` },
+    ],
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       {/* Hero */}
@@ -219,29 +288,33 @@ export default async function MontazhPage({ params }: PageProps) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {INSTALLATION_TIERS.map((tier) => (
-                  <tr key={tier.maxBtu} className="hover:bg-muted/30 transition-colors">
-                    <td className="px-4 sm:px-6 py-4 text-sm text-foreground font-medium">
-                      {formatPowerLabel(tier.maxBtu)}
-                    </td>
-                    <td className="px-4 sm:px-6 py-4 text-right">
-                      <span className="text-base sm:text-lg font-extrabold text-foreground">
-                        {tier.price}
-                      </span>
-                      <span className="ml-1 text-xs text-muted-foreground">{t.bgn}</span>
-                      {/* Mobile: show extra pipe here too */}
-                      <div className="sm:hidden text-[11px] text-muted-foreground mt-1">
-                        +{tier.extraPipePerM} {t.bgnPerM}
-                      </div>
-                    </td>
-                    <td className="px-4 sm:px-6 py-4 text-right hidden sm:table-cell">
-                      <span className="text-sm font-semibold text-foreground">
-                        {tier.extraPipePerM}
-                      </span>
-                      <span className="ml-1 text-xs text-muted-foreground">{t.bgnPerM}</span>
-                    </td>
-                  </tr>
-                ))}
+                {INSTALLATION_TIERS.map((tier) => {
+                  const priceEur = Math.round(bgnToEur(tier.price));
+                  const extraEur = Math.round(bgnToEur(tier.extraPipePerM));
+                  return (
+                    <tr key={tier.maxBtu} className="hover:bg-muted/30 transition-colors">
+                      <td className="px-4 sm:px-6 py-4 text-sm text-foreground font-medium">
+                        {formatPowerLabel(tier.maxBtu)}
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 text-right">
+                        <span className="text-base sm:text-lg font-extrabold text-foreground tabular-nums">
+                          {priceEur}
+                        </span>
+                        <span className="ml-1 text-xs text-muted-foreground">€</span>
+                        {/* Mobile: show extra pipe here too */}
+                        <div className="sm:hidden text-[11px] text-muted-foreground mt-1">
+                          +{extraEur} €/м
+                        </div>
+                      </td>
+                      <td className="px-4 sm:px-6 py-4 text-right hidden sm:table-cell">
+                        <span className="text-sm font-semibold text-foreground tabular-nums">
+                          {extraEur}
+                        </span>
+                        <span className="ml-1 text-xs text-muted-foreground">€/м</span>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -258,37 +331,37 @@ export default async function MontazhPage({ params }: PageProps) {
               <li className="flex items-baseline justify-between p-4 bg-white border border-border/60 rounded-xl">
                 <span className="text-sm text-foreground pr-2">{t.extraDismantleSmall}</span>
                 <span className="whitespace-nowrap">
-                  <span className="text-base font-bold text-foreground">
-                    {EXTRA_SERVICES_BGN.dismantleSmall}
+                  <span className="text-base font-bold text-foreground tabular-nums">
+                    {Math.round(EXTRA_SERVICES_EUR.dismantleSmall)}
                   </span>
-                  <span className="ml-1 text-xs text-muted-foreground">{t.bgn}</span>
+                  <span className="ml-1 text-xs text-muted-foreground">€</span>
                 </span>
               </li>
               <li className="flex items-baseline justify-between p-4 bg-white border border-border/60 rounded-xl">
                 <span className="text-sm text-foreground pr-2">{t.extraDismantleLarge}</span>
                 <span className="whitespace-nowrap">
-                  <span className="text-base font-bold text-foreground">
-                    {EXTRA_SERVICES_BGN.dismantleLarge}
+                  <span className="text-base font-bold text-foreground tabular-nums">
+                    {Math.round(EXTRA_SERVICES_EUR.dismantleLarge)}
                   </span>
-                  <span className="ml-1 text-xs text-muted-foreground">{t.bgn}</span>
+                  <span className="ml-1 text-xs text-muted-foreground">€</span>
                 </span>
               </li>
               <li className="flex items-baseline justify-between p-4 bg-white border border-border/60 rounded-xl">
                 <span className="text-sm text-foreground pr-2">{t.extraDiagnostic}</span>
                 <span className="whitespace-nowrap">
-                  <span className="text-base font-bold text-foreground">
-                    {EXTRA_SERVICES_BGN.diagnostic}
+                  <span className="text-base font-bold text-foreground tabular-nums">
+                    {Math.round(EXTRA_SERVICES_EUR.diagnostic)}
                   </span>
-                  <span className="ml-1 text-xs text-muted-foreground">{t.bgn}</span>
+                  <span className="ml-1 text-xs text-muted-foreground">€</span>
                 </span>
               </li>
               <li className="flex items-baseline justify-between p-4 bg-white border border-border/60 rounded-xl">
                 <span className="text-sm text-foreground pr-2">{t.extraInspection}</span>
                 <span className="whitespace-nowrap">
-                  <span className="text-base font-bold text-foreground">
-                    {EXTRA_SERVICES_BGN.inspection}
+                  <span className="text-base font-bold text-foreground tabular-nums">
+                    {Math.round(EXTRA_SERVICES_EUR.inspection)}
                   </span>
-                  <span className="ml-1 text-xs text-muted-foreground">{t.bgn}</span>
+                  <span className="ml-1 text-xs text-muted-foreground">€</span>
                 </span>
               </li>
             </ul>
