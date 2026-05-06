@@ -61,7 +61,7 @@ export default async function RootLayout({
   return (
     <html
       lang={htmlLang}
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       suppressHydrationWarning
     >
       <head>
@@ -86,7 +86,7 @@ export default async function RootLayout({
           <TrackingPixels />
         </Suspense>
       </head>
-      <body className="h-full flex flex-col">{children}</body>
+      <body className="min-h-screen flex flex-col">{children}</body>
     </html>
   );
 }

@@ -110,7 +110,7 @@ export default function TgShell({ children }: { children: React.ReactNode }) {
   // Loading
   if (loading) {
     return (
-      <div style={{ background: tg.theme.bg, color: tg.theme.text }} className="h-full flex items-center justify-center overflow-hidden">
+      <div style={{ background: tg.theme.bg, color: tg.theme.text }} className="h-screen flex items-center justify-center overflow-hidden">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin mx-auto mb-3" style={{ color: tg.theme.link }} />
           <p className="text-sm" style={{ color: tg.theme.hint }}>Загрузка...</p>
@@ -122,7 +122,7 @@ export default function TgShell({ children }: { children: React.ReactNode }) {
   // Error
   if (error) {
     return (
-      <div style={{ background: tg.theme.bg, color: tg.theme.text }} className="h-full flex items-center justify-center p-6 overflow-hidden">
+      <div style={{ background: tg.theme.bg, color: tg.theme.text }} className="h-screen flex items-center justify-center p-6 overflow-hidden">
         <div className="text-center">
           <p className="text-base font-semibold mb-2">{error}</p>
           <p className="text-sm" style={{ color: tg.theme.hint }}>Этот Mini App доступен только для команды</p>
@@ -137,7 +137,7 @@ export default function TgShell({ children }: { children: React.ReactNode }) {
 
   return (
     <MiniAppContext.Provider value={ctx}>
-      <div className="flex flex-col h-full overflow-hidden" style={{ background: tg.theme.bgSecondary, color: tg.theme.text, fontFamily: "'Inter', -apple-system, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" }}>
+      <div className="flex flex-col h-screen overflow-hidden" style={{ background: tg.theme.bgSecondary, color: tg.theme.text, fontFamily: "'Inter', -apple-system, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" }}>
         {/* Content */}
         <main className={`flex-1 min-h-0 ${isEstimateChat ? "overflow-hidden" : "overflow-y-auto pb-14"}`}>
           {children}
