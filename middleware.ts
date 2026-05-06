@@ -51,10 +51,13 @@ export function middleware(request: NextRequest) {
   );
 
   if (pathnameLocale) {
-    // Locale present — set html lang header for layout
-    const response = NextResponse.next();
-    response.headers.set("x-locale", pathnameLocale);
-    return response;
+    // Locale present — propagate to RSC via REQUEST header, so the root
+    // layout can read it through `headers()`. Setting it on the response
+    // (the previous behavior) only sent it back to the browser; server
+    // components never saw it, which is why <html lang> stayed "bg".
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set("x-locale", pathnameLocale);
+    return NextResponse.next({ request: { headers: requestHeaders } });
   }
 
   // No locale in path — redirect to detected locale

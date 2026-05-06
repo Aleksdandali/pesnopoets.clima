@@ -24,6 +24,11 @@ export const viewport = {
   viewportFit: "cover" as const,
 };
 
+// Pin server rendering to fra1 (Frankfurt). Supabase project lives in
+// eu-central-1, so this collapses the previous FRA edge -> IAD function
+// -> FRA db round-trip into a single-region path.
+export const preferredRegion = "fra1";
+
 export const metadata: Metadata = {
   title: {
     default: "Песнопоец Клима — Климатици с монтаж в България",
