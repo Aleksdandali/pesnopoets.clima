@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { MessageCircle, X, Send, Square, Sparkles, Loader2 } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { trackChatLead } from "@/lib/gtag";
 import Image from "next/image";
 import Link from "next/link";
@@ -100,6 +101,16 @@ export default function ConsultantChat({ locale, labels }: ConsultantChatProps) 
   const [showTeaser, setShowTeaser] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+
+  const pathname = usePathname();
+
+  // Close chat on route change so the body scroll-lock can't leak across pages.
+  // Without this, opening the consultant on a PDP and then navigating via the
+  // header would leave `open=true` (component lives in the layout, not the page),
+  // keeping body { position: fixed } applied → user can't scroll the new page.
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   // Watch for StickyMobileCTA so trigger button lifts above it on product pages
   useEffect(() => {
