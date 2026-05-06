@@ -8,7 +8,7 @@ import OneClickCardButton from "@/components/catalog/OneClickCardButton";
 import AddToCartButton from "@/components/cart/AddToCartButton";
 import ProductBadges from "@/components/catalog/ProductBadges";
 import { generateBadges } from "@/lib/bittel/badges";
-import { getInstallationEur, getPackagePriceEur, getBaseInstallationBgn, EUR_TO_BGN } from "@/lib/pricing";
+import { getInstallationEur } from "@/lib/pricing";
 
 interface ProductCardProps {
   product: {
@@ -51,6 +51,7 @@ interface ProductCardProps {
       };
       withInstallation?: string;
       withoutInstallation?: string;
+      installationPrice?: string;
       addToCart?: string;
       addedToCart?: string;
       youSave?: string;
@@ -95,7 +96,6 @@ export default function ProductCard({
   const localeTitle = locale === "en" ? product.title_en : locale === "ru" ? product.title_ru : locale === "ua" ? product.title_ua : null;
   const displayTitle = product.title_override || localeTitle || product.title;
   const displayPrice = product.price_override || product.price_client;
-  const packagePrice = getPackagePriceEur(displayPrice, product.btu);
   const installEur = getInstallationEur(product.btu);
   const badges = generateBadges(product, locale, 3, { showInstallBadge: true });
   const gallery = product.gallery || [];
@@ -269,7 +269,7 @@ export default function ProductCard({
           {product.btu && (
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Zap className="w-3.5 h-3.5 text-primary/60" aria-hidden="true" />
-              <span>{product.btu.toLocaleString()} BTU</span>
+              <span>{product.btu.toLocaleString("bg-BG")} BTU</span>
             </div>
           )}
           {product.area_m2 && (
@@ -294,27 +294,17 @@ export default function ProductCard({
           )}
         </div>
 
-        {/* Price block — package pricing (product + installation) */}
+        {/* Price block — Bittel API price as primary; install hint as secondary */}
         <div className="mt-auto flex items-end justify-between gap-3 pt-3 sm:pt-4 border-t border-border">
           <div className="flex flex-col gap-0.5 min-w-0">
-            {/* Package price — primary, large */}
-            <div className="flex items-baseline gap-1.5 flex-wrap">
-              <span className="text-base sm:text-xl font-extrabold text-foreground">
-                {formatPrice(Math.round(packagePrice), currency, currencyLabel)}
-              </span>
-              <span className="text-[10px] sm:text-xs text-muted-foreground font-medium">
-                {dictionary?.product.withInstallation || (locale === "en" ? "with installation" : locale === "ru" ? "с монтажом" : locale === "ua" ? "з монтажем" : "с монтаж")}
-              </span>
-            </div>
-            {/* Product-only price — secondary, smaller, muted */}
-            <div className="flex items-baseline gap-1 flex-wrap">
-              <span className="text-[10px] sm:text-xs text-muted-foreground">
-                {formatPrice(displayPrice, currency, currencyLabel)}
-              </span>
-              <span className="text-[10px] sm:text-xs text-muted-foreground/70">
-                {dictionary?.product.withoutInstallation || (locale === "en" ? "without installation" : locale === "ru" ? "без монтажа" : locale === "ua" ? "без монтажу" : "без монтаж")}
-              </span>
-            </div>
+            {/* Bittel price — primary, large (no install) */}
+            <span className="text-base sm:text-xl font-extrabold text-foreground tabular-nums">
+              {formatPrice(displayPrice, currency, currencyLabel)}
+            </span>
+            {/* Install hint — secondary, muted */}
+            <span className="text-[10px] sm:text-xs text-muted-foreground">
+              + {Math.round(installEur)} {currencyLabel} {dictionary?.product.installationPrice?.toLowerCase() || (locale === "en" ? "installation" : locale === "ru" ? "монтаж" : locale === "ua" ? "монтаж" : "монтаж")}
+            </span>
             {/* Promo savings */}
             {product.is_promo && product.price_promo && product.price_promo > 0 && (
               <span className="text-[10px] sm:text-xs font-bold text-danger">
