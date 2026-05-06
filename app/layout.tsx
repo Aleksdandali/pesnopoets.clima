@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { headers } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
@@ -15,6 +16,13 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: "cover" as const,
+};
 
 export const metadata: Metadata = {
   title: {
@@ -33,13 +41,15 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-  params,
 }: Readonly<{
   children: React.ReactNode;
-  params: Promise<{ locale?: string }>;
 }>) {
-  const resolvedParams = await params.catch(() => ({ locale: "bg" }));
-  const locale = resolvedParams?.locale || "bg";
+  // Locale comes from middleware via the `x-locale` request header.
+  // Root layout does NOT receive `params.locale` — that segment belongs
+  // to the child `[locale]/...` layout. Reading params here always
+  // resolved to undefined, which is why every locale rendered <html lang="bg">.
+  const headerStore = await headers();
+  const locale = headerStore.get("x-locale") || "bg";
   const langMap: Record<string, string> = { bg: "bg", en: "en", ru: "ru", ua: "uk" };
   const htmlLang = langMap[locale] || "bg";
 
@@ -71,7 +81,7 @@ export default async function RootLayout({
           <TrackingPixels />
         </Suspense>
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="h-full flex flex-col">{children}</body>
     </html>
   );
 }
