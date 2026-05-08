@@ -91,7 +91,32 @@ export function getInstallationEur(btu: number | null | undefined): number {
   return bgnToEur(getBaseInstallationBgn(btu));
 }
 
+/** Extra-pipe price in EUR per metre over 3 m, for given BTU. */
+export function getExtraPipeEurPerM(btu: number | null | undefined): number {
+  return bgnToEur(getInstallationTier(btu).extraPipePerM);
+}
+
 /** Package price: product EUR + standard installation (converted to EUR). */
 export function getPackagePriceEur(productPriceEur: number, btu: number | null | undefined): number {
   return productPriceEur + getInstallationEur(btu);
 }
+
+/** Extra services in EUR — derived from BGN source of truth. */
+export const EXTRA_SERVICES_EUR = {
+  dismantleSmall: bgnToEur(EXTRA_SERVICES_BGN.dismantleSmall),
+  dismantleLarge: bgnToEur(EXTRA_SERVICES_BGN.dismantleLarge),
+  diagnostic: bgnToEur(EXTRA_SERVICES_BGN.diagnostic),
+  inspection: bgnToEur(EXTRA_SERVICES_BGN.inspection),
+  calloutFee: bgnToEur(EXTRA_SERVICES_BGN.calloutFee),
+} as const;
+
+/** Preventive maintenance prices in EUR — derived from BGN source of truth. */
+export const PROFILAKTIKA_EUR = {
+  single: bgnToEur(PROFILAKTIKA_BGN.single),
+  fullService: bgnToEur(PROFILAKTIKA_BGN.fullService),
+  subscription3y_small: bgnToEur(PROFILAKTIKA_BGN.subscription3y_small),
+  subscription3y_large: bgnToEur(PROFILAKTIKA_BGN.subscription3y_large),
+  turbineCleanMin: bgnToEur(PROFILAKTIKA_BGN.turbineCleanMin),
+  turbineCleanMax: bgnToEur(PROFILAKTIKA_BGN.turbineCleanMax),
+  outdoorUnitClean: bgnToEur(PROFILAKTIKA_BGN.outdoorUnitClean),
+} as const;
