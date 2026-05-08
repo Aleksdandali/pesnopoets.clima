@@ -21,6 +21,7 @@ import ProductCard from "@/components/catalog/ProductCard";
 import SeasonalBanner from "@/components/home/SeasonalBanner";
 import AiConsultantSection from "@/components/home/AiConsultantSection";
 import HeroCarousel from "@/components/home/HeroCarousel";
+import AcBlowingHero from "@/components/home/AcBlowingHero";
 
 // Revalidate homepage every 5 minutes for fresh product data
 export const revalidate = 300;
@@ -329,6 +330,9 @@ export default async function HomePage({ params }: HomePageProps) {
 
   return (
     <>
+      {/* Cinematic AC video — sits above the banners as a "cool air falling onto the face" effect */}
+      <AcBlowingHero />
+
       {/* Hero Carousel — managed via /admin/banners */}
       <HeroCarousel
         banners={heroBanners}
