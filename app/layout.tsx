@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import { GA_ID } from "@/lib/gtag";
+import { GA_ID, GA4_ID } from "@/lib/gtag";
 import TrackingPixels from "@/components/seo/TrackingPixels";
 
 const geistSans = Geist({
@@ -80,6 +80,7 @@ export default async function RootLayout({
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', '${GA_ID}');
+            gtag('config', '${GA4_ID}');
           `}
         </Script>
         <Suspense fallback={null}>

@@ -12,6 +12,7 @@
  */
 
 export const GA_ID = "AW-18063225430";
+export const GA4_ID = "G-0QPS7F89RF";
 
 // ---------------------------------------------------------------------------
 // Low-level helpers
@@ -27,11 +28,19 @@ function getFbq(): ((...args: unknown[]) => void) | null {
   return (window as unknown as { fbq?: (...args: unknown[]) => void }).fbq ?? null;
 }
 
-/** Push an event to Google (dataLayer + gtag). */
+/**
+ * Push an event to Google (dataLayer + gtag).
+ *
+ * - "conversion" events → restricted to Google Ads (GA_ID) only.
+ * - All other events → fire to BOTH Ads and GA4 (no send_to, so all configured tags receive them).
+ */
 function pushEvent(eventName: string, params: Record<string, unknown> = {}) {
   const gtag = getGtag();
-  if (gtag) {
+  if (!gtag) return;
+  if (eventName === "conversion") {
     gtag("event", eventName, { send_to: GA_ID, ...params });
+  } else {
+    gtag("event", eventName, params);
   }
 }
 
