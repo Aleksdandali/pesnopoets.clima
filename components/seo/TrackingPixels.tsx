@@ -1,9 +1,12 @@
+import Script from "next/script";
 import { createClient } from "@/lib/supabase/server";
 import MetaPixelPageView from "./MetaPixelPageView";
 
 interface PixelSettings {
   meta_pixel_id?: string;
   tiktok_pixel_id?: string;
+  google_ads_id?: string;
+  ga4_id?: string;
   custom_head_scripts?: string;
 }
 
@@ -13,13 +16,31 @@ function sanitizePixelId(id: string): string | null {
   return clean.length >= 10 && clean.length <= 20 ? clean : null;
 }
 
+/** Validate Google Ads ID — must match `AW-{10-11 digits}`. Returns canonical form or null. */
+function sanitizeGoogleAdsId(id: string): string | null {
+  const trimmed = id.trim();
+  return /^AW-\d{9,12}$/.test(trimmed) ? trimmed : null;
+}
+
+/** Validate GA4 measurement ID — must match `G-{8-12 alphanumeric}`. */
+function sanitizeGa4Id(id: string): string | null {
+  const trimmed = id.trim();
+  return /^G-[A-Z0-9]{8,12}$/.test(trimmed) ? trimmed : null;
+}
+
 async function getPixelSettings(): Promise<PixelSettings> {
   try {
     const supabase = await createClient();
     const { data } = await supabase
       .from("site_settings")
       .select("key, value")
-      .in("key", ["meta_pixel_id", "tiktok_pixel_id", "custom_head_scripts"]);
+      .in("key", [
+        "meta_pixel_id",
+        "tiktok_pixel_id",
+        "google_ads_id",
+        "ga4_id",
+        "custom_head_scripts",
+      ]);
 
     if (!data) return {};
 
@@ -37,9 +58,34 @@ export default async function TrackingPixels() {
   const settings = await getPixelSettings();
   const metaId = settings.meta_pixel_id ? sanitizePixelId(settings.meta_pixel_id) : null;
   const tiktokId = settings.tiktok_pixel_id?.replace(/[^a-zA-Z0-9]/g, "") || null;
+  const googleAdsId = settings.google_ads_id ? sanitizeGoogleAdsId(settings.google_ads_id) : null;
+  const ga4Id = settings.ga4_id ? sanitizeGa4Id(settings.ga4_id) : null;
+  // gtag.js loads once with a primary tag id; subsequent gtag('config', ...) calls
+  // register additional tags on the same library instance.
+  const gtagBootId = googleAdsId ?? ga4Id;
 
   return (
     <>
+      {/* Google tag (gtag.js) — loaded only when at least one Google ID is configured */}
+      {gtagBootId && (
+        <>
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${gtagBootId}`}
+            strategy="afterInteractive"
+          />
+          <Script id="gtag-init" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              ${googleAdsId ? `gtag('config', '${googleAdsId}');` : ""}
+              ${ga4Id ? `gtag('config', '${ga4Id}');` : ""}
+              window.__ANALYTICS = ${JSON.stringify({ googleAdsId, ga4Id })};
+            `}
+          </Script>
+        </>
+      )}
+
       {/* Meta (Facebook) Pixel */}
       {metaId && (
         <>

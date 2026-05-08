@@ -7,7 +7,8 @@ import { Settings, Save, Loader2 } from "lucide-react";
 const FIELDS = [
   { key: "meta_pixel_id", label: "Meta (Facebook) Pixel ID", placeholder: "123456789012345", help: "Только ID (число). Скрипт fbq() добавится автоматически.", type: "input" },
   { key: "tiktok_pixel_id", label: "TikTok Pixel ID", placeholder: "CXXXXXXXXXXXXXXXXX", help: "Только ID. Скрипт ttq добавится автоматически.", type: "input" },
-  { key: "google_ads_id", label: "Google Ads ID", placeholder: "AW-XXXXXXXXXXX", help: "Формат AW-XXXXXXXXXXX.", type: "input" },
+  { key: "google_ads_id", label: "Google Ads ID", placeholder: "AW-XXXXXXXXXXX", help: "Формат AW-XXXXXXXXXXX. Используется для конверсий и ремаркетинга.", type: "input" },
+  { key: "ga4_id", label: "Google Analytics 4 (GA4) ID", placeholder: "G-XXXXXXXXXX", help: "Формат G-XXXXXXXXXX. Measurement ID из GA4 → Admin → Data Streams.", type: "input" },
   { key: "custom_head_scripts", label: "Custom Scripts (в <head>)", placeholder: "<script>...</script>", help: "HTML/JS код. Вставляется в <head> всех страниц сайта.", type: "textarea" },
 ] as const;
 

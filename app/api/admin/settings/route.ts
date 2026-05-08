@@ -6,6 +6,7 @@ const ALLOWED_KEYS = new Set([
   "meta_pixel_id",
   "tiktok_pixel_id",
   "google_ads_id",
+  "ga4_id",
   "custom_head_scripts",
 ]);
 

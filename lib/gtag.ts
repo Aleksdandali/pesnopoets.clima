@@ -11,9 +11,6 @@
  *   5. messenger_click  (Secondary) — WhatsApp/Viber click      → Meta: Contact
  */
 
-export const GA_ID = "AW-18063225430";
-export const GA4_ID = "G-0QPS7F89RF";
-
 // ---------------------------------------------------------------------------
 // Low-level helpers
 // ---------------------------------------------------------------------------
@@ -29,16 +26,32 @@ function getFbq(): ((...args: unknown[]) => void) | null {
 }
 
 /**
+ * Resolve the configured Google Ads tag id from the runtime config injected
+ * by `<TrackingPixels />`. Returns null if not configured (e.g. site_settings
+ * row is empty), in which case "conversion" events are dropped to avoid
+ * polluting GA4 with mis-routed events.
+ */
+function getGoogleAdsId(): string | null {
+  if (typeof window === "undefined") return null;
+  const cfg = (window as unknown as { __ANALYTICS?: { googleAdsId?: string | null } }).__ANALYTICS;
+  return cfg?.googleAdsId ?? null;
+}
+
+/**
  * Push an event to Google (dataLayer + gtag).
  *
- * - "conversion" events → restricted to Google Ads (GA_ID) only.
- * - All other events → fire to BOTH Ads and GA4 (no send_to, so all configured tags receive them).
+ * - "conversion" events → restricted to Google Ads only via `send_to`.
+ *   Dropped if Google Ads ID is not configured.
+ * - All other events → fire to BOTH Ads and GA4 (no send_to, so all
+ *   configured tags receive them).
  */
 function pushEvent(eventName: string, params: Record<string, unknown> = {}) {
   const gtag = getGtag();
   if (!gtag) return;
   if (eventName === "conversion") {
-    gtag("event", eventName, { send_to: GA_ID, ...params });
+    const adsId = getGoogleAdsId();
+    if (!adsId) return;
+    gtag("event", eventName, { send_to: adsId, ...params });
   } else {
     gtag("event", eventName, params);
   }
