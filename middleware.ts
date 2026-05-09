@@ -15,23 +15,6 @@ const publicPaths = [
   "/tg",
 ];
 
-function getLocaleFromHeaders(request: NextRequest): string {
-  const acceptLanguage = request.headers.get("accept-language") || "";
-  const localeMap: Record<string, string> = {
-    bg: "bg",
-    en: "en",
-    ru: "ru",
-    uk: "ua",
-  };
-
-  const preferred = acceptLanguage
-    .split(",")
-    .map((lang) => lang.split(";")[0].trim().split("-")[0].toLowerCase())
-    .find((lang) => localeMap[lang]);
-
-  return preferred ? localeMap[preferred] || defaultLocale : defaultLocale;
-}
-
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -60,12 +43,15 @@ export function middleware(request: NextRequest) {
     return NextResponse.next({ request: { headers: requestHeaders } });
   }
 
-  // No locale in path — redirect to detected locale
-  const detectedLocale = getLocaleFromHeaders(request);
+  // No locale in path — permanently redirect to default locale (Bulgarian).
+  // 308 (vs 307) signals canonicalization to Google. We deliberately do NOT
+  // detect Accept-Language here: Google Search Central explicitly recommends
+  // against content-negotiation redirects for localized versions, and the
+  // resulting unstable canonical signal was causing /bg to be flagged as
+  // "Duplicate, Google chose different canonical than user" in GSC.
   const url = request.nextUrl.clone();
-  url.pathname = `/${detectedLocale}${pathname}`;
-
-  return NextResponse.redirect(url);
+  url.pathname = `/${defaultLocale}${pathname}`;
+  return NextResponse.redirect(url, 308);
 }
 
 export const config = {

@@ -119,7 +119,7 @@ function ContentBG() {
       </div>
       <p>
         Не сте сигурни колко BTU ви трябват? Нашият{" "}
-        <a href="/" className="text-primary underline underline-offset-4 hover:text-primary/80">
+        <a href="/bg" className="text-primary underline underline-offset-4 hover:text-primary/80">
           AI консултант
         </a>{" "}
         ще изчисли точно — кажете му квадратурата, етажа и изложението.
@@ -314,7 +314,7 @@ function ContentBG() {
       </ul>
       <p>
         Готови ли сте? Започнете с нашия{" "}
-        <a href="/" className="text-primary underline underline-offset-4 hover:text-primary/80">
+        <a href="/bg" className="text-primary underline underline-offset-4 hover:text-primary/80">
           AI консултант
         </a>{" "}
         — ще ви помогне да изберете точния модел за вашата стая и бюджет.
@@ -443,7 +443,7 @@ function ContentEN() {
       </div>
       <p>
         Not sure what BTU you need? Our{" "}
-        <a href="/" className="text-primary underline underline-offset-4 hover:text-primary/80">
+        <a href="/en" className="text-primary underline underline-offset-4 hover:text-primary/80">
           AI consultant
         </a>{" "}
         will calculate it — just tell it your room size, floor, and orientation.
@@ -644,7 +644,7 @@ function ContentEN() {
       </ul>
       <p>
         Ready to choose? Start with our{" "}
-        <a href="/" className="text-primary underline underline-offset-4 hover:text-primary/80">
+        <a href="/en" className="text-primary underline underline-offset-4 hover:text-primary/80">
           AI consultant
         </a>{" "}
         — it will help you find the right model for your room and budget.
@@ -772,7 +772,7 @@ function ContentRU() {
       </div>
       <p>
         Не уверены, сколько BTU нужно? Наш{" "}
-        <a href="/" className="text-primary underline underline-offset-4 hover:text-primary/80">
+        <a href="/ru" className="text-primary underline underline-offset-4 hover:text-primary/80">
           AI-консультант
         </a>{" "}
         рассчитает точно — скажите ему площадь, этаж и сторону света.
@@ -971,7 +971,7 @@ function ContentRU() {
       </ul>
       <p>
         Готовы выбирать? Начните с нашего{" "}
-        <a href="/" className="text-primary underline underline-offset-4 hover:text-primary/80">
+        <a href="/ru" className="text-primary underline underline-offset-4 hover:text-primary/80">
           AI-консультанта
         </a>{" "}
         — он поможет подобрать модель под вашу комнату и бюджет.
@@ -1099,7 +1099,7 @@ function ContentUA() {
       </div>
       <p>
         Не впевнені, скільки BTU потрібно? Наш{" "}
-        <a href="/" className="text-primary underline underline-offset-4 hover:text-primary/80">
+        <a href="/ua" className="text-primary underline underline-offset-4 hover:text-primary/80">
           AI-консультант
         </a>{" "}
         розрахує точно — скажіть йому площу, поверх та сторону світу.
@@ -1299,7 +1299,7 @@ function ContentUA() {
       </ul>
       <p>
         Готові обирати? Почніть з нашого{" "}
-        <a href="/" className="text-primary underline underline-offset-4 hover:text-primary/80">
+        <a href="/ua" className="text-primary underline underline-offset-4 hover:text-primary/80">
           AI-консультанта
         </a>{" "}
         — він допоможе підібрати модель під вашу кімнату та бюджет.
