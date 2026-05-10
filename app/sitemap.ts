@@ -78,6 +78,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...localized("/daikin-varna", { changeFrequency: "weekly", priority: 0.85 })
   );
   entries.push(
+    ...localized("/mitsubishi-varna", { changeFrequency: "weekly", priority: 0.85 })
+  );
+  entries.push(
     ...localized("/uslugi", { changeFrequency: "weekly", priority: 0.85 })
   );
   entries.push(

@@ -519,6 +519,65 @@
     "ctaPrimary": "View Daikin catalog",
     "ctaSecondary": "Ask the AI consultant"
   },
+  "mitsubishiVarna": {
+    "pageTitle": "Mitsubishi air conditioners in Varna — Electric and Heavy with installation",
+    "pageSubtitle": "Genuine Mitsubishi Electric and Mitsubishi Heavy Industries — two distinct Japanese companies, one reputation. Delivery and installation by our own crew in Varna and the region.",
+    "breadcrumbHome": "Home",
+    "breadcrumbMitsubishi": "Mitsubishi Varna",
+    "whyTitle": "Why Mitsubishi",
+    "whySubtitle": "One of the most reliable Japanese brands in the AC business. Some of the quietest indoor units on the market, the highest energy class and a real warranty that gets honoured.",
+    "whyItems": [
+      { "title": "Japanese compressor", "desc": "DC inverter compressor with a 5-year warranty. Famous for its longevity — a real 12–15 years of operation." },
+      { "title": "A+++ energy class", "desc": "Mitsubishi Electric MSZ-LN and Heavy SRK ZS-W reach SCOP up to 5.20 — lower power consumption than most competitors." },
+      { "title": "Down to 19 dB noise", "desc": "Among the quietest air conditioners in the world — MSZ-HR and SRK ZSP models run as quietly as a whisper." },
+      { "title": "Real warranty", "desc": "Mitsubishi is one of the few brands whose warranty is actually honoured without legal disputes. The factory protects its reputation." }
+    ],
+    "twoLinesTitle": "Mitsubishi Electric or Mitsubishi Heavy?",
+    "twoLinesDesc": "These are TWO different Japanese companies sharing the Mitsubishi name since the 1870s. Both make excellent air conditioners with different focus.",
+    "twoLines": [
+      { "title": "Mitsubishi Electric", "desc": "More widely known brand in Europe. The MSZ-HR series — practical white model, MSZ-LN — designer with coloured cases. Slightly higher price but a premium feel. Assembled in Thailand to Japanese standards." },
+      { "title": "Mitsubishi Heavy Industries", "desc": "More economical lineup. SRK ZSP — the main bestseller for home, SRK ZS-W — premium with higher SCOP. More accessible prices for the same quality. Assembled in Japan or Thailand." }
+    ],
+    "rangeTitle": "Popular Mitsubishi models",
+    "rangeSubtitle": "Prices update automatically from the importer. We include installation by our crew, 12 months labour warranty plus the full factory warranty.",
+    "rangeItems": [
+      { "name": "Mitsubishi Heavy SRK ZSP-W", "btu": "9,000–12,000 BTU", "desc": "The main bestseller from Heavy Industries — excellent value for a bedroom or small apartment.", "fromLabel": "from", "fromPrice": "€370" },
+      { "name": "Mitsubishi Electric MSZ-HR", "btu": "9,000–12,000 BTU", "desc": "The classic Electric series — practical white case, low noise, stable SCOP. For a living room or bedroom in an apartment.", "fromLabel": "from", "fromPrice": "€391" },
+      { "name": "Mitsubishi Heavy SRK ZS-W Premium", "btu": "9,000–18,000 BTU", "desc": "Premium series with the highest SCOP in the Heavy lineup. More advanced filtration, quieter mode. For a large living room or whole apartment.", "fromLabel": "from", "fromPrice": "€480" }
+    ],
+    "rangeCtaElectric": "View Mitsubishi Electric",
+    "rangeCtaHeavy": "View Mitsubishi Heavy",
+    "installTitle": "Mitsubishi installation in Varna",
+    "installDesc": "Mitsubishi installation by our own crew with professional vacuuming — a mandatory factory requirement for a valid warranty. Fixed prices, copper pipe, all materials and commissioning included.",
+    "installItems": [
+      "Standard installation 7–14K BTU — €190",
+      "Standard installation 15–24K BTU — €230",
+      "12 months labour warranty",
+      "We preserve the full Mitsubishi factory warranty"
+    ],
+    "installCta": "View installation and prices",
+    "maintenanceTitle": "Mitsubishi service and maintenance",
+    "maintenanceDesc": "Annual maintenance from €42 keeps the compressor efficient and extends the AC's life by years. Mitsubishi requires regular maintenance for a valid warranty after the 2nd year.",
+    "maintenanceCta": "Request maintenance",
+    "warrantyTitle": "Mitsubishi warranty in Varna",
+    "warrantyItems": [
+      { "title": "5 years on the compressor", "desc": "Factory warranty on the DC compressor — the most expensive component of the AC." },
+      { "title": "3 years on the rest", "desc": "Electronic boards, fans, sensors — full factory warranty." },
+      { "title": "12 months on installation", "desc": "Labour warranty from our crew — we fix any issue free of charge." },
+      { "title": "Local service in Varna", "desc": "We don't ship anything to Sofia — everything is serviced on site, fast." }
+    ],
+    "neighborhoodsTitle": "Mitsubishi delivery and installation across Varna",
+    "neighborhoodsSubtitle": "We cover all districts of the city and the region within a 30 km radius. For requests before noon — usually same-day service.",
+    "neighborhoods": [
+      "Chayka", "Levski", "Asparuhovo", "Vinitsa", "Vladislavovo", "Mladost",
+      "Vazrazhdane", "Briz", "Greek Quarter", "Kolhozen Pazar", "Ikonomicheski",
+      "Sea Garden", "Devnya", "Aksakovo", "Beloslav", "Ignatievo", "Kichevo"
+    ],
+    "ctaTitle": "Ready for Mitsubishi?",
+    "ctaDesc": "Get in touch — we'll suggest a model for your room and budget, installation on a day convenient for you.",
+    "ctaPrimary": "View Mitsubishi catalog",
+    "ctaSecondary": "Ask the AI consultant"
+  },
   "contact": {
     "title": "Contact in Varna",
     "subtitle": "Get in touch with us in Varna — consultation, quotes or questions about air conditioners and installation.",
