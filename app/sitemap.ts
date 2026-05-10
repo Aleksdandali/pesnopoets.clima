@@ -56,11 +56,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .eq("is_active", true)
     .eq("is_hidden", false);
 
-  // Fetch all categories
-  const { data: categories } = await supabase
-    .from("categories")
-    .select("slug");
-
   const entries: MetadataRoute.Sitemap = [];
 
   // Static pages
@@ -83,6 +78,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   entries.push(
     ...localized("/uslugi", { changeFrequency: "weekly", priority: 0.85 })
   );
+
+  // SEO category landing pages
+  entries.push(
+    ...localized("/klimatici/inverter", { changeFrequency: "weekly", priority: 0.85 })
+  );
+  entries.push(
+    ...localized("/klimatici/termopompa", { changeFrequency: "weekly", priority: 0.85 })
+  );
+  entries.push(
+    ...localized("/klimatici/multisplit", { changeFrequency: "weekly", priority: 0.85 })
+  );
+  entries.push(
+    ...localized("/klimatici/kanalen", { changeFrequency: "weekly", priority: 0.8 })
+  );
+  entries.push(
+    ...localized("/klimatici/kasetachen", { changeFrequency: "weekly", priority: 0.8 })
+  );
+  entries.push(
+    ...localized("/klimatici/kolonen", { changeFrequency: "weekly", priority: 0.8 })
+  );
   entries.push(
     ...localized("/brands", { changeFrequency: "weekly", priority: 0.8 })
   );
@@ -92,18 +107,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   entries.push(
     ...localized("/kontakti", { changeFrequency: "monthly", priority: 0.7 })
   );
-
-  // Category pages
-  if (categories) {
-    for (const cat of categories) {
-      entries.push(
-        ...localized(`/klimatici/${cat.slug}`, {
-          changeFrequency: "daily",
-          priority: 0.8,
-        })
-      );
-    }
-  }
 
   // Product pages
   if (products) {
