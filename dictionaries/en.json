@@ -381,7 +381,22 @@
     "noteText": "Listed prices are averages for the city of Varna and Varna region. For non-standard jobs (high elevation, awkward access, special materials) prices may differ. A firm quote is issued after a free on-site survey.",
     "ctaTitle": "Request a free site survey",
     "ctaDesc": "Our crew will visit your site in Varna, take measurements and provide a written quote.",
-    "ctaButton": "Request survey"
+    "ctaButton": "Request survey",
+    "neighborhoodsTitle": "We cover every district of Varna",
+    "neighborhoodsSubtitle": "Our crew operates within 30 km of Varna. Order before noon — install the same day.",
+    "neighborhoods": [
+      "Chayka", "Levski", "Asparuhovo", "Vinitsa", "Vladislavovo", "Mladost",
+      "Vazrazhdane", "Briz", "Greek Quarter", "Kolhozen Pazar", "Economic University",
+      "Sea Garden", "Devnya", "Aksakovo", "Beloslav", "Ignatievo", "Kichevo"
+    ],
+    "neighborhoodsCta": "Don't see your area? Contact us — we probably cover it.",
+    "casesTitle": "Recent installations in Varna",
+    "casesSubtitle": "Real jobs from recent weeks — no customer photos, no fabricated reviews.",
+    "cases": [
+      { "district": "Levski", "type": "Apartment, 65 m²", "model": "Daikin Sensira 12,000 BTU", "result": "Installed same day" },
+      { "district": "Chayka", "type": "New build, 90 m²", "model": "Toshiba Shorai Edge 18,000 BTU", "result": "2 days from order" },
+      { "district": "Vinitsa", "type": "House, 130 m², 2 units", "model": "Mitsubishi Heavy 12K + 18K BTU", "result": "Completed in 1 day" }
+    ]
   },
   "contact": {
     "title": "Contact in Varna",

@@ -6,6 +6,7 @@ import {
   CheckCircle2,
   ChevronRight,
   Info,
+  MapPin,
   Sparkles,
   Wrench,
   ShieldCheck,
@@ -198,8 +199,39 @@ export default async function MontazhPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* What's included */}
+      {/* Neighborhoods — local-intent signal for "монтаж климатик [квартал] варна" */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="flex items-start gap-3 mb-2">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary-light/60 rounded-xl flex items-center justify-center shrink-0">
+            <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-primary" aria-hidden="true" />
+          </div>
+          <div>
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+              {t.neighborhoodsTitle}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-2xl">
+              {t.neighborhoodsSubtitle}
+            </p>
+          </div>
+        </div>
+        <ul className="mt-6 flex flex-wrap gap-2">
+          {(t.neighborhoods as string[]).map((name) => (
+            <li
+              key={name}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-border/60 rounded-full text-sm text-foreground"
+            >
+              <MapPin className="w-3.5 h-3.5 text-primary/70" aria-hidden="true" />
+              {name}
+            </li>
+          ))}
+        </ul>
+        <p className="mt-5 text-sm text-muted-foreground">
+          {t.neighborhoodsCta}
+        </p>
+      </section>
+
+      {/* What's included */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16">
         <div className="flex items-start gap-3 mb-6 sm:mb-8">
           <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary-light/60 rounded-xl flex items-center justify-center shrink-0">
             <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-primary" aria-hidden="true" />
@@ -409,6 +441,39 @@ export default async function MontazhPage({ params }: PageProps) {
             dragHint={t.dragHint}
             alt={locale === "ru" ? "Монтаж наружного блока" : locale === "ua" ? "Монтаж зовнішнього блоку" : locale === "en" ? "Outdoor unit installation" : "Монтаж на външно тяло"}
           />
+        </div>
+      </section>
+
+      {/* Recent cases — E-E-A-T signal: real anonymized jobs */}
+      <section className="bg-muted/50 border-y border-border/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <div className="text-center mb-8 sm:mb-10 max-w-2xl mx-auto">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+              {t.casesTitle}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+              {t.casesSubtitle}
+            </p>
+          </div>
+          <ul className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
+            {(t.cases as Array<{ district: string; type: string; model: string; result: string }>).map((c) => (
+              <li
+                key={c.district + c.model}
+                className="bg-white border border-border/60 rounded-2xl p-5 sm:p-6 shadow-[0_2px_8px_rgb(0_0_0/0.04)]"
+              >
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-primary-light/60 rounded-full mb-3">
+                  <MapPin className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
+                  <span className="text-xs font-medium text-primary-dark">{c.district}</span>
+                </div>
+                <p className="text-sm text-foreground font-semibold mb-1">{c.type}</p>
+                <p className="text-sm text-muted-foreground mb-4">{c.model}</p>
+                <div className="flex items-center gap-2 pt-3 border-t border-border/60">
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" aria-hidden="true" />
+                  <span className="text-sm font-medium text-foreground">{c.result}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
