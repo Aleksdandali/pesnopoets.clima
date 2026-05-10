@@ -72,6 +72,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...localized("/montazh", { changeFrequency: "weekly", priority: 0.9 })
   );
   entries.push(
+    ...localized("/profilaktika", { changeFrequency: "weekly", priority: 0.85 })
+  );
+  entries.push(
+    ...localized("/daikin-varna", { changeFrequency: "weekly", priority: 0.85 })
+  );
+  entries.push(
     ...localized("/uslugi", { changeFrequency: "weekly", priority: 0.85 })
   );
   entries.push(

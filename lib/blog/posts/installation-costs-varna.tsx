@@ -326,6 +326,16 @@ function ContentBG() {
         ви трябва при гаранционна рекламация. Направете и снимка на нея в
         телефона за всеки случай.
       </p>
+
+      <h3>Свързани услуги във Варна</h3>
+      <ul>
+        <li>
+          <a href="/bg/montazh"><strong>Монтаж на климатик</strong></a> — фиксирани цени, 12 месеца гаранция, монтаж в същия ден.
+        </li>
+        <li>
+          <a href="/bg/profilaktika"><strong>Профилактика и почистване</strong></a> — годишна поддръжка от 36 €, удължава живота на климатика с години.
+        </li>
+      </ul>
     </>
   );
 }
@@ -657,6 +667,16 @@ function ContentEN() {
         You will need it for warranty claims. Also take a photo of it on your
         phone, just in case.
       </p>
+
+      <h3>Related services in Varna</h3>
+      <ul>
+        <li>
+          <a href="/en/montazh"><strong>AC installation</strong></a> — fixed prices, 12-month warranty, same-day service available.
+        </li>
+        <li>
+          <a href="/en/profilaktika"><strong>Maintenance and cleaning</strong></a> — annual service from €36, extends AC lifetime by years.
+        </li>
+      </ul>
     </>
   );
 }
@@ -994,6 +1014,16 @@ function ContentRU() {
         понадобится при гарантийном обращении. Сделайте также фото на телефон —
         на всякий случай.
       </p>
+
+      <h3>Связанные услуги в Варне</h3>
+      <ul>
+        <li>
+          <a href="/ru/montazh"><strong>Монтаж кондиционера</strong></a> — фиксированные цены, 12 месяцев гарантии, монтаж в день обращения.
+        </li>
+        <li>
+          <a href="/ru/profilaktika"><strong>Профилактика и чистка</strong></a> — ежегодное обслуживание от 36 €, продлевает срок службы кондиционера на годы.
+        </li>
+      </ul>
     </>
   );
 }
@@ -1330,6 +1360,16 @@ function ContentUA() {
         Він знадобиться при гарантійному зверненні. Зробіть також фото на
         телефон — про всяк випадок.
       </p>
+
+      <h3>Пов&apos;язані послуги у Варні</h3>
+      <ul>
+        <li>
+          <a href="/ua/montazh"><strong>Монтаж кондиціонера</strong></a> — фіксовані ціни, 12 місяців гарантії, монтаж того ж дня.
+        </li>
+        <li>
+          <a href="/ua/profilaktika"><strong>Профілактика та чищення</strong></a> — щорічне обслуговування від 36 €, продовжує термін служби кондиціонера на роки.
+        </li>
+      </ul>
     </>
   );
 }

@@ -267,7 +267,7 @@
         ],
         "priceFrom": "from 36 €",
         "ctaLabel": "Request",
-        "ctaHref": "/inquiry?service=profilaktika"
+        "ctaHref": "/profilaktika"
       },
       {
         "slug": "remont",
@@ -397,6 +397,127 @@
       { "district": "Chayka", "type": "New build, 90 m²", "model": "Toshiba Shorai Edge 18,000 BTU", "result": "2 days from order" },
       { "district": "Vinitsa", "type": "House, 130 m², 2 units", "model": "Mitsubishi Heavy 12K + 18K BTU", "result": "Completed in 1 day" }
     ]
+  },
+  "profilaktika": {
+    "pageTitle": "AC preventive maintenance in Varna",
+    "pageSubtitle": "Annual AC service by our own team. Clean filters, lower power bills, healthier indoor air.",
+    "breadcrumbHome": "Home",
+    "breadcrumbProfilaktika": "Maintenance",
+    "includedTitle": "What standard maintenance includes",
+    "includedItems": [
+      "Removal and full cleaning of filters",
+      "Foam wash of indoor unit radiator",
+      "Disinfection of indoor unit and drainage",
+      "Cleaning of outdoor unit and condenser",
+      "Freon level and pressure check",
+      "Check of electrical contacts and contactor",
+      "Cooling and heating mode test",
+      "Vacuum cleaning after the work"
+    ],
+    "imageAlt": "AC preventive maintenance — filter cleaning",
+    "benefitsTitle": "Why regular maintenance matters",
+    "benefitsDesc": "Clean filters and radiator reduce electricity consumption by up to 25%, extend AC lifespan by years and protect indoor air from dust, bacteria and mold.",
+    "benefitsItems": [
+      "Up to 25% lower electricity bill",
+      "Compressor life extended by years",
+      "Clean and healthy air — no dust, no mold",
+      "No unpleasant smell when turned on",
+      "Fewer breakdowns and unplanned repairs"
+    ],
+    "tableTitle": "Maintenance prices in Varna",
+    "tableSubtitle": "Fixed prices, no hidden fees. Discounts available for multiple units.",
+    "thService": "Service",
+    "thPrice": "Price",
+    "priceSingleLabel": "Standard maintenance (1 unit)",
+    "priceFullLabel": "Full service with disassembly",
+    "priceOutdoorLabel": "Outdoor unit cleaning",
+    "priceTurbineLabel": "Turbine cleaning (by complexity)",
+    "noteTitle": "When it costs less",
+    "noteText": "With regular annual maintenance, problems are caught early and don't grow. One maintenance costs less than a single compressor replacement.",
+    "symptomsTitle": "Signs it's time for maintenance",
+    "symptomsSubtitle": "If you notice any of these symptoms — don't postpone, call us.",
+    "symptomsItems": [
+      "Weak airflow from the indoor unit",
+      "Unpleasant smell when turned on",
+      "Water dripping from the indoor unit",
+      "Ice on outdoor unit pipes",
+      "Noise, knocking or vibration during operation",
+      "AC doesn't cool as well as before",
+      "Higher electricity bill for no reason",
+      "No maintenance done for over a year"
+    ],
+    "frequencyTitle": "How often maintenance is needed",
+    "frequencySubtitle": "Depends on operating intensity and the environment of the AC.",
+    "frequencyItems": [
+      { "when": "Once a year", "who": "Standard home use — spring, before active use." },
+      { "when": "Twice a year", "who": "Office, restaurant, shop — year-round operation." },
+      { "when": "After renovation", "who": "Renovation dust clogs filters and radiator within days." }
+    ],
+    "neighborhoodsTitle": "Maintenance in every Varna neighborhood",
+    "neighborhoodsSubtitle": "Our team comes within 30 km of Varna. Request before noon — usually we come the same day.",
+    "neighborhoods": [
+      "Chayka", "Levski", "Asparuhovo", "Vinitsa", "Vladislavovo", "Mladost",
+      "Vazrazhdane", "Briz", "Greek Quarter", "Kolhozen Pazar", "Ikonomicheski",
+      "Sea Garden", "Devnya", "Aksakovo", "Beloslav", "Ignatievo", "Kichevo"
+    ],
+    "relatedMontazhTitle": "Need a new AC unit?",
+    "relatedMontazhDesc": "We do turnkey installation by our own team with a 12-month warranty.",
+    "relatedMontazhCta": "View installation",
+    "ctaTitle": "Request maintenance today",
+    "ctaDesc": "Get in touch — we'll suggest a convenient day and arrive with full equipment.",
+    "ctaButton": "Request maintenance"
+  },
+  "daikinVarna": {
+    "pageTitle": "Daikin air conditioners in Varna — sales, installation and service",
+    "pageSubtitle": "Original Daikin from authorized importer — with factory warranty and own service in Varna. Same-day delivery and installation by our team.",
+    "breadcrumbHome": "Home",
+    "breadcrumbDaikin": "Daikin Varna",
+    "whyTitle": "Why Daikin",
+    "whySubtitle": "Daikin is the world's #1 AC manufacturer — Japanese quality, Japanese compressor, one of the highest energy ratings on the market.",
+    "whyItems": [
+      { "title": "Japanese compressor", "desc": "The heart of Daikin — proprietary Swing/Reluctance DC compressor with 5-year warranty. Quiet, efficient, reliable." },
+      { "title": "Energy class A+++", "desc": "Daikin Sensira and Emura have one of the highest SCOP ratings on the market — up to 5.10. Real electricity savings year-round." },
+      { "title": "R-32 refrigerant", "desc": "New-generation refrigerant — better cooling, lower carbon footprint, cheaper recharging." },
+      { "title": "Whisper-quiet mode", "desc": "Touch-sensitive control, Whisper-quiet mode down to 19 dB — quieter than a whisper in a library." }
+    ],
+    "rangeTitle": "Popular Daikin models",
+    "rangeSubtitle": "Prices update automatically from the importer. We include installation by our team, 12 months workmanship warranty plus full factory warranty.",
+    "rangeItems": [
+      { "name": "Daikin Sensira FTXC", "btu": "9,000–18,000 BTU", "desc": "The most affordable Daikin range — excellent price/quality ratio. For bedroom, living room, small apartment.", "fromLabel": "from", "fromPrice": "€353" },
+      { "name": "Daikin Emura", "btu": "9,000–18,000 BTU", "desc": "Designer range — glass front panel, Red Dot Design Award winner. For living rooms with high interior demands.", "fromLabel": "from", "fromPrice": "€366" },
+      { "name": "Daikin Comfora Plus", "btu": "9,000–12,000 BTU", "desc": "Premium range with Wi-Fi and motion sensor. Higher SCOP than Sensira, quieter mode, better filtration. For large living room or whole apartment.", "fromLabel": "from", "fromPrice": "€644" }
+    ],
+    "rangeCta": "View all Daikin models",
+    "installTitle": "Daikin installation in Varna",
+    "installDesc": "Daikin installation by our own team with professional vacuum evacuation — a factory requirement for valid warranty. Fixed prices, copper pipe, all materials and commissioning included.",
+    "installItems": [
+      "Standard installation 7–14K BTU — €190",
+      "Standard installation 15–24K BTU — €230",
+      "12 months workmanship warranty",
+      "Full Daikin factory warranty preserved"
+    ],
+    "installCta": "View installation prices",
+    "maintenanceTitle": "Daikin service and maintenance",
+    "maintenanceDesc": "Annual maintenance from €42 preserves compressor efficiency and extends AC life by years. Daikin requires regular service for valid warranty after year 2.",
+    "maintenanceCta": "Request maintenance",
+    "warrantyTitle": "Daikin warranty in Varna",
+    "warrantyItems": [
+      { "title": "5 years compressor", "desc": "Factory warranty on the DC compressor — the most expensive AC component." },
+      { "title": "3 years rest of the unit", "desc": "Electronic boards, fans, sensors — full factory warranty." },
+      { "title": "12 months installation", "desc": "Workmanship warranty from our team — we fix any issue free of charge." },
+      { "title": "Local service in Varna", "desc": "We don't ship anything to Sofia — everything is serviced on-site, fast." }
+    ],
+    "neighborhoodsTitle": "Daikin delivery and installation across Varna",
+    "neighborhoodsSubtitle": "We cover all city neighborhoods and the region within 30 km. For requests before noon — usually same day.",
+    "neighborhoods": [
+      "Chayka", "Levski", "Asparuhovo", "Vinitsa", "Vladislavovo", "Mladost",
+      "Vazrazhdane", "Briz", "Greek Quarter", "Kolhozen Pazar", "Ikonomicheski",
+      "Sea Garden", "Devnya", "Aksakovo", "Beloslav", "Ignatievo", "Kichevo"
+    ],
+    "ctaTitle": "Ready for Daikin?",
+    "ctaDesc": "Get in touch — we'll suggest a model for your room and budget, installation on a day convenient for you.",
+    "ctaPrimary": "View Daikin catalog",
+    "ctaSecondary": "Ask the AI consultant"
   },
   "contact": {
     "title": "Contact in Varna",
