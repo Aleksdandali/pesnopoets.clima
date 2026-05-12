@@ -134,7 +134,7 @@ function ContentBG() {
           <tbody>
             <tr>
               <td className="px-4 py-3 border border-border/60">Стандартна профилактика (1 уред)</td>
-              <td className="text-right px-4 py-3 border border-border/60 font-semibold">от 70 лв</td>
+              <td className="text-right px-4 py-3 border border-border/60 font-semibold">от 82 лв</td>
             </tr>
             <tr className="bg-muted/30">
               <td className="px-4 py-3 border border-border/60">Дълбоко почистване с дезинфекция</td>
@@ -303,7 +303,7 @@ function ContentBG() {
               <td className="text-right px-4 py-3 border border-border/60 font-semibold text-green-700">0 лв</td>
             </tr>
             <tr>
-              <td className="px-4 py-3 border border-border/60">Профилактика (7 × 70 лв)</td>
+              <td className="px-4 py-3 border border-border/60">Профилактика (7 × 82 лв)</td>
               <td className="text-right px-4 py-3 border border-border/60">0 лв</td>
               <td className="text-right px-4 py-3 border border-border/60">490 лв</td>
             </tr>
@@ -802,7 +802,7 @@ function ContentRU() {
           <tbody>
             <tr>
               <td className="px-4 py-3 border border-border/60">Стандартное обслуживание (1 аппарат)</td>
-              <td className="text-right px-4 py-3 border border-border/60 font-semibold">от 70 лв</td>
+              <td className="text-right px-4 py-3 border border-border/60 font-semibold">от 82 лв</td>
             </tr>
             <tr className="bg-muted/30">
               <td className="px-4 py-3 border border-border/60">Глубокая чистка с дезинфекцией</td>
@@ -972,7 +972,7 @@ function ContentRU() {
               <td className="text-right px-4 py-3 border border-border/60 font-semibold text-green-700">0 лв</td>
             </tr>
             <tr>
-              <td className="px-4 py-3 border border-border/60">Обслуживание (7 × 70 лв)</td>
+              <td className="px-4 py-3 border border-border/60">Обслуживание (7 × 82 лв)</td>
               <td className="text-right px-4 py-3 border border-border/60">0 лв</td>
               <td className="text-right px-4 py-3 border border-border/60">490 лв</td>
             </tr>
@@ -1137,7 +1137,7 @@ function ContentUA() {
           <tbody>
             <tr>
               <td className="px-4 py-3 border border-border/60">Стандартне обслуговування (1 апарат)</td>
-              <td className="text-right px-4 py-3 border border-border/60 font-semibold">від 70 лв (~1000 грн)</td>
+              <td className="text-right px-4 py-3 border border-border/60 font-semibold">від 82 лв (~1000 грн)</td>
             </tr>
             <tr className="bg-muted/30">
               <td className="px-4 py-3 border border-border/60">Глибоке чищення з дезінфекцією</td>
@@ -1307,7 +1307,7 @@ function ContentUA() {
               <td className="text-right px-4 py-3 border border-border/60 font-semibold text-green-700">0 лв</td>
             </tr>
             <tr>
-              <td className="px-4 py-3 border border-border/60">Обслуговування (7 x 70 лв)</td>
+              <td className="px-4 py-3 border border-border/60">Обслуговування (7 x 82 лв)</td>
               <td className="text-right px-4 py-3 border border-border/60">0 лв</td>
               <td className="text-right px-4 py-3 border border-border/60">490 лв</td>
             </tr>
@@ -1379,7 +1379,7 @@ export const acMaintenanceGuide: BlogPost = {
   },
   faq: {
     bg: [
-      { question: "Колко струва профилактика на климатик във Варна?", answer: "Стандартната профилактика на един уред започва от 70 лв. Дълбокото почистване с дезинфекция — от 90 лв. За втори уред обикновено има отстъпка 10-20 лв." },
+      { question: "Колко струва профилактика на климатик във Варна?", answer: "Стандартната профилактика на един уред започва от 82 лв. Дълбокото почистване с дезинфекция — от 90 лв. За втори уред обикновено има отстъпка 10-20 лв." },
       { question: "Колко често трябва да се прави профилактика?", answer: "Минимум веднъж годишно. Ако използвате климатика и за отопление или живеете близо до морето (Чайка, Виница, Галата) — два пъти годишно." },
       { question: "Кога е най-доброто време за профилактика?", answer: "Март-април (преди лятото) или септември-октомври (след лятото). Избягвайте юни-август, когато екипите са заети с монтажи и чакането е по-дълго." },
       { question: "Мога ли сам да почистя климатика?", answer: "Филтрите — да, на всеки 2-4 седмици. Но дълбокото почистване на изпарителя, проверката на фреон и дезинфекцията изискват професионалист и специални инструменти." },
@@ -1393,14 +1393,14 @@ export const acMaintenanceGuide: BlogPost = {
       { question: "What happens if I skip maintenance?", answer: "Efficiency drops 15-20%, electricity bills increase, you get bad smells and health risks. After 6-7 years without service, the compressor can fail — repair costs 500-1,500 BGN." },
     ],
     ru: [
-      { question: "Сколько стоит обслуживание кондиционера в Варне?", answer: "Стандартное обслуживание одного аппарата — от 70 лв. Глубокая чистка с дезинфекцией — от 90 лв. За второй аппарат обычно скидка 10-20 лв." },
+      { question: "Сколько стоит обслуживание кондиционера в Варне?", answer: "Стандартное обслуживание одного аппарата — от 82 лв. Глубокая чистка с дезинфекцией — от 90 лв. За второй аппарат обычно скидка 10-20 лв." },
       { question: "Как часто нужно обслуживать кондиционер?", answer: "Минимум раз в год. Если используете для отопления или живёте у моря (Чайка, Виница, Галата) — два раза в год." },
       { question: "Когда лучше всего делать обслуживание?", answer: "Март-апрель (до лета) или сентябрь-октябрь (после лета). Избегайте июня-августа, когда бригады заняты монтажами и ожидание дольше." },
       { question: "Можно ли почистить кондиционер самому?", answer: "Фильтры — да, каждые 2-4 недели. Но глубокая чистка испарителя, проверка фреона и дезинфекция требуют профессионала со специальными инструментами." },
       { question: "Что будет, если не делать обслуживание?", answer: "Эффективность падает на 15-20%, счета за электричество растут, появляется неприятный запах и риски для здоровья. Через 6-7 лет без обслуживания компрессор может отказать — ремонт стоит 500-1500 лв." },
     ],
     ua: [
-      { question: "Скільки коштує обслуговування кондиціонера у Варні?", answer: "Стандартне обслуговування одного апарата — від 70 лв (~1000 грн). Глибоке чищення з дезінфекцією — від 90 лв (~1300 грн). За другий апарат зазвичай знижка 10-20 лв." },
+      { question: "Скільки коштує обслуговування кондиціонера у Варні?", answer: "Стандартне обслуговування одного апарата — від 82 лв (~1000 грн). Глибоке чищення з дезінфекцією — від 90 лв (~1300 грн). За другий апарат зазвичай знижка 10-20 лв." },
       { question: "Як часто потрібно обслуговувати кондиціонер?", answer: "Мінімум раз на рік. Якщо використовуєте для опалення або живете біля моря (Чайка, Віниця, Галата) — двічі на рік." },
       { question: "Коли найкраще робити обслуговування?", answer: "Березень-квітень (до літа) або вересень-жовтень (після літа). Уникайте червня-серпня, коли бригади зайняті монтажами та очікування довше." },
       { question: "Чи можна почистити кондиціонер самому?", answer: "Фільтри — так, кожні 2-4 тижні. Але глибоке чищення випарника, перевірка фреону та дезінфекція потребують професіонала зі спеціальними інструментами." },

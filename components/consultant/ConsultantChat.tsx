@@ -12,7 +12,7 @@ type Locale = "bg" | "en" | "ru" | "ua";
 interface ConsultantChatProps {
   locale: Locale;
   labels: {
-    triggerAria: string;   // "Отвори AI консултант"
+    triggerAria: string;   // "Отворете AI консултант"
     title: string;         // "AI консултант"
     subtitle: string;      // "Онлайн • Отговаря мигновено"
     greeting: string;      // First-turn bot message
@@ -22,7 +22,7 @@ interface ConsultantChatProps {
     thinking: string;      // "Мисля..."
     errorGeneric: string;  // "Възникна грешка. Опитайте пак."
     disclaimer: string;    // "AI съветник — може да греши. За сигурна информация се свържете с нас."
-    viewProduct: string;   // "Виж продукта"
+    viewProduct: string;   // "Вижте продукта"
     viewPrice: string;     // "лв"
   };
 }
