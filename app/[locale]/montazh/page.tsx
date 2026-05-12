@@ -17,6 +17,7 @@ import {
   EXTRA_SERVICES_EUR,
   bgnToEur,
 } from "@/lib/pricing";
+import { DISTRICTS, type Locale } from "@/lib/districts";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -97,6 +98,18 @@ export default async function MontazhPage({ params }: PageProps) {
   const common = dict.common;
 
   const faqItems = montazhFaq[locale] || montazhFaq.bg;
+
+  // Map localized district names → slugs so neighborhood chips become real links
+  // for the 8 districts we have dedicated SEO pages for.
+  const districtLocale: Locale = (["bg", "en", "ru", "ua"] as const).includes(
+    locale as Locale
+  )
+    ? (locale as Locale)
+    : "bg";
+  const districtSlugByName: Record<string, string> = {};
+  for (const d of DISTRICTS) {
+    districtSlugByName[d.content[districtLocale].name] = d.slug;
+  }
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -215,15 +228,31 @@ export default async function MontazhPage({ params }: PageProps) {
           </div>
         </div>
         <ul className="mt-6 flex flex-wrap gap-2">
-          {(t.neighborhoods as string[]).map((name) => (
-            <li
-              key={name}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-border/60 rounded-full text-sm text-foreground"
-            >
-              <MapPin className="w-3.5 h-3.5 text-primary/70" aria-hidden="true" />
-              {name}
-            </li>
-          ))}
+          {(t.neighborhoods as string[]).map((name) => {
+            const slug = districtSlugByName[name];
+            if (slug) {
+              return (
+                <li key={name}>
+                  <Link
+                    href={`/${locale}/montazh/${slug}`}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-border/60 rounded-full text-sm text-foreground hover:bg-primary-light/40 hover:border-primary/40 transition"
+                  >
+                    <MapPin className="w-3.5 h-3.5 text-primary/70" aria-hidden="true" />
+                    {name}
+                  </Link>
+                </li>
+              );
+            }
+            return (
+              <li
+                key={name}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-border/60 rounded-full text-sm text-foreground"
+              >
+                <MapPin className="w-3.5 h-3.5 text-primary/70" aria-hidden="true" />
+                {name}
+              </li>
+            );
+          })}
         </ul>
         <p className="mt-5 text-sm text-muted-foreground">
           {t.neighborhoodsCta}

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { createClient } from "@supabase/supabase-js";
 import { getAllPosts } from "@/lib/blog/posts";
+import { DISTRICTS } from "@/lib/districts";
 
 const locales = ["bg", "en", "ru", "ua"] as const;
 const siteUrl =
@@ -66,6 +67,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   entries.push(
     ...localized("/montazh", { changeFrequency: "weekly", priority: 0.9 })
   );
+
+  // District landing pages for /montazh/[district]
+  for (const district of DISTRICTS) {
+    entries.push(
+      ...localized(`/montazh/${district.slug}`, {
+        changeFrequency: "weekly",
+        priority: 0.85,
+      })
+    );
+  }
   entries.push(
     ...localized("/profilaktika", { changeFrequency: "weekly", priority: 0.85 })
   );
@@ -74,6 +85,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
   entries.push(
     ...localized("/mitsubishi-varna", { changeFrequency: "weekly", priority: 0.85 })
+  );
+  entries.push(
+    ...localized("/partneri", { changeFrequency: "monthly", priority: 0.7 })
   );
   entries.push(
     ...localized("/uslugi", { changeFrequency: "weekly", priority: 0.85 })
