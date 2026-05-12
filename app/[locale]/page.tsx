@@ -228,7 +228,7 @@ async function getFeaturedProducts() {
     const supabase = await createClient();
     const { data } = await supabase
       .from("products")
-      .select("id, slug, title, title_override, manufacturer, price_client, price_override, price_promo, is_promo, availability, gallery, btu, energy_class, area_m2, noise_db_indoor")
+      .select("id, slug, title, title_override, title_en, title_ru, title_ua, manufacturer, price_client, price_override, price_promo, is_promo, availability, gallery, btu, energy_class, area_m2, noise_db_indoor")
       .eq("is_active", true)
       .eq("availability", "Наличен")
       .not("btu", "is", null)
