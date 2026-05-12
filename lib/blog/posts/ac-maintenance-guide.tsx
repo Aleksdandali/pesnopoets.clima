@@ -471,7 +471,7 @@ function ContentEN() {
           <tbody>
             <tr>
               <td className="px-4 py-3 border border-border/60">Standard maintenance (1 unit)</td>
-              <td className="text-right px-4 py-3 border border-border/60 font-semibold">from 70 BGN</td>
+              <td className="text-right px-4 py-3 border border-border/60 font-semibold">from 82 BGN</td>
             </tr>
             <tr className="bg-muted/30">
               <td className="px-4 py-3 border border-border/60">Deep cleaning with disinfection</td>
@@ -1386,7 +1386,7 @@ export const acMaintenanceGuide: BlogPost = {
       { question: "Какво се случва, ако не правя профилактика?", answer: "Ефективността спада с 15-20%, сметките за ток растат, появява се неприятна миризма и здравословни рискове. След 6-7 години без обслужване компресорът може да откаже — ремонтът струва 500-1500 лв." },
     ],
     en: [
-      { question: "How much does AC maintenance cost in Varna?", answer: "Standard maintenance for one unit starts from 70 BGN. Deep cleaning with disinfection starts from 90 BGN. There is usually a 10-20 BGN discount for the second unit." },
+      { question: "How much does AC maintenance cost in Varna?", answer: "Standard maintenance for one unit starts from 82 BGN. Deep cleaning with disinfection starts from 90 BGN. There is usually a 10-20 BGN discount for the second unit." },
       { question: "How often should I maintain my AC?", answer: "Once a year minimum. If you use the AC for heating too, or live near the sea (Chayka, Vinitsa, Galata) — twice a year." },
       { question: "When is the best time for AC maintenance?", answer: "March-April (before summer) or September-October (after summer). Avoid June-August when crews are busy with installations and wait times are longer." },
       { question: "Can I clean the AC myself?", answer: "Filters — yes, every 2-4 weeks. But deep evaporator cleaning, freon checks, and disinfection require a professional with specialized tools." },
