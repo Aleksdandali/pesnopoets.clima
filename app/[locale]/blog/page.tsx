@@ -29,7 +29,7 @@ const meta: Record<string, { title: string; description: string }> = {
 };
 
 const labels: Record<string, { heading: string; breadcrumbHome: string; readMore: string }> = {
-  bg: { heading: "Блог", breadcrumbHome: "Начало", readMore: "Прочети повече" },
+  bg: { heading: "Блог", breadcrumbHome: "Начало", readMore: "Прочетете повече" },
   en: { heading: "Blog", breadcrumbHome: "Home", readMore: "Read more" },
   ru: { heading: "Блог", breadcrumbHome: "Главная", readMore: "Читать далее" },
   ua: { heading: "Блог", breadcrumbHome: "Головна", readMore: "Читати далі" },

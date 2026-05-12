@@ -336,7 +336,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               labels={{
                 productOnly: t?.productOnly || "Само климатик",
                 installationPrice: t?.installationPrice || "Стандартен монтаж",
-                addInstallToggle: t?.addInstallToggle || "Добави стандартен монтаж",
+                addInstallToggle: t?.addInstallToggle || "Добавете стандартен монтаж",
                 addInstallNote: t?.addInstallNote || "3 м медна тръба, материали и пуск в експлоатация",
                 total: t?.total || "Общо",
                 withInstallation: t?.withInstallation || "с монтаж",
@@ -567,7 +567,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               ? "Купити"
               : locale === "ru"
               ? "Купить"
-              : "Купи"),
+              : "Купете"),
           added:
             t?.addedToCart ||
             (locale === "en"
@@ -606,7 +606,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               ? "Купити"
               : locale === "ru"
               ? "Купить"
-              : "Купи"),
+              : "Купете"),
           added:
             t?.addedToCart ||
             (locale === "en"

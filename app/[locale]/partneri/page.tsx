@@ -261,7 +261,7 @@ const COPY: Record<Locale, PageCopy> = {
       volumeOptions: ["1–3", "4–10", "10+", "Голям обект (наведнъж)"],
       message: "Кратко за вас (по желание)",
       messagePh: "С какви обекти работите, район, кога мислите за първа препоръка…",
-      submit: "Изпрати заявка",
+      submit: "Изпратете заявка",
       submitting: "Изпращане…",
       successTitle: "Получихме заявката!",
       successText:

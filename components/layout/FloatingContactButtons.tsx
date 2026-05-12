@@ -18,7 +18,7 @@ interface FloatingContactButtonsProps {
 }
 
 const LABELS: Record<string, { contact: string; close: string; call: string }> = {
-  bg: { contact: "Свържи се", close: "Затвори", call: "Обади се" },
+  bg: { contact: "Свържете се", close: "Затворете", call: "Обадете се" },
   en: { contact: "Contact us", close: "Close", call: "Call us" },
   ru: { contact: "Связаться", close: "Закрыть", call: "Позвонить" },
   ua: { contact: "Зв'язатися", close: "Закрити", call: "Зателефонувати" },
