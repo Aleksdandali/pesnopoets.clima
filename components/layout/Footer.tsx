@@ -23,6 +23,7 @@ interface FooterProps {
         brands: string;
         about: string;
         contact: string;
+        partners?: string;
       };
       footer: {
         description: string;
@@ -100,6 +101,7 @@ export default function Footer({ locale, dictionary }: FooterProps) {
                 { href: `/${locale}`, label: t.nav.home },
                 { href: `/${locale}/klimatici`, label: t.nav.catalog },
                 { href: `/${locale}/brands`, label: t.nav.brands },
+                { href: `/${locale}/partneri`, label: t.nav.partners || "Партньорство" },
                 { href: `/${locale}/za-nas`, label: t.nav.about },
                 { href: `/${locale}/kontakti`, label: t.nav.contact },
               ].map((link) => (

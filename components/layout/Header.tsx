@@ -22,6 +22,7 @@ interface HeaderProps {
         about: string;
         contact: string;
         blog?: string;
+        partners?: string;
       };
       siteName: string;
       siteNameFirst: string;
@@ -110,6 +111,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
     { href: `/${locale}/uslugi`, label: t.nav.services || "Services" },
     { href: `/${locale}/brands`, label: t.nav.brands },
     { href: `/${locale}/blog`, label: t.nav.blog || "Blog" },
+    { href: `/${locale}/partneri`, label: t.nav.partners || "Партньорство" },
     { href: `/${locale}/za-nas`, label: t.nav.about },
     { href: `/${locale}/kontakti`, label: t.nav.contact },
   ];
