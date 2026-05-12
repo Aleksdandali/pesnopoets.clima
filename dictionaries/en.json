@@ -33,7 +33,7 @@
     "skipToContent": "Skip to main content",
     "callUs": "Call us",
     "deliveryBanner": "AC sales & installation in Varna",
-    "authorizedDealer": "Authorized Dealer · Daikin · Mitsubishi · Gree",
+    "authorizedDealer": "Authorized Dealer · Daikin · Mitsubishi · Toshiba · Gree",
     "services": [
       "Clean install (with vacuum)",
       "Same-day dispatch",
@@ -52,7 +52,7 @@
   },
   "hero": {
     "title": "Sales & Professional AC Installation in Varna",
-    "subtitle": "Authorized dealer for Daikin, Mitsubishi, Gree. Turnkey installation with warranty up to 5 years.",
+    "subtitle": "Authorized dealer for Daikin, Mitsubishi, Toshiba, Gree. Turnkey installation with warranty up to 5 years.",
     "cta": "Browse Catalog",
     "ctaSecondary": "Free Consultation"
   },
@@ -62,7 +62,7 @@
     "warranty": "Up to 5-yr warranty",
     "consultation": "Free consultation",
     "originalTitle": "Authorized dealer in Varna",
-    "originalDesc": "Authorized dealer for Daikin, Mitsubishi, Gree. In-house installation crew in Varna and full manufacturer warranty.",
+    "originalDesc": "Authorized dealer for Daikin, Mitsubishi, Toshiba, Gree. In-house installation crew in Varna and full manufacturer warranty.",
     "deliveryDesc": "Same-day dispatch for requests before noon. We cover all of Varna and Varna region.",
     "installationDesc": "Clean installation with vacuum by our own crew. Fixed price — no hidden fees.",
     "freeDelivery": "Same-day dispatch",
@@ -201,7 +201,7 @@
     "teamParagraph": "Behind Pesnopoets Clima is a team of specialists with years of experience in HVAC systems. Our priority is to offer every client a solution tailored to their space and budget — honestly, professionally, and without pressure.",
     "stats": [
       {
-        "value": "500+",
+        "value": "200+",
         "label": "installations"
       },
       {
@@ -499,7 +499,7 @@
     ],
     "installCta": "View installation prices",
     "maintenanceTitle": "Daikin service and maintenance",
-    "maintenanceDesc": "Annual maintenance from €42 preserves compressor efficiency and extends AC life by years. Daikin requires regular service for valid warranty after year 2.",
+    "maintenanceDesc": "Annual maintenance from €36 preserves compressor efficiency and extends AC life by years. Daikin requires regular service for a valid warranty after year 2.",
     "maintenanceCta": "Request maintenance",
     "warrantyTitle": "Daikin warranty in Varna",
     "warrantyItems": [
@@ -558,7 +558,7 @@
     ],
     "installCta": "View installation and prices",
     "maintenanceTitle": "Mitsubishi service and maintenance",
-    "maintenanceDesc": "Annual maintenance from €42 keeps the compressor efficient and extends the AC's life by years. Mitsubishi requires regular maintenance for a valid warranty after the 2nd year.",
+    "maintenanceDesc": "Annual maintenance from €36 keeps the compressor efficient and extends the AC's life by years. Mitsubishi requires regular maintenance for a valid warranty after year 2.",
     "maintenanceCta": "Request maintenance",
     "warrantyTitle": "Mitsubishi warranty in Varna",
     "warrantyItems": [
@@ -627,7 +627,7 @@
   "aiConsultant": {
     "title": "AI Assistant",
     "subtitle": "Find your ideal AC in 2 minutes",
-    "desc": "Our AI consultant knows all 458 products, compares models and finds the best option for your budget and room size.",
+    "desc": "Our AI consultant knows the entire catalog, compares models and finds the best option for your budget and room size.",
     "features": [
       "Instant response 24/7",
       "Knows all products and prices",
@@ -651,6 +651,6 @@
     "lastItems": "Only {count} left!",
     "lastOne": "Last one in stock!",
     "peakSeason": "Peak season — reserve your installation now",
-    "delivery": "Delivery & installation: 1-3 business days"
+    "delivery": "Delivery & installation in Varna — usually same day"
   }
 }
