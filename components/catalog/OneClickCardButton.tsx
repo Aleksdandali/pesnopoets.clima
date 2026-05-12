@@ -21,9 +21,9 @@ const translations: Record<
   }
 > = {
   bg: {
-    title: "Поръчай с 1 клик",
+    title: "Поръчайте с 1 клик",
     placeholder: "+359 88 888 8888",
-    submit: "Обади ми се",
+    submit: "Обадете ми се",
     success: "Ще ви се обадим!",
     required: "Въведете телефон",
   },

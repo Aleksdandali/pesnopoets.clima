@@ -11,25 +11,23 @@ import SimilarProducts from "@/components/product/SimilarProducts";
 import StickyMobileCTA from "@/components/product/StickyMobileCTA";
 import StickyProductHeader from "@/components/product/StickyProductHeader";
 import ProductDescription from "@/components/product/ProductDescription";
+import ProductBenefits from "@/components/product/ProductBenefits";
+import WhatsInTheBox from "@/components/product/WhatsInTheBox";
+import RoomFit from "@/components/product/RoomFit";
 import { generateProductJsonLd, generateBreadcrumbJsonLd } from "@/lib/seo/jsonld";
 import { generateBadges } from "@/lib/bittel/badges";
 import ProductBadges from "@/components/catalog/ProductBadges";
 import ProductViewTracker from "@/components/product/ProductViewTracker";
-import AddToCartButton from "@/components/cart/AddToCartButton";
+import ProductBuyBox from "@/components/product/ProductBuyBox";
+import { InstallProvider } from "@/contexts/InstallContext";
 import { BUSINESS_PHONE_DISPLAY } from "@/lib/constants";
-import {
-  getPackagePriceEur,
-  getInstallationEur,
-  getBaseInstallationBgn,
-  EUR_TO_BGN as PRICING_EUR_TO_BGN,
-} from "@/lib/pricing";
+import { getInstallationEur } from "@/lib/pricing";
 import {
   Zap,
   Maximize,
   Volume2,
   CheckCircle2,
   Leaf,
-  Wrench,
 } from "lucide-react";
 
 // ISR: revalidate product pages every 10 minutes
@@ -38,8 +36,6 @@ export const revalidate = 600;
 interface ProductPageProps {
   params: Promise<{ locale: string; slug: string }>;
 }
-
-const EUR_TO_BGN = PRICING_EUR_TO_BGN;
 
 async function getDictionary(locale: string) {
   try {
@@ -69,12 +65,29 @@ export async function generateMetadata({
   const product = await getProduct(slug);
   if (!product) return {};
 
-  const title = product.meta_title || product.title_override || product.title;
-  const description =
+  const localeTitle =
+    locale === "en" ? product.title_en :
+    locale === "ru" ? product.title_ru :
+    locale === "ua" ? product.title_ua : null;
+  const localeDesc =
+    locale === "en" ? product.description_en :
+    locale === "ru" ? product.description_ru :
+    locale === "ua" ? product.description_ua : null;
+
+  const title =
+    product.meta_title ||
+    product.title_override ||
+    localeTitle ||
+    product.title;
+  const description = (
     product.meta_description ||
-    (product.description_override || product.description || "")
-      .replace(/<[^>]*>/g, "")
-      .slice(0, 160);
+    product.description_override ||
+    localeDesc ||
+    product.description ||
+    ""
+  )
+    .replace(/<[^>]*>/g, "")
+    .slice(0, 160);
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
 
@@ -95,6 +108,7 @@ export async function generateMetadata({
         en: `${siteUrl}/en/klimatici/${slug}`,
         ru: `${siteUrl}/ru/klimatici/${slug}`,
         uk: `${siteUrl}/ua/klimatici/${slug}`,
+        "x-default": `${siteUrl}/bg/klimatici/${slug}`,
       },
     },
   };
@@ -115,16 +129,17 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const displayTitle = product.title_override || localeTitle || product.title;
   const localeDesc = locale === "en" ? product.description_en : locale === "ru" ? product.description_ru : locale === "ua" ? product.description_ua : null;
   const displayDescription = product.description_override || localeDesc || product.description;
-  const displayPrice = product.price_override || product.price_client;
+  const displayPrice: number = product.price_override || product.price_client;
 
-  // Price — clean API price in EUR (no conversion). Bittel is the source of truth.
-  const priceEUR = displayPrice.toFixed(0);
-
-  // Package pricing: product + standard installation
+  // Standard installation price in EUR (BTU-tier based).
   const installEur = getInstallationEur(product.btu);
-  const installBgn = getBaseInstallationBgn(product.btu);
-  const packagePriceEur = getPackagePriceEur(displayPrice, product.btu);
-  const packagePriceEurStr = Math.round(packagePriceEur).toFixed(0);
+
+  // Promo savings — pre-promo "list" price for strikethrough.
+  const isPromo = product.is_promo && product.price_promo > 0;
+  const promoListPriceEur: number | null = isPromo ? product.price_client : null;
+  const savingsEur: number | null = isPromo
+    ? Math.max(0, product.price_client - displayPrice)
+    : null;
 
   // Category info for breadcrumb — use translated name if available
   // categories relation returns array from explicit select; take first item
@@ -188,6 +203,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
       <ProductViewTracker productId={product.id} title={displayTitle} priceEur={displayPrice} />
 
+      <InstallProvider installEur={installEur} defaultOn={false}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 pb-28 sm:pb-28 lg:pb-8">
         {/* Breadcrumb */}
         <nav className="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-5 overflow-x-auto scrollbar-hide" role="navigation" aria-label="Breadcrumb">
@@ -301,52 +317,59 @@ export default async function ProductPage({ params }: ProductPageProps) {
               )}
             </div>
 
-            {/* 4. Price Block — Package pricing (product + installation) */}
-            <div className="bg-muted rounded-xl p-4 sm:p-5 mb-4">
-              {/* Package price — primary */}
-              <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
-                <span className="text-2xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-                  {packagePriceEurStr} €
-                </span>
-                <span className="text-sm sm:text-base text-muted-foreground">
-                  ({Math.round(packagePriceEur * EUR_TO_BGN)} лв.)
-                </span>
-                <span className="text-xs sm:text-sm font-semibold text-emerald-600">
-                  {t?.withInstallation || "с монтаж"}
-                </span>
-              </div>
-
-              {/* Breakdown: product + installation */}
-              <div className="mt-2.5 pt-2.5 border-t border-border/50 space-y-1">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">{t?.productOnly || "Само климатик"}</span>
-                  <span className="font-medium text-foreground">{priceEUR} € <span className="text-muted-foreground font-normal">({Math.round(displayPrice * EUR_TO_BGN)} лв.)</span></span>
-                </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="flex items-center gap-1.5 text-muted-foreground">
-                    <Wrench className="w-3.5 h-3.5 text-emerald-600" aria-hidden="true" />
-                    {t?.installationPrice || "Стандартен монтаж"}
-                  </span>
-                  <span className="font-medium text-emerald-600">{Math.round(installEur)} € <span className="text-muted-foreground font-normal">({installBgn} лв.)</span></span>
-                </div>
-              </div>
-
-              {/* Promo savings */}
-              {product.is_promo && product.price_promo > 0 && (
-                <div className="mt-2 flex items-center gap-2">
-                  <span className="text-sm line-through text-muted-foreground">
-                    {Math.round(product.price_client + installEur)} €
-                  </span>
-                  <span className="text-sm font-bold text-danger">
-                    {t?.youSave || "Спестявате"}: {Math.round(product.price_client - displayPrice)} €
-                  </span>
-                </div>
-              )}
-
-              <p className="text-xs text-muted-foreground mt-2">
-                {t?.priceVat}
-              </p>
-            </div>
+            {/* 4. Price + install toggle + add-to-cart (client island) */}
+            <ProductBuyBox
+              locale={locale}
+              priceEur={displayPrice}
+              installEur={installEur}
+              promoListPriceEur={promoListPriceEur}
+              savingsEur={savingsEur}
+              cartItem={{
+                id: product.id,
+                slug: product.slug,
+                title: displayTitle,
+                manufacturer: product.manufacturer,
+                priceEur: displayPrice,
+                image: product.gallery?.[0],
+                btu: product.btu ?? null,
+              }}
+              labels={{
+                productOnly: t?.productOnly || "Само климатик",
+                installationPrice: t?.installationPrice || "Стандартен монтаж",
+                addInstallToggle: t?.addInstallToggle || "Добави стандартен монтаж",
+                addInstallNote: t?.addInstallNote || "3 м медна тръба, материали и пуск в експлоатация",
+                total: t?.total || "Общо",
+                withInstallation: t?.withInstallation || "с монтаж",
+                youSave: t?.youSave || "Спестявате",
+                priceVat: t?.priceVat || "",
+                addToCart:
+                  t?.addToCart ||
+                  (locale === "en"
+                    ? "Add to cart"
+                    : locale === "ua"
+                    ? "У кошик"
+                    : locale === "ru"
+                    ? "В корзину"
+                    : "В количката"),
+                addedToCart:
+                  t?.addedToCart ||
+                  (locale === "en"
+                    ? "Added"
+                    : locale === "ua"
+                    ? "Додано"
+                    : locale === "ru"
+                    ? "Добавлено"
+                    : "Добавено"),
+                goToCart:
+                  locale === "en"
+                    ? "Go to cart"
+                    : locale === "ua"
+                    ? "До кошика"
+                    : locale === "ru"
+                    ? "В корзину"
+                    : "Към количката",
+              }}
+            />
 
 
             {/* 5. Trust Block — before CTA for reassurance */}
@@ -368,44 +391,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <span className="text-xs sm:text-sm font-medium text-foreground leading-snug">{trust.freeConsultation}</span>
               </li>
             </ul>
-
-            {/* 6. Primary CTA — Add to Cart */}
-            <div className="mb-3">
-              <AddToCartButton
-                locale={locale}
-                variant="full"
-                className="w-full"
-                item={{
-                  id: product.id,
-                  slug: product.slug,
-                  title: displayTitle,
-                  manufacturer: product.manufacturer,
-                  priceEur: displayPrice,
-                  image: product.gallery?.[0],
-                  btu: product.btu ?? null,
-                }}
-                label={
-                  t?.addToCart ||
-                  (locale === "en"
-                    ? "Add to cart"
-                    : locale === "ua"
-                    ? "У кошик"
-                    : locale === "ru"
-                    ? "В корзину"
-                    : "В количката")
-                }
-                addedLabel={
-                  t?.addedToCart ||
-                  (locale === "en"
-                    ? "Added"
-                    : locale === "ua"
-                    ? "Додано"
-                    : locale === "ru"
-                    ? "Добавлено"
-                    : "Добавено")
-                }
-              />
-            </div>
 
             {/* 6b. Secondary CTA — 1-Click callback */}
             <OneClickOrder
@@ -498,6 +483,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </section>
         )}
 
+        {/* Why choose this AC — auto-detected benefits from features */}
+        <section className="mt-10 sm:mt-12">
+          <ProductBenefits locale={locale} product={product} />
+        </section>
+
+        {/* Where it fits — room sizes + operating modes */}
+        <section className="mt-10 sm:mt-12">
+          <RoomFit locale={locale} areaM2={product.area_m2} btu={product.btu} />
+        </section>
+
+        {/* What's in the package */}
+        <section className="mt-10 sm:mt-12">
+          <WhatsInTheBox locale={locale} />
+        </section>
+
         {/* Specs Table */}
         <section className="mt-10 sm:mt-12">
           <h2 className="text-lg sm:text-xl font-bold text-foreground mb-5 sm:mb-6">
@@ -548,7 +548,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <StickyProductHeader
         locale={locale}
         title={displayTitle}
-        priceEUR={packagePriceEurStr}
+        priceEur={displayPrice}
         cartItem={{
           id: product.id,
           slug: product.slug,
@@ -585,7 +585,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       {/* Sticky mobile CTA (bottom, mobile-only) */}
       <StickyMobileCTA
         locale={locale}
-        priceEUR={packagePriceEurStr}
+        priceEur={displayPrice}
         phoneNumber={BUSINESS_PHONE_DISPLAY}
         cartItem={{
           id: product.id,
@@ -619,6 +619,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           eur: dictionary.common.currency.eur,
         }}
       />
+      </InstallProvider>
     </>
   );
 }

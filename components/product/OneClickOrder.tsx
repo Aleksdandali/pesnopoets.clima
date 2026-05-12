@@ -25,7 +25,7 @@ const translations: Record<
   }
 > = {
   bg: {
-    title: "Поръчай с 1 клик",
+    title: "Поръчайте с 1 клик",
     subtitle: "Въведете телефон и ние ще ви се обадим",
     placeholder: "+359 88 888 8888",
     phoneLabel: "Телефонен номер",
