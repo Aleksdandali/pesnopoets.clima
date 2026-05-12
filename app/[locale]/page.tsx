@@ -50,7 +50,7 @@ const features: Record<
     {
       icon: "shield",
       title: "Официален дилър във Варна",
-      desc: "Оторизиран партньор на Daikin, Mitsubishi, Gree. Пълна гаранция до 5 години и оригинални резервни части.",
+      desc: "Оторизиран партньор на Daikin, Mitsubishi, Toshiba, Gree. Пълна гаранция до 5 години и оригинални резервни части.",
     },
     {
       icon: "truck",
@@ -67,7 +67,7 @@ const features: Record<
     {
       icon: "shield",
       title: "Authorized dealer in Varna",
-      desc: "Authorized partner for Daikin, Mitsubishi, Gree. Full warranty up to 5 years and original spare parts.",
+      desc: "Authorized partner for Daikin, Mitsubishi, Toshiba, Gree. Full warranty up to 5 years and original spare parts.",
     },
     {
       icon: "truck",
@@ -84,7 +84,7 @@ const features: Record<
     {
       icon: "shield",
       title: "Официальный дилер в Варне",
-      desc: "Авторизованный партнёр Daikin, Mitsubishi, Gree. Полная гарантия до 5 лет и оригинальные запчасти.",
+      desc: "Авторизованный партнёр Daikin, Mitsubishi, Toshiba, Gree. Полная гарантия до 5 лет и оригинальные запчасти.",
     },
     {
       icon: "truck",
@@ -101,7 +101,7 @@ const features: Record<
     {
       icon: "shield",
       title: "Офіційний дилер у Варні",
-      desc: "Авторизований партнер Daikin, Mitsubishi, Gree. Повна гарантія до 5 років та оригінальні запчастини.",
+      desc: "Авторизований партнер Daikin, Mitsubishi, Toshiba, Gree. Повна гарантія до 5 років та оригінальні запчастини.",
     },
     {
       icon: "truck",
@@ -171,6 +171,7 @@ const sectionLabels: Record<string, {
   ctaSubtitle: string;
   ctaButton: string;
   freeConsultation: string;
+  trustStrip: string;
 }> = {
   bg: {
     categories: "Категории",
@@ -182,6 +183,7 @@ const sectionLabels: Record<string, {
     ctaSubtitle: "Обадете ни се или оставете запитване — наш специалист ще ви помогне да изберете най-подходящия климатик за вашето помещение и бюджет. Без ангажимент.",
     ctaButton: "Безплатна консултация",
     freeConsultation: "Безплатна консултация",
+    trustStrip: "Показатели за доверие",
   },
   en: {
     categories: "Categories",
@@ -193,6 +195,7 @@ const sectionLabels: Record<string, {
     ctaSubtitle: "Call us or leave an inquiry — our specialist will help you choose the best air conditioner for your space and budget. No commitment.",
     ctaButton: "Free consultation",
     freeConsultation: "Free consultation",
+    trustStrip: "Trust indicators",
   },
   ru: {
     categories: "Категории",
@@ -204,6 +207,7 @@ const sectionLabels: Record<string, {
     ctaSubtitle: "Позвоните нам или оставьте заявку — наш специалист поможет подобрать оптимальный кондиционер для вашего помещения и бюджета. Без обязательств.",
     ctaButton: "Бесплатная консультация",
     freeConsultation: "Бесплатная консультация",
+    trustStrip: "Показатели доверия",
   },
   ua: {
     categories: "Категорії",
@@ -215,6 +219,7 @@ const sectionLabels: Record<string, {
     ctaSubtitle: "Зателефонуйте або залиште заявку — наш спеціаліст допоможе обрати найкращий кондиціонер для вашого приміщення та бюджету. Без зобов'язань.",
     ctaButton: "Безкоштовна консультація",
     freeConsultation: "Безкоштовна консультація",
+    trustStrip: "Показники довіри",
   },
 };
 
@@ -346,9 +351,9 @@ export default async function HomePage({ params }: HomePageProps) {
 
       {/* Trust Strip — numbers + social proof */}
       <section className="border-b border-border/60 bg-gradient-to-b from-white to-[#fafbfc]">
-        <h2 className="sr-only">Trust indicators</h2>
+        <h2 className="sr-only">{labels.trustStrip}</h2>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div role="region" aria-label="Trust indicators" tabIndex={0} className="flex gap-3 sm:gap-4 lg:gap-6 py-4 sm:py-5 overflow-x-auto scrollbar-hide snap-x snap-mandatory -mx-4 px-4 sm:mx-0 sm:px-0 sm:justify-center">
+          <div role="region" aria-label={labels.trustStrip} tabIndex={0} className="flex gap-3 sm:gap-4 lg:gap-6 py-4 sm:py-5 overflow-x-auto scrollbar-hide snap-x snap-mandatory -mx-4 px-4 sm:mx-0 sm:px-0 sm:justify-center">
             {(trustNumbers || []).map((item: { value: string; label: string; icon: string }, i: number) => {
               const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
                 shield: Shield, star: Star, award: Award, sparkles: Sparkles, truck: Truck,

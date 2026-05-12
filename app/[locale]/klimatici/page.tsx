@@ -24,26 +24,26 @@ const PRODUCTS_PER_PAGE = 24;
 const catalogMeta: Record<string, { title: string; description: string }> = {
   bg: {
     title:
-      "Каталог климатици Варна — Daikin, Mitsubishi, Gree | Песнопоец Клима",
+      "Каталог климатици Варна — Daikin, Mitsubishi, Toshiba, Gree | Песнопоец Клима",
     description:
-      "Каталог на инверторни и мулти-сплит климатици във Варна. Daikin, Mitsubishi, Gree, Toshiba — продажба, доставка и монтаж под ключ. Фиксирани цени.",
+      "Каталог на инверторни и мулти-сплит климатици във Варна. Daikin, Mitsubishi, Toshiba, Gree — продажба, доставка и монтаж под ключ. Фиксирани цени.",
   },
   en: {
-    title: "Air Conditioners Catalog Varna — Daikin, Mitsubishi, Gree",
+    title: "Air Conditioners Catalog Varna — Daikin, Mitsubishi, Toshiba, Gree",
     description:
-      "Catalog of inverter and multi-split air conditioners in Varna. Daikin, Mitsubishi, Gree, Toshiba — sales, delivery and turnkey installation. Fixed prices.",
+      "Catalog of inverter and multi-split air conditioners in Varna. Daikin, Mitsubishi, Toshiba, Gree — sales, delivery and turnkey installation. Fixed prices.",
   },
   ru: {
     title:
-      "Каталог кондиционеров Варна — Daikin, Mitsubishi, Gree | Песнопоец Клима",
+      "Каталог кондиционеров Варна — Daikin, Mitsubishi, Toshiba, Gree | Песнопоец Клима",
     description:
-      "Каталог инверторных и мульти-сплит кондиционеров в Варне. Daikin, Mitsubishi, Gree, Toshiba — продажа, доставка и монтаж под ключ. Фиксированные цены.",
+      "Каталог инверторных и мульти-сплит кондиционеров в Варне. Daikin, Mitsubishi, Toshiba, Gree — продажа, доставка и монтаж под ключ. Фиксированные цены.",
   },
   ua: {
     title:
-      "Каталог кондиціонерів Варна — Daikin, Mitsubishi, Gree | Піснопоєць Кліма",
+      "Каталог кондиціонерів Варна — Daikin, Mitsubishi, Toshiba, Gree | Піснопоєць Кліма",
     description:
-      "Каталог інверторних та мульти-спліт кондиціонерів у Варні. Daikin, Mitsubishi, Gree, Toshiba — продаж, доставка та монтаж під ключ. Фіксовані ціни.",
+      "Каталог інверторних та мульти-спліт кондиціонерів у Варні. Daikin, Mitsubishi, Toshiba, Gree — продаж, доставка та монтаж під ключ. Фіксовані ціни.",
   },
 };
 
