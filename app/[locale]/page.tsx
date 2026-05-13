@@ -232,7 +232,7 @@ async function getFeaturedProducts() {
       .eq("is_active", true)
       .eq("availability", "Наличен")
       .not("btu", "is", null)
-      .order("price_client", { ascending: false })
+      .order("price_client", { ascending: true })
       .limit(4);
     return data || [];
   } catch {
