@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { sendInquiryNotification } from "@/lib/telegram";
 import { upsertClient } from "@/lib/clients";
 import {
@@ -8,13 +8,6 @@ import {
   isValidPhone,
   isValidEmail,
 } from "@/lib/security";
-
-function createAnonClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-}
 
 interface CartItemPayload {
   id: number;
@@ -119,7 +112,7 @@ export async function POST(request: Request) {
     const firstProductId = items[0]?.id ?? null;
     const messageForDb = sanitizeInput(summary, 1000);
 
-    const supabase = createAnonClient();
+    const supabase = createAdminClient();
     const clientId = await upsertClient(supabase, { phone, name, email: email || undefined, locale });
     const insertData: Record<string, unknown> = {
       product_id: firstProductId,

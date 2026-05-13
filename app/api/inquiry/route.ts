@@ -1,13 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-// Use anon key (not service role) — RLS allows anon INSERT on inquiries + SELECT on products
-function createAnonClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-}
+import { createAdminClient } from "@/lib/supabase/admin";
 import { sendInquiryNotification } from "@/lib/telegram";
 import { upsertClient } from "@/lib/clients";
 import {
@@ -79,7 +71,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const supabase = createAnonClient();
+    const supabase = createAdminClient();
 
     // Get product title for notification
     let productTitle = null;
