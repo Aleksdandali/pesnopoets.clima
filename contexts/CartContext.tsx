@@ -15,10 +15,15 @@ export interface CartItem {
   slug: string;
   title: string;
   manufacturer: string;
-  priceEur: number; // unit price WITH base installation, stored in EUR
+  /** Unit product price in EUR (Bittel API price — installation NOT included). */
+  priceEur: number;
   image?: string;
   btu?: number | null;
   quantity: number;
+  /** Whether the customer opted-in for standard installation on this line. */
+  withInstallation?: boolean;
+  /** Standard installation price in EUR for this line (set when withInstallation is true). */
+  installEur?: number;
 }
 
 interface CartContextValue {
@@ -28,6 +33,7 @@ interface CartContextValue {
   addItem: (item: Omit<CartItem, "quantity">, quantity?: number) => void;
   removeItem: (id: number) => void;
   updateQuantity: (id: number, quantity: number) => void;
+  setInstallation: (id: number, withInstallation: boolean, installEur?: number) => void;
   clear: () => void;
   hydrated: boolean;
 }
@@ -97,6 +103,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const setInstallation = useCallback(
+    (id: number, withInstallation: boolean, installEur?: number) => {
+      setItems((prev) =>
+        prev.map((x) =>
+          x.id === id
+            ? {
+                ...x,
+                withInstallation,
+                installEur:
+                  withInstallation
+                    ? installEur ?? x.installEur ?? 0
+                    : x.installEur,
+              }
+            : x
+        )
+      );
+    },
+    []
+  );
+
   const clear = useCallback(() => setItems([]), []);
 
   const itemCount = useMemo(
@@ -104,7 +130,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [items]
   );
   const subtotalEur = useMemo(
-    () => items.reduce((sum, x) => sum + x.priceEur * x.quantity, 0),
+    () =>
+      items.reduce((sum, x) => {
+        const installPart = x.withInstallation ? (x.installEur ?? 0) : 0;
+        return sum + (x.priceEur + installPart) * x.quantity;
+      }, 0),
     [items]
   );
 
@@ -116,10 +146,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
       addItem,
       removeItem,
       updateQuantity,
+      setInstallation,
       clear,
       hydrated,
     }),
-    [items, itemCount, subtotalEur, addItem, removeItem, updateQuantity, clear, hydrated]
+    [items, itemCount, subtotalEur, addItem, removeItem, updateQuantity, setInstallation, clear, hydrated]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

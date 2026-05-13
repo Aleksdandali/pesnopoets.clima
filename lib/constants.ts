@@ -26,3 +26,6 @@ export const VIBER_URL = `viber://chat?number=${encodeURIComponent(BUSINESS_PHON
 /** Social profiles. */
 export const INSTAGRAM_URL = "https://www.instagram.com/pesnopoets.klima/";
 export const INSTAGRAM_HANDLE = "@pesnopoets.klima";
+
+/** Google Business Profile review link — share with clients post-installation. */
+export const GBP_REVIEW_URL = "https://g.page/r/CR5z2MDNJ8TDEBM/review";

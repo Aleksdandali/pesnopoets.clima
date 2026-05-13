@@ -4,10 +4,12 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Phone, Check, ShoppingCart } from "lucide-react";
 import { useCart, type CartItem } from "@/contexts/CartContext";
+import { useInstall } from "@/contexts/InstallContext";
 
 interface StickyMobileCTAProps {
   locale: string;
-  priceEUR: string;
+  /** Bittel base price in EUR (number). */
+  priceEur: number;
   phoneNumber: string;
   cartItem: Omit<CartItem, "quantity">;
   labels: {
@@ -25,14 +27,17 @@ interface StickyMobileCTAProps {
  */
 export default function StickyMobileCTA({
   locale,
-  priceEUR,
+  priceEur,
   phoneNumber,
   cartItem,
   labels,
 }: StickyMobileCTAProps) {
   const { addItem, items } = useCart();
+  const { withInstallation, installEur } = useInstall();
   const router = useRouter();
   const isInCart = items.some((i) => i.id === cartItem.id);
+  const totalEur = priceEur + (withInstallation ? installEur : 0);
+  const priceDisplay = Math.round(totalEur).toLocaleString("bg-BG");
 
   // Tell floating WA/Viber buttons to lift above this bar (on mobile).
   useEffect(() => {
@@ -45,7 +50,14 @@ export default function StickyMobileCTA({
       router.push(`/${locale}/cart`);
       return;
     }
-    addItem(cartItem, 1);
+    addItem(
+      {
+        ...cartItem,
+        withInstallation,
+        installEur: withInstallation ? installEur : undefined,
+      },
+      1
+    );
   }
 
   return (
@@ -55,7 +67,7 @@ export default function StickyMobileCTA({
           {/* Price: EUR */}
           <div className="flex-1 min-w-0 flex flex-col leading-tight">
             <span className="text-base sm:text-lg font-extrabold text-foreground tabular-nums">
-              {priceEUR} {labels.eur}
+              {priceDisplay} {labels.eur}
             </span>
           </div>
 

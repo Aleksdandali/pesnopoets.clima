@@ -5,11 +5,13 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Check, ShoppingCart } from "lucide-react";
 import { useCart, type CartItem } from "@/contexts/CartContext";
+import { useInstall } from "@/contexts/InstallContext";
 
 interface StickyProductHeaderProps {
   locale: string;
   title: string;
-  priceEUR: string;
+  /** Bittel base price in EUR (number). */
+  priceEur: number;
   cartItem: Omit<CartItem, "quantity">;
   labels: {
     buy: string;          // "Купи" / "Buy"
@@ -33,14 +35,17 @@ interface StickyProductHeaderProps {
 export default function StickyProductHeader({
   locale,
   title,
-  priceEUR,
+  priceEur,
   cartItem,
   labels,
 }: StickyProductHeaderProps) {
   const { addItem, items } = useCart();
+  const { withInstallation, installEur } = useInstall();
   const router = useRouter();
   const [visible, setVisible] = useState(false);
   const isInCart = items.some((i) => i.id === cartItem.id);
+  const totalEur = priceEur + (withInstallation ? installEur : 0);
+  const priceDisplay = Math.round(totalEur).toLocaleString("bg-BG");
 
   useEffect(() => {
     function onScroll() {
@@ -56,7 +61,14 @@ export default function StickyProductHeader({
       router.push(`/${locale}/cart`);
       return;
     }
-    addItem(cartItem, 1);
+    addItem(
+      {
+        ...cartItem,
+        withInstallation,
+        installEur: withInstallation ? installEur : undefined,
+      },
+      1
+    );
   }
 
   function scrollToInquiry() {
@@ -91,7 +103,7 @@ export default function StickyProductHeader({
           {/* Price — always visible; on mobile it's the main info element */}
           <div className="flex items-baseline leading-tight shrink-0 flex-1 sm:flex-none min-w-0">
             <span className="text-sm sm:text-base font-extrabold text-foreground tabular-nums whitespace-nowrap">
-              {priceEUR} {labels.eur}
+              {priceDisplay} {labels.eur}
             </span>
           </div>
 

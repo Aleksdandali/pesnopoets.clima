@@ -46,8 +46,8 @@ export default function CartView({ locale, dictionary }: CartViewProps) {
   const d = dictionary.cart;
   const eurLabel = dictionary.common.currency.eur;
 
-  const decreaseLabel = d.decrease || t(locale, "Намали количеството", "Decrease quantity", "Уменьшить количество", "Зменшити кількість");
-  const increaseLabel = d.increase || t(locale, "Увеличи количеството", "Increase quantity", "Увеличить количество", "Збільшити кількість");
+  const decreaseLabel = d.decrease || t(locale, "Намалете количеството", "Decrease quantity", "Уменьшить количество", "Зменшити кількість");
+  const increaseLabel = d.increase || t(locale, "Увеличете количеството", "Increase quantity", "Увеличить количество", "Збільшити кількість");
 
   if (!hydrated) {
     return <div className="py-12 text-center text-muted-foreground">...</div>;
@@ -140,16 +140,27 @@ export default function CartView({ locale, dictionary }: CartViewProps) {
                   </button>
                 </div>
                 {/* Price */}
-                <div className="text-right">
-                  <p className="text-sm sm:text-base font-extrabold text-foreground tabular-nums">
-                    {formatEur(item.priceEur * item.quantity, eurLabel)}
-                  </p>
-                  {item.quantity > 1 && (
-                    <p className="text-[10px] text-muted-foreground tabular-nums">
-                      {formatEur(item.priceEur, eurLabel)} × {item.quantity}
-                    </p>
-                  )}
-                </div>
+                {(() => {
+                  const installPart = item.withInstallation ? (item.installEur ?? 0) : 0;
+                  const lineUnit = item.priceEur + installPart;
+                  return (
+                    <div className="text-right">
+                      <p className="text-sm sm:text-base font-extrabold text-foreground tabular-nums">
+                        {formatEur(lineUnit * item.quantity, eurLabel)}
+                      </p>
+                      {item.withInstallation && (
+                        <p className="text-[10px] text-emerald-600 font-medium">
+                          {t(locale, "вкл. монтаж", "incl. installation", "вкл. монтаж", "вкл. монтаж")}
+                        </p>
+                      )}
+                      {item.quantity > 1 && (
+                        <p className="text-[10px] text-muted-foreground tabular-nums">
+                          {formatEur(lineUnit, eurLabel)} × {item.quantity}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })()}
                 {/* Remove — 44px hit target */}
                 <button
                   type="button"

@@ -71,6 +71,19 @@ export function useTelegram(): TgContext {
     // Signal ready to Telegram
     (tg as { ready?: () => void }).ready?.();
 
+    // Set viewport height CSS var for proper sizing
+    const vh = (tg as { viewportStableHeight?: number }).viewportStableHeight;
+    if (vh) {
+      document.documentElement.style.setProperty("--tg-viewport-stable-height", `${vh}px`);
+    }
+    // Listen for viewport changes
+    (tg as { onEvent?: (e: string, cb: () => void) => void }).onEvent?.("viewportChanged", () => {
+      const newVh = ((window as unknown as { Telegram?: { WebApp?: { viewportStableHeight?: number } } }).Telegram?.WebApp?.viewportStableHeight);
+      if (newVh) {
+        document.documentElement.style.setProperty("--tg-viewport-stable-height", `${newVh}px`);
+      }
+    });
+
     // Expand to full height
     (tg as { expand?: () => void }).expand?.();
 

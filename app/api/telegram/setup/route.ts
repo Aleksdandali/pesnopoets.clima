@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
         { command: "dashboard", description: "📊 Сводка KPI" },
         { command: "leads", description: "📥 Новые заявки" },
         { command: "next", description: "👤 Следующий клиент" },
+        { command: "estimate", description: "🎙 Новый просчёт" },
         { command: "help", description: "📋 Справка" },
       ],
     }),

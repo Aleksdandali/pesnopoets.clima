@@ -90,6 +90,11 @@ export default function CheckoutView({ locale, dictionary }: CheckoutViewProps) 
             priceEur: i.priceEur,
             priceBgn: Math.round(i.priceEur * EUR_TO_BGN),
             btu: i.btu,
+            withInstallation: !!i.withInstallation,
+            installEur: i.withInstallation ? (i.installEur ?? 0) : 0,
+            installBgn: i.withInstallation
+              ? Math.round((i.installEur ?? 0) * EUR_TO_BGN)
+              : 0,
           })),
           subtotalBgn: Math.round(subtotalEur * EUR_TO_BGN),
         }),
@@ -309,19 +314,28 @@ export default function CheckoutView({ locale, dictionary }: CheckoutViewProps) 
         <div className="bg-white border border-border rounded-2xl p-5 sm:p-6 lg:sticky lg:top-24">
           <h2 className="text-lg font-bold text-foreground mb-4">{t.yourOrder}</h2>
           <ul className="space-y-3 mb-5 pb-5 border-b border-border">
-            {items.map((item) => (
-              <li key={item.id} className="flex justify-between gap-3 text-sm">
-                <div className="min-w-0">
-                  <p className="font-medium text-foreground line-clamp-2">{item.title}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    {item.quantity} × {formatEur(item.priceEur, eurLabel)}
-                  </p>
-                </div>
-                <span className="font-semibold whitespace-nowrap text-foreground">
-                  {formatEur(item.priceEur * item.quantity, eurLabel)}
-                </span>
-              </li>
-            ))}
+            {items.map((item) => {
+              const installPart = item.withInstallation ? (item.installEur ?? 0) : 0;
+              const lineUnit = item.priceEur + installPart;
+              return (
+                <li key={item.id} className="flex justify-between gap-3 text-sm">
+                  <div className="min-w-0">
+                    <p className="font-medium text-foreground line-clamp-2">{item.title}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {item.quantity} × {formatEur(lineUnit, eurLabel)}
+                    </p>
+                    {item.withInstallation && (
+                      <p className="text-[11px] text-emerald-600 font-medium mt-0.5">
+                        + {formatEur(item.installEur ?? 0, eurLabel)} {locale === "en" ? "installation" : locale === "ru" ? "монтаж" : locale === "ua" ? "монтаж" : "монтаж"}
+                      </p>
+                    )}
+                  </div>
+                  <span className="font-semibold whitespace-nowrap text-foreground">
+                    {formatEur(lineUnit * item.quantity, eurLabel)}
+                  </span>
+                </li>
+              );
+            })}
           </ul>
           <div className="flex items-baseline justify-between mb-1">
             <span className="text-sm font-semibold text-foreground">{t.total}</span>
