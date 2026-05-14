@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { cache } from "react";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
@@ -47,13 +47,16 @@ async function getDictionary(locale: string) {
   }
 }
 
+// Fetch by slug WITHOUT filtering by is_active so we can distinguish
+// "deactivated product" (→ 301 to /klimatici) from "never existed" (→ 404).
+// Bittel-imported SKUs that are later set is_active=false were generating
+// hundreds of 404s in SerpStat audit and wasting Google crawl budget.
 const getProduct = cache(async (slug: string) => {
   const supabase = await createClient();
   const { data } = await supabase
     .from("products")
     .select("*, categories(slug, group_name, subgroup_name, name_en, name_ru, name_ua)")
     .eq("slug", slug)
-    .eq("is_active", true)
     .single();
   return data;
 });
@@ -63,7 +66,7 @@ export async function generateMetadata({
 }: ProductPageProps): Promise<Metadata> {
   const { locale, slug } = await params;
   const product = await getProduct(slug);
-  if (!product) return {};
+  if (!product || !product.is_active) return {};
 
   const localeTitle =
     locale === "en" ? product.title_en :
@@ -118,6 +121,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const { locale, slug } = await params;
   const product = await getProduct(slug);
   if (!product) notFound();
+  // Deactivated product (no longer sold) — 308-redirect to catalog so
+  // Google can drop the stale URL cleanly instead of accumulating 404s.
+  if (!product.is_active) permanentRedirect(`/${locale}/klimatici`);
 
   const dictionary = await getDictionary(locale);
   const t = dictionary.product;

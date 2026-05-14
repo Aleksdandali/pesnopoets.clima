@@ -49,16 +49,27 @@ const catalogMeta: Record<string, { title: string; description: string }> = {
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }): Promise<Metadata> {
   const { locale } = await params;
+  const sp = await searchParams;
   const m = catalogMeta[locale] || catalogMeta.bg;
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
+
+  // Faceted-nav SEO hygiene: any filter combination → noindex,follow.
+  // page=1 is the same as no page param, so don't penalise it.
+  const filterKeys = ["brand", "btu", "energy", "available", "sort", "category"];
+  const hasFilter =
+    filterKeys.some((k) => sp[k]) || (sp.page && sp.page !== "1");
+
   return {
     title: m.title,
     description: m.description,
+    robots: hasFilter ? { index: false, follow: true } : undefined,
     alternates: {
       canonical: `${siteUrl}/${locale}/klimatici`,
       languages: {
