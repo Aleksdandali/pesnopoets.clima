@@ -38,23 +38,41 @@ function getGoogleAdsId(): string | null {
 }
 
 /**
- * Push an event to Google (dataLayer + gtag).
- *
- * - "conversion" events → restricted to Google Ads only via `send_to`.
- *   Dropped if Google Ads ID is not configured.
- * - All other events → fire to BOTH Ads and GA4 (no send_to, so all
- *   configured tags receive them).
+ * Conversion action labels — tied to Google Ads account AW-18063225430.
+ * Created 2026-05-15. If admin switches `google_ads_id` in site_settings to
+ * a different AW account, these labels stop matching and must be regenerated.
+ */
+const CONVERSION_LABELS = {
+  inquiry: "srr_CL3MtK0cENbkm6VD", // "Заявка с сайта" — forms, cart, chat lead
+  phone: "mwOlCMDMtK0cENbkm6VD", // "Клик по телефону"
+  whatsapp: "cGmyCMPMtK0cENbkm6VD", // "Клик WhatsApp"
+  viber: "AJojCKrwzq0cENbkm6VD", // "Клик Viber"
+} as const;
+
+type ConversionKey = keyof typeof CONVERSION_LABELS;
+
+/**
+ * Fire a Google Ads conversion with the specific action label.
+ * Dropped if Google Ads ID is not configured.
+ */
+function pushConversion(key: ConversionKey, params: Record<string, unknown> = {}) {
+  const gtag = getGtag();
+  if (!gtag) return;
+  const adsId = getGoogleAdsId();
+  if (!adsId) return;
+  gtag("event", "conversion", {
+    send_to: `${adsId}/${CONVERSION_LABELS[key]}`,
+    ...params,
+  });
+}
+
+/**
+ * Push a non-conversion event to gtag (goes to GA4 + Ads remarketing audiences).
  */
 function pushEvent(eventName: string, params: Record<string, unknown> = {}) {
   const gtag = getGtag();
   if (!gtag) return;
-  if (eventName === "conversion") {
-    const adsId = getGoogleAdsId();
-    if (!adsId) return;
-    gtag("event", eventName, { send_to: adsId, ...params });
-  } else {
-    gtag("event", eventName, params);
-  }
+  gtag("event", eventName, params);
 }
 
 /** Fire a Meta Pixel event. */
@@ -87,8 +105,7 @@ function pushFbqCustom(eventName: string, params?: Record<string, unknown>) {
 
 /** Form inquiry submitted (one-click, product page, inquiry page). */
 export function trackInquirySubmit(source?: string) {
-  pushEvent("conversion", {
-    event_category: "lead",
+  pushConversion("inquiry", {
     event_label: source ?? "inquiry",
     value: 25,
     currency: "EUR",
@@ -105,8 +122,7 @@ export function trackInquirySubmit(source?: string) {
 
 /** Cart checkout inquiry submitted. */
 export function trackCartSubmit(itemCount: number = 1) {
-  pushEvent("conversion", {
-    event_category: "lead",
+  pushConversion("inquiry", {
     event_label: "cart",
     value: 50,
     currency: "EUR",
@@ -124,8 +140,7 @@ export function trackCartSubmit(itemCount: number = 1) {
 
 /** AI consultant collected a lead (name + phone). */
 export function trackChatLead() {
-  pushEvent("conversion", {
-    event_category: "lead",
+  pushConversion("inquiry", {
     event_label: "consultant-chat",
     value: 25,
     currency: "EUR",
@@ -146,6 +161,11 @@ export function trackChatLead() {
 
 /** Click on tel: phone link. */
 export function trackPhoneClick() {
+  pushConversion("phone", {
+    event_label: "phone",
+    value: 5,
+    currency: "EUR",
+  });
   pushEvent("phone_click", {
     event_category: "contact",
     event_label: "phone",
@@ -158,6 +178,11 @@ export function trackPhoneClick() {
 
 /** Click on WhatsApp or Viber link. */
 export function trackMessengerClick(messenger: "whatsapp" | "viber") {
+  pushConversion(messenger, {
+    event_label: messenger,
+    value: 5,
+    currency: "EUR",
+  });
   pushEvent("messenger_click", {
     event_category: "contact",
     event_label: messenger,
@@ -201,15 +226,3 @@ export function trackCatalogView() {
   pushFbqCustom("ViewCatalog");
 }
 
-// ---------------------------------------------------------------------------
-// Backward compatibility
-// ---------------------------------------------------------------------------
-
-/** @deprecated Use trackInquirySubmit, trackCartSubmit, or trackChatLead instead. */
-export function trackConversion(eventName: string = "conversion") {
-  pushEvent(eventName, {
-    event_category: "lead",
-    value: 25,
-    currency: "EUR",
-  });
-}
