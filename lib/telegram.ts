@@ -1,3 +1,5 @@
+import { createAdminClient } from "@/lib/supabase/admin";
+
 const TELEGRAM_API = "https://api.telegram.org/bot";
 
 interface InquiryData {
@@ -19,15 +21,7 @@ interface SyncReport {
   duration: number;
 }
 
-async function sendTelegramMessage(text: string): Promise<void> {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
-
-  if (!token || !chatId) {
-    console.warn("Telegram credentials not configured, skipping notification");
-    return;
-  }
-
+async function sendToChat(token: string, chatId: string | number, text: string): Promise<void> {
   try {
     const res = await fetch(`${TELEGRAM_API}${token}/sendMessage`, {
       method: "POST",
@@ -42,11 +36,72 @@ async function sendTelegramMessage(text: string): Promise<void> {
 
     if (!res.ok) {
       const body = await res.text();
-      console.error("Telegram API error:", res.status, body);
+      console.error(`Telegram API error (chat ${chatId}):`, res.status, body);
     }
   } catch (err) {
-    console.error("Failed to send Telegram message:", err);
+    console.error(`Failed to send Telegram message (chat ${chatId}):`, err);
   }
+}
+
+/**
+ * Default recipient = legacy TELEGRAM_CHAT_ID. Used for non-inquiry messages
+ * (e.g. sync reports) that don't need fan-out to the whole team.
+ */
+async function sendTelegramMessage(text: string): Promise<void> {
+  const token = (process.env.TELEGRAM_BOT_TOKEN || "").trim();
+  const chatId = (process.env.TELEGRAM_CHAT_ID || "").trim();
+
+  if (!token || !chatId) {
+    console.warn("Telegram credentials not configured, skipping notification");
+    return;
+  }
+
+  await sendToChat(token, chatId, text);
+}
+
+/**
+ * Collect every recipient who should see a new inquiry:
+ *   - TELEGRAM_OWNER_ID (always, if set)
+ *   - All telegram_team_members with is_active = true AND notify_new_leads = true
+ *   - TELEGRAM_CHAT_ID (legacy fallback, only if no DB recipients found)
+ *
+ * Returns a de-duplicated list of chat ids as strings.
+ */
+async function resolveInquiryRecipients(): Promise<string[]> {
+  const recipients = new Set<string>();
+
+  const ownerId = (process.env.TELEGRAM_OWNER_ID || "").trim();
+  if (ownerId) recipients.add(ownerId);
+
+  try {
+    const supabase = createAdminClient();
+    const { data, error } = await supabase
+      .from("telegram_team_members")
+      .select("telegram_user_id")
+      .eq("is_active", true)
+      .eq("notify_new_leads", true);
+
+    if (error) {
+      console.error("Failed to load telegram_team_members:", error);
+    } else if (data) {
+      for (const row of data) {
+        if (row.telegram_user_id != null) {
+          recipients.add(String(row.telegram_user_id));
+        }
+      }
+    }
+  } catch (err) {
+    console.error("telegram_team_members lookup failed:", err);
+  }
+
+  // Legacy fallback — keep CHAT_ID only when nothing else resolved, so a stale
+  // value doesn't keep spamming a dead chat once the team table is populated.
+  if (recipients.size === 0) {
+    const legacyChatId = (process.env.TELEGRAM_CHAT_ID || "").trim();
+    if (legacyChatId) recipients.add(legacyChatId);
+  }
+
+  return Array.from(recipients);
 }
 
 export async function sendInquiryNotification(
@@ -77,7 +132,19 @@ export async function sendInquiryNotification(
     .filter(Boolean)
     .join("\n");
 
-  await sendTelegramMessage(text);
+  const token = (process.env.TELEGRAM_BOT_TOKEN || "").trim();
+  if (!token) {
+    console.warn("TELEGRAM_BOT_TOKEN not set, skipping inquiry notification");
+    return;
+  }
+
+  const recipients = await resolveInquiryRecipients();
+  if (recipients.length === 0) {
+    console.warn("No Telegram recipients configured for inquiry notification");
+    return;
+  }
+
+  await Promise.all(recipients.map((chatId) => sendToChat(token, chatId, text)));
 }
 
 export async function sendSyncReport(report: SyncReport): Promise<void> {
