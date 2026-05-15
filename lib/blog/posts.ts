@@ -1,10 +1,19 @@
 import type { BlogPost, Locale } from "./types";
+import { acCorrectSettingsGuide } from "./posts/ac-correct-settings-guide";
 import { acMaintenanceGuide } from "./posts/ac-maintenance-guide";
+import { electricityCostAcVarna } from "./posts/electricity-cost-ac-varna";
 import { heatingWithAc } from "./posts/heating-with-ac";
 import { howToChooseAc } from "./posts/how-to-choose-ac";
 import { installationCostsVarna } from "./posts/installation-costs-varna";
 
-const allPosts: BlogPost[] = [acMaintenanceGuide, heatingWithAc, howToChooseAc, installationCostsVarna];
+const allPosts: BlogPost[] = [
+  acCorrectSettingsGuide,
+  acMaintenanceGuide,
+  electricityCostAcVarna,
+  heatingWithAc,
+  howToChooseAc,
+  installationCostsVarna,
+];
 
 // Sort by date descending
 allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
