@@ -73,16 +73,14 @@
 html {
   height: 100%;
   scroll-behavior: smooth;
-  /* Prevent horizontal overflow on all pages */
-  overflow-x: hidden;
+  /* Prevent horizontal overflow without creating a nested scroll
+     container. `overflow-x: hidden` implicitly toggles overflow-y:auto
+     which breaks `position: sticky` and window.scrollY listeners.
+     `overflow-x: clip` clips horizontally without becoming a scroller. */
+  overflow-x: clip;
 }
 /* NOTE: body uses min-h-screen via Tailwind in app/layout.tsx so the
-   document scroll container stays on <html>/window. Setting body
-   height:100% would create a nested scroll container (body has
-   overflow-x:hidden which implicitly toggles overflow-y:auto when
-   content exceeds height) — that broke window.scrollY listeners
-   like StickyProductHeader. TG mini-app uses h-screen on its own
-   shell (see app/tg/TgShell.tsx) and does not depend on body height. */
+   document scroll container stays on <html>/window. */
 
 * {
   border-color: var(--border);
@@ -94,8 +92,9 @@ body {
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Prevent horizontal overflow */
-  overflow-x: hidden;
+  /* clip (not hidden) to avoid creating a nested scroll container —
+     see html comment above. */
+  overflow-x: clip;
   /* Prevent iOS zoom on input focus by using 16px as base */
   -webkit-text-size-adjust: 100%;
 }

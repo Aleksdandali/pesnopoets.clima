@@ -117,7 +117,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
   ];
 
   return (
-    <header>
+    <header className="sticky top-0 z-50">
       {/* Top bar with phone — desktop only */}
       <div className="hidden lg:block bg-[#0c1425] text-white/70">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-9">
@@ -137,7 +137,7 @@ export default function Header({ locale, dictionary }: HeaderProps) {
 
       {/* Main nav */}
       <div
-        className={`sticky top-0 z-50 transition-all duration-300 ${
+        className={`transition-all duration-300 ${
           scrolled
             ? "bg-white/98 backdrop-blur-xl shadow-[0_1px_3px_0_rgb(0_0_0/0.04)]"
             : "bg-white/95 backdrop-blur-md"
@@ -230,26 +230,26 @@ export default function Header({ locale, dictionary }: HeaderProps) {
                 )}
               </div>
 
-              {/* CTA — visible on all breakpoints (compact on mobile) */}
+              {/* CTA — hidden on mobile (burger drawer has Inquiry inside) */}
               <Link
                 href={`/${locale}/inquiry`}
-                className="inline-flex items-center px-3 sm:px-5 py-2 sm:py-2.5 bg-primary text-primary-foreground text-xs sm:text-sm font-semibold rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-sm hover:shadow-md min-h-[40px] sm:min-h-[44px]"
+                className="hidden sm:inline-flex items-center px-5 py-2.5 bg-primary text-primary-foreground text-sm font-semibold rounded-xl hover:bg-primary-dark transition-all duration-200 shadow-sm hover:shadow-md min-h-[44px]"
               >
                 {inquiryLabel}
               </Link>
 
-              {/* Mobile menu button — 44px tap target */}
+              {/* Mobile menu button — prominent, primary-tinted */}
               <button
-                className="lg:hidden flex items-center justify-center w-11 h-11 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+                className="lg:hidden flex items-center justify-center w-11 h-11 ml-0.5 bg-primary/[0.08] hover:bg-primary/15 text-primary rounded-xl border border-primary/20 transition-colors"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                 aria-expanded={mobileMenuOpen}
                 aria-controls="mobile-nav"
               >
                 {mobileMenuOpen ? (
-                  <X className="w-5 h-5" aria-hidden="true" />
+                  <X className="w-6 h-6" aria-hidden="true" />
                 ) : (
-                  <Menu className="w-5 h-5" aria-hidden="true" />
+                  <Menu className="w-6 h-6" aria-hidden="true" strokeWidth={2.5} />
                 )}
               </button>
             </div>

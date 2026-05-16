@@ -149,8 +149,9 @@ export default function HeroCarousel({
               quality={85}
             />
           )}
-          {/* Desktop gradient — left to right */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/75 via-[#0a1628]/35 to-transparent" />
+          {/* Desktop gradient — left-to-right + soft bottom vignette for legibility on bright slides */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0a1628]/85 via-[#0a1628]/55 to-[#0a1628]/15" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628]/40 via-transparent to-transparent" />
         </div>
       ))}
 
@@ -159,7 +160,7 @@ export default function HeroCarousel({
         <div className="max-w-xl lg:max-w-2xl">
           <h1
             key={`title-${current}`}
-            className="text-xl sm:text-3xl lg:text-5xl font-bold text-white leading-tight animate-fade-in-up"
+            className="text-xl sm:text-3xl lg:text-5xl font-bold text-white leading-tight animate-fade-in-up [text-shadow:0_2px_12px_rgb(10_22_40/0.55)]"
           >
             {title}
           </h1>
@@ -167,7 +168,7 @@ export default function HeroCarousel({
           {subtitle && (
             <p
               key={`sub-${current}`}
-              className="mt-2 sm:mt-4 text-sm sm:text-base lg:text-lg text-white/90 leading-relaxed max-w-lg animate-fade-in-up"
+              className="mt-2 sm:mt-4 text-sm sm:text-base lg:text-lg text-white/90 leading-relaxed max-w-lg animate-fade-in-up [text-shadow:0_1px_6px_rgb(10_22_40/0.5)]"
               style={{ animationDelay: "100ms" }}
             >
               {subtitle}

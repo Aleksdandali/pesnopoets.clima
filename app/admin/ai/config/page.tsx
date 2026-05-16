@@ -187,7 +187,7 @@ export default function AIConfigPage() {
             <InfoRow label="Название" value="Песнопоец Клима" />
             <InfoRow label="Локация" value="Варна, Болгария" />
             <InfoRow label="Телефон" value="+359 87 799 8795" />
-            <InfoRow label="Email" value="pesnopoetsklima@gmail.com" />
+            <InfoRow label="Email" value="info@pesnopoets-clima.com" />
             <InfoRow label="Бригада" value="Собственная (не субподряд)" />
             <InfoRow label="Покрытие" value="Варна + область до ~30 км" />
             <InfoRow label="Оплата" value="Наличные, перевод, карта на месте. Без онлайн, без рассрочки" />

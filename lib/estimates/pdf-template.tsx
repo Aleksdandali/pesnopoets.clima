@@ -327,7 +327,7 @@ export function EstimatePDF(props: PDFProps) {
           </View>
           <View style={s.contactArea}>
             <Text style={s.contactBold}>{"+359 87 799 8795"}</Text>
-            <Text style={s.contactLine}>{"pesnopoetsklima@gmail.com"}</Text>
+            <Text style={s.contactLine}>{"info@pesnopoets-clima.com"}</Text>
             <Text style={s.contactLine}>{"pesnopoets-clima.com"}</Text>
             <Text style={s.contactLine}>{"Варна, България"}</Text>
           </View>

@@ -1,6 +1,13 @@
 import Image from "next/image";
 import type { Metadata } from "next";
-import { Shield, Truck, Wrench, Award } from "lucide-react";
+import { Shield, Truck, Wrench, Award, Sparkles } from "lucide-react";
+
+const eyebrowLabel: Record<string, string> = {
+  bg: "Нашата компания",
+  en: "Our company",
+  ru: "Наша компания",
+  ua: "Наша компанія",
+};
 
 async function getDictionary(locale: string) {
   try {
@@ -46,9 +53,23 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const c = dictionary.about;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">{c.title}</h1>
-      <p className="text-lg text-muted-foreground leading-relaxed mb-8">{c.subtitle}</p>
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+      {/* Hero */}
+      <div className="mb-10 sm:mb-12">
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/[0.08] border border-primary/15 rounded-full mb-4">
+          <Sparkles className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
+          <span className="text-xs font-semibold text-primary tracking-wide uppercase">
+            {eyebrowLabel[locale] || eyebrowLabel.bg}
+          </span>
+        </div>
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-[1.1]">
+          {c.title}
+        </h1>
+        <div className="mt-4 w-12 h-1 bg-gradient-to-r from-primary to-accent rounded-full" />
+        <p className="mt-5 sm:mt-6 text-base sm:text-lg text-foreground/70 leading-relaxed max-w-2xl">
+          {c.subtitle}
+        </p>
+      </div>
 
       {/* Team photo */}
       <div className="rounded-2xl overflow-hidden shadow-xl mb-10">

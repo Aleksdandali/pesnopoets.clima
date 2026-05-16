@@ -1,10 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import {
+  BUSINESS_ADDRESS_CITY,
   BUSINESS_EMAIL,
   BUSINESS_PHONE_DISPLAY,
   BUSINESS_PHONE_TEL,
+  BUSINESS_POSTAL_CODE,
+  BUSINESS_STREET,
   INSTAGRAM_URL,
   INSTAGRAM_HANDLE,
 } from "@/lib/constants";
@@ -56,6 +59,27 @@ const dealerLine: Record<string, string> = {
   en: "Authorized dealer of Daikin, Mitsubishi, Toshiba and Gree in Bulgaria",
   ru: "Официальный дилер Daikin, Mitsubishi, Toshiba и Gree в Болгарии",
   ua: "Офіційний дилер Daikin, Mitsubishi, Toshiba та Gree в Болгарії",
+};
+
+const hoursValue: Record<string, string> = {
+  bg: "Пон–Пет: 09:00–18:00 · Съб: 10:00–14:00",
+  en: "Mon–Fri: 09:00–18:00 · Sat: 10:00–14:00",
+  ru: "Пн–Пт: 09:00–18:00 · Сб: 10:00–14:00",
+  ua: "Пн–Пт: 09:00–18:00 · Сб: 10:00–14:00",
+};
+
+const hoursLabel: Record<string, string> = {
+  bg: "Работно време",
+  en: "Working hours",
+  ru: "Часы работы",
+  ua: "Робочий час",
+};
+
+const addressLabel: Record<string, string> = {
+  bg: "Адрес",
+  en: "Address",
+  ru: "Адрес",
+  ua: "Адреса",
 };
 
 export default function Footer({ locale, dictionary }: FooterProps) {
@@ -163,9 +187,25 @@ export default function Footer({ locale, dictionary }: FooterProps) {
                 </a>
               </li>
               <li>
-                <div className="flex items-start gap-2.5 text-sm text-white/50 py-2">
-                  <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-white/30" aria-hidden="true" />
-                  <span>{t.country}</span>
+                <div
+                  className="flex items-start gap-2.5 text-sm text-white/70 py-2"
+                  aria-label={addressLabel[locale] || addressLabel.bg}
+                >
+                  <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-white/50" aria-hidden="true" />
+                  <span>
+                    {BUSINESS_STREET}
+                    <br />
+                    {BUSINESS_POSTAL_CODE} {BUSINESS_ADDRESS_CITY}, {t.country}
+                  </span>
+                </div>
+              </li>
+              <li>
+                <div
+                  className="flex items-start gap-2.5 text-sm text-white/70 py-2"
+                  aria-label={hoursLabel[locale] || hoursLabel.bg}
+                >
+                  <Clock className="w-4 h-4 shrink-0 mt-0.5 text-white/50" aria-hidden="true" />
+                  <span>{hoursValue[locale] || hoursValue.bg}</span>
                 </div>
               </li>
               <li>

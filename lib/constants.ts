@@ -5,7 +5,7 @@
 
 export const BUSINESS_PHONE_DISPLAY = "+359 87 799 8795";
 export const BUSINESS_PHONE_TEL = "+359877998795"; // for tel: links
-export const BUSINESS_EMAIL = "pesnopoetsklima@gmail.com";
+export const BUSINESS_EMAIL = "info@pesnopoets-clima.com";
 
 // Address — must EXACTLY match Google Business Profile (NAP consistency).
 // GBP submitted in Bulgarian; we mirror that for citation matching.
