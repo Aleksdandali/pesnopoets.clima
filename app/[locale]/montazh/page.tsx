@@ -110,6 +110,13 @@ const faqHeadings: Record<string, { title: string; subtitle: string }> = {
   ua: { title: "Часті запитання", subtitle: "Швидкі відповіді про ціни, гарантію, терміни та технічні деталі." },
 };
 
+const includedLead: Record<string, string> = {
+  bg: "Стандартният монтаж на климатик във Варна включва медни тръби до 3 м, всички материали, вакуумиране, електрическо свързване, монтаж на двете тела и пускане в експлоатация. Цена от 190 € за уреди до 14 000 BTU, готов за работа за 2–4 часа.",
+  en: "Standard AC installation in Varna includes up to 3 m copper pipe, all materials, vacuum evacuation, electrical connection, mounting of both units and commissioning. Price from €190 for units up to 14,000 BTU, ready to use in 2–4 hours.",
+  ru: "Стандартная установка кондиционера в Варне включает медные трубы до 3 м, все материалы, вакуумирование, электроподключение, монтаж двух блоков и пусконаладку. Цена от 190 € для моделей до 14 000 BTU, готов к работе за 2–4 часа.",
+  ua: "Стандартний монтаж кондиціонера у Варні включає мідні труби до 3 м, всі матеріали, вакуумування, електропідключення, монтаж двох блоків та пусконалагодження. Ціна від 190 € для моделей до 14 000 BTU, готовий до роботи за 2–4 години.",
+};
+
 export default async function MontazhPage({ params }: PageProps) {
   const { locale } = await params;
   const dict = await getDictionary(locale);
@@ -298,6 +305,9 @@ export default async function MontazhPage({ params }: PageProps) {
             {t.includedTitle}
           </h2>
         </div>
+        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-3xl mb-6 sm:mb-8">
+          {includedLead[locale] || includedLead.bg}
+        </p>
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           {(t.includedItems as string[]).map((item) => (
             <li

@@ -100,6 +100,13 @@ const faqHeadings: Record<string, { title: string; subtitle: string }> = {
   ua: { title: "Часті запитання", subtitle: "Швидкі відповіді про ціни, періодичність, симптоми та що входить у профілактику." },
 };
 
+const includedLead: Record<string, string> = {
+  bg: "Стандартната профилактика на климатик във Варна обхваща пълно почистване на вътрешен и външен блок, измиване на филтри и радиатор, проверка на фреон и налягане, дезинфекция на дренажа и електрически контрол — обикновено 60–90 минути на уред, цена от 42 € (82 лв).",
+  en: "Standard AC maintenance in Varna covers full cleaning of indoor and outdoor units, washing of filters and radiator, freon and pressure check, drainage disinfection and electrical inspection — typically 60–90 minutes per unit, price from €42 (82 BGN).",
+  ru: "Стандартная профилактика кондиционера в Варне охватывает полную чистку внутреннего и внешнего блоков, мойку фильтров и радиатора, проверку фреона и давления, дезинфекцию дренажа и электрический контроль — обычно 60–90 минут на блок, цена от 42 € (82 лв).",
+  ua: "Стандартна профілактика кондиціонера у Варні охоплює повне чищення внутрішнього та зовнішнього блоків, миття фільтрів і радіатора, перевірку фреону та тиску, дезінфекцію дренажу та електричний контроль — зазвичай 60–90 хвилин на блок, ціна від 42 € (82 лв).",
+};
+
 export default async function ProfilaktikaPage({ params }: PageProps) {
   const { locale } = await params;
   const dict = await getDictionary(locale);
@@ -232,6 +239,9 @@ export default async function ProfilaktikaPage({ params }: PageProps) {
             {t.includedTitle}
           </h2>
         </div>
+        <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-3xl mb-6 sm:mb-8">
+          {includedLead[locale] || includedLead.bg}
+        </p>
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           {(t.includedItems as string[]).map((item) => (
             <li
