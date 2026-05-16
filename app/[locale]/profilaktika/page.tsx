@@ -58,6 +58,8 @@ const profilaktikaFaq: Record<string, { q: string; a: string }[]> = {
     { q: "Колко време отнема профилактиката?", a: "Стандартна профилактика — 60–90 минути за един уред. Пълен сервиз с разглобяване и измиване — до 2 часа." },
     { q: "Защо е важна редовната профилактика?", a: "Чистите филтри и радиатор намаляват сметката за ток с до 25%, удължават живота на климатика с години и предпазват от прах, бактерии и плесен във въздуха в дома." },
     { q: "Можете ли да дойдете в същия ден?", a: "Да, при заявка преди обяд — обикновено идваме същия ден. Покриваме всички квартали на Варна и областта в радиус до 30 км." },
+    { q: "Кога е най-доброто време за профилактика?", a: "Април–май, преди активния летен сезон. Влажността от морския бриз във Варна (75%+) през лятото натоварва вътрешния блок, затова пролетна профилактика дава максимален ефект." },
+    { q: "Какъв е рискът от пропусната профилактика?", a: "Запушени филтри увеличават разхода на ток с 20–25%, плесен в дренажа причинява неприятна миризма и алергии, а ниско налягане на фреона води до изгаряне на компресора (ремонт от 400 €+)." },
   ],
   en: [
     { q: "How often does an AC need maintenance?", a: "We recommend once a year — preferably in spring, before active use. For intensive operation (office, restaurant, pets) — twice a year." },
@@ -66,6 +68,8 @@ const profilaktikaFaq: Record<string, { q: string; a: string }[]> = {
     { q: "How long does maintenance take?", a: "Standard maintenance — 60–90 minutes for one unit. Full service with disassembly and washing — up to 2 hours." },
     { q: "Why is regular maintenance important?", a: "Clean filters and radiator reduce electricity bills by up to 25%, extend AC lifespan by years and protect indoor air from dust, bacteria and mold." },
     { q: "Can you come the same day?", a: "Yes, when requested before noon — usually we come the same day. We cover all neighborhoods of Varna and the region within a 30 km radius." },
+    { q: "When is the best time for AC maintenance?", a: "April–May, before the active summer season. The humidity from Varna's sea breeze (75%+) in summer strains the indoor unit, so spring maintenance delivers maximum benefit." },
+    { q: "What's the risk of skipping maintenance?", a: "Clogged filters increase electricity use by 20–25%, mold in drainage causes bad odor and allergies, and low refrigerant pressure leads to compressor burnout (repair from €400+)." },
   ],
   ru: [
     { q: "Как часто нужна профилактика кондиционера?", a: "Рекомендуем раз в год — лучше весной, до активного использования. При интенсивной работе (офис, ресторан, домашние животные) — два раза в год." },
@@ -74,6 +78,8 @@ const profilaktikaFaq: Record<string, { q: string; a: string }[]> = {
     { q: "Сколько времени занимает профилактика?", a: "Стандартная профилактика — 60–90 минут на один блок. Полный сервис с разборкой и мойкой — до 2 часов." },
     { q: "Почему важна регулярная профилактика?", a: "Чистые фильтры и радиатор снижают счёт за электричество до 25%, продлевают срок службы кондиционера на годы и защищают воздух дома от пыли, бактерий и плесени." },
     { q: "Можете приехать в тот же день?", a: "Да, при заявке до обеда — обычно приезжаем в тот же день. Покрываем все районы Варны и область в радиусе до 30 км." },
+    { q: "Когда лучшее время для профилактики?", a: "Апрель–май, до активного летнего сезона. Влажность от морского бриза в Варне (75%+) летом нагружает внутренний блок, поэтому весенняя профилактика даёт максимальный эффект." },
+    { q: "Чем опасен пропуск профилактики?", a: "Забитые фильтры увеличивают расход тока на 20–25%, плесень в дренаже вызывает запах и аллергию, а низкое давление фреона приводит к сгоранию компрессора (ремонт от 400 €+)." },
   ],
   ua: [
     { q: "Як часто потрібна профілактика кондиціонера?", a: "Рекомендуємо раз на рік — краще навесні, перед активним використанням. При інтенсивній роботі (офіс, ресторан, домашні тварини) — двічі на рік." },
@@ -82,7 +88,16 @@ const profilaktikaFaq: Record<string, { q: string; a: string }[]> = {
     { q: "Скільки часу займає профілактика?", a: "Стандартна профілактика — 60–90 хвилин на один блок. Повний сервіс з розбиранням і миттям — до 2 годин." },
     { q: "Чому важлива регулярна профілактика?", a: "Чисті фільтри й радіатор знижують рахунок за електрику на 25%, продовжують термін служби кондиціонера на роки та захищають повітря вдома від пилу, бактерій і плісняви." },
     { q: "Чи можете приїхати того ж дня?", a: "Так, при заявці до обіду — зазвичай приїздимо того ж дня. Обслуговуємо всі райони Варни та область у радіусі до 30 км." },
+    { q: "Коли найкращий час для профілактики?", a: "Квітень–травень, до активного літнього сезону. Вологість від морського бризу у Варні (75%+) влітку навантажує внутрішній блок, тому весняна профілактика дає максимальний ефект." },
+    { q: "Чим небезпечний пропуск профілактики?", a: "Забиті фільтри збільшують витрату струму на 20–25%, пліснява у дренажі викликає запах і алергію, а низький тиск фреону призводить до згорання компресора (ремонт від 400 €+)." },
   ],
+};
+
+const faqHeadings: Record<string, { title: string; subtitle: string }> = {
+  bg: { title: "Често задавани въпроси", subtitle: "Бързи отговори за цени, периодичност, симптоми и какво включва профилактиката." },
+  en: { title: "Frequently asked questions", subtitle: "Quick answers about pricing, frequency, warning signs and what maintenance includes." },
+  ru: { title: "Частые вопросы", subtitle: "Быстрые ответы о ценах, периодичности, симптомах и что входит в профилактику." },
+  ua: { title: "Часті запитання", subtitle: "Швидкі відповіді про ціни, періодичність, симптоми та що входить у профілактику." },
 };
 
 export default async function ProfilaktikaPage({ params }: PageProps) {
@@ -107,11 +122,14 @@ export default async function ProfilaktikaPage({ params }: PageProps) {
 
   const siteUrl = "https://pesnopoets-clima.com";
   const singleEur = Math.round(bgnToEur(PROFILAKTIKA_BGN.single));
+  const lowEur = Math.round(bgnToEur(PROFILAKTIKA_BGN.turbineCleanMin));
+  const highEur = Math.round(bgnToEur(PROFILAKTIKA_BGN.fullService));
 
   const serviceJsonLd = {
     "@context": "https://schema.org",
     "@type": "Service",
     serviceType: locale === "bg" ? "Профилактика на климатик" : locale === "en" ? "AC preventive maintenance" : locale === "ru" ? "Профилактика кондиционера" : "Профілактика кондиціонера",
+    category: "HVAC Maintenance",
     provider: { "@id": `${siteUrl}/#business` },
     areaServed: [
       { "@type": "City", name: "Варна" },
@@ -122,10 +140,13 @@ export default async function ProfilaktikaPage({ params }: PageProps) {
     name: t.pageTitle,
     description: t.pageSubtitle,
     url: `${siteUrl}/${locale}/profilaktika`,
+    priceRange: `€${lowEur} – €${highEur}`,
     offers: {
-      "@type": "Offer",
+      "@type": "AggregateOffer",
       priceCurrency: "EUR",
-      price: String(singleEur),
+      lowPrice: String(lowEur),
+      highPrice: String(highEur),
+      offerCount: 4,
       priceSpecification: {
         "@type": "PriceSpecification",
         priceCurrency: "EUR",
@@ -140,6 +161,12 @@ export default async function ProfilaktikaPage({ params }: PageProps) {
             ? `От ${singleEur} € за стандартную профилактику`
             : `Від ${singleEur} € за стандартну профілактику`,
       },
+    },
+    hoursAvailable: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      opens: "08:00",
+      closes: "19:00",
     },
   };
 
@@ -433,6 +460,42 @@ export default async function ProfilaktikaPage({ params }: PageProps) {
             {t.relatedMontazhCta}
             <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </Link>
+        </div>
+      </section>
+
+      {/* FAQ — visible content mirrors FAQPage JSON-LD, primary AIO citation source */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-8 sm:mb-10">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+              {(faqHeadings[locale] || faqHeadings.bg).title}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+              {(faqHeadings[locale] || faqHeadings.bg).subtitle}
+            </p>
+          </div>
+          <div className="space-y-3">
+            {faqItems.map((item, i) => (
+              <details
+                key={item.q}
+                className="group bg-white border border-border/60 rounded-2xl overflow-hidden"
+                open={i < 2}
+              >
+                <summary className="flex items-start justify-between gap-4 cursor-pointer list-none p-5 sm:p-6 hover:bg-muted/30 transition-colors">
+                  <h3 className="text-sm sm:text-base font-semibold text-foreground leading-snug pr-2">
+                    {item.q}
+                  </h3>
+                  <ChevronRight
+                    className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5 transition-transform group-open:rotate-90"
+                    aria-hidden="true"
+                  />
+                </summary>
+                <div className="px-5 sm:px-6 pb-5 sm:pb-6 -mt-1">
+                  <p className="text-sm text-muted-foreground leading-relaxed">{item.a}</p>
+                </div>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 

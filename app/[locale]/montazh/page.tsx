@@ -67,6 +67,9 @@ const montazhFaq: Record<string, { q: string; a: string }[]> = {
     { q: "Колко бързо можете да монтирате?", a: "Предлагаме монтаж в същия ден, ако се свържете с нас преди обяд. Типичният монтаж отнема 2–4 часа." },
     { q: "Давате ли гаранция за монтажа?", a: "Да, предоставяме 12 месеца гаранция върху монтажните дейности. При проблем, свързан с монтажа, го отстраняваме безплатно." },
     { q: "Какви райони покривате?", a: "Покриваме всички квартали на Варна и околността в радиус до около 30 км по договаряне." },
+    { q: "Кога е най-добре да се монтира климатик?", a: "Най-добрите месеци са март–май и септември–октомври — търсенето е по-ниско и можем да дойдем в рамките на 1–3 дни. През юли и август изчакването често достига 1–2 седмици." },
+    { q: "Кой плаща за монтажа — наемателят или собственикът?", a: "Обикновено собственикът заплаща монтажа, тъй като климатикът остава в имота след изнасянето на наемателя. Препоръчваме това да се запише в договора за наем." },
+    { q: "Каква е максималната дължина на тръбата между вътрешното и външното тяло?", a: "При битови сплит климатици техническият максимум е 15–25 м (зависи от модела), но за оптимална ефективност препоръчваме до 7–10 м. Над 10 м обикновено се изисква дозареждане с фреон." },
   ],
   en: [
     { q: "How much does AC installation cost?", a: "Standard installation starts from 190 € for units up to 14,000 BTU and 230 € for up to 24,000 BTU. Price includes 3m pipe, materials, vacuum, and commissioning." },
@@ -74,6 +77,9 @@ const montazhFaq: Record<string, { q: string; a: string }[]> = {
     { q: "How fast can you install?", a: "We offer same-day installation if you contact us before noon. Typical installation takes 2–4 hours." },
     { q: "Do you offer warranty on installation?", a: "Yes, we provide 12 months warranty on all installation work. Any installation-related issue within that period is fixed at no charge." },
     { q: "What areas do you cover?", a: "We cover all neighborhoods in Varna city and the surrounding region up to approximately 30km by arrangement." },
+    { q: "When is the best time to install an AC?", a: "Best months are March–May and September–October — demand is lower and we can come within 1–3 days. In July and August the wait often reaches 1–2 weeks." },
+    { q: "Who pays for installation — tenant or landlord?", a: "Typically the landlord pays, as the AC stays in the property after the tenant moves out. We recommend documenting this in the lease agreement." },
+    { q: "What is the maximum pipe length between indoor and outdoor units?", a: "For residential split systems the technical maximum is 15–25 m (varies by model), but for optimal efficiency we recommend up to 7–10 m. Above 10 m usually requires additional refrigerant top-up." },
   ],
   ru: [
     { q: "Сколько стоит установка кондиционера?", a: "Стандартная установка — от 190 € для моделей до 14 000 BTU и 230 € до 24 000 BTU. В цену входят 3 м трубы, материалы, вакуумирование и пусконаладка." },
@@ -81,6 +87,9 @@ const montazhFaq: Record<string, { q: string; a: string }[]> = {
     { q: "Как быстро вы можете установить?", a: "Мы предлагаем установку в тот же день, если вы свяжетесь с нами до обеда. Типичная установка занимает 2–4 часа." },
     { q: "Даёте ли вы гарантию на монтаж?", a: "Да, мы предоставляем 12 месяцев гарантии на монтажные работы. Любая проблема, связанная с монтажом, устраняется бесплатно." },
     { q: "Какие районы вы обслуживаете?", a: "Мы обслуживаем все районы Варны и окрестности в радиусе до 30 км по договорённости." },
+    { q: "Когда лучше всего устанавливать кондиционер?", a: "Лучшие месяцы — март–май и сентябрь–октябрь, когда спрос ниже и мы можем приехать в течение 1–3 дней. В июле и августе ожидание часто достигает 1–2 недель." },
+    { q: "Кто платит за установку — арендатор или собственник?", a: "Обычно собственник, так как кондиционер остаётся в квартире после съезда арендатора. Рекомендуем закрепить это в договоре аренды." },
+    { q: "Какова максимальная длина трассы между внутренним и наружным блоками?", a: "Технический максимум для бытовых сплит-систем — 15–25 м (зависит от модели), но для оптимальной эффективности рекомендуем до 7–10 м. Свыше 10 м обычно требуется дозаправка фреоном." },
   ],
   ua: [
     { q: "Скільки коштує монтаж кондиціонера?", a: "Стандартний монтаж — від 190 € для моделей до 14 000 BTU та 230 € до 24 000 BTU. Ціна включає 3 м труби, матеріали, вакуумування та пусконалагодження." },
@@ -88,7 +97,17 @@ const montazhFaq: Record<string, { q: string; a: string }[]> = {
     { q: "Як швидко ви можете встановити?", a: "Ми пропонуємо монтаж у той самий день, якщо ви зв'яжетесь до обіду. Типовий монтаж займає 2–4 години." },
     { q: "Чи надаєте гарантію на монтаж?", a: "Так, ми надаємо 12 місяців гарантії на монтажні роботи. Будь-яка проблема, пов'язана з монтажем, усувається безкоштовно." },
     { q: "Які райони ви обслуговуєте?", a: "Ми обслуговуємо всі райони Варни та околиці в радіусі до 30 км за домовленістю." },
+    { q: "Коли найкраще встановлювати кондиціонер?", a: "Найкращі місяці — березень–травень і вересень–жовтень, коли попит нижчий і ми можемо приїхати протягом 1–3 днів. У липні та серпні очікування часто сягає 1–2 тижнів." },
+    { q: "Хто платить за монтаж — орендар чи власник?", a: "Зазвичай власник, оскільки кондиціонер залишається у квартирі після виїзду орендаря. Рекомендуємо зафіксувати це в договорі оренди." },
+    { q: "Яка максимальна довжина траси між внутрішнім і зовнішнім блоками?", a: "Технічний максимум для побутових спліт-систем — 15–25 м (залежить від моделі), але для оптимальної ефективності рекомендуємо до 7–10 м. Понад 10 м зазвичай потрібна дозаправка фреоном." },
   ],
+};
+
+const faqHeadings: Record<string, { title: string; subtitle: string }> = {
+  bg: { title: "Често задавани въпроси", subtitle: "Бързи отговори за цени, гаранция, срокове и технически детайли." },
+  en: { title: "Frequently asked questions", subtitle: "Quick answers about pricing, warranty, timing and technical details." },
+  ru: { title: "Частые вопросы", subtitle: "Быстрые ответы о ценах, гарантии, сроках и технических деталях." },
+  ua: { title: "Часті запитання", subtitle: "Швидкі відповіді про ціни, гарантію, терміни та технічні деталі." },
 };
 
 export default async function MontazhPage({ params }: PageProps) {
@@ -138,10 +157,14 @@ export default async function MontazhPage({ params }: PageProps) {
     name: t.pageTitle,
     description: t.pageSubtitle,
     url: `${siteUrl}/${locale}/montazh`,
+    category: "HVAC Installation",
+    priceRange: "€190 – €350",
     offers: {
-      "@type": "Offer",
+      "@type": "AggregateOffer",
       priceCurrency: "EUR",
-      price: "190",
+      lowPrice: "190",
+      highPrice: "350",
+      offerCount: INSTALLATION_TIERS.length,
       priceSpecification: {
         "@type": "PriceSpecification",
         priceCurrency: "EUR",
@@ -156,6 +179,12 @@ export default async function MontazhPage({ params }: PageProps) {
             ? "От 190 € за стандартный монтаж до 3м трассы"
             : "Від 190 € за стандартний монтаж до 3м траси",
       },
+    },
+    hoursAvailable: {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      opens: "08:00",
+      closes: "19:00",
     },
   };
 
@@ -503,6 +532,42 @@ export default async function MontazhPage({ params }: PageProps) {
               </li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      {/* FAQ — visible content mirrors FAQPage JSON-LD, primary AIO citation source */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-8 sm:mb-10">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+              {(faqHeadings[locale] || faqHeadings.bg).title}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+              {(faqHeadings[locale] || faqHeadings.bg).subtitle}
+            </p>
+          </div>
+          <div className="space-y-3">
+            {faqItems.map((item, i) => (
+              <details
+                key={item.q}
+                className="group bg-white border border-border/60 rounded-2xl overflow-hidden"
+                open={i < 2}
+              >
+                <summary className="flex items-start justify-between gap-4 cursor-pointer list-none p-5 sm:p-6 hover:bg-muted/30 transition-colors">
+                  <h3 className="text-sm sm:text-base font-semibold text-foreground leading-snug pr-2">
+                    {item.q}
+                  </h3>
+                  <ChevronRight
+                    className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5 transition-transform group-open:rotate-90"
+                    aria-hidden="true"
+                  />
+                </summary>
+                <div className="px-5 sm:px-6 pb-5 sm:pb-6 -mt-1">
+                  <p className="text-sm text-muted-foreground leading-relaxed">{item.a}</p>
+                </div>
+              </details>
+            ))}
+          </div>
         </div>
       </section>
 
