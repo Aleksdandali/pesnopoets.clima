@@ -46,3 +46,8 @@ supabase/.temp/
 *.tsbuildinfo
 next-env.d.ts
 .env*.local
+
+# local working artifacts (planning, QA evidence, ads exports)
+/HOMEPAGE_PLAN*.md
+/qa-evidence-*/
+/google-ads-*/
