@@ -12,6 +12,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import BeforeAfterSlider from "@/components/montazh/BeforeAfterSlider";
+import PortfolioGallery from "@/components/portfolio/PortfolioGallery";
 import {
   INSTALLATION_TIERS,
   EXTRA_SERVICES_EUR,
@@ -544,6 +545,9 @@ export default async function MontazhPage({ params }: PageProps) {
           </ul>
         </div>
       </section>
+
+      {/* Portfolio — real installation work */}
+      <PortfolioGallery locale={locale} tags={["install", "outdoor", "detail"]} limit={8} />
 
       {/* FAQ — visible content mirrors FAQPage JSON-LD, primary AIO citation source */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">

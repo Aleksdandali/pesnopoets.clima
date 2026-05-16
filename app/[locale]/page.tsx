@@ -21,6 +21,8 @@ import ProductCard from "@/components/catalog/ProductCard";
 import SeasonalBanner from "@/components/home/SeasonalBanner";
 import AiConsultantSection from "@/components/home/AiConsultantSection";
 import HeroCarousel from "@/components/home/HeroCarousel";
+import QuickOrderForm from "@/components/home/QuickOrderForm";
+import PortfolioGallery from "@/components/portfolio/PortfolioGallery";
 
 // Revalidate homepage every 5 minutes for fresh product data
 export const revalidate = 300;
@@ -131,25 +133,25 @@ const categories: Record<
     { slug: "invertorni-klimatici", name: "Инверторни климатици", desc: "Енергийно ефективни решения за дома", icon: "snowflake" },
     { slug: "multi-split-sistemi", name: "Мулти сплит системи", desc: "Едно външно тяло, множество вътрешни", icon: "zap" },
     { slug: "profesionalni-sistemi", name: "Професионални системи", desc: "За търговски и индустриални обекти", icon: "thermometer" },
-    { slug: "ventilaciya", name: "Вентилация", desc: "Системи за пресен въздух и рекуперация", icon: "wind" },
+    { slug: "termopompa", name: "Термопомпи", desc: "Отопление и охлаждане целогодишно", icon: "thermometer" },
   ],
   en: [
     { slug: "invertorni-klimatici", name: "Inverter Air Conditioners", desc: "Energy-efficient solutions for home", icon: "snowflake" },
     { slug: "multi-split-sistemi", name: "Multi Split Systems", desc: "One outdoor unit, multiple indoor units", icon: "zap" },
     { slug: "profesionalni-sistemi", name: "Professional Systems", desc: "For commercial and industrial spaces", icon: "thermometer" },
-    { slug: "ventilaciya", name: "Ventilation", desc: "Fresh air and heat recovery systems", icon: "wind" },
+    { slug: "termopompa", name: "Heat Pumps", desc: "Heating and cooling year-round", icon: "thermometer" },
   ],
   ru: [
     { slug: "invertorni-klimatici", name: "Инверторные кондиционеры", desc: "Энергоэффективные решения для дома", icon: "snowflake" },
     { slug: "multi-split-sistemi", name: "Мульти сплит системы", desc: "Один наружный блок, несколько внутренних", icon: "zap" },
     { slug: "profesionalni-sistemi", name: "Профессиональные системы", desc: "Для коммерческих и промышленных объектов", icon: "thermometer" },
-    { slug: "ventilaciya", name: "Вентиляция", desc: "Системы подачи свежего воздуха и рекуперации", icon: "wind" },
+    { slug: "termopompa", name: "Тепловые насосы", desc: "Отопление и охлаждение круглый год", icon: "thermometer" },
   ],
   ua: [
     { slug: "invertorni-klimatici", name: "Інверторні кондиціонери", desc: "Енергоефективні рішення для дому", icon: "snowflake" },
     { slug: "multi-split-sistemi", name: "Мульті спліт системи", desc: "Один зовнішній блок, кілька внутрішніх", icon: "zap" },
     { slug: "profesionalni-sistemi", name: "Професійні системи", desc: "Для комерційних та промислових об'єктів", icon: "thermometer" },
-    { slug: "ventilaciya", name: "Вентиляція", desc: "Системи подачі свіжого повітря та рекуперації", icon: "wind" },
+    { slug: "termopompa", name: "Теплові насоси", desc: "Опалення та охолодження цілорічно", icon: "thermometer" },
   ],
 };
 
@@ -275,7 +277,7 @@ async function getBrandsWithImages() {
 async function getCategoryImages() {
   try {
     const supabase = await createClient();
-    const categorySlugs = ["invertorni-klimatici", "multi-split-sistemi", "profesionalni-sistemi", "ventilaciya"];
+    const categorySlugs = ["invertorni-klimatici", "multi-split-sistemi", "profesionalni-sistemi", "termopompa"];
 
     // Single query instead of 4 sequential ones
     const { data } = await supabase
@@ -374,6 +376,9 @@ export default async function HomePage({ params }: HomePageProps) {
           </div>
         </div>
       </section>
+
+      {/* Quick Order Form — high-intent capture for PPC traffic */}
+      <QuickOrderForm locale={locale} />
 
       {/* Categories */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
@@ -512,6 +517,9 @@ export default async function HomePage({ params }: HomePageProps) {
           </div>
         </div>
       </section>
+
+      {/* Portfolio — real work in Varna (AIO citation + social proof) */}
+      <PortfolioGallery locale={locale} limit={8} />
 
       {/* AI Consultant Section */}
       {aiConsultant && <AiConsultantSection labels={aiConsultant} />}

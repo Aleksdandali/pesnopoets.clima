@@ -14,6 +14,7 @@ import {
   CalendarClock,
 } from "lucide-react";
 import { PROFILAKTIKA_BGN, bgnToEur } from "@/lib/pricing";
+import PortfolioGallery from "@/components/portfolio/PortfolioGallery";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -472,6 +473,9 @@ export default async function ProfilaktikaPage({ params }: PageProps) {
           </Link>
         </div>
       </section>
+
+      {/* Portfolio — real maintenance work */}
+      <PortfolioGallery locale={locale} tags={["maintenance", "detail"]} limit={6} />
 
       {/* FAQ — visible content mirrors FAQPage JSON-LD, primary AIO citation source */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
