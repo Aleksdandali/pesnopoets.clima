@@ -74,7 +74,7 @@ export default function LocalBusinessJsonLd({
         closes: "14:00",
       },
     ],
-    sameAs: [INSTAGRAM_URL],
+    sameAs: [INSTAGRAM_URL, "https://www.wikidata.org/wiki/Q139819378"],
     makesOffer: [
       {
         "@type": "Offer",
