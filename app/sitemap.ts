@@ -122,19 +122,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...localized("/kontakti", { changeFrequency: "monthly", priority: 0.7 })
   );
 
-  // Product pages
+  // Product pages — primary market only (BG)
+  // RU/EN/UA product pages remain crawlable + indexable via hreflang on /bg pages,
+  // but excluded from sitemap to focus crawl budget on the primary market while
+  // the domain is still building authority. Re-add other locales once BG indexing stabilises.
   if (products) {
     for (const product of products) {
+      const path = `/klimatici/${product.slug}`;
       const lastMod = product.updated_at
         ? new Date(product.updated_at)
         : new Date();
-      entries.push(
-        ...localized(`/klimatici/${product.slug}`, {
-          lastModified: lastMod,
-          changeFrequency: "daily",
-          priority: 0.8,
-        })
-      );
+      entries.push({
+        url: `${siteUrl}/bg${path}`,
+        lastModified: lastMod,
+        changeFrequency: "daily",
+        priority: 0.8,
+        alternates: { languages: buildLanguages(path) },
+      });
     }
   }
 
