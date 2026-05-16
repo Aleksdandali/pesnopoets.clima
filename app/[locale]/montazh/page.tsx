@@ -320,6 +320,97 @@ export default async function MontazhPage({ params }: PageProps) {
     ],
   };
 
+  // HowTo schema — describes the 5-step installation process. AI engines render this
+  // as a numbered list in Perplexity / Gemini answers for queries like
+  // "how to install AC Varna" or "steps for AC installation".
+  const howToSteps: Record<string, { name: string; text: string }[]> = {
+    bg: [
+      { name: "Заявка и безплатен оглед", text: "Изпратете заявка през сайта или по телефон. Идваме на безплатен оглед в рамките на 24–48 часа, оценяваме мястото за вътрешно и външно тяло и даваме фиксирана цена." },
+      { name: "Избор на модел и оферта", text: "Препоръчваме модел според квадратурата и бюджета — Daikin, Mitsubishi, Gree, Toshiba. Получавате писмена оферта без скрити такси." },
+      { name: "Доставка и подготовка", text: "Доставяме климатика на адреса. Подготвяме мястото — пробиване на отвор, изтегляне на тръбна линия, кабели." },
+      { name: "Стандартен монтаж", text: "Монтаж на конзоли, окачване на вътрешно и външно тяло, медни тръби до 3м, вакуумиране, електрическо свързване. Чисто, аккуратно, по стандарт." },
+      { name: "Пускане в експлоатация и гаранция", text: "Тест на режими охлаждане/отопление, обучение за дистанционно, издаване на гаранционна карта 12 месеца върху монтажа." },
+    ],
+    en: [
+      { name: "Request & free site inspection", text: "Submit a request via website or phone. We arrive for a free site inspection within 24–48 hours, evaluate placement for indoor and outdoor units, and give a fixed price." },
+      { name: "Model selection & offer", text: "We recommend a model based on room size and budget — Daikin, Mitsubishi, Gree, Toshiba. You receive a written offer with no hidden fees." },
+      { name: "Delivery & site preparation", text: "We deliver the unit to your address. Prepare the site — drill the wall opening, route pipe line and cables." },
+      { name: "Standard installation", text: "Mount brackets, hang indoor and outdoor units, run copper pipe up to 3m, vacuum the system, connect electrical. Clean, neat, by the book." },
+      { name: "Commissioning & warranty", text: "Test cooling/heating modes, remote training, issue 12-month installation warranty card." },
+    ],
+    ru: [
+      { name: "Заявка и бесплатный осмотр", text: "Отправьте заявку через сайт или по телефону. Приезжаем на бесплатный осмотр в течение 24–48 часов, оцениваем место для внутреннего и наружного блоков, даём фиксированную цену." },
+      { name: "Подбор модели и оферта", text: "Рекомендуем модель по квадратуре и бюджету — Daikin, Mitsubishi, Gree, Toshiba. Получаете письменную оферту без скрытых платежей." },
+      { name: "Доставка и подготовка", text: "Доставляем кондиционер на адрес. Готовим место — сверление отверстия, прокладка трассы и кабелей." },
+      { name: "Стандартный монтаж", text: "Монтаж кронштейнов, навешивание внутреннего и наружного блоков, медные трубы до 3м, вакуумирование, электроподключение. Чисто, аккуратно, по стандарту." },
+      { name: "Пусконаладка и гарантия", text: "Тест режимов охлаждения/отопления, обучение работе с пультом, выдача гарантийной карты на 12 месяцев на монтаж." },
+    ],
+    ua: [
+      { name: "Заявка та безкоштовний огляд", text: "Надішліть заявку через сайт або телефон. Приїжджаємо на безкоштовний огляд протягом 24–48 годин, оцінюємо місце для внутрішнього та зовнішнього блоків, даємо фіксовану ціну." },
+      { name: "Підбір моделі та оферта", text: "Рекомендуємо модель за квадратурою та бюджетом — Daikin, Mitsubishi, Gree, Toshiba. Отримуєте письмову оферту без прихованих платежів." },
+      { name: "Доставка та підготовка", text: "Доставляємо кондиціонер на адресу. Готуємо місце — свердління отвору, прокладання траси та кабелів." },
+      { name: "Стандартний монтаж", text: "Монтаж кронштейнів, навішування внутрішнього та зовнішнього блоків, мідні труби до 3м, вакуумування, електропідключення. Чисто, акуратно, за стандартом." },
+      { name: "Пусконалагодження та гарантія", text: "Тест режимів охолодження/обігріву, навчання роботі з пультом, видача гарантійної карти на 12 місяців на монтаж." },
+    ],
+  };
+
+  const howToHeadings: Record<string, { name: string; description: string }> = {
+    bg: {
+      name: "Как монтираме климатик във Варна — 5 стъпки",
+      description: "Подробен процес на стандартен монтаж на климатик във Варна и областта — от безплатен оглед до гаранция 12 месеца. Цена от 190 € за уреди до 14 000 BTU и 230 € за до 24 000 BTU.",
+    },
+    en: {
+      name: "How we install an AC in Varna — 5 steps",
+      description: "Detailed standard AC installation process in Varna and the region — from free site inspection to 12-month warranty. Price from €190 for units up to 14,000 BTU and €230 for up to 24,000 BTU.",
+    },
+    ru: {
+      name: "Как мы устанавливаем кондиционер во Варне — 5 шагов",
+      description: "Подробный процесс стандартной установки кондиционера во Варне и области — от бесплатного осмотра до гарантии 12 месяцев. Цена от 190 € для моделей до 14 000 BTU и 230 € до 24 000 BTU.",
+    },
+    ua: {
+      name: "Як ми встановлюємо кондиціонер у Варні — 5 кроків",
+      description: "Детальний процес стандартного монтажу кондиціонера у Варні та області — від безкоштовного огляду до гарантії 12 місяців. Ціна від 190 € для моделей до 14 000 BTU і 230 € до 24 000 BTU.",
+    },
+  };
+
+  const steps = howToSteps[locale] || howToSteps.bg;
+  const headings = howToHeadings[locale] || howToHeadings.bg;
+  const lowPriceEur = Math.round(bgnToEur(INSTALLATION_TIERS[0].price));
+  const highPriceEur = Math.round(bgnToEur(INSTALLATION_TIERS[INSTALLATION_TIERS.length - 1].price));
+
+  const howToJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: headings.name,
+    description: headings.description,
+    inLanguage: locale === "ua" ? "uk" : locale,
+    totalTime: "PT3H",
+    estimatedCost: {
+      "@type": "MonetaryAmount",
+      currency: "EUR",
+      value: lowPriceEur,
+      minValue: lowPriceEur,
+      maxValue: highPriceEur,
+    },
+    supply: [
+      { "@type": "HowToSupply", name: locale === "bg" ? "Медни тръби (до 3м)" : locale === "en" ? "Copper pipes (up to 3m)" : locale === "ru" ? "Медные трубы (до 3м)" : "Мідні труби (до 3м)" },
+      { "@type": "HowToSupply", name: locale === "bg" ? "Електрически кабел" : locale === "en" ? "Electrical cable" : locale === "ru" ? "Электрический кабел" : "Електричний кабель" },
+      { "@type": "HowToSupply", name: locale === "bg" ? "Конзоли за външно тяло" : locale === "en" ? "Outdoor unit brackets" : locale === "ru" ? "Кронштейны для наружного блока" : "Кронштейни для зовнішнього блоку" },
+    ],
+    tool: [
+      { "@type": "HowToTool", name: locale === "bg" ? "Вакуум помпа" : locale === "en" ? "Vacuum pump" : locale === "ru" ? "Вакуумный насос" : "Вакуумний насос" },
+      { "@type": "HowToTool", name: locale === "bg" ? "Развалцовъчен инструмент" : locale === "en" ? "Flaring tool" : locale === "ru" ? "Развальцовочный инструмент" : "Розвальцьовувальний інструмент" },
+      { "@type": "HowToTool", name: locale === "bg" ? "Манометри за фреон" : locale === "en" ? "Refrigerant manifold gauges" : locale === "ru" ? "Манометры для фреона" : "Манометри для фреону" },
+    ],
+    step: steps.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.name,
+      text: s.text,
+      url: `${siteUrl}/${locale}/montazh#step-${i + 1}`,
+    })),
+  };
+
   return (
     <>
       <script
@@ -329,6 +420,10 @@ export default async function MontazhPage({ params }: PageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
       />
       <script
         type="application/ld+json"
@@ -473,6 +568,42 @@ export default async function MontazhPage({ params }: PageProps) {
               </ul>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* HowTo steps — visible content mirrors HowTo JSON-LD, primary AIO citation source
+          for "as steps" queries like "how to install AC Varna" */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-8 sm:mb-10">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+              {headings.name}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+              {headings.description}
+            </p>
+          </div>
+          <ol className="space-y-3">
+            {steps.map((step, i) => (
+              <li
+                key={step.name}
+                id={`step-${i + 1}`}
+                className="flex gap-4 p-5 sm:p-6 bg-white border border-border/60 rounded-2xl shadow-[0_2px_8px_rgb(0_0_0/0.04)]"
+              >
+                <div className="shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-primary text-white font-bold text-base sm:text-lg flex items-center justify-center">
+                  {i + 1}
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base font-semibold text-foreground leading-snug">
+                    {step.name}
+                  </h3>
+                  <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
+                    {step.text}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
