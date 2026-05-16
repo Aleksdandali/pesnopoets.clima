@@ -151,6 +151,107 @@ export default async function MontazhPage({ params }: PageProps) {
   };
 
   const siteUrl = "https://pesnopoets-clima.com";
+
+  // BTU tier label per locale — explicit "from–to" range used in Offer.name so AI engines
+  // can quote exact ranges like "монтаж 9000–14000 BTU — 190 €".
+  const tierName = (maxBtu: number, prevMaxBtu: number): string => {
+    const fromK = (prevMaxBtu / 1000).toFixed(0);
+    const toK = (maxBtu / 1000).toFixed(0);
+    if (locale === "bg") return `Монтаж на климатик ${fromK} 000–${toK} 000 BTU`;
+    if (locale === "en") return `AC installation ${fromK},000–${toK},000 BTU`;
+    if (locale === "ru") return `Монтаж кондиционера ${fromK} 000–${toK} 000 BTU`;
+    return `Монтаж кондиціонера ${fromK} 000–${toK} 000 BTU`;
+  };
+
+  const extrasOffers = [
+    {
+      name:
+        locale === "bg" ? "Демонтаж на климатик до 14 000 BTU"
+        : locale === "en" ? "AC dismantle up to 14,000 BTU"
+        : locale === "ru" ? "Демонтаж кондиционера до 14 000 BTU"
+        : "Демонтаж кондиціонера до 14 000 BTU",
+      price: Math.round(EXTRA_SERVICES_EUR.dismantleSmall),
+    },
+    {
+      name:
+        locale === "bg" ? "Демонтаж на климатик 15 000–24 000 BTU"
+        : locale === "en" ? "AC dismantle 15,000–24,000 BTU"
+        : locale === "ru" ? "Демонтаж кондиционера 15 000–24 000 BTU"
+        : "Демонтаж кондиціонера 15 000–24 000 BTU",
+      price: Math.round(EXTRA_SERVICES_EUR.dismantleLarge),
+    },
+    {
+      name:
+        locale === "bg" ? "Диагностика на климатик"
+        : locale === "en" ? "AC diagnostic"
+        : locale === "ru" ? "Диагностика кондиционера"
+        : "Діагностика кондиціонера",
+      price: Math.round(EXTRA_SERVICES_EUR.diagnostic),
+    },
+    {
+      name:
+        locale === "bg" ? "Оглед на място"
+        : locale === "en" ? "On-site inspection"
+        : locale === "ru" ? "Осмотр на месте"
+        : "Огляд на місці",
+      price: Math.round(EXTRA_SERVICES_EUR.inspection),
+    },
+  ];
+
+  const installOffers = INSTALLATION_TIERS.map((tier, idx) => {
+    const prevMaxBtu = idx === 0 ? 7_000 : INSTALLATION_TIERS[idx - 1].maxBtu;
+    const priceEur = Math.round(bgnToEur(tier.price));
+    const extraEur = Math.round(bgnToEur(tier.extraPipePerM));
+    return {
+      "@type": "Offer",
+      name: tierName(tier.maxBtu, prevMaxBtu),
+      itemOffered: {
+        "@type": "Service",
+        name: tierName(tier.maxBtu, prevMaxBtu),
+        serviceType: "HVAC Installation",
+      },
+      price: priceEur.toString(),
+      priceCurrency: "EUR",
+      availability: "https://schema.org/InStock",
+      areaServed: { "@type": "City", name: "Варна" },
+      priceSpecification: [
+        {
+          "@type": "PriceSpecification",
+          price: priceEur.toString(),
+          priceCurrency: "EUR",
+          valueAddedTaxIncluded: true,
+          description:
+            locale === "bg" ? `Стандартен монтаж: до 3м медна тръба, материали, вакуумиране, пускане в експлоатация. Цена ${priceEur} € с ДДС.`
+            : locale === "en" ? `Standard installation: up to 3m copper pipe, materials, vacuum, commissioning. Price €${priceEur} incl. VAT.`
+            : locale === "ru" ? `Стандартный монтаж: до 3м медной трубы, материалы, вакуумирование, пусконаладка. Цена ${priceEur} € с НДС.`
+            : `Стандартний монтаж: до 3м мідної труби, матеріали, вакуумування, пусконалагодження. Ціна ${priceEur} € з ПДВ.`,
+        },
+        {
+          "@type": "UnitPriceSpecification",
+          price: extraEur.toString(),
+          priceCurrency: "EUR",
+          unitCode: "MTR",
+          referenceQuantity: { "@type": "QuantitativeValue", value: 1, unitCode: "MTR" },
+          description:
+            locale === "bg" ? `Допълнителна тръба над 3м: ${extraEur} €/м`
+            : locale === "en" ? `Extra pipe over 3m: €${extraEur}/m`
+            : locale === "ru" ? `Дополнительная трасса свыше 3м: ${extraEur} €/м`
+            : `Додаткова траса понад 3м: ${extraEur} €/м`,
+        },
+      ],
+    };
+  });
+
+  const extraOffersJsonLd = extrasOffers.map((extra) => ({
+    "@type": "Offer",
+    name: extra.name,
+    itemOffered: { "@type": "Service", name: extra.name },
+    price: extra.price.toString(),
+    priceCurrency: "EUR",
+    availability: "https://schema.org/InStock",
+    areaServed: { "@type": "City", name: "Варна" },
+  }));
+
   const serviceJsonLd = {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -166,27 +267,41 @@ export default async function MontazhPage({ params }: PageProps) {
     description: t.pageSubtitle,
     url: `${siteUrl}/${locale}/montazh`,
     category: "HVAC Installation",
-    priceRange: "€190 – €350",
+    priceRange: "€20 – €230",
     offers: {
       "@type": "AggregateOffer",
       priceCurrency: "EUR",
-      lowPrice: "190",
-      highPrice: "350",
-      offerCount: INSTALLATION_TIERS.length,
-      priceSpecification: {
-        "@type": "PriceSpecification",
-        priceCurrency: "EUR",
-        price: "190",
-        valueAddedTaxIncluded: true,
-        description:
-          locale === "bg"
-            ? "От 190 € за стандартен монтаж до 3м тръба"
-            : locale === "en"
-            ? "From €190 for standard install up to 3m line set"
-            : locale === "ru"
-            ? "От 190 € за стандартный монтаж до 3м трассы"
-            : "Від 190 € за стандартний монтаж до 3м траси",
-      },
+      lowPrice: Math.round(EXTRA_SERVICES_EUR.diagnostic).toString(),
+      highPrice: Math.round(bgnToEur(INSTALLATION_TIERS[INSTALLATION_TIERS.length - 1].price)).toString(),
+      offerCount: installOffers.length + extraOffersJsonLd.length,
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name:
+        locale === "bg" ? "Прайс-лист монтаж и допълнителни услуги — Варна"
+        : locale === "en" ? "Installation & extras price list — Varna"
+        : locale === "ru" ? "Прайс-лист монтаж и доп. услуги — Варна"
+        : "Прайс-лист монтаж і дод. послуги — Варна",
+      itemListElement: [
+        {
+          "@type": "OfferCatalog",
+          name:
+            locale === "bg" ? "Стандартен монтаж по BTU"
+            : locale === "en" ? "Standard installation by BTU"
+            : locale === "ru" ? "Стандартный монтаж по BTU"
+            : "Стандартний монтаж за BTU",
+          itemListElement: installOffers,
+        },
+        {
+          "@type": "OfferCatalog",
+          name:
+            locale === "bg" ? "Допълнителни услуги"
+            : locale === "en" ? "Extra services"
+            : locale === "ru" ? "Дополнительные услуги"
+            : "Додаткові послуги",
+          itemListElement: extraOffersJsonLd,
+        },
+      ],
     },
     hoursAvailable: {
       "@type": "OpeningHoursSpecification",
