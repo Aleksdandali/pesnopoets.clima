@@ -522,12 +522,12 @@ export default async function ProfilaktikaPage({ params }: PageProps) {
               </h2>
               <p className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed">
                 {locale === "en"
-                  ? "After each maintenance visit we leave a branded sticker with our service phone inside the indoor unit — so next year you know exactly who to call, and so does any future owner."
+                  ? "After each visit we leave a dated sticker with our direct service phone on the indoor unit. Next year you don't dig through receipts — you just look at the AC. Same goes for the next owner of the apartment."
                   : locale === "ru"
-                  ? "После каждой профилактики мы оставляем брендированную наклейку с телефоном сервиса внутри блока — чтобы через год вы точно знали, кому звонить, и любой следующий владелец тоже."
+                  ? "После каждой профилактики оставляем на блоке наклейку с датой и прямым телефоном сервиса. Через год не нужно искать чеки и переписку — всё на самом кондиционере. Та же история работает и для следующего владельца квартиры."
                   : locale === "ua"
-                  ? "Після кожної профілактики ми залишаємо брендований стікер з телефоном сервісу всередині блоку — щоб через рік ви точно знали, кому телефонувати, і будь-який наступний власник теж."
-                  : "След всяка профилактика оставяме брандиран стикер с телефон за сервиз вътре в блока — за да знаете точно на кого да се обадите след година, и всеки следващ собственик също."}
+                  ? "Після кожної профілактики залишаємо на блоці стікер з датою та прямим телефоном сервісу. Через рік не треба шукати чеки і листування — усе на самому кондиціонері. Те саме працює і для наступного власника квартири."
+                  : "След всяка профилактика оставяме на блока стикер с дата и директен телефон за сервиз. След година не търсите касови бележки и кореспонденция — всичко е на самия климатик. Същото важи и за следващия собственик на жилището."}
               </p>
               <ul className="mt-4 space-y-2">
                 {[
@@ -546,12 +546,12 @@ export default async function ProfilaktikaPage({ params }: PageProps) {
                     ? "Прямий телефон сервісу — без кол-центрів"
                     : "Директен телефон за сервиз — без кол-центрове",
                   locale === "en"
-                    ? "Service history stays with the AC, not lost paperwork"
+                    ? "Service history stays on the unit — survives lost receipts and a change of owner"
                     : locale === "ru"
-                    ? "История сервиса остаётся при кондиционере, не на потерянных бумагах"
+                    ? "История сервиса — на самом блоке, переживёт потерянные чеки и смену владельца"
                     : locale === "ua"
-                    ? "Історія сервісу залишається при кондиціонері, не на загублених паперах"
-                    : "Историята на сервиз остава при климатика, не на изгубени документи",
+                    ? "Історія сервісу — на самому блоці, переживе загублені чеки і зміну власника"
+                    : "Историята на сервиз е на блока — преживява изгубени бележки и смяна на собственик",
                 ].map((line) => (
                   <li key={line} className="flex items-start gap-2 text-sm text-foreground/80">
                     <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" aria-hidden="true" />

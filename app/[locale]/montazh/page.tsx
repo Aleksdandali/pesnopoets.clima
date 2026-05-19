@@ -364,8 +364,8 @@ export default async function MontazhPage({ params }: PageProps) {
       description: "Detailed standard AC installation process in Varna and the region — from free site inspection to 12-month warranty. Price from €190 for units up to 14,000 BTU and €230 for up to 24,000 BTU.",
     },
     ru: {
-      name: "Как мы устанавливаем кондиционер во Варне — 5 шагов",
-      description: "Подробный процесс стандартной установки кондиционера во Варне и области — от бесплатного осмотра до гарантии 12 месяцев. Цена от 190 € для моделей до 14 000 BTU и 230 € до 24 000 BTU.",
+      name: "Как мы устанавливаем кондиционер в Варне — 5 шагов",
+      description: "Подробный процесс стандартной установки кондиционера в Варне и области — от бесплатного осмотра до гарантии 12 месяцев. Цена от 190 € для моделей до 14 000 BTU и 230 € до 24 000 BTU.",
     },
     ua: {
       name: "Як ми встановлюємо кондиціонер у Варні — 5 кроків",
@@ -392,7 +392,7 @@ export default async function MontazhPage({ params }: PageProps) {
       alt: {
         bg: "Подбор на модел Gree, Daikin или Mitsubishi за апартамент във Варна",
         en: "Selecting a Gree, Daikin or Mitsubishi model for an apartment in Varna",
-        ru: "Подбор модели Gree, Daikin или Mitsubishi для квартиры во Варне",
+        ru: "Подбор модели Gree, Daikin или Mitsubishi для квартиры в Варне",
         ua: "Підбір моделі Gree, Daikin або Mitsubishi для квартири у Варні",
       },
     },
