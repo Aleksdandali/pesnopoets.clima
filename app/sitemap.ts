@@ -92,6 +92,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   entries.push(
     ...localized("/uslugi", { changeFrequency: "weekly", priority: 0.85 })
   );
+  entries.push(
+    ...localized("/abonament-biznes", { changeFrequency: "weekly", priority: 0.85 })
+  );
 
   // SEO category landing pages
   entries.push(

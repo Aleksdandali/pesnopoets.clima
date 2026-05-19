@@ -82,6 +82,13 @@ const addressLabel: Record<string, string> = {
   ua: "Адреса",
 };
 
+const b2bLabel: Record<string, string> = {
+  bg: "Абонамент за бизнес",
+  en: "Business contracts",
+  ru: "Абонемент для бизнеса",
+  ua: "Абонемент для бізнесу",
+};
+
 export default function Footer({ locale, dictionary }: FooterProps) {
   const t = dictionary.common;
   const year = new Date().getFullYear();
@@ -126,6 +133,7 @@ export default function Footer({ locale, dictionary }: FooterProps) {
                 { href: `/${locale}/klimatici`, label: t.nav.catalog },
                 { href: `/${locale}/brands`, label: t.nav.brands },
                 { href: `/${locale}/partneri`, label: t.nav.partners || "Партньорство" },
+                { href: `/${locale}/abonament-biznes`, label: b2bLabel[locale] || b2bLabel.bg },
                 { href: `/${locale}/za-nas`, label: t.nav.about },
                 { href: `/${locale}/kontakti`, label: t.nav.contact },
               ].map((link) => (

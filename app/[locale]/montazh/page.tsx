@@ -831,6 +831,50 @@ export default async function MontazhPage({ params }: PageProps) {
         </div>
       </section>
 
+      {/* B2B upsell — annual maintenance contracts for businesses with 3+ indoor units */}
+      <section className="border-t border-border/60 bg-muted/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+          <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex-1">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-primary/10 text-primary-dark text-[11px] font-semibold tracking-wide uppercase rounded-full mb-2">
+                B2B
+              </div>
+              <h3 className="text-lg sm:text-xl font-bold text-foreground">
+                {locale === "en"
+                  ? "Multiple AC units in your office or retail space?"
+                  : locale === "ru"
+                  ? "Несколько кондиционеров в офисе или магазине?"
+                  : locale === "ua"
+                  ? "Декілька кондиціонерів в офісі чи магазині?"
+                  : "Няколко климатика в офиса или обекта?"}
+              </h3>
+              <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
+                {locale === "en"
+                  ? "Annual maintenance contracts for businesses with 3+ indoor units — fixed price, scheduled visits, priority response."
+                  : locale === "ru"
+                  ? "Годовые контракты на обслуживание для бизнеса от 3 внутренних блоков — фиксированная цена, плановые визиты, приоритетная реакция."
+                  : locale === "ua"
+                  ? "Річні контракти на обслуговування для бізнесу від 3 внутрішніх блоків — фіксована ціна, планові візити, пріоритетна реакція."
+                  : "Годишни договори за поддръжка за бизнеси с 3+ вътрешни тела — фиксирана цена, планови визити, приоритетна реакция."}
+              </p>
+            </div>
+            <Link
+              href={`/${locale}/abonament-biznes`}
+              className="shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-primary/30 bg-primary/5 text-primary-dark text-sm font-semibold hover:bg-primary/10 transition-colors min-h-[44px]"
+            >
+              {locale === "en"
+                ? "Business contracts"
+                : locale === "ru"
+                ? "Абонемент для бизнеса"
+                : locale === "ua"
+                ? "Абонемент для бізнесу"
+                : "Абонамент за бизнес"}
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="relative overflow-hidden border-t border-border/60">
         <div className="absolute inset-0 bg-gradient-to-r from-[var(--primary-dark)] to-[var(--primary)]" />

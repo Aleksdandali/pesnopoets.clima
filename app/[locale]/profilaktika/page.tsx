@@ -513,6 +513,50 @@ export default async function ProfilaktikaPage({ params }: PageProps) {
         </div>
       </section>
 
+      {/* B2B upsell — annual maintenance contracts for businesses with 3+ indoor units */}
+      <section className="border-t border-border/60 bg-muted/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+          <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex-1">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-primary/10 text-primary-dark text-[11px] font-semibold tracking-wide uppercase rounded-full mb-2">
+                B2B
+              </div>
+              <h3 className="text-lg sm:text-xl font-bold text-foreground">
+                {locale === "en"
+                  ? "3+ AC units in your business?"
+                  : locale === "ru"
+                  ? "3+ кондиционера в бизнесе?"
+                  : locale === "ua"
+                  ? "3+ кондиціонери у бізнесі?"
+                  : "3+ климатика в бизнеса?"}
+              </h3>
+              <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
+                {locale === "en"
+                  ? "Switch to an annual maintenance contract — fixed price per unit, scheduled visits, priority response, volume discounts."
+                  : locale === "ru"
+                  ? "Перейдите на годовой контракт — фиксированная цена за блок, плановые визиты, приоритетная реакция, объёмные скидки."
+                  : locale === "ua"
+                  ? "Перейдіть на річний контракт — фіксована ціна за блок, планові візити, пріоритетна реакція, об'ємні знижки."
+                  : "Преминете на годишен договор — фиксирана цена на тяло, планови визити, приоритетна реакция, отстъпки за обем."}
+              </p>
+            </div>
+            <Link
+              href={`/${locale}/abonament-biznes`}
+              className="shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-primary/30 bg-primary/5 text-primary-dark text-sm font-semibold hover:bg-primary/10 transition-colors min-h-[44px]"
+            >
+              {locale === "en"
+                ? "Business contracts"
+                : locale === "ru"
+                ? "Абонемент для бизнеса"
+                : locale === "ua"
+                ? "Абонемент для бізнесу"
+                : "Абонамент за бизнес"}
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="relative overflow-hidden border-t border-border/60">
         <div className="absolute inset-0 bg-gradient-to-r from-[var(--primary-dark)] to-[var(--primary)]" />
