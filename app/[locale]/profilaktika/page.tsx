@@ -474,6 +474,96 @@ export default async function ProfilaktikaPage({ params }: PageProps) {
         </div>
       </section>
 
+      {/* Sticker trust block — unique brand differentiator */}
+      <section className="border-t border-border/40 bg-gradient-to-b from-[#fafbfc] to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div className="relative rounded-2xl overflow-hidden shadow-xl border border-border/40 order-2 md:order-1">
+              <div className="relative aspect-[4/3]">
+                <Image
+                  src="/team/sticker-on-pcb.jpg"
+                  alt={
+                    locale === "en"
+                      ? "Branded Pesnopoets Clima sticker on the PCB of a serviced AC with our service phone"
+                      : locale === "ru"
+                      ? "Брендированная наклейка Песнопоец Клима на плате обслуженного кондиционера с телефоном сервиса"
+                      : locale === "ua"
+                      ? "Брендований стікер Песнопоец Клима на платі обслуженого кондиціонера з телефоном сервісу"
+                      : "Брандиран стикер Песнопоец Клима върху платката на обслужен климатик с телефон за сервиз"
+                  }
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+            <div className="order-1 md:order-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/[0.08] border border-primary/15 rounded-full mb-4">
+                <ShieldCheck className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
+                <span className="text-xs font-semibold text-primary tracking-wide uppercase">
+                  {locale === "en"
+                    ? "Our trademark"
+                    : locale === "ru"
+                    ? "Наш знак"
+                    : locale === "ua"
+                    ? "Наш знак"
+                    : "Наш знак"}
+                </span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
+                {locale === "en"
+                  ? "We mark every AC we service"
+                  : locale === "ru"
+                  ? "Мы маркируем каждый обслуженный кондиционер"
+                  : locale === "ua"
+                  ? "Ми маркуємо кожен обслужений кондиціонер"
+                  : "Маркираме всеки обслужен климатик"}
+              </h2>
+              <p className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed">
+                {locale === "en"
+                  ? "After each maintenance visit we leave a branded sticker with our service phone inside the indoor unit — so next year you know exactly who to call, and so does any future owner."
+                  : locale === "ru"
+                  ? "После каждой профилактики мы оставляем брендированную наклейку с телефоном сервиса внутри блока — чтобы через год вы точно знали, кому звонить, и любой следующий владелец тоже."
+                  : locale === "ua"
+                  ? "Після кожної профілактики ми залишаємо брендований стікер з телефоном сервісу всередині блоку — щоб через рік ви точно знали, кому телефонувати, і будь-який наступний власник теж."
+                  : "След всяка профилактика оставяме брандиран стикер с телефон за сервиз вътре в блока — за да знаете точно на кого да се обадите след година, и всеки следващ собственик също."}
+              </p>
+              <ul className="mt-4 space-y-2">
+                {[
+                  locale === "en"
+                    ? "Date of last service written on the sticker"
+                    : locale === "ru"
+                    ? "Дата последнего сервиса написана на наклейке"
+                    : locale === "ua"
+                    ? "Дата останнього сервісу записана на стікері"
+                    : "Дата на последен сервиз — написана на стикера",
+                  locale === "en"
+                    ? "Direct service phone — no call centers"
+                    : locale === "ru"
+                    ? "Прямой телефон сервиса — без колл-центров"
+                    : locale === "ua"
+                    ? "Прямий телефон сервісу — без кол-центрів"
+                    : "Директен телефон за сервиз — без кол-центрове",
+                  locale === "en"
+                    ? "Service history stays with the AC, not lost paperwork"
+                    : locale === "ru"
+                    ? "История сервиса остаётся при кондиционере, не на потерянных бумагах"
+                    : locale === "ua"
+                    ? "Історія сервісу залишається при кондиціонері, не на загублених паперах"
+                    : "Историята на сервиз остава при климатика, не на изгубени документи",
+                ].map((line) => (
+                  <li key={line} className="flex items-start gap-2 text-sm text-foreground/80">
+                    <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" aria-hidden="true" />
+                    <span>{line}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Portfolio — real maintenance work */}
       <PortfolioGallery locale={locale} tags={["maintenance", "detail"]} limit={6} />
 

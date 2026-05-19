@@ -1324,7 +1324,7 @@ export default async function AbonamentBiznesPage({ params }: PageProps) {
       <section className="relative bg-[#0a1628] text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/abonament-biznes/hero.jpg"
+            src="/abonament-biznes/hero-real.jpg"
             alt={c.hero.title}
             fill
             sizes="100vw"
@@ -1651,6 +1651,96 @@ export default async function AbonamentBiznesPage({ params }: PageProps) {
               );
             })}
           </ol>
+        </div>
+      </section>
+
+      {/* Sticker trust block — service trail audit for businesses */}
+      <section className="border-t border-border/40 bg-gradient-to-b from-[#fafbfc] to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div className="relative rounded-2xl overflow-hidden shadow-xl border border-border/40 order-2 md:order-1">
+              <div className="relative aspect-[4/3]">
+                <Image
+                  src="/team/sticker-on-pcb.jpg"
+                  alt={
+                    locale === "en"
+                      ? "Branded Pesnopoets Clima service sticker on the PCB of a serviced AC unit"
+                      : locale === "ru"
+                      ? "Брендированная сервисная наклейка Песнопоец Клима на плате обслуженного кондиционера"
+                      : locale === "ua"
+                      ? "Брендований сервісний стікер Песнопоец Клима на платі обслуженого кондиціонера"
+                      : "Брандиран сервизен стикер Песнопоец Клима върху платката на обслужен климатик"
+                  }
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+            <div className="order-1 md:order-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/[0.08] border border-primary/15 rounded-full mb-4">
+                <ShieldCheck className="w-3.5 h-3.5 text-primary" aria-hidden="true" />
+                <span className="text-xs font-semibold text-primary tracking-wide uppercase">
+                  {locale === "en"
+                    ? "Service trail"
+                    : locale === "ru"
+                    ? "Сервисный след"
+                    : locale === "ua"
+                    ? "Сервісний слід"
+                    : "Сервизен запис"}
+                </span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
+                {locale === "en"
+                  ? "Every AC under contract gets a service sticker"
+                  : locale === "ru"
+                  ? "Каждый кондиционер по контракту получает сервисную наклейку"
+                  : locale === "ua"
+                  ? "Кожен кондиціонер за контрактом отримує сервісний стікер"
+                  : "Всеки климатик по договор получава сервизен стикер"}
+              </h2>
+              <p className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed">
+                {locale === "en"
+                  ? "After each scheduled visit we mark the indoor unit with a dated sticker — your facility manager has a physical audit trail for every AC in the building, with our direct service phone."
+                  : locale === "ru"
+                  ? "После каждого планового визита мы маркируем внутренний блок наклейкой с датой — у вашего управляющего есть физический аудит-след по каждому блоку с прямым телефоном сервиса."
+                  : locale === "ua"
+                  ? "Після кожного планового візиту ми маркуємо внутрішній блок стікером з датою — у вашого керівника є фізичний аудит-слід по кожному блоку з прямим телефоном сервісу."
+                  : "След всеки планов визит маркираме вътрешния блок със стикер с дата — вашият мениджър има физическа одит-следа за всеки блок с директен телефон за сервиз."}
+              </p>
+              <ul className="mt-4 space-y-2">
+                {[
+                  locale === "en"
+                    ? "Visible audit trail for facility manager"
+                    : locale === "ru"
+                    ? "Видимый аудит-след для управляющего"
+                    : locale === "ua"
+                    ? "Видимий аудит-слід для керівника"
+                    : "Видима одит-следа за мениджъра",
+                  locale === "en"
+                    ? "Compliant with internal HVAC service logs"
+                    : locale === "ru"
+                    ? "Соответствует внутренним журналам обслуживания HVAC"
+                    : locale === "ua"
+                    ? "Відповідає внутрішнім журналам обслуговування HVAC"
+                    : "Съответства на вътрешните дневници за сервиз HVAC",
+                  locale === "en"
+                    ? "Service history follows the unit, not the staff"
+                    : locale === "ru"
+                    ? "История сервиса при блоке, а не при персонале"
+                    : locale === "ua"
+                    ? "Історія сервісу при блоці, а не при персоналі"
+                    : "Историята на сервиз остава при блока, а не при персонала",
+                ].map((line) => (
+                  <li key={line} className="flex items-start gap-2 text-sm text-foreground/80">
+                    <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" aria-hidden="true" />
+                    <span>{line}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 

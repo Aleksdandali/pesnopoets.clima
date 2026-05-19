@@ -132,6 +132,46 @@ const PHOTOS: Photo[] = [
       ua: "Сервіс зовнішнього блоку Gree у Варненській області",
     },
   },
+  {
+    src: "/portfolio/13-gree-white-wall.jpg",
+    width: 1200, height: 1600, tags: ["install", "brand"],
+    alt: {
+      bg: "Завършен монтаж на климатик Gree на бяла стена в апартамент във Варна",
+      en: "Finished Gree AC installation on a white wall in a Varna apartment",
+      ru: "Завершённый монтаж кондиционера Gree на белой стене в квартире во Варне",
+      ua: "Завершений монтаж кондиціонера Gree на білій стіні у квартирі у Варні",
+    },
+  },
+  {
+    src: "/portfolio/14-apartment-pre-install.jpg",
+    width: 1200, height: 1600, tags: ["install", "detail"],
+    alt: {
+      bg: "Подготовка за монтаж на климатик в апартамент във Варна",
+      en: "Apartment prepared for AC installation in Varna",
+      ru: "Подготовка к монтажу кондиционера в квартире во Варне",
+      ua: "Підготовка до монтажу кондиціонера у квартирі у Варні",
+    },
+  },
+  {
+    src: "/portfolio/15-gree-display-30c.jpg",
+    width: 1200, height: 1600, tags: ["install", "brand", "detail"],
+    alt: {
+      bg: "Тест на новомонтиран климатик Gree — дисплей показва зададени 30°C",
+      en: "Newly installed Gree AC under test — display showing 30°C setting",
+      ru: "Тест новоустановленного кондиционера Gree — дисплей показывает 30°C",
+      ua: "Тест новоустановленого кондиціонера Gree — дисплей показує 30°C",
+    },
+  },
+  {
+    src: "/portfolio/16-outdoor-mountain-master.jpg",
+    width: 1200, height: 1600, tags: ["outdoor", "install"],
+    alt: {
+      bg: "Майстор монтира външно тяло на климатик с гледка към планината във Варненския район",
+      en: "Technician installing an outdoor AC unit with mountain view in Varna region",
+      ru: "Мастер устанавливает внешний блок кондиционера с видом на горы во Варненской области",
+      ua: "Майстер встановлює зовнішній блок кондиціонера з видом на гори у Варненській області",
+    },
+  },
 ];
 
 const HEADINGS: Record<Locale, { title: string; subtitle: string }> = {

@@ -375,6 +375,55 @@ export default async function MontazhPage({ params }: PageProps) {
 
   const steps = howToSteps[locale] || howToSteps.bg;
   const headings = howToHeadings[locale] || howToHeadings.bg;
+
+  // Step images — real install photos paired to each HowTo step (used in JSON-LD + visible)
+  const stepImages: { src: string; alt: Record<string, string> }[] = [
+    {
+      src: "/team/owner-portrait.jpg",
+      alt: {
+        bg: "Управителят на Песнопоец Клима — лична консултация при заявка за монтаж",
+        en: "Founder of Pesnopoets Clima — personal consultation on installation request",
+        ru: "Руководитель Песнопоец Клима — личная консультация при заявке на монтаж",
+        ua: "Керівник Песнопоец Клима — особиста консультація при заявці на монтаж",
+      },
+    },
+    {
+      src: "/team/owner-with-gree.jpg",
+      alt: {
+        bg: "Подбор на модел Gree, Daikin или Mitsubishi за апартамент във Варна",
+        en: "Selecting a Gree, Daikin or Mitsubishi model for an apartment in Varna",
+        ru: "Подбор модели Gree, Daikin или Mitsubishi для квартиры во Варне",
+        ua: "Підбір моделі Gree, Daikin або Mitsubishi для квартири у Варні",
+      },
+    },
+    {
+      src: "/portfolio/14-apartment-pre-install.jpg",
+      alt: {
+        bg: "Подготовка на стената за монтаж на климатик в апартамент",
+        en: "Wall preparation for AC installation in an apartment",
+        ru: "Подготовка стены к монтажу кондиционера в квартире",
+        ua: "Підготовка стіни до монтажу кондиціонера у квартирі",
+      },
+    },
+    {
+      src: "/portfolio/10-pipe-flaring-tool.jpg",
+      alt: {
+        bg: "Развалцоване на медни тръби при стандартен монтаж на климатик",
+        en: "Flaring copper pipes during standard AC installation",
+        ru: "Развальцовка медных труб при стандартном монтаже кондиционера",
+        ua: "Розвальцовування мідних труб при стандартному монтажі кондиціонера",
+      },
+    },
+    {
+      src: "/portfolio/15-gree-display-30c.jpg",
+      alt: {
+        bg: "Пускане в експлоатация — тест на климатика и проверка на режимите",
+        en: "Commissioning — AC test run and mode verification",
+        ru: "Пусконаладка — тестовый запуск кондиционера и проверка режимов",
+        ua: "Пусконалагодження — тестовий запуск кондиціонера та перевірка режимів",
+      },
+    },
+  ];
   const lowPriceEur = Math.round(bgnToEur(INSTALLATION_TIERS[0].price));
   const highPriceEur = Math.round(bgnToEur(INSTALLATION_TIERS[INSTALLATION_TIERS.length - 1].price));
 
@@ -408,6 +457,9 @@ export default async function MontazhPage({ params }: PageProps) {
       name: s.name,
       text: s.text,
       url: `${siteUrl}/${locale}/montazh#step-${i + 1}`,
+      ...(stepImages[i]
+        ? { image: `${siteUrl}${stepImages[i].src}` }
+        : {}),
     })),
   };
 
@@ -584,25 +636,44 @@ export default async function MontazhPage({ params }: PageProps) {
             </p>
           </div>
           <ol className="space-y-3">
-            {steps.map((step, i) => (
-              <li
-                key={step.name}
-                id={`step-${i + 1}`}
-                className="flex gap-4 p-5 sm:p-6 bg-white border border-border/60 rounded-2xl shadow-[0_2px_8px_rgb(0_0_0/0.04)]"
-              >
-                <div className="shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-primary text-white font-bold text-base sm:text-lg flex items-center justify-center">
-                  {i + 1}
-                </div>
-                <div>
-                  <h3 className="text-sm sm:text-base font-semibold text-foreground leading-snug">
-                    {step.name}
-                  </h3>
-                  <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
-                    {step.text}
-                  </p>
-                </div>
-              </li>
-            ))}
+            {steps.map((step, i) => {
+              const img = stepImages[i];
+              return (
+                <li
+                  key={step.name}
+                  id={`step-${i + 1}`}
+                  className="flex flex-col sm:flex-row gap-4 sm:gap-5 p-5 sm:p-6 bg-white border border-border/60 rounded-2xl shadow-[0_2px_8px_rgb(0_0_0/0.04)]"
+                >
+                  <div className="flex gap-4 flex-1 min-w-0">
+                    <div className="shrink-0 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-primary text-white font-bold text-base sm:text-lg flex items-center justify-center">
+                      {i + 1}
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-sm sm:text-base font-semibold text-foreground leading-snug">
+                        {step.name}
+                      </h3>
+                      <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">
+                        {step.text}
+                      </p>
+                    </div>
+                  </div>
+                  {img && (
+                    <div className="shrink-0 sm:w-44 lg:w-52">
+                      <div className="relative aspect-[4/3] sm:aspect-[3/4] rounded-xl overflow-hidden bg-muted/40 border border-border/40">
+                        <Image
+                          src={img.src}
+                          alt={img.alt[locale] || img.alt.bg}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 200px, 220px"
+                          loading="lazy"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
           </ol>
         </div>
       </section>

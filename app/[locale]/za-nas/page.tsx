@@ -9,6 +9,37 @@ const eyebrowLabel: Record<string, string> = {
   ua: "Наша компанія",
 };
 
+const teamLabels: Record<string, { heading: string; sub: string; ownerCap: string; gearCap: string; vanCap: string }> = {
+  bg: {
+    heading: "Екипът, който ще монтира вашия климатик",
+    sub: "Собствена бригада, брандиран сервизен бус, оригинална техника — без подизпълнители.",
+    ownerCap: "Управителят на Песнопоец Клима — на всеки обект лично",
+    gearCap: "Работим само с оригинална техника Daikin, Gree, Mitsubishi",
+    vanCap: "Брандираният ни сервизен бус — идваме навреме във Варна",
+  },
+  en: {
+    heading: "The team that will install your AC",
+    sub: "Our own crew, branded service van, original equipment — no subcontractors.",
+    ownerCap: "Founder of Pesnopoets Clima — on every site personally",
+    gearCap: "We work only with original Daikin, Gree, Mitsubishi equipment",
+    vanCap: "Our branded service van — we arrive on time across Varna",
+  },
+  ru: {
+    heading: "Команда, которая установит ваш кондиционер",
+    sub: "Своя бригада, брендированный сервисный фургон, оригинальная техника — без подрядчиков.",
+    ownerCap: "Руководитель Песнопоец Клима — на каждом объекте лично",
+    gearCap: "Работаем только с оригинальной техникой Daikin, Gree, Mitsubishi",
+    vanCap: "Наш брендированный сервисный фургон — приезжаем вовремя по Варне",
+  },
+  ua: {
+    heading: "Команда, яка встановить ваш кондиціонер",
+    sub: "Власна бригада, брендований сервісний фургон, оригінальна техніка — без підрядників.",
+    ownerCap: "Керівник Песнопоец Клима — на кожному об'єкті особисто",
+    gearCap: "Працюємо лише з оригінальною технікою Daikin, Gree, Mitsubishi",
+    vanCap: "Наш брендований сервісний фургон — приїжджаємо вчасно по Варні",
+  },
+};
+
 async function getDictionary(locale: string) {
   try {
     const dict = await import(`@/dictionaries/${locale}.json`);
@@ -71,18 +102,64 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
         </p>
       </div>
 
-      {/* Team photo */}
-      <div className="rounded-2xl overflow-hidden shadow-xl mb-10">
-        <Image
-          src="/images/about-team.jpg"
-          alt={c.title}
-          width={1254}
-          height={1254}
-          sizes="(max-width: 896px) 100vw, 896px"
-          className="w-full h-auto"
-          priority
-        />
-      </div>
+      {/* Team — real photos */}
+      {(() => {
+        const tl = teamLabels[locale] || teamLabels.bg;
+        return (
+          <section className="mb-12">
+            <div className="text-center mb-6 sm:mb-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">{tl.heading}</h2>
+              <p className="mt-3 text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">{tl.sub}</p>
+              <div className="mt-3 mx-auto w-10 h-1 bg-gradient-to-r from-primary to-accent rounded-full" />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <figure className="relative rounded-2xl overflow-hidden bg-muted/40 border border-border/40 shadow-[0_2px_12px_rgb(0_0_0/0.04)]">
+                <div className="relative aspect-[3/4]">
+                  <Image
+                    src="/team/owner-portrait.jpg"
+                    alt={tl.ownerCap}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, 33vw"
+                    priority
+                  />
+                </div>
+                <figcaption className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/70 to-transparent text-white text-xs sm:text-sm">
+                  {tl.ownerCap}
+                </figcaption>
+              </figure>
+              <figure className="relative rounded-2xl overflow-hidden bg-muted/40 border border-border/40 shadow-[0_2px_12px_rgb(0_0_0/0.04)]">
+                <div className="relative aspect-[3/4]">
+                  <Image
+                    src="/team/owner-with-gree.jpg"
+                    alt={tl.gearCap}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, 33vw"
+                  />
+                </div>
+                <figcaption className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/70 to-transparent text-white text-xs sm:text-sm">
+                  {tl.gearCap}
+                </figcaption>
+              </figure>
+              <figure className="relative rounded-2xl overflow-hidden bg-muted/40 border border-border/40 shadow-[0_2px_12px_rgb(0_0_0/0.04)]">
+                <div className="relative aspect-[3/4]">
+                  <Image
+                    src="/team/branded-van.jpg"
+                    alt={tl.vanCap}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, 33vw"
+                  />
+                </div>
+                <figcaption className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/70 to-transparent text-white text-xs sm:text-sm">
+                  {tl.vanCap}
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* Team paragraph */}
       <p className="text-base text-muted-foreground leading-relaxed mb-10">{c.teamParagraph}</p>
