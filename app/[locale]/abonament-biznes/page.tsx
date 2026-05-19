@@ -174,65 +174,65 @@ const COPY: Record<Locale, Copy> = {
     breadcrumbHome: "Начало",
     breadcrumbThis: "Бизнес абонамент",
     hero: {
-      badge: "За компании във Варна",
+      badge: "За компании във Варна и областта",
       title: "Абонаментно обслужване на климатици за бизнеса",
       subtitle:
-        "Фиксиран годишен бюджет, приоритет при авария, ДДС фактура и договор. Един партньор за всички климатици във вашите обекти.",
+        "Един изпълнител за всички климатици във всичките ви обекти. Фиксирана годишна цена, приоритет при авария, ДДС фактура и писмен договор.",
       bullets: [
-        "Фиксиран годишен бюджет — без изненади",
-        "Приоритет при авария пред клиенти без договор",
-        "ДДС фактура и договор за всеки обект",
+        "Фиксирана цена за 12 месеца — без изненади в бюджета",
+        "Приоритет при авария — преди клиентите без договор",
+        "Договор и ДДС фактура — документално покрит всеки обект",
       ],
       ctaPrimary: "Вижте тарифите",
-      ctaSecondary: "Безплатна оферта",
+      ctaSecondary: "Безплатна оценка",
     },
     tiers: {
-      title: "Три тарифа според вашия обем и приоритет",
-      subtitle: `Цена за един вътрешен блок на година, с включено ДДС. Минимум ${B2B_MIN_UNITS} апарата за договор.`,
+      title: "Три тарифа — избирате обем и скорост на реакция",
+      subtitle: `Цена за едно вътрешно тяло на година, с включено ДДС. От ${B2B_MIN_UNITS} тела за договор.`,
       recommended: "Препоръчан",
       perUnit: "на 1 вътрешно тяло",
       fromLabel: "от",
       chooseCta: "Заявка",
       basic: {
         name: "Basic",
-        tagline: "1 планова визита/година · реакция до 3 раб. дни",
+        tagline: "1 планова визита годишно · реакция до 3 работни дни",
       },
       standard: {
         name: "Standard",
         tagline:
-          "2 планови визити (пролет + есен) · реакция до 2 раб. дни · −10% части",
+          "2 планови визити (пролет + есен) · реакция до 2 работни дни · −10% на резервни части",
       },
       pro: {
         name: "Pro",
         tagline:
-          "3 планови визити · реакция до 1 раб. ден · −15% части · приоритетна линия",
+          "3 планови визити · реакция до 1 работен ден · −15% на резервни части · приоритетна линия",
       },
     },
     matrix: {
       title: "Какво включва всеки тариф",
       subtitle:
-        "Подробна сравнителна таблица. Всичко по-долу е заложено в писмения договор.",
+        "Подробно сравнение. Всичко по-долу е заложено в писмения договор — без устни уговорки.",
       rowVisits: "Планови визити годишно",
       rowSla: "Реакция при авария",
       rowWash: "Измиване на вътрешно и външно тяло",
-      rowDisinfect: "Антибактериална дезинфекция",
+      rowDisinfect: "Антибактериална обработка",
       rowDrainage: "Почистване на дренажа",
-      rowElectro: "Електрическа проверка и затягане",
+      rowElectro: "Електрическа проверка и затягане на връзките",
       rowFreon: "Проверка на фреон и налягания",
       rowDiscount: "Отстъпка за резервни части",
-      rowHotline: "Приоритетна гореща линия",
-      rowReport: "Дигитален отчет (PDF) след всяка визита",
+      rowHotline: "Приоритетна линия",
+      rowReport: "Цифров PDF отчет след всяка визита",
       rowConsult: "Безплатна консултация за нови обекти",
       cell: {
         visitsBasic: "1 визита (пролет)",
         visitsStandard: "2 визити (пролет + есен)",
-        visitsPro: "3 визити (тримесечно)",
-        slaBasic: "до 3 раб. дни",
-        slaStandard: "до 2 раб. дни",
-        slaPro: "до 1 раб. ден",
-        hotlineYes: "Работно време",
-        hotlinePro: "Работно време · приоритет",
-        consultPro: "1 път/год · до 1 час",
+        visitsPro: "3 визити (на всеки 4 месеца)",
+        slaBasic: "до 3 работни дни",
+        slaStandard: "до 2 работни дни",
+        slaPro: "до 1 работен ден",
+        hotlineYes: "В работно време",
+        hotlinePro: "В работно време · приоритет",
+        consultPro: "1 път годишно · до 1 час",
         yes: "Включено",
         no: "Не е включено",
       },
@@ -240,73 +240,73 @@ const COPY: Record<Locale, Copy> = {
     notIncluded: {
       title: "Какво НЕ е включено",
       subtitle:
-        "За пълна прозрачност — следните услуги се заплащат отделно по фиксиран прайс.",
+        "Пълна прозрачност: тези услуги се заплащат отделно по фиксиран прайс — без скрити сметки.",
       items: [
         "Долив на фреон (R32 / R410A) — по 25 € на всеки 100 g",
-        "Авариен ремонт на компресор, платка или мотор",
+        "Авариен ремонт на компресор, платка или вентилатор",
         "Демонтаж, преместване или повторен монтаж на тяло",
         "Подмяна на климатично тяло или ключови компоненти",
-        "Щети от външни фактори — буря, ток, влага, насекоми, вандализъм",
+        "Щети от външни фактори — буря, токов удар, влага, насекоми, вандализъм",
       ],
     },
     guarantee: {
       badge: "Без риск за вашия бизнес",
       title: "Не сте доволни от първата планова визита?",
-      text: "Следващата визита е за наша сметка. Това е нашата гаранция, че ще получите обслужването, което заслужавате — без бюрокрация и възстановявания.",
+      text: "Следващата визита е за наша сметка. Това е нашата гаранция, че ще получите обслужването, на което разчитате — без бюрокрация и без писма за възстановяване.",
     },
     segments: {
-      title: "За кого е създаден този абонамент",
+      title: "За кого е този абонамент",
       subtitle:
-        "Подходящ за всяка организация във Варна и областта с 3 или повече климатика на собствен или нает обект.",
+        "Всяка компания във Варна или областта с 3 и повече климатика — на собствен или нает обект.",
       office: {
         name: "Офиси и административни сгради",
-        desc: "Стабилна работна среда, без прекъсване на работа за ремонт. Планираме визитите извън пиковите часове.",
+        desc: "Стабилен микроклимат без прекъсване на работата. Планираме визитите извън пиковите ви часове.",
       },
       horeca: {
         name: "Ресторанти и хотели (HoReCa)",
-        desc: "Сезонна готовност, без аварии в активния сезон. Подготвяме климатиците преди летния и зимния пик.",
+        desc: "Готова техника за активния сезон — без аварии в най-натоварения месец.",
       },
       medical: {
         name: "Медицински и стоматологични кабинети",
-        desc: "Чист въздух с антибактериална дезинфекция и протокол за всяка визита. Документация за РЗИ.",
+        desc: "Антибактериална обработка и протокол на всяка визита — документация за изискванията на РЗИ.",
       },
       retail: {
         name: "Магазини и търговски обекти",
-        desc: "Комфорт за клиенти и персонал. Гъвкави часове на посещение — рано сутрин или след затваряне.",
+        desc: "Комфорт за клиенти и персонал. Визитите са рано сутрин или след затваряне — без да пречат на търговията.",
       },
     },
     process: {
       title: "Как работим — 4 стъпки",
       subtitle:
-        "От заявка до първа планова визита обикновено отнема 7–10 работни дни.",
+        "От заявка до първа планова визита — обикновено 7–10 работни дни.",
       steps: [
         {
           title: "1. Заявка",
-          desc: "Попълвате формата с брой апарати и желан тариф, ние се свързваме с вас в рамките на 1 работен ден.",
+          desc: "Попълвате формата — посочвате брой апарати и желан тариф. Свързваме се с вас в рамките на 1 работен ден.",
         },
         {
           title: "2. Оглед на обекта",
-          desc: `Идваме на място, инвентаризираме всеки апарат и подготвяме индивидуална оферта. Такса ${B2B_SURVEY_FEE_EUR} €, възстановена в първата фактура при подпис.`,
+          desc: `Идваме на място, описваме всяко тяло и подготвяме индивидуална оферта. Цената на огледа е ${B2B_SURVEY_FEE_EUR} €, приспада се от първата фактура при подписване на договор.`,
         },
         {
-          title: "3. Договор и план",
-          desc: "Подписваме договор за 12 месеца с фиксирани цени и SLA. Получавате график на планови визити.",
+          title: "3. Договор и график",
+          desc: "Подписваме 12-месечен договор с фиксирани цени и SLA. Получавате график на плановите визити за цялата година.",
         },
         {
           title: "4. Първа визита",
-          desc: "Първата планова визита се изпълнява до 14 дни след подпис. Получавате дигитален отчет с препоръки.",
+          desc: "Първата планова визита е до 14 дни след подпис. Завършваме с цифров PDF отчет с препоръки за всяко тяло.",
         },
       ],
     },
     protection: {
       title: "Важно да знаете",
       items: [
-        `Минимален брой апарати: ${B2B_MIN_UNITS}. Срок на договор: 12 месеца, после автоматично подновяване с 30-дневно предизвестие.`,
-        "SLA се измерва в работни дни (Пон–Съб 08:00–18:00). Празнични и неделни дни не се броят.",
-        "Долив на фреон и аварийни ремонти се таксуват отделно по официален прайс.",
-        "При апарати на възраст над 10 години или монтирани от трета фирма — оценяваме индивидуално, можем да откажем включването им.",
-        "Цените са фиксирани 12 месеца. Възможна актуализация веднъж годишно, не повече от CPI на България.",
-        "Клиентът осигурява достъп до обекта в уговорено време. Пропуснат визит не се прехвърля.",
+        `Минимален брой тела за договор — ${B2B_MIN_UNITS}. Срок — 12 месеца, след това автоматично подновяване с възможност за прекратяване с 30-дневно предизвестие.`,
+        "SLA се измерва в работни дни (Пон–Съб 08:00–18:00). Неделя и официални празници не се броят.",
+        "Доливът на фреон и аварийните ремонти се заплащат отделно — по официален прайс.",
+        "За тела над 10 години или монтирани от друга фирма — индивидуална оценка преди включване в договора.",
+        "Цените са фиксирани за 12 месеца. Възможна индексация веднъж годишно — не над инфлацията (CPI) на България.",
+        "Клиентът осигурява достъп до обекта в уговореното време. Пропусната по вина на клиента визита не се прехвърля.",
       ],
     },
     faq: [
@@ -320,7 +320,7 @@ const COPY: Record<Locale, Copy> = {
       },
       {
         q: "Какво се случва при авария извън планов график?",
-        a: "Свързвате се с приоритетна линия и ние реагираме според вашия тариф — до 1, 2 или 3 работни дни. Аварийният труд и резервните части се таксуват отделно по официален прайс (с отстъпка за Standard и Pro).",
+        a: "Обаждате се на приоритетната линия за абонати и реагираме в срока на вашия тариф — до 1, 2 или 3 работни дни. Аварийните работи и резервните части се таксуват отделно по официален прайс (с отстъпка за Standard и Pro).",
       },
       {
         q: "Включена ли е смяна на фреон в абонамента?",
@@ -328,30 +328,30 @@ const COPY: Record<Locale, Copy> = {
       },
       {
         q: "Можем ли да плащаме на части?",
-        a: "Да. Стандартна схема — 2 равни транша (април и октомври), обвързани с планови визити. При едногодишно плащане предварително — отстъпка 5%.",
+        a: "Да. Стандартно делим сумата на 2 равни вноски (април и октомври), вързани с плановите визити. При плащане на цялата година предварително — 5% отстъпка.",
       },
       {
         q: "Какъв е срокът на договора и как се прекратява?",
-        a: "Минимален срок 12 месеца. След първата година — автоматично подновяване с възможност за прекратяване с 30 дневно писмено предизвестие.",
+        a: "Минимален срок 12 месеца. След първата година договорът се подновява автоматично и може да бъде прекратен с 30-дневно писмено предизвестие — без неустойки.",
       },
       {
         q: "Обслужвате ли апарати, които не сте монтирали вие?",
-        a: "Да, но извършваме предварителен оглед. При апарати над 10 години или с признаци на лош монтаж си запазваме правото да откажем включването им в абонамента или да предложим индивидуални условия.",
+        a: "Да, след оглед на място. При апарати над 10 години или с признаци на лош монтаж си запазваме правото да откажем включването им в абонамента или да предложим индивидуални условия.",
       },
       {
         q: "Колко струва огледът на обекта?",
-        a: `Огледът е ${B2B_SURVEY_FEE_EUR} € и се възстановява в първата фактура при подпис на договор в рамките на 14 дни. Така уважаваме времето и на двете страни.`,
+        a: `Огледът е ${B2B_SURVEY_FEE_EUR} € и се приспада от първата фактура, ако подпишете договор в рамките на 14 дни.`,
       },
     ],
     faqHeading: {
       title: "Често задавани въпроси",
       subtitle:
-        "Кратки и честни отговори за условията, договора и какво включва абонаментът.",
+        "Кратки и честни отговори за договора, цените и какво точно включва абонаментът.",
     },
     form: {
       title: "Заявка за бизнес абонамент",
       subtitle:
-        "Попълнете формата — ще ви се обадим в рамките на 1 работен ден с индивидуална оферта.",
+        "Попълнете формата — ще се свържем с вас до 1 работен ден с конкретна оферта за вашите обекти.",
       copy: {
         title: "B2B заявка",
         subtitle: "Без ангажимент",
@@ -389,7 +389,7 @@ const COPY: Record<Locale, Copy> = {
     },
     finalCta: {
       title: "Имате въпроси преди да попълните формата?",
-      desc: "Обадете се директно — ще ви консултираме безплатно по телефона.",
+      desc: "Обадете се директно — безплатна консултация по телефона, без задължение.",
       button: "Свържете се с нас",
     },
     pricePeriod: "/год",
@@ -399,17 +399,17 @@ const COPY: Record<Locale, Copy> = {
     breadcrumbHome: "Home",
     breadcrumbThis: "Business contract",
     hero: {
-      badge: "For companies in Varna",
+      badge: "For companies in Varna and the region",
       title: "Annual AC maintenance contract for your business",
       subtitle:
-        "Fixed yearly budget, priority response, VAT invoice and a written contract. One partner for every AC across your sites.",
+        "One partner for every AC across your sites. Fixed annual price, priority response on breakdowns, VAT invoice and a signed contract.",
       bullets: [
-        "Fixed annual budget — no surprises",
-        "Priority over non-contract customers in case of breakdown",
+        "Fixed price for 12 months — predictable budget",
+        "Priority response over non-contract clients",
         "VAT invoice and written contract for every site",
       ],
       ctaPrimary: "See pricing",
-      ctaSecondary: "Free quote",
+      ctaSecondary: "Free assessment",
     },
     tiers: {
       title: "Three tiers based on your fleet size and priority",
@@ -436,11 +436,11 @@ const COPY: Record<Locale, Copy> = {
     matrix: {
       title: "What each tier includes",
       subtitle:
-        "Detailed comparison table. Everything below is locked into your written contract.",
+        "Detailed comparison. Everything below is locked into your signed contract.",
       rowVisits: "Scheduled visits per year",
       rowSla: "Breakdown response time",
       rowWash: "Indoor and outdoor unit washing",
-      rowDisinfect: "Antibacterial disinfection",
+      rowDisinfect: "Antibacterial treatment",
       rowDrainage: "Drainage cleaning",
       rowElectro: "Electrical inspection and tightening",
       rowFreon: "Refrigerant and pressure check",
@@ -451,7 +451,7 @@ const COPY: Record<Locale, Copy> = {
       cell: {
         visitsBasic: "1 visit (spring)",
         visitsStandard: "2 visits (spring + autumn)",
-        visitsPro: "3 visits (quarterly)",
+        visitsPro: "3 visits (every 4 months)",
         slaBasic: "within 3 working days",
         slaStandard: "within 2 working days",
         slaPro: "within 1 working day",
@@ -465,7 +465,7 @@ const COPY: Record<Locale, Copy> = {
     notIncluded: {
       title: "What is NOT included",
       subtitle:
-        "Full transparency — the following are billed separately at fixed published rates.",
+        "Full transparency — the items below are billed separately at our published rates.",
       items: [
         "Refrigerant top-up (R32 / R410A) — €25 per 100 g",
         "Emergency repair of compressor, board or motor",
@@ -475,63 +475,63 @@ const COPY: Record<Locale, Copy> = {
       ],
     },
     guarantee: {
-      badge: "Zero-risk for your business",
+      badge: "Zero risk for your business",
       title: "Not happy with the first scheduled visit?",
-      text: "The next visit is on us. That's our guarantee that you receive the service you deserve — no bureaucracy, no refunds.",
+      text: "The next visit is on us — no paperwork, no questions. That's how we stand behind the service you're paying for.",
     },
     segments: {
       title: "Who this contract is built for",
       subtitle:
-        "Designed for any organisation in Varna and the region with 3 or more AC units on owned or leased premises.",
+        "For any organisation in Varna and the region with 3 or more AC units on owned or leased premises.",
       office: {
         name: "Offices and administrative buildings",
-        desc: "Stable working environment, no downtime for repairs. We schedule visits outside peak hours.",
+        desc: "Stable working environment without interruptions — we schedule visits outside business hours.",
       },
       horeca: {
         name: "Restaurants and hotels (HoReCa)",
-        desc: "Seasonal readiness, no breakdowns in active season. We prep ACs ahead of summer and winter peaks.",
+        desc: "Seasonal readiness with no breakdowns in high season — we service units before the summer and winter peaks.",
       },
       medical: {
         name: "Medical and dental practices",
-        desc: "Clean air with antibacterial disinfection and a per-visit protocol. Documentation for regulators.",
+        desc: "Clean air with antibacterial treatment and a documented protocol per visit — ready for regulator checks.",
       },
       retail: {
         name: "Shops and retail venues",
-        desc: "Comfort for clients and staff. Flexible visit times — early morning or after closing hours.",
+        desc: "Comfort for customers and staff. Flexible visit slots — early morning or after closing.",
       },
     },
     process: {
       title: "How we work — 4 steps",
       subtitle:
-        "From inquiry to first scheduled visit typically takes 7–10 working days.",
+        "From inquiry to the first scheduled visit usually takes 7–10 working days.",
       steps: [
         {
           title: "1. Inquiry",
-          desc: "Fill in the form with your unit count and preferred tier. We call you back within 1 working day.",
+          desc: "Fill in the form with the number of units and your preferred tier. We call you back within 1 working day.",
         },
         {
           title: "2. On-site survey",
-          desc: `We come to your site, inventory each unit, and prepare a tailored quote. Survey fee €${B2B_SURVEY_FEE_EUR}, refunded in your first invoice upon signing.`,
+          desc: `We visit your site, inventory each unit and prepare a tailored quote. The survey costs €${B2B_SURVEY_FEE_EUR} and is deducted from your first invoice upon signing.`,
         },
         {
-          title: "3. Contract and plan",
-          desc: "We sign a 12-month contract with fixed prices and SLAs. You receive a schedule of planned visits.",
+          title: "3. Contract and schedule",
+          desc: "We sign a 12-month contract with fixed prices and SLAs. You receive the schedule of planned visits.",
         },
         {
           title: "4. First visit",
-          desc: "The first scheduled visit happens within 14 days of signing. You receive a digital report with recommendations.",
+          desc: "The first scheduled visit takes place within 14 days of signing. You receive a digital report with recommendations.",
         },
       ],
     },
     protection: {
       title: "Important to know",
       items: [
-        `Minimum units: ${B2B_MIN_UNITS}. Contract term: 12 months, then auto-renewal with 30-day notice.`,
-        "SLA is measured in working days (Mon–Sat 08:00–18:00). Holidays and Sundays don't count.",
+        `Minimum units: ${B2B_MIN_UNITS}. Term: 12 months, then auto-renewal with the option to cancel via 30-day written notice.`,
+        "SLA is measured in working days (Mon–Sat 08:00–18:00). Sundays and public holidays don't count.",
         "Refrigerant top-up and emergency repairs are billed separately at our published rates.",
-        "For units older than 10 years or installed by a third party, we assess individually and may decline inclusion.",
-        "Prices are fixed for 12 months. Possible annual adjustment, capped at Bulgarian CPI.",
-        "Client provides access at the agreed time. Missed visits are not carried over.",
+        "For units older than 10 years or installed by a third party, we assess each case and may decline inclusion.",
+        "Prices fixed for 12 months. Possible annual indexation, capped at the Bulgarian CPI.",
+        "The client grants access at the agreed time. Missed visits are not rescheduled into the next period.",
       ],
     },
     faq: [
@@ -545,38 +545,38 @@ const COPY: Record<Locale, Copy> = {
       },
       {
         q: "What happens with breakdowns outside the schedule?",
-        a: "Call the priority line. We respond within 1, 2 or 3 working days depending on your tier. Emergency labour and parts are billed separately (with a discount on Standard and Pro).",
+        a: "Call the contract priority line — we respond within 1, 2 or 3 working days depending on your tier. Emergency labour and parts are billed separately at our published rates (with a discount on Standard and Pro).",
       },
       {
         q: "Is refrigerant top-up included?",
-        a: "No. Refrigerant top-up is charged separately — €25 per 100 g of R32 / R410A. This keeps your annual fee predictable and fair.",
+        a: "No. Refrigerant top-up is billed separately — €25 per 100 g of R32 / R410A. This is how we keep your annual fee predictable and honest.",
       },
       {
         q: "Can we pay in instalments?",
-        a: "Yes. Standard scheme — 2 equal instalments (April and October), aligned with the scheduled visits. Pay annually upfront — 5% discount.",
+        a: "Yes. Standard schedule — 2 equal instalments (April and October), tied to your scheduled visits. Pay the full year upfront — 5% discount.",
       },
       {
         q: "Contract term and cancellation?",
-        a: "Minimum 12 months. After the first year, auto-renewal with the option to cancel via 30-day written notice.",
+        a: "Minimum term 12 months. After the first year the contract auto-renews and can be cancelled with 30 days' written notice — no penalties.",
       },
       {
         q: "Do you service units we didn't install?",
-        a: "Yes, but we do a preliminary survey. For units older than 10 years or with signs of poor installation, we reserve the right to decline inclusion or quote individual terms.",
+        a: "Yes, after an on-site survey. For units older than 10 years or with signs of poor installation, we reserve the right to decline inclusion or offer individual terms.",
       },
       {
         q: "How much is the survey?",
-        a: `The on-site survey is €${B2B_SURVEY_FEE_EUR}, refunded in your first invoice upon signing within 14 days. This respects everyone's time.`,
+        a: `The on-site survey is €${B2B_SURVEY_FEE_EUR} and is deducted from your first invoice if you sign within 14 days.`,
       },
     ],
     faqHeading: {
       title: "Frequently asked questions",
       subtitle:
-        "Short, honest answers about contract terms and what's included.",
+        "Short, honest answers about the contract, the pricing and what's included.",
     },
     form: {
       title: "Business contract inquiry",
       subtitle:
-        "Fill in the form — we'll call back within 1 working day with a tailored quote.",
+        "Fill in the form — we'll come back within 1 working day with a tailored quote for your sites.",
       copy: {
         title: "B2B inquiry",
         subtitle: "No commitment",
@@ -849,17 +849,17 @@ const COPY: Record<Locale, Copy> = {
     breadcrumbHome: "Головна",
     breadcrumbThis: "Бізнес-абонемент",
     hero: {
-      badge: "Для компаній у Варні",
+      badge: "Для компаній у Варні та області",
       title: "Річний контракт на обслуговування кондиціонерів для бізнесу",
       subtitle:
-        "Фіксований річний бюджет, пріоритет при аварії, ДДС-фактура та письмовий договір. Один партнер на всі кондиціонери ваших об'єктів.",
+        "Один підрядник на всі кондиціонери ваших об'єктів. Фіксована ціна на рік, пріоритет при аварії, офіційна ДДС-фактура та письмовий договір.",
       bullets: [
-        "Фіксований річний бюджет — без сюрпризів",
+        "Фіксована ціна на 12 місяців — передбачуваний бюджет",
         "Пріоритет при аварії — раніше за клієнтів без договору",
         "ДДС-фактура та договір на кожен об'єкт",
       ],
       ctaPrimary: "Дивитись тарифи",
-      ctaSecondary: "Безкоштовна пропозиція",
+      ctaSecondary: "Безкоштовний розрахунок",
     },
     tiers: {
       title: "Три тарифи за обсягом і пріоритетом",
@@ -886,11 +886,11 @@ const COPY: Record<Locale, Copy> = {
     matrix: {
       title: "Що включає кожен тариф",
       subtitle:
-        "Детальна порівняльна таблиця. Усе нижче зафіксовано в письмовому договорі.",
+        "Детальне порівняння. Усе нижче зафіксовано у підписаному договорі.",
       rowVisits: "Планові візити на рік",
       rowSla: "Реакція при аварії",
       rowWash: "Миття внутрішнього та зовнішнього блоків",
-      rowDisinfect: "Антибактеріальна дезінфекція",
+      rowDisinfect: "Антибактеріальна обробка",
       rowDrainage: "Чистка дренажу",
       rowElectro: "Перевірка та затягування електрики",
       rowFreon: "Перевірка фреону і тиску",
@@ -901,7 +901,7 @@ const COPY: Record<Locale, Copy> = {
       cell: {
         visitsBasic: "1 візит (весна)",
         visitsStandard: "2 візити (весна + осінь)",
-        visitsPro: "3 візити (поквартально)",
+        visitsPro: "3 візити (кожні 4 місяці)",
         slaBasic: "до 3 роб. днів",
         slaStandard: "до 2 роб. днів",
         slaPro: "до 1 роб. дня",
@@ -915,7 +915,7 @@ const COPY: Record<Locale, Copy> = {
     notIncluded: {
       title: "Що НЕ входить",
       subtitle:
-        "Для повної прозорості — наступне сплачується окремо за фікс. прайсом.",
+        "Повна прозорість — наведене нижче сплачується окремо за нашим офіційним прайсом.",
       items: [
         "Долив фреону (R32 / R410A) — 25 € за кожні 100 г",
         "Аварійний ремонт компресора, плати або мотора",
@@ -927,7 +927,7 @@ const COPY: Record<Locale, Copy> = {
     guarantee: {
       badge: "Без ризику для вашого бізнесу",
       title: "Незадоволені першим плановим візитом?",
-      text: "Наступний візит — за наш кошт. Це наша гарантія, що ви отримаєте сервіс, на який заслуговуєте — без бюрократії та повернень.",
+      text: "Наступний візит — за наш кошт, без паперової тяганини та зайвих питань. Так ми відповідаємо за сервіс, за який ви платите.",
     },
     segments: {
       title: "Кому підходить цей абонемент",
@@ -935,53 +935,53 @@ const COPY: Record<Locale, Copy> = {
         "Для будь-якої організації у Варні та області з 3+ кондиціонерами на власному або орендованому об'єкті.",
       office: {
         name: "Офіси та адміністративні будівлі",
-        desc: "Стабільне робоче середовище, без простою на ремонт. Плануємо візити поза пікові години.",
+        desc: "Стабільне робоче середовище без зупинок — плануємо візити поза робочими годинами.",
       },
       horeca: {
         name: "Ресторани та готелі (HoReCa)",
-        desc: "Сезонна готовність, без аварій в активний сезон. Готуємо техніку перед літнім і зимовим піком.",
+        desc: "Сезонна готовність без аварій у пік — готуємо техніку перед літнім і зимовим сезонами.",
       },
       medical: {
         name: "Медичні та стоматологічні кабінети",
-        desc: "Чисте повітря з антибактеріальною дезінфекцією і протокол на кожен візит. Документація для регуляторів.",
+        desc: "Чисте повітря з антибактеріальною обробкою та документований протокол на кожен візит — готово до перевірок регуляторів.",
       },
       retail: {
         name: "Магазини та торгові об'єкти",
-        desc: "Комфорт для клієнтів та персоналу. Гнучкий час візиту — рано вранці або після закриття.",
+        desc: "Комфорт для клієнтів і персоналу. Гнучкий час візиту — рано вранці або після закриття.",
       },
     },
     process: {
-      title: "Як працюємо — 4 кроки",
+      title: "Як ми працюємо — 4 кроки",
       subtitle:
         "Від заявки до першого планового візиту — зазвичай 7–10 робочих днів.",
       steps: [
         {
           title: "1. Заявка",
-          desc: "Заповнюєте форму з кількістю апаратів та бажаним тарифом, передзвонюємо протягом 1 робочого дня.",
+          desc: "Заповнюєте форму з кількістю апаратів і бажаним тарифом. Передзвонюємо протягом 1 робочого дня.",
         },
         {
           title: "2. Огляд об'єкта",
-          desc: `Приїжджаємо на місце, інвентаризуємо кожен апарат і готуємо індивідуальну пропозицію. Такса ${B2B_SURVEY_FEE_EUR} €, повертається у першій фактурі при підписі.`,
+          desc: `Приїжджаємо на місце, інвентаризуємо кожен апарат і готуємо індивідуальну пропозицію. Вартість огляду — ${B2B_SURVEY_FEE_EUR} €, віднімається з першої фактури при підписанні договору.`,
         },
         {
-          title: "3. Договір і план",
-          desc: "Підписуємо договір на 12 місяців з фікс. цінами та SLA. Отримуєте графік планових візитів.",
+          title: "3. Договір і графік",
+          desc: "Підписуємо договір на 12 місяців із фіксованими цінами та SLA. Ви отримуєте графік планових візитів.",
         },
         {
           title: "4. Перший візит",
-          desc: "Перший плановий візит — протягом 14 днів після підпису. Отримуєте цифровий звіт із рекомендаціями.",
+          desc: "Перший плановий візит — протягом 14 днів після підписання. Ви отримуєте цифровий звіт із рекомендаціями.",
         },
       ],
     },
     protection: {
       title: "Важливо знати",
       items: [
-        `Мінімум апаратів: ${B2B_MIN_UNITS}. Термін договору: 12 місяців, далі автопродовження з 30-денним повідомленням.`,
-        "SLA у робочих днях (Пн–Сб 08:00–18:00). Свята та неділі не рахуються.",
-        "Долив фреону та аварійні ремонти — окремо за офіційним прайсом.",
+        `Мінімум апаратів: ${B2B_MIN_UNITS}. Термін: 12 місяців, далі автопродовження з можливістю розірвання через 30-денне письмове повідомлення.`,
+        "SLA рахується в робочих днях (Пн–Сб 08:00–18:00). Неділі та державні свята не враховуються.",
+        "Долив фреону та аварійні ремонти — окремо за нашим офіційним прайсом.",
         "Для апаратів старше 10 років або встановлених третьою фірмою — індивідуальна оцінка, можемо відмовити.",
-        "Ціни фіксовані 12 місяців. Можливе щорічне коригування, не вище за CPI Болгарії.",
-        "Клієнт забезпечує доступ у погоджений час. Пропущений візит не переноситься.",
+        "Ціни фіксовані 12 місяців. Можлива індексація раз на рік — не вище за інфляцію (CPI) Болгарії.",
+        "Клієнт забезпечує доступ у погоджений час. Пропущений візит не переноситься на наступний період.",
       ],
     },
     faq: [
@@ -995,7 +995,7 @@ const COPY: Record<Locale, Copy> = {
       },
       {
         q: "Що при аварії поза плановим графіком?",
-        a: "Телефонуєте на пріоритетну лінію, реагуємо за вашим тарифом — до 1, 2 або 3 робочих днів. Аварійна праця та запчастини — окремо за прайсом (зі знижкою для Standard і Pro).",
+        a: "Телефонуєте на пріоритетну лінію для абонентів — реагуємо у строк вашого тарифу (до 1, 2 або 3 робочих днів). Аварійні роботи та запчастини — окремо за нашим офіційним прайсом (зі знижкою для Standard і Pro).",
       },
       {
         q: "Чи входить долив фреону в абонемент?",
@@ -1003,30 +1003,30 @@ const COPY: Record<Locale, Copy> = {
       },
       {
         q: "Чи можна сплачувати частинами?",
-        a: "Так. Стандартна схема — 2 рівних транші (квітень і жовтень), прив'язка до планових візитів. При річній передоплаті — знижка 5%.",
+        a: "Так. Стандартна схема — 2 рівні внески (квітень і жовтень), прив'язані до планових візитів. При оплаті всього року наперед — 5% знижка.",
       },
       {
         q: "Термін договору і як розірвати?",
-        a: "Мінімум 12 місяців. Після першого року — автопродовження з можливістю розірвання через 30 днів письмового повідомлення.",
+        a: "Мінімум 12 місяців. Після першого року договір автоматично продовжується і може бути розірваний письмовим повідомленням за 30 днів — без штрафів.",
       },
       {
         q: "Чи обслуговуєте апарати, які встановлювали не ви?",
-        a: "Так, але робимо попередній огляд. Для апаратів старше 10 років або з ознаками поганого монтажу залишаємо право відмовити або запропонувати індивідуальні умови.",
+        a: "Так, після огляду на місці. Для апаратів старше 10 років або з ознаками поганого монтажу залишаємо за собою право відмовити або запропонувати індивідуальні умови.",
       },
       {
         q: "Скільки коштує огляд об'єкта?",
-        a: `Огляд — ${B2B_SURVEY_FEE_EUR} €, повертається у першій фактурі при підписі договору протягом 14 днів. Це повага до часу обох сторін.`,
+        a: `Огляд — ${B2B_SURVEY_FEE_EUR} €, віднімається з першої фактури, якщо ви підпишете договір протягом 14 днів.`,
       },
     ],
     faqHeading: {
       title: "Часті запитання",
       subtitle:
-        "Короткі та чесні відповіді про умови, договір і що включає абонемент.",
+        "Короткі та чесні відповіді про договір, ціни і що саме включає абонемент.",
     },
     form: {
       title: "Заявка на бізнес-абонемент",
       subtitle:
-        "Заповніть форму — передзвонимо протягом 1 робочого дня з індивідуальною пропозицією.",
+        "Заповніть форму — зв'яжемося з вами протягом 1 робочого дня з конкретною пропозицією для ваших об'єктів.",
       copy: {
         title: "B2B заявка",
         subtitle: "Без зобов'язань",
@@ -1064,7 +1064,7 @@ const COPY: Record<Locale, Copy> = {
     },
     finalCta: {
       title: "Питання перед заповненням форми?",
-      desc: "Зателефонуйте напряму — безкоштовна консультація.",
+      desc: "Зателефонуйте напряму — безкоштовна консультація, без зобов'язань.",
       button: "Зв'язатися з нами",
     },
     pricePeriod: "/рік",
