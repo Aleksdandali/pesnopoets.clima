@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   Send,
@@ -18,6 +18,8 @@ import {
   Sparkles,
   Clock,
   ChevronDown,
+  Lock,
+  Unlock,
 } from "lucide-react";
 import { BUSINESS_PHONE_DISPLAY, BUSINESS_PHONE_TEL, WHATSAPP_URL } from "@/lib/constants";
 import { trackInquirySubmit } from "@/lib/gtag";
@@ -64,6 +66,14 @@ export interface PromoCopy {
   faqTitle: string;
   faq: { q: string; a: string }[];
   whatsappPrefilled: string;
+  // Phone gate (when arriving without a code)
+  gateTitle: string;
+  gateSubtitle: string;
+  gatePhoneLabel: string;
+  gateSubmit: string;
+  gateSubmitting: string;
+  gateUnlockedTitle: string;
+  gateError: string;
 }
 
 interface Props {
@@ -72,7 +82,8 @@ interface Props {
 }
 
 const PROMO_END_TS = new Date("2026-05-31T23:59:59+02:00").getTime();
-const ALLOWED_CODES = ["VAR50", "BAZ50", "UKR50", "MORE50", "GRP50", "KOM50", "OBJ50", "TG50"];
+const ALLOWED_CODES = ["VAR50", "BAZ50", "UKR50", "MORE50", "GRP50", "KOM50", "OBJ50", "TG50", "SITE50"];
+const ORGANIC_CODE = "SITE50";
 
 function useCountdown(target: number) {
   const [now, setNow] = useState<number>(() => Date.now());
@@ -87,10 +98,14 @@ function useCountdown(target: number) {
   return { diff, days, hours, mins };
 }
 
-function normalizeCode(raw: string | null): string {
-  if (!raw) return "VAR50";
+function parseUrlCode(raw: string | null): string | null {
+  if (!raw) return null;
   const up = raw.trim().toUpperCase();
-  return ALLOWED_CODES.includes(up) ? up : "VAR50";
+  return ALLOWED_CODES.includes(up) ? up : null;
+}
+
+function digitsOnly(raw: string): string {
+  return raw.replace(/[^\d]/g, "");
 }
 
 const TRUST_ICONS = [ShieldCheck, MapPin, Wrench, Award];
@@ -99,16 +114,82 @@ type FormStatus = "idle" | "submitting" | "success" | "error";
 
 export default function PromoLanding({ locale, copy }: Props) {
   const sp = useSearchParams();
-  const code = useMemo(() => normalizeCode(sp?.get("code")), [sp]);
+  const urlCode = useMemo(() => parseUrlCode(sp?.get("code") || null), [sp]);
+  const urlPhone = useMemo(() => {
+    const p = sp?.get("phone");
+    return p ? digitsOnly(p).replace(/^359/, "").replace(/^0+/, "") : "";
+  }, [sp]);
   const { diff, days, hours, mins } = useCountdown(PROMO_END_TS);
   const promoExpired = diff <= 0;
 
-  const whatsappHref = `${WHATSAPP_URL}?text=${encodeURIComponent(copy.whatsappPrefilled.replace("VAR50", code))}`;
+  const [unlockedCode, setUnlockedCode] = useState<string | null>(null);
+  const code = urlCode ?? unlockedCode;
+  const showGate = !code;
+
+  const whatsappHref = `${WHATSAPP_URL}?text=${encodeURIComponent(
+    copy.whatsappPrefilled.replace("VAR50", code || "SITE50")
+  )}`;
   const phoneHref = `tel:${BUSINESS_PHONE_TEL}`;
 
   const [status, setStatus] = useState<FormStatus>("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+  // Gate state
+  const [gateStatus, setGateStatus] = useState<FormStatus>("idle");
+  const [gateError, setGateError] = useState<string>("");
+  const [prefillPhone, setPrefillPhone] = useState<string>(urlPhone);
+  const [formKey, setFormKey] = useState<number>(0);
+  const orderFormRef = useRef<HTMLElement | null>(null);
+
+  // If user landed via ?code=SITE50&phone=… (from homepage banner), auto-scroll once
+  useEffect(() => {
+    if (urlCode && urlPhone) {
+      const t = setTimeout(() => {
+        orderFormRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 400);
+      return () => clearTimeout(t);
+    }
+  }, [urlCode, urlPhone]);
+
+  async function handleGateSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setGateError("");
+    const form = new FormData(e.currentTarget);
+    const rawPhone = (form.get("gate_phone") as string)?.trim() || "";
+    const cleanPhone = digitsOnly(rawPhone);
+    if (cleanPhone.length < 7) {
+      setGateError(copy.formRequired);
+      return;
+    }
+
+    setGateStatus("submitting");
+    try {
+      const res = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: "Промо-заявка",
+          phone: `+359 ${cleanPhone}`,
+          message: `[ЗАЯВКА ЗА КОД — органика] Промо: монтаж €50 до 31.05.2026`,
+          locale,
+          source: "tg-promo-organic",
+        }),
+      });
+      if (!res.ok) throw new Error("submit failed");
+      trackInquirySubmit("tg-promo-organic");
+      setUnlockedCode(ORGANIC_CODE);
+      setPrefillPhone(cleanPhone);
+      setFormKey((k) => k + 1);
+      setGateStatus("success");
+      setTimeout(() => {
+        orderFormRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 500);
+    } catch {
+      setGateStatus("error");
+      setGateError(copy.formError);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -126,8 +207,9 @@ export default function PromoLanding({ locale, copy }: Props) {
       return;
     }
 
+    const effectiveCode = code || ORGANIC_CODE;
     const message = [
-      `[TG ПРОМО — код ${code}]`,
+      `[TG ПРОМО — код ${effectiveCode}]`,
       note ? `Бележка: ${note}` : null,
       `Промо: монтаж €50 до 31.05.2026`,
     ]
@@ -205,14 +287,110 @@ export default function PromoLanding({ locale, copy }: Props) {
             <p className="mt-1 text-xs opacity-90">{copy.perInstall}</p>
           </div>
           <div className="bg-white border-2 border-dashed border-primary/40 rounded-2xl p-5 text-center">
-            <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide font-semibold flex items-center justify-center gap-1.5">
+              {showGate ? (
+                <Lock className="w-3.5 h-3.5" aria-hidden="true" />
+              ) : (
+                <Unlock className="w-3.5 h-3.5 text-success" aria-hidden="true" />
+              )}
               {copy.promoCodeLabel}
             </p>
-            <p className="mt-2 text-2xl font-extrabold text-primary tracking-widest tabular-nums">
-              {code}
-            </p>
+            {showGate ? (
+              <p className="mt-2 text-sm font-semibold text-muted-foreground">
+                ••••••
+              </p>
+            ) : (
+              <p className="mt-2 text-2xl font-extrabold text-primary tracking-widest tabular-nums">
+                {code}
+              </p>
+            )}
           </div>
         </div>
+
+        {/* Phone gate (organic visitors without code) */}
+        {showGate && (
+          <section className="mt-8 bg-white border-2 border-primary/30 rounded-2xl p-5 sm:p-6 max-w-xl mx-auto shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <Lock className="w-4 h-4 text-primary" aria-hidden="true" />
+              <h2 className="text-base sm:text-lg font-bold text-foreground">
+                {copy.gateTitle}
+              </h2>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">{copy.gateSubtitle}</p>
+            <form onSubmit={handleGateSubmit} className="space-y-3">
+              <div>
+                <label htmlFor="gate_phone" className={labelCls}>
+                  {copy.gatePhoneLabel} {reqMark}
+                </label>
+                <div
+                  className={`flex items-stretch rounded-lg bg-white border focus-within:ring-2 focus-within:ring-ring transition-colors overflow-hidden ${
+                    gateError ? "border-danger" : "border-border"
+                  }`}
+                >
+                  <span
+                    aria-hidden="true"
+                    className="flex items-center px-3 bg-muted text-sm font-medium text-muted-foreground border-r border-border tabular-nums"
+                  >
+                    +359
+                  </span>
+                  <input
+                    id="gate_phone"
+                    name="gate_phone"
+                    type="tel"
+                    required
+                    maxLength={20}
+                    autoComplete="tel-national"
+                    inputMode="tel"
+                    placeholder="88 123 4567"
+                    pattern="[0-9 ()\-]{7,}"
+                    onInput={(e) => {
+                      const el = e.currentTarget;
+                      const clean = el.value
+                        .replace(/^\+?359\s?/, "")
+                        .replace(/^0+/, "");
+                      if (clean !== el.value) el.value = clean;
+                    }}
+                    className="flex-1 min-w-0 px-4 py-3 text-base sm:text-sm bg-transparent focus:outline-none min-h-[48px]"
+                  />
+                </div>
+                {gateError && (
+                  <p className="mt-1 text-xs text-danger" role="alert">
+                    {gateError}
+                  </p>
+                )}
+              </div>
+              <button
+                type="submit"
+                disabled={gateStatus === "submitting"}
+                className="w-full flex items-center justify-center gap-2 px-5 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary-dark disabled:opacity-60 disabled:cursor-not-allowed transition-colors min-h-[52px] text-base shadow-sm"
+              >
+                {gateStatus === "submitting" ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
+                    {copy.gateSubmitting}
+                  </>
+                ) : (
+                  <>
+                    <Unlock className="w-4 h-4" aria-hidden="true" />
+                    {copy.gateSubmit}
+                  </>
+                )}
+              </button>
+              <p className="text-xs text-muted-foreground text-center">{copy.formPrivacy}</p>
+            </form>
+          </section>
+        )}
+
+        {/* Unlocked banner shown briefly after gate submit */}
+        {!showGate && unlockedCode && gateStatus === "success" && (
+          <div className="mt-6 max-w-xl mx-auto flex items-center gap-2 bg-success-light text-success rounded-xl p-3.5 text-sm font-semibold">
+            <Unlock className="w-4 h-4 shrink-0" aria-hidden="true" />
+            <span>
+              {copy.gateUnlockedTitle}{" "}
+              <strong className="tracking-widest tabular-nums">{unlockedCode}</strong>
+            </span>
+          </div>
+        )}
 
         {/* Countdown */}
         <div className="mt-6 max-w-3xl mx-auto flex items-center justify-center gap-2 text-sm text-muted-foreground">
@@ -333,7 +511,11 @@ export default function PromoLanding({ locale, copy }: Props) {
         </section>
 
         {/* Form */}
-        <section className="mt-12 bg-white border border-border/80 rounded-2xl p-5 sm:p-8 max-w-2xl mx-auto shadow-sm">
+        <section
+          id="order-form"
+          ref={orderFormRef}
+          className="mt-12 bg-white border border-border/80 rounded-2xl p-5 sm:p-8 max-w-2xl mx-auto shadow-sm scroll-mt-20"
+        >
           {status === "success" ? (
             <div className="text-center py-6">
               <CheckCircle2 className="w-14 h-14 text-success mx-auto mb-3" aria-hidden="true" />
@@ -352,7 +534,7 @@ export default function PromoLanding({ locale, copy }: Props) {
                 </h2>
                 <p className="mt-1 text-sm text-muted-foreground">{copy.formSubtitle}</p>
               </div>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form key={formKey} onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label htmlFor="name" className={labelCls}>
                     {copy.formName} {reqMark}
@@ -395,6 +577,7 @@ export default function PromoLanding({ locale, copy }: Props) {
                       maxLength={20}
                       autoComplete="tel-national"
                       inputMode="tel"
+                      defaultValue={prefillPhone}
                       placeholder="88 123 4567"
                       pattern="[0-9 ()\-]{7,}"
                       onInput={(e) => {
@@ -429,7 +612,7 @@ export default function PromoLanding({ locale, copy }: Props) {
                 <div className="flex items-center justify-between text-xs px-1">
                   <span className="text-muted-foreground">{copy.formCodeLabel}</span>
                   <span className="font-bold text-primary tracking-widest tabular-nums">
-                    {code}
+                    {code || "—"}
                   </span>
                 </div>
                 {status === "error" && (

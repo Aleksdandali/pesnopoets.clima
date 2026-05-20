@@ -122,6 +122,13 @@ const COPY: Record<Locale, PromoCopy> = {
     ],
     whatsappPrefilled:
       "Здравейте, искам да използвам промокод VAR50 за монтаж за €50.",
+    gateTitle: "Отключи промокода",
+    gateSubtitle: "Остави телефон — изпращаме ти кода веднага и форма за поръчка.",
+    gatePhoneLabel: "Телефон",
+    gateSubmit: "Получи промокода",
+    gateSubmitting: "Изпращане...",
+    gateUnlockedTitle: "Кодът е твой:",
+    gateError: "Грешка при изпращане. Опитай отново или се обади.",
   },
   en: {
     badge: "Exclusive to Telegram subscribers",
@@ -211,6 +218,13 @@ const COPY: Record<Locale, PromoCopy> = {
     ],
     whatsappPrefilled:
       "Hi, I'd like to use code VAR50 for the €50 install promo.",
+    gateTitle: "Unlock the promo code",
+    gateSubtitle: "Leave your phone — we send the code instantly along with the order form.",
+    gatePhoneLabel: "Phone",
+    gateSubmit: "Get the code",
+    gateSubmitting: "Sending...",
+    gateUnlockedTitle: "Your code:",
+    gateError: "Failed to send. Please try again or call us.",
   },
   ru: {
     badge: "Только для подписчиков Telegram групп",
@@ -300,6 +314,13 @@ const COPY: Record<Locale, PromoCopy> = {
     ],
     whatsappPrefilled:
       "Здравствуйте, хочу воспользоваться промокодом VAR50 для монтажа за €50.",
+    gateTitle: "Получите промокод",
+    gateSubtitle: "Оставьте телефон — пришлём код мгновенно и откроем форму заказа.",
+    gatePhoneLabel: "Телефон",
+    gateSubmit: "Получить промокод",
+    gateSubmitting: "Отправка...",
+    gateUnlockedTitle: "Ваш код:",
+    gateError: "Ошибка отправки. Попробуйте ещё раз или позвоните.",
   },
   ua: {
     badge: "Лише для підписників Telegram груп",
@@ -389,6 +410,13 @@ const COPY: Record<Locale, PromoCopy> = {
     ],
     whatsappPrefilled:
       "Вітаю, хочу скористатися промокодом VAR50 для монтажу за €50.",
+    gateTitle: "Отримайте промокод",
+    gateSubtitle: "Залиште телефон — надішлемо код миттєво та відкриємо форму замовлення.",
+    gatePhoneLabel: "Телефон",
+    gateSubmit: "Отримати промокод",
+    gateSubmitting: "Надсилання...",
+    gateUnlockedTitle: "Ваш код:",
+    gateError: "Помилка надсилання. Спробуйте ще раз або зателефонуйте.",
   },
 };
 

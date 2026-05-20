@@ -23,6 +23,7 @@ import AiConsultantSection from "@/components/home/AiConsultantSection";
 import HeroCarousel from "@/components/home/HeroCarousel";
 import QuickOrderForm from "@/components/home/QuickOrderForm";
 import PortfolioGallery from "@/components/portfolio/PortfolioGallery";
+import PromoCodeBanner from "@/components/promo/PromoCodeBanner";
 
 // Revalidate homepage every 5 minutes for fresh product data
 export const revalidate = 300;
@@ -376,6 +377,9 @@ export default async function HomePage({ params }: HomePageProps) {
           </div>
         </div>
       </section>
+
+      {/* Promo Code Banner — phone-gate lead-magnet for organic visitors (active until 2026-05-31) */}
+      <PromoCodeBanner locale={locale} />
 
       {/* Quick Order Form — high-intent capture for PPC traffic */}
       <QuickOrderForm locale={locale} />

@@ -98,7 +98,7 @@ export async function POST(request: Request) {
       phone,
       message,
       locale,
-      source: ["one-click", "one-click-card", "inquiry-page", "product-page", "partners", "quick-order-home", "b2b-contract", "tg-promo"].includes(body.source) ? body.source : null,
+      source: ["one-click", "one-click-card", "inquiry-page", "product-page", "partners", "quick-order-home", "b2b-contract", "tg-promo", "tg-promo-organic"].includes(body.source) ? body.source : null,
       status: "new",
     };
     if (email) insertData.email = email;
