@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import PageProgress from "@/components/PageProgress";
+import PromoBar from "@/components/promo/PromoBar";
 import LocalBusinessJsonLd from "@/components/seo/LocalBusinessJsonLd";
 import { CartProvider } from "@/contexts/CartContext";
 import LazyOverlays from "@/components/layout/LazyOverlays";
@@ -212,6 +213,7 @@ export default async function LocaleLayout({
         <Suspense fallback={null}>
           <PageProgress />
         </Suspense>
+        <PromoBar locale={locale} />
         <Header locale={locale} dictionary={dictionary} />
         <main id="main" tabIndex={-1} className="flex-1">{children}</main>
         <Footer locale={locale} dictionary={dictionary} />
