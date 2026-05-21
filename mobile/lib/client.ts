@@ -44,7 +44,8 @@ export async function fetchInstallation(id: string): Promise<InstallationFull | 
         "indoor_photo_path, outdoor_photo_path, label_photo_path, extra_photo_paths, address, notes",
     )
     .eq("id", id)
-    .maybeSingle();
+    .maybeSingle()
+    .returns<Omit<InstallationFull, "warranty_until">>();
 
   if (error) throw error;
   if (!data) return null;
@@ -53,7 +54,7 @@ export async function fetchInstallation(id: string): Promise<InstallationFull | 
     .toISOString()
     .slice(0, 10);
 
-  return { ...(data as Omit<InstallationFull, "warranty_until">), warranty_until: warrantyUntil };
+  return { ...data, warranty_until: warrantyUntil };
 }
 
 function addMonths(date: Date, months: number): Date {

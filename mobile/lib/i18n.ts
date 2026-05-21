@@ -13,7 +13,14 @@ export function isValidLocale(value: string): value is Locale {
 
 /**
  * Resolve a translation map keyed by locale. Falls back to BG.
+ *
+ * Generic over the dict shape so callers can pass an `as const` object
+ * (TS 5.x infers literal types per entry, which would conflict with
+ * `Record<Locale, T>` if T were inferred from one entry).
  */
-export function t<T>(dict: Record<Locale, T>, locale: Locale): T {
+export function t<D extends Record<Locale, unknown>>(
+  dict: D,
+  locale: Locale,
+): D[Locale] {
   return dict[locale] ?? dict[defaultLocale];
 }
