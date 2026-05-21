@@ -1,0 +1,60 @@
+{
+  "expo": {
+    "name": "Песнопоец Клима",
+    "slug": "pesnopoets-clima",
+    "scheme": "pesnopoetsclima",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.pesnopoetsclima.app",
+      "buildNumber": "1",
+      "usesAppleSignIn": false,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSCameraUsageDescription": "Камерата се използва за снимки на монтажа (вътрешно тяло, външно тяло, табелка със сериен номер).",
+        "NSPhotoLibraryUsageDescription": "Достъп до галерията е необходим за прикачване на снимки в чата с техник.",
+        "NSLocationWhenInUseUsageDescription": "Местоположението се използва за автоматично попълване на адреса при нов монтаж.",
+        "CFBundleLocalizations": ["bg", "ru"]
+      },
+      "entitlements": {
+        "aps-environment": "production"
+      }
+    },
+    "android": {
+      "package": "com.pesnopoetsclima.app",
+      "versionCode": 1
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Достъп до галерията за прикачване на снимки в чата.",
+          "cameraPermission": "Камерата за снимки на монтажа."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Местоположение за автоматичен адрес при нов монтаж."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#0284c7",
+          "defaultChannel": "default"
+        }
+      ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      }
+    }
+  }
+}
