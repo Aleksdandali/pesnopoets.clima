@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, createContext, useContext } from "react";
+import { useState, useEffect, useCallback, useRef, createContext, useContext } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {
@@ -18,6 +18,7 @@ import {
 
 /* ─── Auth Context ─── */
 interface AdminCtx {
+  /** Legacy field — empty under cookie auth. Kept so old components still compile. */
   password: string;
   fetchApi: (path: string, opts?: RequestInit) => Promise<Response>;
 }
@@ -44,27 +45,77 @@ const NAV: NavItem[] = [
   { href: "/admin/settings", label: "Настройки", icon: Settings },
 ];
 
-/* ─── Login Screen ─── */
-function LoginScreen({ onLogin }: { onLogin: (pw: string) => void }) {
-  const [pw, setPw] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+/* ─── Login Screen — passwordless via Telegram bot approval ─── */
+function LoginScreen({ onAuthed }: { onAuthed: () => void }) {
+  // states: idle | requesting | waiting | approved | denied | expired | error
+  type State = "idle" | "requesting" | "waiting" | "approved" | "denied" | "expired" | "error";
+  const [state, setState] = useState<State>("idle");
+  const [errMsg, setErrMsg] = useState<string>("");
+  const [code, setCode] = useState<string | null>(null);
+  const pollTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+  useEffect(() => {
+    return () => {
+      if (pollTimer.current) clearInterval(pollTimer.current);
+    };
+  }, []);
+
+  function stopPoll() {
+    if (pollTimer.current) {
+      clearInterval(pollTimer.current);
+      pollTimer.current = null;
+    }
+  }
+
+  async function startLogin() {
+    setState("requesting");
+    setErrMsg("");
     try {
-      const res = await fetch(`/api/admin/dashboard?pw=${encodeURIComponent(pw)}`);
-      if (res.ok) {
-        onLogin(pw);
-      } else {
-        setError(res.status === 429 ? "Слишком много попыток" : "Неверный пароль");
+      const res = await fetch("/api/admin/login/start", { method: "POST" });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setErrMsg(
+          res.status === 429
+            ? "Слишком часто. Подождите минуту."
+            : data?.error || "Не удалось отправить запрос",
+        );
+        setState("error");
+        return;
+      }
+      setCode(data.code);
+      setState("waiting");
+      // start polling
+      pollTimer.current = setInterval(() => pollOnce(data.code), 2000);
+      // safety: stop polling after 5.5 min
+      setTimeout(() => {
+        stopPoll();
+        setState((s) => (s === "waiting" ? "expired" : s));
+      }, 5.5 * 60_000);
+    } catch {
+      setErrMsg("Ошибка соединения");
+      setState("error");
+    }
+  }
+
+  async function pollOnce(c: string) {
+    try {
+      const res = await fetch(`/api/admin/login/poll?code=${encodeURIComponent(c)}`);
+      if (!res.ok) return; // keep polling
+      const data = await res.json().catch(() => ({}));
+      if (data.status === "approved") {
+        stopPoll();
+        setState("approved");
+        // small delay so user sees the green state, then trigger re-check upstream
+        setTimeout(onAuthed, 600);
+      } else if (data.status === "denied") {
+        stopPoll();
+        setState("denied");
+      } else if (data.status === "expired") {
+        stopPoll();
+        setState("expired");
       }
     } catch {
-      setError("Ошибка соединения");
-    } finally {
-      setLoading(false);
+      // ignore one-off network blips
     }
   }
 
@@ -79,28 +130,97 @@ function LoginScreen({ onLogin }: { onLogin: (pw: string) => void }) {
             <p className="text-xs text-[var(--muted-foreground)]">Pesnopoets Clima</p>
           </div>
         </div>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="admin-pw" className="block text-sm font-medium text-[var(--foreground)] mb-2">
-            Пароль
-          </label>
-          <input
-            id="admin-pw"
-            type="password"
-            value={pw}
-            onChange={(e) => setPw(e.target.value)}
-            className="w-full px-4 py-3 border border-[var(--border)] rounded-lg text-sm bg-[var(--background)] text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)]"
-            placeholder="Введите пароль"
-            autoFocus
-          />
-          {error && <p className="mt-2 text-sm text-[var(--danger)]">{error}</p>}
-          <button
-            type="submit"
-            disabled={loading || !pw}
-            className="mt-4 w-full py-3 bg-[var(--primary)] text-white font-semibold rounded-lg hover:bg-[var(--primary-dark)] disabled:opacity-50 transition-colors"
-          >
-            {loading ? "Проверка..." : "Войти"}
-          </button>
-        </form>
+
+        {state === "idle" || state === "error" ? (
+          <>
+            <p className="text-sm text-[var(--muted-foreground)] mb-4 leading-relaxed">
+              Для входа подтвердите запрос в Telegram-боте владельца.
+            </p>
+            <button
+              type="button"
+              onClick={startLogin}
+              className="w-full py-3 bg-[var(--primary)] text-white font-semibold rounded-lg hover:bg-[var(--primary-dark)] transition-colors flex items-center justify-center gap-2"
+            >
+              <Bot className="w-4 h-4" />
+              Войти через Telegram
+            </button>
+            {errMsg && <p className="mt-3 text-sm text-[var(--danger)]">{errMsg}</p>}
+          </>
+        ) : null}
+
+        {state === "requesting" && (
+          <p className="text-sm text-[var(--muted-foreground)] text-center py-4">Отправка запроса…</p>
+        )}
+
+        {state === "waiting" && (
+          <div className="space-y-3">
+            <div className="flex items-center gap-3 px-3 py-3 rounded-lg bg-[var(--muted)] border border-[var(--border)]">
+              <div className="w-8 h-8 rounded-full bg-[var(--primary)]/15 flex items-center justify-center shrink-0 animate-pulse">
+                <Bot className="w-4 h-4 text-[var(--primary)]" />
+              </div>
+              <div className="text-sm">
+                <p className="font-medium text-[var(--foreground)]">Подтвердите вход в Telegram</p>
+                <p className="text-xs text-[var(--muted-foreground)] mt-0.5">Откройте бота и нажмите ✅ Разрешить</p>
+              </div>
+            </div>
+            {code && (
+              <p className="text-[10px] text-center font-mono text-[var(--muted-foreground)]">
+                код {code} · действует 5 мин
+              </p>
+            )}
+            <button
+              type="button"
+              onClick={() => {
+                stopPoll();
+                setState("idle");
+                setCode(null);
+              }}
+              className="w-full py-2 text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+            >
+              Отмена
+            </button>
+          </div>
+        )}
+
+        {state === "approved" && (
+          <div className="text-center py-4">
+            <p className="text-sm font-medium text-emerald-600">✓ Подтверждено</p>
+            <p className="text-xs text-[var(--muted-foreground)] mt-1">Загружаем…</p>
+          </div>
+        )}
+
+        {state === "denied" && (
+          <div className="space-y-3 text-center py-2">
+            <p className="text-sm text-[var(--danger)]">Запрос отклонён</p>
+            <button
+              type="button"
+              onClick={() => {
+                setState("idle");
+                setCode(null);
+              }}
+              className="text-xs text-[var(--muted-foreground)] underline"
+            >
+              Попробовать снова
+            </button>
+          </div>
+        )}
+
+        {state === "expired" && (
+          <div className="space-y-3 text-center py-2">
+            <p className="text-sm text-[var(--muted-foreground)]">Срок запроса истёк (5 минут)</p>
+            <button
+              type="button"
+              onClick={() => {
+                setState("idle");
+                setCode(null);
+              }}
+              className="text-xs text-[var(--primary)] underline"
+            >
+              Отправить новый запрос
+            </button>
+          </div>
+        )}
+
         <div className="mt-6 flex justify-center">
           <a
             href="https://dangrow.agency"
@@ -140,44 +260,50 @@ function SplashScreen() {
 
 /* ─── Shell ─── */
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const [password, setPassword] = useState<string | null>(null);
-  const [hydrated, setHydrated] = useState(false);
+  // null = checking; true = authed; false = needs login
+  const [authed, setAuthed] = useState<boolean | null>(null);
   const pathname = usePathname();
 
+  // Verify cookie session by pinging a cheap admin endpoint.
+  const checkAuth = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/dashboard", { credentials: "include" });
+      setAuthed(res.ok);
+    } catch {
+      setAuthed(false);
+    }
+  }, []);
+
   useEffect(() => {
-    const saved = sessionStorage.getItem("admin_pw");
-    if (saved) setPassword(saved);
-    setHydrated(true);
+    void checkAuth();
+  }, [checkAuth]);
+
+  const handleLogout = useCallback(async () => {
+    try {
+      await fetch("/api/admin/logout", { method: "POST", credentials: "include" });
+    } catch {
+      // best effort — even without a clean POST the cookie was httpOnly so the
+      // server is the source of truth; we still flip local state.
+    }
+    setAuthed(false);
   }, []);
 
-  const handleLogin = useCallback((pw: string) => {
-    setPassword(pw);
-    sessionStorage.setItem("admin_pw", pw);
-  }, []);
-
-  const handleLogout = useCallback(() => {
-    setPassword(null);
-    sessionStorage.removeItem("admin_pw");
-  }, []);
-
+  // Cookies travel automatically same-origin. No more ?pw=.
   const fetchApi = useCallback(
-    async (path: string, opts?: RequestInit) => {
-      const sep = path.includes("?") ? "&" : "?";
-      return fetch(`${path}${sep}pw=${encodeURIComponent(password || "")}`, opts);
-    },
-    [password]
+    async (path: string, opts?: RequestInit) =>
+      fetch(path, { ...opts, credentials: "include" }),
+    [],
   );
 
-  // Show splash while checking sessionStorage
-  if (!hydrated) {
+  if (authed === null) {
     return <SplashScreen />;
   }
 
-  if (!password) {
-    return <LoginScreen onLogin={handleLogin} />;
+  if (!authed) {
+    return <LoginScreen onAuthed={() => void checkAuth()} />;
   }
 
-  const ctx: AdminCtx = { password, fetchApi };
+  const ctx: AdminCtx = { password: "", fetchApi };
 
   return (
     <AdminContext.Provider value={ctx}>

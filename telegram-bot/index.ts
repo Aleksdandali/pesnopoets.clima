@@ -5,6 +5,7 @@ import { handleDashboard } from "./commands/dashboard";
 import { handleLeads, handleNext } from "./commands/leads";
 import { handleEstimateCommand, handleVoiceMessage } from "./commands/estimate";
 import { handleLeadCallback, handleNoteText, handleNoteCancel } from "./callbacks/lead-actions";
+import { handleAdminLoginCallback } from "./callbacks/admin-login";
 
 let botInstance: Bot | null = null;
 
@@ -56,6 +57,7 @@ export function createBot(): Bot {
   });
 
   // Callback queries (inline buttons)
+  bot.callbackQuery(/^adm:/, handleAdminLoginCallback);
   bot.callbackQuery(/^lead:/, handleLeadCallback);
   bot.callbackQuery("note:cancel", handleNoteCancel);
   bot.callbackQuery(/^cmd:leads$/, async (ctx) => {
