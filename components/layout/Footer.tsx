@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
+import ManageCookiesButton from "@/components/privacy/ManageCookiesButton";
 import {
   BUSINESS_ADDRESS_CITY,
   BUSINESS_EMAIL,
@@ -59,6 +60,13 @@ const dealerLine: Record<string, string> = {
   en: "Authorized dealer of Daikin, Mitsubishi, Toshiba and Gree in Bulgaria",
   ru: "Официальный дилер Daikin, Mitsubishi, Toshiba и Gree в Болгарии",
   ua: "Офіційний дилер Daikin, Mitsubishi, Toshiba та Gree в Болгарії",
+};
+
+const manageCookiesLabel: Record<string, string> = {
+  bg: "Бисквитки",
+  en: "Cookies",
+  ru: "Cookie",
+  ua: "Cookie",
 };
 
 const hoursValue: Record<string, string> = {
@@ -271,6 +279,10 @@ export default function Footer({ locale, dictionary }: FooterProps) {
             >
               {t.footer.terms}
             </Link>
+            <ManageCookiesButton
+              label={manageCookiesLabel[locale] ?? manageCookiesLabel.bg!}
+              className="text-xs text-white/30 hover:text-white/60 transition-colors duration-200 py-2 cursor-pointer"
+            />
           </div>
 
           {/* DANGROW badge — right on desktop, centered on mobile */}
