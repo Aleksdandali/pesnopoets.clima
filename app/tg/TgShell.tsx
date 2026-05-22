@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useTelegram } from "../../telegram-miniapp/hooks/useTelegram";
 import { setToken, tgFetch } from "../../telegram-miniapp/lib/api";
+import TgAnalyticsProvider from "../../components/analytics/TgAnalyticsProvider";
 
 /* ─── Context ─── */
 interface MiniAppCtx {
@@ -137,6 +138,7 @@ export default function TgShell({ children }: { children: React.ReactNode }) {
 
   return (
     <MiniAppContext.Provider value={ctx}>
+      <TgAnalyticsProvider tgUserId={tg.user?.id ?? 0} />
       <div className="flex flex-col h-screen overflow-hidden" style={{ background: tg.theme.bgSecondary, color: tg.theme.text, fontFamily: "'Inter', -apple-system, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif" }}>
         {/* Content */}
         <main className={`flex-1 min-h-0 ${isEstimateChat ? "overflow-hidden" : "overflow-y-auto pb-14"}`}>
