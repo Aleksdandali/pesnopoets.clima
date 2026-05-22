@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useCallback, useRef } from "react";
-import { Zap, Thermometer, Volume2, Maximize, ChevronLeft, ChevronRight } from "lucide-react";
+import { Zap, Thermometer, Volume2, Maximize, ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import OneClickCardButton from "@/components/catalog/OneClickCardButton";
 import AddToCartButton from "@/components/cart/AddToCartButton";
 import ProductBadges from "@/components/catalog/ProductBadges";
@@ -168,6 +168,10 @@ export default function ProductCard({
   const nextImgLabel = locale === "en" ? "Next image" : locale === "ua" ? "Наступне зображення" : locale === "ru" ? "Следующее изображение" : "Следващо изображение";
   const goToImgLabel = (i: number) =>
     locale === "en" ? `Go to image ${i}` : locale === "ua" ? `Перейти до зображення ${i}` : locale === "ru" ? `Перейти к изображению ${i}` : `Покажи изображение ${i}`;
+  // CTA label — Clarity showed catalog cards get 0 clicks in 45s; users don't realise
+  // cards are tappable. This pill is purely visual ("tap me") — the whole card is
+  // already clickable via the stretched <Link> on the title.
+  const viewDetailsLabel = locale === "en" ? "View" : locale === "ua" ? "Деталі" : locale === "ru" ? "Подробнее" : "Виж";
 
   return (
     <article className="relative group bg-white rounded-2xl border border-border shadow-[0_2px_8px_rgb(0_0_0/0.04)] hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0_0_0/0.08)] transition-all duration-300 overflow-hidden flex flex-col">
@@ -223,6 +227,20 @@ export default function ProductCard({
             </button>
           </>
         )}
+
+        {/* "View details" CTA pill — bottom-left, always visible on mobile.
+            Purely visual (whole card is clickable via stretched <Link> on title).
+            Added 2026-05-22 in response to Clarity data: catalog cards were getting
+            0 clicks per session despite 25-45s dwell — users didn't realise the
+            cards were tappable. z-[2] keeps it below the title Link's ::before
+            pseudo (z-[1] for hit area, but the pill paints above the image). */}
+        <div
+          className="absolute bottom-2 left-2 z-[2] pointer-events-none inline-flex items-center gap-1 rounded-full bg-primary/95 text-white text-[10px] sm:text-xs font-semibold px-2.5 py-1 shadow-sm group-hover:bg-primary transition-colors"
+          aria-hidden="true"
+        >
+          {viewDetailsLabel}
+          <ArrowRight className="w-3 h-3" />
+        </div>
 
         {/* Dot indicators — 44x44 hit area via padding */}
         {hasMultipleImages && (
