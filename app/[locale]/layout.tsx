@@ -8,6 +8,7 @@ import PromoBar from "@/components/promo/PromoBar";
 import LocalBusinessJsonLd from "@/components/seo/LocalBusinessJsonLd";
 import { CartProvider } from "@/contexts/CartContext";
 import LazyOverlays from "@/components/layout/LazyOverlays";
+import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
 
 const locales = ["bg", "en", "ru", "ua"] as const;
 type Locale = (typeof locales)[number];
@@ -224,6 +225,9 @@ export default async function LocaleLayout({
           viberLabel={dictionary.contact?.viber || "Viber"}
           consentCopy={dictionary.cookie}
         />
+        <Suspense fallback={null}>
+          <AnalyticsProvider locale={locale as "bg" | "en" | "ru" | "ua"} />
+        </Suspense>
       </CartProvider>
     </>
   );

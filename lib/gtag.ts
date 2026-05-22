@@ -75,6 +75,19 @@ function pushEvent(eventName: string, params: Record<string, unknown> = {}) {
   gtag("event", eventName, params);
 }
 
+/**
+ * Forward a click event to our first-party warehouse. Imported lazily so this
+ * module stays usable in pure-Node test environments and the browser-only
+ * `track` SDK never gets bundled into anything it shouldn't.
+ */
+function pushFirstParty(
+  name: "phone_click" | "whatsapp_click" | "viber_click" | "telegram_click",
+  properties: Record<string, unknown> = {},
+) {
+  if (typeof window === "undefined") return;
+  void import("@/lib/analytics/track").then(({ track }) => track(name, properties));
+}
+
 /** Fire a Meta Pixel event. */
 function pushFbq(eventName: string, params?: Record<string, unknown>) {
   const fbq = getFbq();
@@ -174,6 +187,9 @@ export function trackPhoneClick() {
   });
   // Meta Pixel: Contact
   pushFbq("Contact", { value: 5, currency: "EUR", content_name: "phone" });
+  // First-party warehouse — fired regardless of marketing consent so we can
+  // still measure intent for users who only opted into analytics.
+  pushFirstParty("phone_click");
 }
 
 /** Click on WhatsApp or Viber link. */
@@ -191,6 +207,8 @@ export function trackMessengerClick(messenger: "whatsapp" | "viber") {
   });
   // Meta Pixel: Contact
   pushFbq("Contact", { value: 5, currency: "EUR", content_name: messenger });
+  // First-party warehouse
+  pushFirstParty(messenger === "whatsapp" ? "whatsapp_click" : "viber_click");
 }
 
 // ---------------------------------------------------------------------------
