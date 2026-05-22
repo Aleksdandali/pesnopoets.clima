@@ -12,6 +12,7 @@ export async function isTeamMember(telegramUserId: number): Promise<boolean> {
     .select("id")
     .eq("telegram_user_id", telegramUserId)
     .eq("is_active", true)
+    .eq("status", "approved")
     .maybeSingle();
 
   return !!data;

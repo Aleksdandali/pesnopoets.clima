@@ -47,6 +47,7 @@ export async function POST(req: NextRequest) {
         .select("id")
         .eq("telegram_user_id", user.id)
         .eq("is_active", true)
+        .eq("status", "approved")
         .maybeSingle();
       isTeam = !!data;
     }

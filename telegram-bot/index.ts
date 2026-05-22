@@ -6,6 +6,11 @@ import { handleLeads, handleNext } from "./commands/leads";
 import { handleEstimateCommand, handleVoiceMessage } from "./commands/estimate";
 import { handleLeadCallback, handleNoteText, handleNoteCancel } from "./callbacks/lead-actions";
 import { handleAdminLoginCallback } from "./callbacks/admin-login";
+import {
+  handleOnboardingText,
+  handleTeamApprovalCallback,
+} from "./callbacks/onboarding";
+import { hasOnboardingState } from "./services/onboarding";
 
 let botInstance: Bot | null = null;
 
@@ -22,17 +27,33 @@ export function createBot(): Bot {
 
   const bot = new Bot(token);
 
-  // Auth middleware — reject non-team members
+  // Auth middleware — allow team members, plus /start and onboarding traffic.
+  // Anything else from a non-member gets a polite refusal.
   bot.use(async (ctx, next) => {
     const userId = ctx.from?.id;
     if (!userId) return;
-    if (!(await isTeamMember(userId))) {
-      if (ctx.message) {
-        await ctx.reply("⛔ Этот бот доступен только для команды.");
-      }
-      return;
+
+    if (await isTeamMember(userId)) {
+      return next();
     }
-    await next();
+
+    // Allow /start (manages onboarding) for everyone.
+    const text = ctx.message?.text;
+    if (text === "/start" || text?.startsWith("/start ")) {
+      return next();
+    }
+
+    // If onboarding is in flight for this user, let text answers through.
+    if (ctx.message && (await hasOnboardingState(userId))) {
+      return next();
+    }
+
+    if (ctx.message) {
+      await ctx.reply(
+        "⛔ Этот бот доступен только для сотрудников Pesnopoets Clima.\n\n" +
+          "Если вы новый сотрудник — отправьте /start, чтобы подать заявку.",
+      );
+    }
   });
 
   // Commands
@@ -58,6 +79,7 @@ export function createBot(): Bot {
 
   // Callback queries (inline buttons)
   bot.callbackQuery(/^adm:/, handleAdminLoginCallback);
+  bot.callbackQuery(/^team:/, handleTeamApprovalCallback);
   bot.callbackQuery(/^lead:/, handleLeadCallback);
   bot.callbackQuery("note:cancel", handleNoteCancel);
   bot.callbackQuery(/^cmd:leads$/, async (ctx) => {
@@ -79,8 +101,9 @@ export function createBot(): Bot {
     if (!handled) await next();
   });
 
-  // Text messages — check if user is adding a note
+  // Text messages — try onboarding capture first, then lead notes.
   bot.on("message:text", async (ctx, next) => {
+    if (await handleOnboardingText(ctx)) return;
     const handled = await handleNoteText(ctx);
     if (!handled) await next();
   });
