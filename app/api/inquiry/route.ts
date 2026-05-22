@@ -8,6 +8,7 @@ import {
   isValidPhone,
   isValidEmail,
 } from "@/lib/security";
+import { trackServerEvent, hashIp } from "@/lib/analytics/server";
 
 export async function POST(request: Request) {
   // CSRF: reject requests from foreign origins (exact match, not substring)
@@ -129,6 +130,35 @@ export async function POST(request: Request) {
     }).catch((err) =>
       console.error("Telegram notification failed:", err)
     );
+
+    // Analytics: emit inquiry_submitted with attribution payload so the
+    // mv_funnel_inquiry_to_won materialized view can join wins back to inquiries.
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      request.headers.get("x-real-ip") ||
+      "";
+    const anonId =
+      typeof body.anon_id === "string" ? body.anon_id.slice(0, 64) : null;
+    trackServerEvent({
+      name: "inquiry_submitted",
+      source: "server",
+      userId: null, // web inquirer != authenticated profile; clientId lives in properties below
+      anonId,
+      locale,
+      page: typeof body.page === "string" ? body.page.slice(0, 500) : null,
+      properties: {
+        inquiry_id: inquiry?.id ?? null,
+        client_id: clientId ?? null,
+        source_page: insertData.source ?? null,
+        product_id: productId,
+        has_email: Boolean(email),
+        utm_source: typeof body.utm_source === "string" ? body.utm_source.slice(0, 100) : null,
+        utm_medium: typeof body.utm_medium === "string" ? body.utm_medium.slice(0, 100) : null,
+        utm_campaign: typeof body.utm_campaign === "string" ? body.utm_campaign.slice(0, 100) : null,
+      },
+      ipHash: hashIp(ip),
+      userAgent: request.headers.get("user-agent"),
+    });
 
     return NextResponse.json(
       { success: true },
