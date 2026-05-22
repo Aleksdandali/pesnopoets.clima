@@ -1,6 +1,5 @@
-import Script from "next/script";
 import { createClient } from "@/lib/supabase/server";
-import MetaPixelPageView from "./MetaPixelPageView";
+import TrackingPixelsClient from "./TrackingPixelsClient";
 
 interface PixelSettings {
   meta_pixel_id?: string;
@@ -69,93 +68,18 @@ export default async function TrackingPixels() {
   const googleAdsId = settings.google_ads_id ? sanitizeGoogleAdsId(settings.google_ads_id) : null;
   const ga4Id = settings.ga4_id ? sanitizeGa4Id(settings.ga4_id) : null;
   const clarityId = settings.clarity_id ? sanitizeClarityId(settings.clarity_id) : null;
-  // gtag.js loads once with a primary tag id; subsequent gtag('config', ...) calls
-  // register additional tags on the same library instance.
-  const gtagBootId = googleAdsId ?? ga4Id;
+  const customHeadScripts = settings.custom_head_scripts || null;
 
+  // Sanitized IDs cross the server/client boundary as plain props. The client
+  // component decides which to actually inject based on consent state.
   return (
-    <>
-      {/* Google tag (gtag.js) — loaded only when at least one Google ID is configured */}
-      {gtagBootId && (
-        <>
-          <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${gtagBootId}`}
-            strategy="afterInteractive"
-          />
-          <Script id="gtag-init" strategy="afterInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              ${googleAdsId ? `gtag('config', '${googleAdsId}');` : ""}
-              ${ga4Id ? `gtag('config', '${ga4Id}');` : ""}
-              window.__ANALYTICS = ${JSON.stringify({ googleAdsId, ga4Id })};
-            `}
-          </Script>
-        </>
-      )}
-
-      {/* Meta (Facebook) Pixel */}
-      {metaId && (
-        <>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','${metaId}');
-fbq('track','PageView');`,
-            }}
-          />
-          <noscript>
-            <img
-              height="1"
-              width="1"
-              style={{ display: "none" }}
-              src={`https://www.facebook.com/tr?id=${metaId}&ev=PageView&noscript=1`}
-              alt=""
-            />
-          </noscript>
-          <MetaPixelPageView />
-        </>
-      )}
-
-      {/* TikTok Pixel */}
-      {tiktokId && (
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-!function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=
-["page","track","identify","instances","debug","on","off","once","ready",
-"alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e)
-{t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};
-for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);
-ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)
-ttq.setAndDefer(e,ttq.methods[n]);return e};ttq.load=function(e,n){var i=
-"https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{};
-ttq._i[e]=[];ttq._i[e]._u=i;ttq._t=ttq._t||{};ttq._t[e+"_"+n]=+new Date;
-(ttq._o=ttq._o||{})[e+"_"+n]=n||{};var o=document.createElement("script");
-o.type="text/javascript";o.async=!0;o.src=i+"?sdkid="+e+"&lib="+t;
-var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
-ttq.load('${tiktokId}');ttq.page()}(window,document,'ttq');`,
-          }}
-        />
-      )}
-
-      {/* Microsoft Clarity — heatmaps + session recordings */}
-      {clarityId && (
-        <Script id="clarity-init" strategy="afterInteractive">
-          {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${clarityId}");`}
-        </Script>
-      )}
-
-      {/* Custom head scripts */}
-      {settings.custom_head_scripts && (
-        <div dangerouslySetInnerHTML={{ __html: settings.custom_head_scripts }} />
-      )}
-    </>
+    <TrackingPixelsClient
+      metaId={metaId}
+      tiktokId={tiktokId}
+      googleAdsId={googleAdsId}
+      ga4Id={ga4Id}
+      clarityId={clarityId}
+      customHeadScripts={customHeadScripts}
+    />
   );
 }
