@@ -23,7 +23,7 @@ function RootNavigator() {
   // Register push token once we have a signed-in profile.
   useEffect(() => {
     if (!session?.user || !profile) return;
-    registerForPushNotificationsAsync(session.user.id).catch((e) => {
+    registerForPushNotificationsAsync().catch((e) => {
       console.warn("[notifications] register failed:", e);
     });
   }, [session?.user, profile]);

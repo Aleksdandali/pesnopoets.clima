@@ -33,9 +33,7 @@ export function configureNotificationHandler() {
   });
 }
 
-export async function registerForPushNotificationsAsync(
-  userId: string,
-): Promise<string | null> {
+export async function registerForPushNotificationsAsync(): Promise<string | null> {
   if (!Device.isDevice) {
     // Simulator can't receive pushes. Silent no-op.
     return null;
@@ -80,21 +78,12 @@ export async function registerForPushNotificationsAsync(
     return null;
   }
 
-  // Persist to profile (idempotent — only write if changed)
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("expo_push_token")
-    .eq("id", userId)
-    .single();
-
-  if (profile?.expo_push_token !== token) {
-    const { error } = await supabase
-      .from("profiles")
-      .update({ expo_push_token: token })
-      .eq("id", userId);
-    if (error) {
-      console.warn("[notifications] failed to save token:", error.message);
-    }
+  // Persist to profile via RPC. SELECT on expo_push_token is revoked at the
+  // column level (migration 022) — the RPC writes idempotently on the
+  // server side and skips the round-trip read.
+  const { error } = await supabase.rpc("set_my_push_token", { p_token: token });
+  if (error) {
+    console.warn("[notifications] failed to save token:", error.message);
   }
 
   return token;
