@@ -11,6 +11,10 @@
     {
       "path": "/api/cron/cleanup-orphan-photos",
       "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/analytics-daily",
+      "schedule": "30 4 * * *"
     }
   ]
 }
