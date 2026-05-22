@@ -10,6 +10,7 @@
 
 import type Anthropic from "@anthropic-ai/sdk";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getGa4Daily, getGa4BySource } from "./ga4";
 
 export interface ToolContext {
   /** Caller surface — used for log attribution only. */
@@ -88,6 +89,38 @@ export const INSIGHT_TOOL_DEFINITIONS: Anthropic.Tool[] = [
     description:
       "Session-level aggregate per source (web/tg/mobile): session count, avg duration seconds, avg page views per session, inquiry_rate (share of sessions that submitted an inquiry).",
     input_schema: { type: "object", properties: {} },
+  },
+  {
+    name: "get_ga4_daily",
+    description:
+      "Google Analytics 4 daily metrics for the last N days (max 180). Returns sessions, active_users, new_users, page_views, engaged_sessions, avg_engagement_seconds. Use this when the question is about official GA4 numbers (e.g. 'how many visitors yesterday per Google Analytics?').",
+    input_schema: {
+      type: "object",
+      properties: {
+        days_back: {
+          type: "integer",
+          minimum: 1,
+          maximum: 180,
+          description: "How many days back to include. Default 7.",
+        },
+      },
+    },
+  },
+  {
+    name: "get_ga4_by_source",
+    description:
+      "Google Analytics 4 sessions split by source/medium for the last N days (max 180). Returns up to 30 source+medium rows with sessions, active_users, engaged_sessions, conversions. Use to compare GA4 traffic channels.",
+    input_schema: {
+      type: "object",
+      properties: {
+        days_back: {
+          type: "integer",
+          minimum: 1,
+          maximum: 180,
+          description: "How many days back to include. Default 30.",
+        },
+      },
+    },
   },
   {
     name: "get_user_journey",
@@ -174,6 +207,16 @@ export async function executeInsightTool(
         const { data, error } = await db.rpc("get_session_metrics");
         if (error) return { ok: false, error: error.message };
         return { ok: true, rows: data ?? [] };
+      }
+      case "get_ga4_daily": {
+        const days = asInt(args.days_back, 7);
+        const rows = await getGa4Daily(days);
+        return { ok: true, rows };
+      }
+      case "get_ga4_by_source": {
+        const days = asInt(args.days_back, 30);
+        const rows = await getGa4BySource(days);
+        return { ok: true, rows };
       }
       case "get_user_journey": {
         const uid = asUuid(args.user_id);

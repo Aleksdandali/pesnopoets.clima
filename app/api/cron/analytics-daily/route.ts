@@ -36,11 +36,18 @@ const MAX_TOOL_TURNS = 4;
 const TELEGRAM_API = "https://api.telegram.org/bot";
 
 const DIGEST_PROMPT_RU = `Сделай короткий ежедневный отчёт для владельца Песнопоец Клима. \
-Используй инструменты, чтобы взять KPI за последние 7 дней и сравнить вчера с предыдущей неделей. \
-Структура (Markdown, без заголовков H1/H2):
+Используй инструменты, чтобы взять KPI за последние 7 дней и сравнить вчера с предыдущей неделей.
+
+ФОРМАТ — ОБЯЗАТЕЛЬНО ПЛОСКИЙ ТЕКСТ:
+- НЕ используй markdown: никаких **звёздочек**, _подчёркиваний_, # заголовков, \`code\`, [ссылок].
+- Выделяй важное ЗАГЛАВНЫМИ БУКВАМИ или эмодзи (📈 📉 ⚠️ ✅).
+- Буллеты — обычные строки с тире "— ".
+- Цифры пиши простым текстом, без форматирования.
+
+СТРУКТУРА:
 1. Одна строка-итог: что произошло за вчера.
 2. 3-5 буллетов с конкретными цифрами (visitors, inquiries, phone/whatsapp, выручка).
-3. 1-2 предложения "что важно сделать сегодня" (по данным).
+3. 1-2 предложения «что важно сделать сегодня» (по данным).
 
 Будь предельно кратким — это утреннее уведомление в Telegram. Не больше 12 строк.`;
 
@@ -234,7 +241,7 @@ async function postToTelegram(text: string): Promise<boolean> {
   const ownerId = (process.env.TELEGRAM_OWNER_ID || "").trim();
   if (!token || !ownerId) return false;
 
-  const message = `📊 <b>Утренний отчёт</b>\n\n${escapeHtml(text)}`;
+  const message = `📊 <b>Утренний отчёт</b>\n\n${escapeHtml(stripMarkdown(text))}`;
   try {
     const res = await fetch(`${TELEGRAM_API}${token}/sendMessage`, {
       method: "POST",
@@ -259,6 +266,32 @@ async function postToTelegram(text: string): Promise<boolean> {
 
 function escapeHtml(s: string): string {
   return s.replace(/[&<>]/g, (ch) => (ch === "&" ? "&amp;" : ch === "<" ? "&lt;" : "&gt;"));
+}
+
+/**
+ * Strip Markdown formatting that Telegram HTML mode would render literally.
+ * Removes **bold**, *italic*, __underline__, `code`, [text](url), and ##
+ * heading markers at line start. Keeps the inner text.
+ */
+function stripMarkdown(s: string): string {
+  return s
+    // [text](url) → text
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    // ```fences``` → drop fences, keep content
+    .replace(/```([\s\S]*?)```/g, "$1")
+    // **bold** / __bold__ → bold
+    .replace(/\*\*([^*\n]+)\*\*/g, "$1")
+    .replace(/__([^_\n]+)__/g, "$1")
+    // *italic* / _italic_ → italic
+    .replace(/(^|[^\w*])\*([^*\n]+)\*(?!\w)/g, "$1$2")
+    .replace(/(^|[^\w_])_([^_\n]+)_(?!\w)/g, "$1$2")
+    // `inline code` → inline code
+    .replace(/`([^`\n]+)`/g, "$1")
+    // Leading "#" headings at line start → strip the hashes + one space
+    .replace(/^\s{0,3}#{1,6}\s+/gm, "")
+    // Stray leftover asterisks/underscores at line edges
+    .replace(/^[*_]+|[*_]+$/gm, "")
+    .trim();
 }
 
 function capPayload(result: unknown): Record<string, unknown> {
