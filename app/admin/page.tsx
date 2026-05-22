@@ -5,7 +5,7 @@ import { useAdmin } from "./layout";
 import Link from "next/link";
 import {
   Inbox, TrendingUp, TrendingDown, AlertTriangle, Bot, Users, Package,
-  Phone, Loader2, ArrowRight, Minus,
+  Phone, Loader2, ArrowRight, Minus, Activity,
 } from "lucide-react";
 
 /* ─── Types ─── */
@@ -139,6 +139,137 @@ function StatusDonut({ data }: { data: StatusItem[] }) {
   );
 }
 
+/* ─── GA4 Realtime Widget ─── */
+interface RealtimeData {
+  ok: boolean;
+  active_users?: number;
+  views_last_30m?: number;
+  top_pages?: { page: string; active_users: number }[];
+  per_minute?: { minutes_ago: number; active_users: number }[];
+  fetched_at?: string;
+  error?: string;
+}
+
+function RealtimeSparkline({ data }: { data: { minutes_ago: number; active_users: number }[] }) {
+  // 30 buckets, minutes_ago 0..29 (0 = current minute on the right).
+  const bars: number[] = Array.from({ length: 30 }, () => 0);
+  for (const d of data) {
+    if (d.minutes_ago >= 0 && d.minutes_ago < 30) bars[29 - d.minutes_ago] = d.active_users;
+  }
+  const max = Math.max(...bars, 1);
+  return (
+    <div className="flex items-end gap-[2px] h-8">
+      {bars.map((v, i) => (
+        <div
+          key={i}
+          className="flex-1 bg-[var(--primary)]/70 rounded-sm transition-all"
+          style={{ height: `${Math.max(4, (v / max) * 100)}%`, opacity: v === 0 ? 0.15 : 1 }}
+          title={`${29 - i} мин назад: ${v}`}
+        />
+      ))}
+    </div>
+  );
+}
+
+function RealtimeWidget({ fetchApi }: { fetchApi: (path: string, init?: RequestInit) => Promise<Response> }) {
+  const [data, setData] = useState<RealtimeData | null>(null);
+  const [loaded, setLoaded] = useState(false);
+
+  const load = useCallback(async () => {
+    try {
+      const res = await fetchApi("/api/admin/realtime");
+      const json = (await res.json()) as RealtimeData;
+      setData(json);
+    } catch {
+      setData({ ok: false, error: "network" });
+    } finally {
+      setLoaded(true);
+    }
+  }, [fetchApi]);
+
+  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    const id = setInterval(load, 20000);
+    return () => clearInterval(id);
+  }, [load]);
+
+  if (!loaded) {
+    return (
+      <div className="bg-[var(--background)] rounded-xl border border-[var(--border)] p-4 shadow-sm flex items-center gap-2 text-sm text-[var(--muted-foreground)]">
+        <Loader2 className="w-4 h-4 animate-spin" /> Загружаем realtime…
+      </div>
+    );
+  }
+
+  if (!data?.ok) {
+    const isSetup = data?.error === "GA4 not configured";
+    return (
+      <div className="bg-[var(--background)] rounded-xl border border-amber-300/40 p-4 shadow-sm">
+        <div className="flex items-center gap-2 text-sm text-amber-700">
+          <Activity className="w-4 h-4" />
+          {isSetup
+            ? "GA4 не подключён."
+            : `Google Analytics недоступен: ${data?.error ?? "неизвестная ошибка"}.`}
+        </div>
+        {!isSetup && (
+          <p className="text-xs text-[var(--muted-foreground)] mt-2">
+            Проверьте, что сервис-аккаунт <code className="bg-[var(--muted)] px-1 rounded">ai-analytics-reader@…</code> добавлен как Viewer в Property Access Management.
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  const active = data.active_users ?? 0;
+  const views = data.views_last_30m ?? 0;
+  const topPages = (data.top_pages ?? []).slice(0, 5);
+  const perMinute = data.per_minute ?? [];
+
+  return (
+    <div className="bg-[var(--background)] rounded-xl border border-[var(--border)] p-5 shadow-sm">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--success)] opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--success)]" />
+          </span>
+          <h2 className="text-sm font-semibold text-[var(--foreground)]">Сейчас на сайте — Google Analytics</h2>
+        </div>
+        <span className="text-[10px] text-[var(--muted-foreground)] font-mono">обновляется каждые 20 сек</span>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <p className="text-4xl font-bold text-[var(--foreground)] leading-none">{active}</p>
+          <p className="text-xs text-[var(--muted-foreground)] mt-2">активных пользователей</p>
+          <p className="text-[10px] text-[var(--muted-foreground)] mt-0.5">за последние 30 мин</p>
+          <p className="text-xs text-[var(--muted-foreground)] mt-3">
+            Просмотров: <span className="font-semibold text-[var(--foreground)]">{views}</span>
+          </p>
+        </div>
+
+        <div className="md:col-span-2">
+          <p className="text-[10px] uppercase tracking-wide text-[var(--muted-foreground)] mb-2">Активность по минутам (30 → сейчас)</p>
+          <RealtimeSparkline data={perMinute} />
+          {topPages.length > 0 ? (
+            <div className="mt-4 space-y-1.5">
+              <p className="text-[10px] uppercase tracking-wide text-[var(--muted-foreground)]">Топ страниц прямо сейчас</p>
+              {topPages.map((p) => (
+                <div key={p.page} className="flex items-center justify-between text-xs">
+                  <span className="text-[var(--foreground)] truncate mr-2" title={p.page}>{p.page}</span>
+                  <span className="font-mono text-[var(--muted-foreground)] shrink-0">{p.active_users}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-xs text-[var(--muted-foreground)] mt-3">Никого активного — типичная пауза в трафике.</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Main Dashboard ─── */
 export default function DashboardPage() {
   const { fetchApi } = useAdmin();
@@ -169,6 +300,9 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-[var(--foreground)]">Главная</h1>
+
+      {/* Realtime (GA4) */}
+      <RealtimeWidget fetchApi={fetchApi} />
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">

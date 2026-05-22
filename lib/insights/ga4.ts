@@ -91,6 +91,68 @@ export async function getGa4Daily(daysBack: number): Promise<Ga4DailyRow[]> {
   });
 }
 
+export interface Ga4RealtimeRow {
+  page: string;
+  active_users: number;
+}
+
+export interface Ga4RealtimeSnapshot {
+  active_users: number; // last 30 minutes
+  views_last_30m: number;
+  top_pages: Ga4RealtimeRow[];
+  per_minute: { minutes_ago: number; active_users: number }[];
+  fetched_at: string;
+}
+
+export async function getGa4Realtime(): Promise<Ga4RealtimeSnapshot> {
+  const client = getClient();
+  const property = getPropertyPath();
+
+  const [totals, byPage, perMinute] = await Promise.all([
+    client.runRealtimeReport({
+      property,
+      metrics: [{ name: "activeUsers" }, { name: "screenPageViews" }],
+    }),
+    client.runRealtimeReport({
+      property,
+      dimensions: [{ name: "unifiedScreenName" }],
+      metrics: [{ name: "activeUsers" }],
+      orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
+      limit: 10,
+    }),
+    client.runRealtimeReport({
+      property,
+      dimensions: [{ name: "minutesAgo" }],
+      metrics: [{ name: "activeUsers" }],
+      orderBys: [{ dimension: { dimensionName: "minutesAgo" }, desc: false }],
+      limit: 30,
+    }),
+  ]);
+
+  const num = (s: string | null | undefined) => Number(s ?? 0) || 0;
+  const totalsRow = totals[0]?.rows?.[0]?.metricValues ?? [];
+
+  const top_pages: Ga4RealtimeRow[] =
+    (byPage[0]?.rows ?? []).map((r) => ({
+      page: r.dimensionValues?.[0]?.value ?? "(unknown)",
+      active_users: num(r.metricValues?.[0]?.value),
+    }));
+
+  const per_minute: { minutes_ago: number; active_users: number }[] =
+    (perMinute[0]?.rows ?? []).map((r) => ({
+      minutes_ago: num(r.dimensionValues?.[0]?.value),
+      active_users: num(r.metricValues?.[0]?.value),
+    }));
+
+  return {
+    active_users: num(totalsRow[0]?.value),
+    views_last_30m: num(totalsRow[1]?.value),
+    top_pages,
+    per_minute,
+    fetched_at: new Date().toISOString(),
+  };
+}
+
 export interface Ga4SourceRow {
   source: string;
   medium: string;
