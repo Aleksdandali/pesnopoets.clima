@@ -7,6 +7,7 @@ interface PixelSettings {
   tiktok_pixel_id?: string;
   google_ads_id?: string;
   ga4_id?: string;
+  clarity_id?: string;
   custom_head_scripts?: string;
 }
 
@@ -28,6 +29,12 @@ function sanitizeGa4Id(id: string): string | null {
   return /^G-[A-Z0-9]{8,12}$/.test(trimmed) ? trimmed : null;
 }
 
+/** Validate Clarity project ID — 8-12 lowercase alphanumeric chars. */
+function sanitizeClarityId(id: string): string | null {
+  const trimmed = id.trim().toLowerCase();
+  return /^[a-z0-9]{8,12}$/.test(trimmed) ? trimmed : null;
+}
+
 async function getPixelSettings(): Promise<PixelSettings> {
   try {
     const supabase = await createClient();
@@ -39,6 +46,7 @@ async function getPixelSettings(): Promise<PixelSettings> {
         "tiktok_pixel_id",
         "google_ads_id",
         "ga4_id",
+        "clarity_id",
         "custom_head_scripts",
       ]);
 
@@ -60,6 +68,7 @@ export default async function TrackingPixels() {
   const tiktokId = settings.tiktok_pixel_id?.replace(/[^a-zA-Z0-9]/g, "") || null;
   const googleAdsId = settings.google_ads_id ? sanitizeGoogleAdsId(settings.google_ads_id) : null;
   const ga4Id = settings.ga4_id ? sanitizeGa4Id(settings.ga4_id) : null;
+  const clarityId = settings.clarity_id ? sanitizeClarityId(settings.clarity_id) : null;
   // gtag.js loads once with a primary tag id; subsequent gtag('config', ...) calls
   // register additional tags on the same library instance.
   const gtagBootId = googleAdsId ?? ga4Id;
@@ -134,6 +143,13 @@ var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)}
 ttq.load('${tiktokId}');ttq.page()}(window,document,'ttq');`,
           }}
         />
+      )}
+
+      {/* Microsoft Clarity — heatmaps + session recordings */}
+      {clarityId && (
+        <Script id="clarity-init" strategy="afterInteractive">
+          {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${clarityId}");`}
+        </Script>
       )}
 
       {/* Custom head scripts */}

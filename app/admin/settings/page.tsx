@@ -9,6 +9,7 @@ const FIELDS = [
   { key: "tiktok_pixel_id", label: "TikTok Pixel ID", placeholder: "CXXXXXXXXXXXXXXXXX", help: "Только ID. Скрипт ttq добавится автоматически.", type: "input" },
   { key: "google_ads_id", label: "Google Ads ID", placeholder: "AW-XXXXXXXXXXX", help: "Формат AW-XXXXXXXXXXX. Используется для конверсий и ремаркетинга.", type: "input" },
   { key: "ga4_id", label: "Google Analytics 4 (GA4) ID", placeholder: "G-XXXXXXXXXX", help: "Формат G-XXXXXXXXXX. Measurement ID из GA4 → Admin → Data Streams.", type: "input" },
+  { key: "clarity_id", label: "Microsoft Clarity Project ID", placeholder: "wv15j58nj6", help: "10-значный ID из clarity.microsoft.com → Settings → Setup. Heatmaps + session recordings.", type: "input" },
   { key: "custom_head_scripts", label: "Custom Scripts (в <head>)", placeholder: "<script>...</script>", help: "HTML/JS код. Вставляется в <head> всех страниц сайта.", type: "textarea" },
 ] as const;
 
