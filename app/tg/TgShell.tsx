@@ -4,7 +4,7 @@ import { useState, useEffect, createContext, useContext, useCallback } from "rea
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
-  LayoutDashboard, Inbox, Package, Users, MessageCircle, Calculator, Loader2,
+  LayoutDashboard, Inbox, Package, Users, MessageCircle, Calculator, Loader2, Sparkles,
 } from "lucide-react";
 import { useTelegram } from "../../telegram-miniapp/hooks/useTelegram";
 import { setToken, tgFetch } from "../../telegram-miniapp/lib/api";
@@ -30,6 +30,7 @@ const NAV = [
   { href: "/tg/leads", icon: Inbox, label: "Заявки" },
   { href: "/tg/products", icon: Package, label: "Товары" },
   { href: "/tg/clients", icon: Users, label: "Клиенты" },
+  { href: "/tg/insights", icon: Sparkles, label: "ИИ" },
 ];
 
 /* ─── Layout ─── */
