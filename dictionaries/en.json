@@ -171,10 +171,30 @@
     "workHoursValue": "Mon-Fri: 09:00-18:00\nSat: 10:00-14:00"
   },
   "cookie": {
-    "text": "This site uses cookies to improve your experience. By continuing, you agree to their use.",
-    "accept": "Accept",
-    "decline": "Decline",
-    "learnMore": "Learn more"
+    "bannerTitle": "We value your privacy",
+    "bannerText": "We use cookies and similar technologies to make the site work, measure usage, and show relevant ads. Choose which categories you accept.",
+    "acceptAll": "Accept all",
+    "rejectAll": "Reject all",
+    "customize": "Customize",
+    "save": "Save choice",
+    "learnMore": "Learn more",
+    "manageLabel": "Manage cookies",
+    "closeAria": "Close",
+    "categories": {
+      "necessary": {
+        "title": "Necessary",
+        "description": "Cookies the site can't function without: sign-in, cart, security.",
+        "alwaysOn": "Always on"
+      },
+      "analytics": {
+        "title": "Analytics",
+        "description": "Helps us understand what works on the site and what to improve. No identification of individual users."
+      },
+      "marketing": {
+        "title": "Marketing",
+        "description": "Lets us measure ad performance and show you more relevant offers."
+      }
+    }
   },
   "oneClick": {
     "title": "Order in 1 click",

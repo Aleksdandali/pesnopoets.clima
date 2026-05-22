@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import type { ConsentCopy } from "@/components/privacy/ConsentManager";
 
 const FloatingContactButtons = dynamic(
   () => import("@/components/layout/FloatingContactButtons"),
@@ -10,13 +11,15 @@ const ConsultantChat = dynamic(
   () => import("@/components/consultant/ConsultantChat"),
   { ssr: false }
 );
-const CookieConsent = dynamic(
-  () => import("@/components/CookieConsent"),
+const ConsentManager = dynamic(
+  () => import("@/components/privacy/ConsentManager"),
   { ssr: false }
 );
 
+type Locale = "bg" | "en" | "ru" | "ua";
+
 interface LazyOverlaysProps {
-  locale: "bg" | "en" | "ru" | "ua";
+  locale: Locale;
   consultantLabels: {
     triggerAria: string;
     title: string;
@@ -33,15 +36,7 @@ interface LazyOverlaysProps {
   };
   whatsappLabel: string;
   viberLabel: string;
-  cookieLocale: string;
-  cookieDictionary: {
-    cookie: {
-      text: string;
-      accept: string;
-      decline: string;
-      learnMore: string;
-    };
-  };
+  consentCopy: ConsentCopy;
 }
 
 export default function LazyOverlays({
@@ -49,8 +44,7 @@ export default function LazyOverlays({
   consultantLabels,
   whatsappLabel,
   viberLabel,
-  cookieLocale,
-  cookieDictionary,
+  consentCopy,
 }: LazyOverlaysProps) {
   return (
     <>
@@ -60,7 +54,7 @@ export default function LazyOverlays({
         locale={locale}
       />
       <ConsultantChat locale={locale} labels={consultantLabels} />
-      <CookieConsent locale={cookieLocale} dictionary={cookieDictionary} />
+      <ConsentManager locale={locale} copy={consentCopy} />
     </>
   );
 }

@@ -222,8 +222,7 @@ export default async function LocaleLayout({
           consultantLabels={getConsultantLabels(locale)}
           whatsappLabel={dictionary.contact?.whatsapp || "WhatsApp"}
           viberLabel={dictionary.contact?.viber || "Viber"}
-          cookieLocale={locale}
-          cookieDictionary={dictionary}
+          consentCopy={dictionary.cookie}
         />
       </CartProvider>
     </>
