@@ -118,6 +118,9 @@ export default async function ProfilaktikaPage({ params }: PageProps) {
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    datePublished: "2026-01-15",
+    dateModified: "2026-05-23",
+    inLanguage: locale === "bg" ? "bg-BG" : locale === "en" ? "en-GB" : locale === "ru" ? "ru-RU" : "uk-UA",
     mainEntity: faqItems.map((item) => ({
       "@type": "Question",
       name: item.q,
@@ -227,6 +230,40 @@ export default async function ProfilaktikaPage({ params }: PageProps) {
               {t.pageSubtitle}
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Quick-answer block — bare-number-first answer for AIO citation.
+          Price + frequency + duration + risk on one line so Gemini / Perplexity
+          can extract a quote on the first crawl. */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 sm:-mt-10 relative z-10">
+        <div className="bg-white border-2 border-primary/20 rounded-2xl shadow-[0_8px_32px_rgb(0_0_0/0.08)] p-5 sm:p-7">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-primary" aria-hidden="true" />
+            </div>
+            <h2 className="text-base sm:text-lg font-bold text-foreground">
+              {locale === "bg" ? "Бърз отговор за профилактика във Варна (2026 г.)"
+               : locale === "en" ? "Quick answer — AC maintenance in Varna (2026)"
+               : locale === "ru" ? "Быстрый ответ — профилактика во Варне (2026 г.)"
+               : "Швидка відповідь — профілактика у Варні (2026 р.)"}
+            </h2>
+          </div>
+          <p className="text-sm sm:text-base text-foreground leading-relaxed">
+            {locale === "bg" ? <>
+              <strong>42 € (82 лв.)</strong> с ДДС за един уред, стандартна еднократна профилактика; пълен сервиз с разглобяване — <strong>82 € (160 лв.)</strong>.
+              Препоръчителна честота: <strong>веднъж на 12 месеца</strong> (април–май). Времетраене: <strong>60–90 минути</strong>. Пропусната профилактика увеличава тока с <strong>20–25%</strong>.
+            </> : locale === "en" ? <>
+              <strong>€42 (82 лв.)</strong> incl. VAT per unit for standard one-off maintenance; full service with disassembly — <strong>€82 (160 лв.)</strong>.
+              Recommended frequency: <strong>once every 12 months</strong> (April–May). Duration: <strong>60–90 minutes</strong>. Skipping maintenance raises power use by <strong>20–25%</strong>.
+            </> : locale === "ru" ? <>
+              <strong>42 € (82 лв.)</strong> с НДС за один блок — стандартная разовая профилактика; полный сервис с разборкой — <strong>82 € (160 лв.)</strong>.
+              Рекомендуемая частота: <strong>раз в 12 месяцев</strong> (апрель–май). Длительность: <strong>60–90 минут</strong>. Пропуск повышает счёт за ток на <strong>20–25%</strong>.
+            </> : <>
+              <strong>42 € (82 лв.)</strong> з ПДВ за один блок — стандартна разова профілактика; повний сервіс з розбиранням — <strong>82 € (160 лв.)</strong>.
+              Рекомендована частота: <strong>раз на 12 місяців</strong> (квітень–травень). Тривалість: <strong>60–90 хвилин</strong>. Пропуск підвищує рахунок за струм на <strong>20–25%</strong>.
+            </>}
+          </p>
         </div>
       </section>
 

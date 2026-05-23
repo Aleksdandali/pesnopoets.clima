@@ -39,9 +39,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const dict = await getDictionary(locale);
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
+  const seoTitle = dict.montazh.metaTitle || dict.montazh.pageTitle;
+  const seoDescription = dict.montazh.metaDescription || dict.montazh.pageSubtitle;
   return {
-    title: `${dict.montazh.pageTitle} | ${dict.common.siteName}`,
-    description: dict.montazh.pageSubtitle,
+    title: `${seoTitle} | ${dict.common.siteName}`,
+    description: seoDescription,
     alternates: {
       canonical: `${siteUrl}/${locale}/montazh`,
       languages: {
@@ -63,14 +65,14 @@ function formatPowerLabel(maxBtu: number): string {
 
 const montazhFaq: Record<string, { q: string; a: string }[]> = {
   bg: [
-    { q: "Колко струва монтажът на климатик?", a: "Стандартният монтаж започва от 190 € за уреди до 14 000 BTU и 230 € за до 24 000 BTU. Цената включва 3 м тръба, материали, вакуумиране и пускане в експлоатация." },
-    { q: "Какво включва стандартният монтаж?", a: "Стандартният монтаж включва до 3 метра медна тръба, всички материали и фитинги, вакуумиране, електрическо свързване, монтаж на вътрешно и външно тяло и пускане в експлоатация." },
-    { q: "Колко бързо можете да монтирате?", a: "Предлагаме монтаж в същия ден, ако се свържете с нас преди обяд. Типичният монтаж отнема 2–4 часа." },
-    { q: "Давате ли гаранция за монтажа?", a: "Да, предоставяме 12 месеца гаранция върху монтажните дейности. При проблем, свързан с монтажа, го отстраняваме безплатно." },
-    { q: "Какви райони покривате?", a: "Покриваме всички квартали на Варна и околността в радиус до около 30 км по договаряне." },
-    { q: "Кога е най-добре да се монтира климатик?", a: "Най-добрите месеци са март–май и септември–октомври — търсенето е по-ниско и можем да дойдем в рамките на 1–3 дни. През юли и август изчакването често достига 1–2 седмици." },
-    { q: "Кой плаща за монтажа — наемателят или собственикът?", a: "Обикновено собственикът заплаща монтажа, тъй като климатикът остава в имота след изнасянето на наемателя. Препоръчваме това да се запише в договора за наем." },
-    { q: "Каква е максималната дължина на тръбата между вътрешното и външното тяло?", a: "При битови сплит климатици техническият максимум е 15–25 м (зависи от модела), но за оптимална ефективност препоръчваме до 7–10 м. Над 10 м обикновено се изисква дозареждане с фреон." },
+    { q: "Колко струва монтажът на климатик във Варна през 2026 г.?", a: "190 € (372 лв.) с ДДС за уреди до 14 000 BTU и 230 € (450 лв.) с ДДС за до 24 000 BTU през 2026 г. Цената включва 3 м медна тръба, всички материали, вакуумиране и пускане в експлоатация." },
+    { q: "Какво включва стандартният монтаж?", a: "Стандартен монтаж включва: медна тръба до 3 м, комуникационен кабел до 4 м, дренажен маркуч до 4 м, захранващ кабел до 3 м, вакуумиране, монтаж на вътрешно и външно тяло, електрическо свързване и пускане в експлоатация." },
+    { q: "Колко бързо можете да монтирате?", a: "2–4 часа за стандартен монтаж в един и същи ден, ако се свържете с нас преди обяд. Покриваме всички квартали на Варна." },
+    { q: "Давате ли гаранция за монтажа?", a: "12 месеца писмена гаранция на монтажа в договора + 2–5 години фабрична гаранция на климатика. При дефект, свързан с монтажа, го отстраняваме безплатно (съгл. ЗЗП чл.112–115)." },
+    { q: "Какви райони покривате?", a: "Всички квартали на Варна + Девня, Аксаково и околността в радиус до 30 км. Извън града — по договаряне с надценка за транспорт." },
+    { q: "Кога е най-добре да се монтира климатик?", a: "Март–май и септември–октомври са най-добрите месеци — търсенето е по-ниско, можем да дойдем в рамките на 1–3 дни. През юли и август изчакването достига 1–2 седмици." },
+    { q: "Кой плаща за монтажа — наемателят или собственикът?", a: "Собственикът, в 95% от случаите — климатикът остава в имота след изнасянето на наемателя. Препоръчваме да се запише в договора за наем." },
+    { q: "Каква е максималната дължина на тръбата между вътрешното и външното тяло?", a: "15–25 м технически максимум за битови сплит климатици (зависи от модела), но 7–10 м е оптимално за ефективност. Над 10 м обикновено се изисква дозареждане с фреон." },
   ],
   en: [
     { q: "How much does AC installation cost?", a: "Standard installation starts from 190 € for units up to 14,000 BTU and 230 € for up to 24,000 BTU. Price includes 3m pipe, materials, vacuum, and commissioning." },
@@ -140,6 +142,9 @@ export default async function MontazhPage({ params }: PageProps) {
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    datePublished: "2026-01-15",
+    dateModified: "2026-05-23",
+    inLanguage: locale === "bg" ? "bg-BG" : locale === "en" ? "en-GB" : locale === "ru" ? "ru-RU" : "uk-UA",
     mainEntity: faqItems.map((item) => ({
       "@type": "Question",
       name: item.q,
@@ -433,6 +438,8 @@ export default async function MontazhPage({ params }: PageProps) {
     name: headings.name,
     description: headings.description,
     inLanguage: locale === "ua" ? "uk" : locale,
+    datePublished: "2026-01-15",
+    dateModified: "2026-05-23",
     totalTime: "PT3H",
     estimatedCost: {
       "@type": "MonetaryAmount",
@@ -507,6 +514,83 @@ export default async function MontazhPage({ params }: PageProps) {
             <p className="mt-4 text-base sm:text-lg text-white/70 leading-relaxed">
               {t.pageSubtitle}
             </p>
+            {t.seoIntro && (
+              <p className="mt-3 text-sm sm:text-base text-white/60 leading-relaxed">
+                {t.seoIntro}
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Quick-answer block — bare-number-first answer for AIO citation.
+          Renders price + duration + warranty + spec block in 4 short lines
+          so Gemini / Perplexity can extract a quote on the first crawl. */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 sm:-mt-10 relative z-10">
+        <div className="bg-white border-2 border-primary/20 rounded-2xl shadow-[0_8px_32px_rgb(0_0_0/0.08)] p-5 sm:p-7">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Wrench className="w-4 h-4 text-primary" aria-hidden="true" />
+            </div>
+            <h2 className="text-base sm:text-lg font-bold text-foreground">
+              {locale === "bg" ? "Бърз отговор за монтаж във Варна (2026 г.)"
+               : locale === "en" ? "Quick answer — AC installation in Varna (2026)"
+               : locale === "ru" ? "Быстрый ответ — монтаж во Варне (2026 г.)"
+               : "Швидка відповідь — монтаж у Варні (2026 р.)"}
+            </h2>
+          </div>
+          <p className="text-sm sm:text-base text-foreground leading-relaxed">
+            {locale === "bg" ? <>
+              <strong>190 € (372 лв.)</strong> с ДДС за климатик до 14 000 BTU, <strong>230 € (450 лв.)</strong> с ДДС за до 24 000 BTU.
+              Готов за <strong>2–4 часа</strong> в един и същи ден. <strong>12 месеца писмена гаранция</strong> на монтажа (съгл. ЗЗП чл.112–115).
+            </> : locale === "en" ? <>
+              <strong>€190 (372 лв.)</strong> incl. VAT for up to 14,000 BTU, <strong>€230 (450 лв.)</strong> incl. VAT for up to 24,000 BTU.
+              Ready in <strong>2–4 hours</strong> same day. <strong>12-month written warranty</strong> on installation.
+            </> : locale === "ru" ? <>
+              <strong>190 € (372 лв.)</strong> с НДС для кондиционера до 14 000 BTU, <strong>230 € (450 лв.)</strong> с НДС для до 24 000 BTU.
+              Готов за <strong>2–4 часа</strong> в тот же день. <strong>12 месяцев письменной гарантии</strong> на монтаж.
+            </> : <>
+              <strong>190 € (372 лв.)</strong> з ПДВ для кондиціонера до 14 000 BTU, <strong>230 € (450 лв.)</strong> з ПДВ для до 24 000 BTU.
+              Готовий за <strong>2–4 години</strong> в той самий день. <strong>12 місяців письмової гарантії</strong> на монтаж.
+            </>}
+          </p>
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm sm:text-[0.95rem] text-foreground/85">
+            <div className="flex items-baseline gap-2">
+              <span className="text-primary font-bold tabular-nums">3 м</span>
+              <span>
+                {locale === "bg" ? "медна тръба"
+                 : locale === "en" ? "copper pipe"
+                 : locale === "ru" ? "медная труба"
+                 : "мідна труба"}
+              </span>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-primary font-bold tabular-nums">4 м</span>
+              <span>
+                {locale === "bg" ? "комуникационен кабел"
+                 : locale === "en" ? "communication cable"
+                 : locale === "ru" ? "коммуникационный кабель"
+                 : "комунікаційний кабель"}
+              </span>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-primary font-bold tabular-nums">4 м</span>
+              <span>
+                {locale === "bg" ? "дренажен маркуч"
+                 : locale === "en" ? "drainage hose"
+                 : locale === "ru" ? "дренажный шланг"
+                 : "дренажний шланг"}
+              </span>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-primary font-bold tabular-nums">3 м</span>
+              <span>
+                {locale === "bg" ? "захранващ кабел"
+                 : locale === "en" ? "power cable"
+                 : locale === "ru" ? "силовой кабель"
+                 : "силовий кабель"}
+              </span>
+            </div>
           </div>
         </div>
       </section>
