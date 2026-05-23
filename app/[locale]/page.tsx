@@ -21,6 +21,7 @@ import ProductCard from "@/components/catalog/ProductCard";
 import SeasonalBanner from "@/components/home/SeasonalBanner";
 import AiConsultantSection from "@/components/home/AiConsultantSection";
 import HeroCarousel from "@/components/home/HeroCarousel";
+import HeroContactRow from "@/components/home/HeroContactRow";
 import QuickOrderForm from "@/components/home/QuickOrderForm";
 import PortfolioGallery from "@/components/portfolio/PortfolioGallery";
 import PromoCodeBanner from "@/components/promo/PromoCodeBanner";
@@ -175,6 +176,12 @@ const sectionLabels: Record<string, {
   ctaButton: string;
   freeConsultation: string;
   trustStrip: string;
+  servicesTitle: string;
+  servicesMontazh: string;
+  servicesMontazhDesc: string;
+  servicesProfilaktika: string;
+  servicesProfilaktikaDesc: string;
+  servicesCta: string;
 }> = {
   bg: {
     categories: "Категории",
@@ -187,6 +194,12 @@ const sectionLabels: Record<string, {
     ctaButton: "Безплатна консултация",
     freeConsultation: "Безплатна консултация",
     trustStrip: "Показатели за доверие",
+    servicesTitle: "Услуги във Варна",
+    servicesMontazh: "Монтаж на климатик във Варна",
+    servicesMontazhDesc: "Фиксирана цена от 99 €, собствена бригада, гаранция 12 месеца. Чист монтаж с прахосмукачка.",
+    servicesProfilaktika: "Профилактика на климатик във Варна",
+    servicesProfilaktikaDesc: "Годишна поддръжка — чисти филтри, по-нисък ток, по-чист въздух у дома.",
+    servicesCta: "Вижте цените",
   },
   en: {
     categories: "Categories",
@@ -199,6 +212,12 @@ const sectionLabels: Record<string, {
     ctaButton: "Free consultation",
     freeConsultation: "Free consultation",
     trustStrip: "Trust indicators",
+    servicesTitle: "Services in Varna",
+    servicesMontazh: "AC installation in Varna",
+    servicesMontazhDesc: "Fixed price from €99, in-house crew, 12-month warranty. Clean install with vacuum.",
+    servicesProfilaktika: "AC maintenance in Varna",
+    servicesProfilaktikaDesc: "Annual service — clean filters, lower power use, cleaner air at home.",
+    servicesCta: "See prices",
   },
   ru: {
     categories: "Категории",
@@ -211,6 +230,12 @@ const sectionLabels: Record<string, {
     ctaButton: "Бесплатная консультация",
     freeConsultation: "Бесплатная консультация",
     trustStrip: "Показатели доверия",
+    servicesTitle: "Услуги в Варне",
+    servicesMontazh: "Монтаж кондиционера в Варне",
+    servicesMontazhDesc: "Фиксированная цена от 99 €, собственная бригада, гарантия 12 месяцев. Чистый монтаж с пылесосом.",
+    servicesProfilaktika: "Профилактика кондиционера в Варне",
+    servicesProfilaktikaDesc: "Годовое обслуживание — чистые фильтры, меньше тока, чистый воздух дома.",
+    servicesCta: "Смотреть цены",
   },
   ua: {
     categories: "Категорії",
@@ -223,6 +248,12 @@ const sectionLabels: Record<string, {
     ctaButton: "Безкоштовна консультація",
     freeConsultation: "Безкоштовна консультація",
     trustStrip: "Показники довіри",
+    servicesTitle: "Послуги у Варні",
+    servicesMontazh: "Монтаж кондиціонера у Варні",
+    servicesMontazhDesc: "Фіксована ціна від 99 €, власна бригада, гарантія 12 місяців. Чистий монтаж з пилососом.",
+    servicesProfilaktika: "Профілактика кондиціонера у Варні",
+    servicesProfilaktikaDesc: "Річне обслуговування — чисті фільтри, менше струму, чисте повітря вдома.",
+    servicesCta: "Дивитись ціни",
   },
 };
 
@@ -348,6 +379,11 @@ export default async function HomePage({ params }: HomePageProps) {
         ctaLink="/klimatici"
         ctaSecondaryLink="/inquiry"
       />
+
+      {/* Hero Contact Row — above-the-fold messenger access for ad traffic.
+          Clarity (2026-05-23): 76% of mobile visitors never scroll past 50%,
+          so this row must sit immediately under the carousel. */}
+      <HeroContactRow locale={locale} />
 
       {/* Seasonal Urgency Banner */}
       {seasonal && <SeasonalBanner locale={locale} labels={seasonal} />}
@@ -522,6 +558,61 @@ export default async function HomePage({ params }: HomePageProps) {
         </div>
       </section>
 
+      {/* Services — internal links to /montazh and /profilaktika with keyword-rich anchors */}
+      <section className="bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground text-center mb-8 sm:mb-10">
+            {labels.servicesTitle}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            <Link
+              href={`/${locale}/montazh`}
+              className="group block p-6 sm:p-8 bg-primary-light/30 border border-primary/15 rounded-2xl hover:bg-primary-light/50 hover:border-primary/30 transition-colors"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shrink-0 shadow-sm">
+                  <Wrench className="w-6 h-6 text-primary" aria-hidden="true" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base sm:text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                    {labels.servicesMontazh}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+                    {labels.servicesMontazhDesc}
+                  </p>
+                  <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                    {labels.servicesCta}
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                  </span>
+                </div>
+              </div>
+            </Link>
+            <Link
+              href={`/${locale}/profilaktika`}
+              className="group block p-6 sm:p-8 bg-accent/[0.06] border border-accent/15 rounded-2xl hover:bg-accent/[0.1] hover:border-accent/30 transition-colors"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shrink-0 shadow-sm">
+                  <Sparkles className="w-6 h-6 text-accent" aria-hidden="true" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base sm:text-lg font-bold text-foreground mb-2 group-hover:text-accent transition-colors">
+                    {labels.servicesProfilaktika}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">
+                    {labels.servicesProfilaktikaDesc}
+                  </p>
+                  <span className="inline-flex items-center gap-1.5 text-sm font-medium text-accent">
+                    {labels.servicesCta}
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                  </span>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Portfolio — real work in Varna (AIO citation + social proof) */}
       <PortfolioGallery locale={locale} limit={8} />
 
@@ -573,44 +664,30 @@ export default async function HomePage({ params }: HomePageProps) {
         </div>
       </section>
 
-      {/* Brands */}
+      {/* Brands — typography-first cards (Vimax-style) */}
       <section className="border-t border-border/40 bg-gradient-to-b from-[#fafbfc] to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
           <p className="text-xs sm:text-sm font-medium text-muted-foreground text-center mb-8 sm:mb-12 tracking-widest uppercase">
             {labels.brands}
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
             {brands.map((brand) => (
               <Link
                 key={brand.name}
                 href={`/${locale}/klimatici?brand=${encodeURIComponent(brand.name)}`}
-                className="group relative flex flex-col items-center gap-2 sm:gap-3 p-4 sm:p-5 bg-white border border-border/60 rounded-2xl hover:border-primary/30 hover:shadow-[0_12px_40px_rgb(2_132_199/0.08)] transition-all duration-300 hover:-translate-y-0.5"
+                className="group relative aspect-[5/3] flex flex-col items-center justify-center px-3 py-4 bg-white border border-border/60 rounded-2xl hover:border-primary/40 hover:shadow-[0_12px_40px_rgb(2_132_199/0.08)] transition-all duration-300 hover:-translate-y-0.5 overflow-hidden"
               >
-                {/* Brand representative image */}
-                {brand.image ? (
-                  <div className="relative w-full h-16 sm:h-20 rounded-xl bg-gradient-to-br from-[#f0f9ff]/50 to-[#f8fafc] overflow-hidden">
-                    <Image
-                      src={brand.image}
-                      alt={`${brand.name} air conditioner`}
-                      fill
-                      className="object-contain p-2 group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
-                      loading="lazy"
-                    />
-                  </div>
-                ) : (
-                  <div className="w-full h-16 sm:h-20 rounded-xl bg-gradient-to-br from-[#f0f9ff]/50 to-[#f8fafc] flex items-center justify-center">
-                    <Snowflake className="w-7 h-7 sm:w-8 sm:h-8 text-muted-foreground/20" aria-hidden="true" />
-                  </div>
-                )}
-                <div className="text-center">
-                  <span className="text-xs sm:text-sm font-semibold text-foreground/80 group-hover:text-primary transition-colors duration-200">
-                    {brand.name}
-                  </span>
-                  <span className="block text-xs text-muted-foreground mt-0.5">
-                    {brand.count} {dictionary.common.productsCount}
-                  </span>
-                </div>
+                {/* Subtle brand-coloured top accent on hover */}
+                <span
+                  aria-hidden="true"
+                  className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary to-accent scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300"
+                />
+                <span className="text-sm sm:text-base lg:text-lg font-bold text-foreground/85 tracking-tight uppercase text-center leading-tight group-hover:text-primary transition-colors duration-200 break-words">
+                  {brand.name}
+                </span>
+                <span className="mt-1.5 text-[10px] sm:text-[11px] text-muted-foreground tracking-wide tabular-nums">
+                  {brand.count} {dictionary.common.productsCount}
+                </span>
               </Link>
             ))}
           </div>

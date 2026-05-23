@@ -35,7 +35,6 @@ export default function FloatingContactButtons({
   viberLabel,
   locale = "bg",
 }: FloatingContactButtonsProps) {
-  const [visible, setVisible] = useState(false);
   const [stickyCta, setStickyCta] = useState(false);
   const [consultantOpen, setConsultantOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -44,15 +43,9 @@ export default function FloatingContactButtons({
 
   const t = LABELS[locale] ?? LABELS.bg;
 
-  // Show after small scroll
-  useEffect(() => {
-    function onScroll() {
-      setVisible(window.scrollY > 200);
-    }
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  // Visible immediately — Clarity (2026-05-23) shows 29% of mobile visitors
+  // exit before scrolling 10%. Hiding the FAB until 200px lost those clicks.
+  const visible = true;
 
   // React to sticky CTA + consultant panel
   useEffect(() => {

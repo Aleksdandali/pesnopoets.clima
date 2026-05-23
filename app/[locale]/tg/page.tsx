@@ -5,17 +5,17 @@ import PromoLanding, { type Locale, type PromoCopy } from "./PromoLanding";
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
 
 const TITLES: Record<Locale, string> = {
-  bg: "Монтаж €50 — промо за абонати на Telegram | Песнопоец Клима",
-  en: "€50 Install — Telegram Subscriber Promo | Pesnopoets Klima",
-  ru: "Монтаж €50 — акция для подписчиков Telegram | Песнопоец Клима",
-  ua: "Монтаж €50 — акція для підписників Telegram | Песнопоец Клима",
+  bg: "Монтаж €99 — промо за абонати на Telegram | Песнопоец Клима",
+  en: "€99 Install — Telegram Subscriber Promo | Pesnopoets Klima",
+  ru: "Монтаж €99 — акция для подписчиков Telegram | Песнопоец Клима",
+  ua: "Монтаж €99 — акція для підписників Telegram | Песнопоец Клима",
 };
 
 const DESCRIPTIONS: Record<Locale, string> = {
-  bg: "До 31.05: монтаж €50 при покупка на климатик от каталога. Само за абонати от Telegram групи на Варна. Промокод VAR50.",
-  en: "Until May 31: €50 installation with any AC purchase. Exclusive to Telegram subscribers in Varna. Code VAR50.",
-  ru: "До 31.05: монтаж €50 при покупке кондиционера из каталога. Только для подписчиков Telegram групп Варны. Промокод VAR50.",
-  ua: "До 31.05: монтаж €50 при купівлі кондиціонера з каталогу. Лише для підписників Telegram груп Варни. Промокод VAR50.",
+  bg: "До 31.05: монтаж €99 при покупка на климатик от каталога. Само за абонати от Telegram групи на Варна. Промокод VAR50.",
+  en: "Until May 31: €99 installation with any AC purchase. Exclusive to Telegram subscribers in Varna. Code VAR50.",
+  ru: "До 31.05: монтаж €99 при покупке кондиционера из каталога. Только для подписчиков Telegram групп Варны. Промокод VAR50.",
+  ua: "До 31.05: монтаж €99 при купівлі кондиціонера з каталогу. Лише для підписників Telegram груп Варни. Промокод VAR50.",
 };
 
 export async function generateMetadata({
@@ -30,19 +30,39 @@ export async function generateMetadata({
     description: DESCRIPTIONS[lc],
     robots: { index: false, follow: true },
     alternates: { canonical: `${SITE}/${lc}/tg` },
+    openGraph: {
+      title: TITLES[lc],
+      description: DESCRIPTIONS[lc],
+      url: `${SITE}/${lc}/tg`,
+      type: "website",
+      images: [
+        {
+          url: `${SITE}/promo/install-99-poster.jpg`,
+          width: 1200,
+          height: 1500,
+          alt: TITLES[lc],
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: TITLES[lc],
+      description: DESCRIPTIONS[lc],
+      images: [`${SITE}/promo/install-99-poster.jpg`],
+    },
   };
 }
 
 const COPY: Record<Locale, PromoCopy> = {
   bg: {
     badge: "Само за абонати от Telegram групи",
-    headline: "Монтаж за €50 при покупка на климатик",
+    headline: "Монтаж за €99 при покупка на климатик",
     subheadline:
-      "Промоция до 31 май — спестявате ~€140 на стандартния монтаж. Само първите 20 заявки от Telegram групи на Варна.",
+      "Промоция до 31 май — спестявате ~€91 на стандартния монтаж. Само първите 20 заявки от Telegram групи на Варна.",
     priceWas: "Обикновена цена",
     priceWasValue: "≈ €190",
     priceNow: "Промо цена",
-    priceNowValue: "€50",
+    priceNowValue: "€99",
     perInstall: "за стандартен монтаж",
     promoCodeLabel: "Промокод",
     countdownLabel: "Промоцията завършва след:",
@@ -81,7 +101,7 @@ const COPY: Record<Locale, PromoCopy> = {
       "1 промокод на клиент",
       "Допълнителни услуги (пробиване на стена, удължаване на тръби) — по тарифа",
     ],
-    formTitle: "Поръчай монтаж за €50",
+    formTitle: "Поръчай монтаж за €99",
     formSubtitle: "Ще ти се обадим в рамките на 30 минути.",
     formName: "Име",
     formPhone: "Телефон",
@@ -100,7 +120,7 @@ const COPY: Record<Locale, PromoCopy> = {
     faqTitle: "Често задавани въпроси",
     faq: [
       {
-        q: "Какво включва монтажът за €50?",
+        q: "Какво включва монтажът за €99?",
         a: "Стандартен монтаж до 3,5 m тръба: продухване с вакуумна помпа, монтаж на конзоли вътре/вън, свързване на електро- и фреонова система, тест и пускане. До 30 km от Варна.",
       },
       {
@@ -113,7 +133,7 @@ const COPY: Record<Locale, PromoCopy> = {
       },
       {
         q: "Промоцията важи ли за всички климатици?",
-        a: "Да — €50 монтаж важи за всеки модел от нашия каталог, независимо от мощност или марка.",
+        a: "Да — €99 монтаж важи за всеки модел от нашия каталог, независимо от мощност или марка.",
       },
       {
         q: "Има ли гаранция?",
@@ -121,7 +141,7 @@ const COPY: Record<Locale, PromoCopy> = {
       },
     ],
     whatsappPrefilled:
-      "Здравейте, искам да използвам промокод VAR50 за монтаж за €50.",
+      "Здравейте, искам да използвам промокод VAR50 за монтаж за €99.",
     gateTitle: "Отключи промокода",
     gateSubtitle: "Остави телефон — изпращаме ти кода веднага и форма за поръчка.",
     gatePhoneLabel: "Телефон",
@@ -132,13 +152,13 @@ const COPY: Record<Locale, PromoCopy> = {
   },
   en: {
     badge: "Exclusive to Telegram subscribers",
-    headline: "€50 installation with any AC purchase",
+    headline: "€99 installation with any AC purchase",
     subheadline:
-      "Until May 31 — save ~€140 on standard installation. First 20 requests from Varna Telegram groups only.",
+      "Until May 31 — save ~€91 on standard installation. First 20 requests from Varna Telegram groups only.",
     priceWas: "Standard price",
     priceWasValue: "≈ €190",
     priceNow: "Promo price",
-    priceNowValue: "€50",
+    priceNowValue: "€99",
     perInstall: "for standard install",
     promoCodeLabel: "Promo code",
     countdownLabel: "Promo ends in:",
@@ -177,7 +197,7 @@ const COPY: Record<Locale, PromoCopy> = {
       "1 promo code per customer",
       "Extra services (wall drilling, pipe extension) — per rate card",
     ],
-    formTitle: "Request your €50 install",
+    formTitle: "Request your €99 install",
     formSubtitle: "We'll call you back within 30 minutes.",
     formName: "Name",
     formPhone: "Phone",
@@ -196,7 +216,7 @@ const COPY: Record<Locale, PromoCopy> = {
     faqTitle: "Frequently asked",
     faq: [
       {
-        q: "What's included in the €50 install?",
+        q: "What's included in the €99 install?",
         a: "Standard install up to 3.5 m piping: vacuum pump, bracket mounting indoors/outdoors, electrical and refrigerant connections, test and startup. Up to 30 km from Varna.",
       },
       {
@@ -209,7 +229,7 @@ const COPY: Record<Locale, PromoCopy> = {
       },
       {
         q: "Does the promo apply to all ACs?",
-        a: "Yes — the €50 install applies to any model from our catalog, regardless of power or brand.",
+        a: "Yes — the €99 install applies to any model from our catalog, regardless of power or brand.",
       },
       {
         q: "Is there a warranty?",
@@ -217,7 +237,7 @@ const COPY: Record<Locale, PromoCopy> = {
       },
     ],
     whatsappPrefilled:
-      "Hi, I'd like to use code VAR50 for the €50 install promo.",
+      "Hi, I'd like to use code VAR50 for the €99 install promo.",
     gateTitle: "Unlock the promo code",
     gateSubtitle: "Leave your phone — we send the code instantly along with the order form.",
     gatePhoneLabel: "Phone",
@@ -228,13 +248,13 @@ const COPY: Record<Locale, PromoCopy> = {
   },
   ru: {
     badge: "Только для подписчиков Telegram групп",
-    headline: "Монтаж €50 при покупке кондиционера",
+    headline: "Монтаж €99 при покупке кондиционера",
     subheadline:
-      "Акция до 31 мая — экономия ~€140 на стандартном монтаже. Только первые 20 заявок из Telegram-групп Варны.",
+      "Акция до 31 мая — экономия ~€91 на стандартном монтаже. Только первые 20 заявок из Telegram-групп Варны.",
     priceWas: "Обычная цена",
     priceWasValue: "≈ €190",
     priceNow: "Цена по акции",
-    priceNowValue: "€50",
+    priceNowValue: "€99",
     perInstall: "за стандартный монтаж",
     promoCodeLabel: "Промокод",
     countdownLabel: "До конца акции:",
@@ -273,7 +293,7 @@ const COPY: Record<Locale, PromoCopy> = {
       "1 промокод на клиента",
       "Дополнительные услуги (пробивка стены, удлинение труб) — по тарифу",
     ],
-    formTitle: "Заказать монтаж за €50",
+    formTitle: "Заказать монтаж за €99",
     formSubtitle: "Перезвоним в течение 30 минут.",
     formName: "Имя",
     formPhone: "Телефон",
@@ -292,7 +312,7 @@ const COPY: Record<Locale, PromoCopy> = {
     faqTitle: "Часто задаваемые вопросы",
     faq: [
       {
-        q: "Что входит в монтаж за €50?",
+        q: "Что входит в монтаж за €99?",
         a: "Стандартный монтаж до 3,5 m трубы: вакуумирование, монтаж кронштейнов внутри/снаружи, подключение электро- и фреоновой системы, тест и запуск. До 30 km от Варны.",
       },
       {
@@ -305,7 +325,7 @@ const COPY: Record<Locale, PromoCopy> = {
       },
       {
         q: "Акция действует на все кондиционеры?",
-        a: "Да — монтаж €50 действует для любой модели из каталога, независимо от мощности или бренда.",
+        a: "Да — монтаж €99 действует для любой модели из каталога, независимо от мощности или бренда.",
       },
       {
         q: "Есть ли гарантия?",
@@ -313,7 +333,7 @@ const COPY: Record<Locale, PromoCopy> = {
       },
     ],
     whatsappPrefilled:
-      "Здравствуйте, хочу воспользоваться промокодом VAR50 для монтажа за €50.",
+      "Здравствуйте, хочу воспользоваться промокодом VAR50 для монтажа за €99.",
     gateTitle: "Получите промокод",
     gateSubtitle: "Оставьте телефон — пришлём код мгновенно и откроем форму заказа.",
     gatePhoneLabel: "Телефон",
@@ -324,13 +344,13 @@ const COPY: Record<Locale, PromoCopy> = {
   },
   ua: {
     badge: "Лише для підписників Telegram груп",
-    headline: "Монтаж €50 при купівлі кондиціонера",
+    headline: "Монтаж €99 при купівлі кондиціонера",
     subheadline:
-      "Акція до 31 травня — економія ~€140 на стандартному монтажі. Лише перші 20 заявок з Telegram-груп Варни.",
+      "Акція до 31 травня — економія ~€91 на стандартному монтажі. Лише перші 20 заявок з Telegram-груп Варни.",
     priceWas: "Звичайна ціна",
     priceWasValue: "≈ €190",
     priceNow: "Ціна за акцією",
-    priceNowValue: "€50",
+    priceNowValue: "€99",
     perInstall: "за стандартний монтаж",
     promoCodeLabel: "Промокод",
     countdownLabel: "До кінця акції:",
@@ -369,7 +389,7 @@ const COPY: Record<Locale, PromoCopy> = {
       "1 промокод на клієнта",
       "Додаткові послуги (пробивання стіни, подовження труб) — за тарифом",
     ],
-    formTitle: "Замовити монтаж за €50",
+    formTitle: "Замовити монтаж за €99",
     formSubtitle: "Зателефонуємо протягом 30 хвилин.",
     formName: "Ім'я",
     formPhone: "Телефон",
@@ -388,7 +408,7 @@ const COPY: Record<Locale, PromoCopy> = {
     faqTitle: "Часті запитання",
     faq: [
       {
-        q: "Що входить у монтаж за €50?",
+        q: "Що входить у монтаж за €99?",
         a: "Стандартний монтаж до 3,5 m труби: вакуумування, монтаж кронштейнів усередині/зовні, підключення електро- та фреонової системи, тест та запуск. До 30 km від Варни.",
       },
       {
@@ -401,7 +421,7 @@ const COPY: Record<Locale, PromoCopy> = {
       },
       {
         q: "Чи діє акція на всі кондиціонери?",
-        a: "Так — монтаж €50 діє для будь-якої моделі з каталогу, незалежно від потужності чи бренду.",
+        a: "Так — монтаж €99 діє для будь-якої моделі з каталогу, незалежно від потужності чи бренду.",
       },
       {
         q: "Чи є гарантія?",
@@ -409,7 +429,7 @@ const COPY: Record<Locale, PromoCopy> = {
       },
     ],
     whatsappPrefilled:
-      "Вітаю, хочу скористатися промокодом VAR50 для монтажу за €50.",
+      "Вітаю, хочу скористатися промокодом VAR50 для монтажу за €99.",
     gateTitle: "Отримайте промокод",
     gateSubtitle: "Залиште телефон — надішлемо код миттєво та відкриємо форму замовлення.",
     gatePhoneLabel: "Телефон",

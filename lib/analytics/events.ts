@@ -16,6 +16,7 @@ export const CLIENT_EVENTS = [
   "whatsapp_click",
   "viber_click",
   "telegram_click",
+  "instagram_click",
   // Funnel
   "inquiry_started",
   "cart_add",

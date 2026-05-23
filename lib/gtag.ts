@@ -81,7 +81,12 @@ function pushEvent(eventName: string, params: Record<string, unknown> = {}) {
  * `track` SDK never gets bundled into anything it shouldn't.
  */
 function pushFirstParty(
-  name: "phone_click" | "whatsapp_click" | "viber_click" | "telegram_click",
+  name:
+    | "phone_click"
+    | "whatsapp_click"
+    | "viber_click"
+    | "telegram_click"
+    | "instagram_click",
   properties: Record<string, unknown> = {},
 ) {
   if (typeof window === "undefined") return;
@@ -192,13 +197,19 @@ export function trackPhoneClick() {
   pushFirstParty("phone_click");
 }
 
-/** Click on WhatsApp or Viber link. */
-export function trackMessengerClick(messenger: "whatsapp" | "viber") {
-  pushConversion(messenger, {
-    event_label: messenger,
-    value: 5,
-    currency: "EUR",
-  });
+/** Click on WhatsApp, Viber, Instagram, or Telegram link. */
+export function trackMessengerClick(
+  messenger: "whatsapp" | "viber" | "instagram" | "telegram"
+) {
+  // Only WhatsApp + Viber are wired in Google Ads conversion actions — others
+  // track as standard events only.
+  if (messenger === "whatsapp" || messenger === "viber") {
+    pushConversion(messenger, {
+      event_label: messenger,
+      value: 5,
+      currency: "EUR",
+    });
+  }
   pushEvent("messenger_click", {
     event_category: "contact",
     event_label: messenger,
@@ -208,7 +219,7 @@ export function trackMessengerClick(messenger: "whatsapp" | "viber") {
   // Meta Pixel: Contact
   pushFbq("Contact", { value: 5, currency: "EUR", content_name: messenger });
   // First-party warehouse
-  pushFirstParty(messenger === "whatsapp" ? "whatsapp_click" : "viber_click");
+  pushFirstParty(`${messenger}_click`);
 }
 
 // ---------------------------------------------------------------------------

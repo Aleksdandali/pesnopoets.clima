@@ -171,7 +171,7 @@ export default function PromoLanding({ locale, copy }: Props) {
         body: JSON.stringify({
           name: "Промо-заявка",
           phone: `+359 ${cleanPhone}`,
-          message: `[ЗАЯВКА ЗА КОД — органика] Промо: монтаж €50 до 31.05.2026`,
+          message: `[ЗАЯВКА ЗА КОД — органика] Промо: монтаж €99 до 31.05.2026`,
           locale,
           source: "tg-promo-organic",
         }),
@@ -211,7 +211,7 @@ export default function PromoLanding({ locale, copy }: Props) {
     const message = [
       `[TG ПРОМО — код ${effectiveCode}]`,
       note ? `Бележка: ${note}` : null,
-      `Промо: монтаж €50 до 31.05.2026`,
+      `Промо: монтаж €99 до 31.05.2026`,
     ]
       .filter(Boolean)
       .join("\n");
@@ -255,6 +255,21 @@ export default function PromoLanding({ locale, copy }: Props) {
             <span className="text-xs font-semibold text-primary tracking-wide uppercase">
               {copy.badge}
             </span>
+          </div>
+        </div>
+
+        {/* Hero poster — owner photo + €99 offer, builds trust + clarifies pricing
+            for ad traffic before they read the H1. */}
+        <div className="mx-auto max-w-xl mb-6 sm:mb-8">
+          <div className="relative aspect-[4/5] sm:aspect-[16/10] rounded-2xl overflow-hidden shadow-[0_8px_32px_rgb(0_0_0/0.12)] ring-1 ring-border/60">
+            <Image
+              src="/promo/install-99-poster.jpg"
+              alt={copy.headline}
+              fill
+              priority
+              sizes="(max-width: 640px) 90vw, 36rem"
+              className="object-cover"
+            />
           </div>
         </div>
 
