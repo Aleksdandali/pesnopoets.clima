@@ -14,6 +14,8 @@ import {
   CalendarClock,
 } from "lucide-react";
 import { PROFILAKTIKA_BGN, bgnToEur } from "@/lib/pricing";
+import { DISTRICTS, type Locale } from "@/lib/districts";
+import { PROFILAKTIKA_BY_DISTRICT } from "@/lib/profilaktika-districts";
 import PortfolioGallery from "@/components/portfolio/PortfolioGallery";
 
 interface PageProps {
@@ -35,9 +37,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const dict = await getDictionary(locale);
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
+  const seoTitle = dict.profilaktika.metaTitle || dict.profilaktika.pageTitle;
+  const seoDescription = dict.profilaktika.metaDescription || dict.profilaktika.pageSubtitle;
   return {
-    title: `${dict.profilaktika.pageTitle} | ${dict.common.siteName}`,
-    description: dict.profilaktika.pageSubtitle,
+    title: `${seoTitle} | ${dict.common.siteName}`,
+    description: seoDescription,
     alternates: {
       canonical: `${siteUrl}/${locale}/profilaktika`,
       languages: {
@@ -115,6 +119,20 @@ export default async function ProfilaktikaPage({ params }: PageProps) {
   const common = dict.common;
 
   const faqItems = profilaktikaFaq[locale] || profilaktikaFaq.bg;
+
+  // Map localized district names → slugs so neighborhood chips become real links
+  // for the 8 districts that have dedicated /profilaktika/[district] SEO pages.
+  const districtLocale: Locale = (["bg", "en", "ru", "ua"] as const).includes(
+    locale as Locale
+  )
+    ? (locale as Locale)
+    : "bg";
+  const districtSlugByName: Record<string, string> = {};
+  for (const d of DISTRICTS) {
+    if (PROFILAKTIKA_BY_DISTRICT[d.slug]) {
+      districtSlugByName[d.content[districtLocale].name] = d.slug;
+    }
+  }
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -475,15 +493,31 @@ export default async function ProfilaktikaPage({ params }: PageProps) {
           </div>
         </div>
         <ul className="mt-6 flex flex-wrap gap-2">
-          {(t.neighborhoods as string[]).map((name) => (
-            <li
-              key={name}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-border/60 rounded-full text-sm text-foreground"
-            >
-              <MapPin className="w-3.5 h-3.5 text-primary/70" aria-hidden="true" />
-              {name}
-            </li>
-          ))}
+          {(t.neighborhoods as string[]).map((name) => {
+            const slug = districtSlugByName[name];
+            if (slug) {
+              return (
+                <li key={name}>
+                  <Link
+                    href={`/${locale}/profilaktika/${slug}`}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-border/60 rounded-full text-sm text-foreground hover:bg-primary-light/40 hover:border-primary/40 transition"
+                  >
+                    <MapPin className="w-3.5 h-3.5 text-primary/70" aria-hidden="true" />
+                    {name}
+                  </Link>
+                </li>
+              );
+            }
+            return (
+              <li
+                key={name}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-border/60 rounded-full text-sm text-foreground"
+              >
+                <MapPin className="w-3.5 h-3.5 text-primary/70" aria-hidden="true" />
+                {name}
+              </li>
+            );
+          })}
         </ul>
       </section>
 

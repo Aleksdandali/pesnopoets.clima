@@ -369,6 +369,9 @@
   "montazh": {
     "pageTitle": "AC Installation in Varna",
     "pageSubtitle": "Transparent pricing. Fixed rates. Clean install with vacuum.",
+    "metaTitle": "AC Installation in Varna 2026 — from €190, 12-month warranty",
+    "metaDescription": "AC installation in Varna in 2026: €190 (up to 14,000 BTU) and €230 (up to 24,000 BTU) incl. VAT. In-house crew, 12-month warranty, same-day service.",
+    "seoIntro": "We install air conditioners in Varna and the region with our own in-house crew. Fixed price for standard installation — no hidden fees. You see the final cost before we start.",
     "breadcrumbHome": "Home",
     "breadcrumbMontazh": "Installation",
     "includedTitle": "What's included in standard install",
@@ -422,6 +425,8 @@
   "profilaktika": {
     "pageTitle": "AC preventive maintenance in Varna",
     "pageSubtitle": "Annual AC service by our own team. Clean filters, lower power bills, healthier indoor air.",
+    "metaTitle": "AC Maintenance in Varna 2026 — from €42 incl. VAT",
+    "metaDescription": "Annual AC service in Varna from €42 (82 BGN) incl. VAT. Clean filters, up to -25% power use. Full service €82. In-house crew, same-day.",
     "breadcrumbHome": "Home",
     "breadcrumbProfilaktika": "Maintenance",
     "includedTitle": "What standard maintenance includes",
@@ -483,7 +488,7 @@
     ],
     "relatedMontazhTitle": "Need a new AC unit?",
     "relatedMontazhDesc": "We do turnkey installation by our own team with a 12-month warranty.",
-    "relatedMontazhCta": "View installation",
+    "relatedMontazhCta": "AC installation in Varna",
     "ctaTitle": "Request maintenance today",
     "ctaDesc": "Get in touch — we'll suggest a convenient day and arrive with full equipment.",
     "ctaButton": "Request maintenance"

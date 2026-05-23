@@ -81,6 +81,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...localized("/profilaktika", { changeFrequency: "weekly", priority: 0.85 })
   );
   entries.push(
+    ...localized("/kalkulator-btu", { changeFrequency: "monthly", priority: 0.8 })
+  );
+
+  // District landing pages for /profilaktika/[district]
+  for (const district of DISTRICTS) {
+    entries.push(
+      ...localized(`/profilaktika/${district.slug}`, {
+        changeFrequency: "weekly",
+        priority: 0.8,
+      })
+    );
+  }
+  entries.push(
     ...localized("/daikin-varna", { changeFrequency: "weekly", priority: 0.85 })
   );
   entries.push(
