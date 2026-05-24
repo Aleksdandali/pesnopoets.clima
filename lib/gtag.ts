@@ -38,6 +38,19 @@ function getGoogleAdsId(): string | null {
 }
 
 /**
+ * Owner / internal-traffic gate. When the owner appends `?internal=1` to any
+ * URL once on their device, `TrackingPixelsClient` writes a localStorage
+ * flag and `window.__ANALYTICS.internal = true`. We then suppress all
+ * Google Ads conversions + GA4 custom events from that browser so the
+ * owner's own clicks don't pollute campaign optimisation data.
+ */
+function isInternalTraffic(): boolean {
+  if (typeof window === "undefined") return false;
+  const cfg = (window as unknown as { __ANALYTICS?: { internal?: boolean } }).__ANALYTICS;
+  return cfg?.internal === true;
+}
+
+/**
  * Conversion action labels — tied to Google Ads account AW-18063225430.
  * Created 2026-05-15. If admin switches `google_ads_id` in site_settings to
  * a different AW account, these labels stop matching and must be regenerated.
@@ -56,6 +69,7 @@ type ConversionKey = keyof typeof CONVERSION_LABELS;
  * Dropped if Google Ads ID is not configured.
  */
 function pushConversion(key: ConversionKey, params: Record<string, unknown> = {}) {
+  if (isInternalTraffic()) return;
   const gtag = getGtag();
   if (!gtag) return;
   const adsId = getGoogleAdsId();
@@ -70,6 +84,7 @@ function pushConversion(key: ConversionKey, params: Record<string, unknown> = {}
  * Push a non-conversion event to gtag (goes to GA4 + Ads remarketing audiences).
  */
 function pushEvent(eventName: string, params: Record<string, unknown> = {}) {
+  if (isInternalTraffic()) return;
   const gtag = getGtag();
   if (!gtag) return;
   gtag("event", eventName, params);
@@ -179,16 +194,21 @@ export function trackChatLead() {
 
 /** Click on tel: phone link. */
 export function trackPhoneClick() {
+  // transport_type: 'beacon' = use sendBeacon so the hit survives the browser
+  // handoff to the dialer (otherwise tap-to-call kills the fetch and we lose
+  // the conversion — primary cause of under-reporting on mobile).
   pushConversion("phone", {
     event_label: "phone",
     value: 5,
     currency: "EUR",
+    transport_type: "beacon",
   });
   pushEvent("phone_click", {
     event_category: "contact",
     event_label: "phone",
     value: 5,
     currency: "EUR",
+    transport_type: "beacon",
   });
   // Meta Pixel: Contact
   pushFbq("Contact", { value: 5, currency: "EUR", content_name: "phone" });
@@ -208,6 +228,7 @@ export function trackMessengerClick(
       event_label: messenger,
       value: 5,
       currency: "EUR",
+      transport_type: "beacon",
     });
   }
   pushEvent("messenger_click", {
@@ -215,6 +236,7 @@ export function trackMessengerClick(
     event_label: messenger,
     value: 5,
     currency: "EUR",
+    transport_type: "beacon",
   });
   // Meta Pixel: Contact
   pushFbq("Contact", { value: 5, currency: "EUR", content_name: messenger });

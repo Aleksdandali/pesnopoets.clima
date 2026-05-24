@@ -32,10 +32,10 @@ const COPY: Record<Locale, {
 }> = {
   bg: {
     badge: "Промо до 31 май",
-    headline: "Монтаж €50 при покупка на климатик",
+    headline: "Монтаж €99 при покупка на климатик",
     sub: "Остави телефон — изпращаме ти промокода веднага. Само срещу телефон.",
     priceWas: "≈ €190",
-    priceNow: "€50",
+    priceNow: "€99",
     phoneLabel: "Телефон",
     submit: "Получи промокода",
     submitting: "Изпращане...",
@@ -49,10 +49,10 @@ const COPY: Record<Locale, {
   },
   en: {
     badge: "Promo until May 31",
-    headline: "€50 installation with any AC purchase",
+    headline: "€99 installation with any AC purchase",
     sub: "Leave your phone — we send the promo code instantly. Phone only.",
     priceWas: "≈ €190",
-    priceNow: "€50",
+    priceNow: "€99",
     phoneLabel: "Phone",
     submit: "Get the code",
     submitting: "Sending...",
@@ -66,10 +66,10 @@ const COPY: Record<Locale, {
   },
   ru: {
     badge: "Акция до 31 мая",
-    headline: "Монтаж €50 при покупке кондиционера",
+    headline: "Монтаж €99 при покупке кондиционера",
     sub: "Оставьте телефон — пришлём промокод мгновенно. Только телефон.",
     priceWas: "≈ €190",
-    priceNow: "€50",
+    priceNow: "€99",
     phoneLabel: "Телефон",
     submit: "Получить промокод",
     submitting: "Отправка...",
@@ -83,10 +83,10 @@ const COPY: Record<Locale, {
   },
   ua: {
     badge: "Акція до 31 травня",
-    headline: "Монтаж €50 при купівлі кондиціонера",
+    headline: "Монтаж €99 при купівлі кондиціонера",
     sub: "Залиште телефон — надішлемо промокод миттєво. Лише телефон.",
     priceWas: "≈ €190",
-    priceNow: "€50",
+    priceNow: "€99",
     phoneLabel: "Телефон",
     submit: "Отримати промокод",
     submitting: "Надсилання...",
@@ -144,13 +144,17 @@ export default function PromoCodeBanner({ locale }: Props) {
         body: JSON.stringify({
           name: "Промо-заявка",
           phone: `+359 ${cleanPhone}`,
-          message: `[ЗАЯВКА ЗА КОД — органика, главна страница] Промо: монтаж €50 до 31.05.2026`,
+          message: `[ЗАЯВКА ЗА КОД — органика, главна страница] Промо: монтаж €99 до 31.05.2026`,
           locale: lc,
           source: "tg-promo-organic",
         }),
       });
       if (!res.ok) throw new Error("submit failed");
       trackInquirySubmit("tg-promo-organic");
+      // Dedup: tell /tg landing that this lead is already counted, so its
+      // own form submit (same phone, name/note added) does NOT re-fire a
+      // Google Ads conversion. One actual lead = one Ads conversion.
+      try { sessionStorage.setItem("tg_promo_counted", "1"); } catch (_) {}
       router.push(`/${lc}/tg?code=SITE50&phone=${encodeURIComponent(cleanPhone)}`);
     } catch {
       setStatus("error");

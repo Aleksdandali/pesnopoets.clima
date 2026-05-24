@@ -69,7 +69,7 @@ const montazhFaq: Record<string, { q: string; a: string }[]> = {
     { q: "Какво включва стандартният монтаж?", a: "Стандартен монтаж включва: медна тръба до 3 м, комуникационен кабел до 4 м, дренажен маркуч до 4 м, захранващ кабел до 3 м, вакуумиране, монтаж на вътрешно и външно тяло, електрическо свързване и пускане в експлоатация." },
     { q: "Колко бързо можете да монтирате?", a: "2–4 часа за стандартен монтаж в един и същи ден, ако се свържете с нас преди обяд. Покриваме всички квартали на Варна." },
     { q: "Давате ли гаранция за монтажа?", a: "12 месеца писмена гаранция на монтажа в договора + 2–5 години фабрична гаранция на климатика. При дефект, свързан с монтажа, го отстраняваме безплатно (съгл. ЗЗП чл.112–115)." },
-    { q: "Какви райони покривате?", a: "Всички квартали на Варна + Девня, Аксаково и околността в радиус до 30 км. Извън града — по договаряне с надценка за транспорт." },
+    { q: "Какви райони покривате?", a: "Всички квартали на Варна + Девня, Аксаково и околността в радиус до 25 км. Извън града — по договаряне с надценка за транспорт." },
     { q: "Кога е най-добре да се монтира климатик?", a: "Март–май и септември–октомври са най-добрите месеци — търсенето е по-ниско, можем да дойдем в рамките на 1–3 дни. През юли и август изчакването достига 1–2 седмици." },
     { q: "Кой плаща за монтажа — наемателят или собственикът?", a: "Собственикът, в 95% от случаите — климатикът остава в имота след изнасянето на наемателя. Препоръчваме да се запише в договора за наем." },
     { q: "Каква е максималната дължина на тръбата между вътрешното и външното тяло?", a: "15–25 м технически максимум за битови сплит климатици (зависи от модела), но 7–10 м е оптимално за ефективност. Над 10 м обикновено се изисква дозареждане с фреон." },
@@ -79,7 +79,7 @@ const montazhFaq: Record<string, { q: string; a: string }[]> = {
     { q: "What does standard installation include?", a: "Standard installation includes up to 3 meters of copper pipe, all fittings and materials, vacuum evacuation, electrical connection, mounting of indoor and outdoor units, and commissioning." },
     { q: "How fast can you install?", a: "We offer same-day installation if you contact us before noon. Typical installation takes 2–4 hours." },
     { q: "Do you offer warranty on installation?", a: "Yes, we provide 12 months warranty on all installation work. Any installation-related issue within that period is fixed at no charge." },
-    { q: "What areas do you cover?", a: "We cover all neighborhoods in Varna city and the surrounding region up to approximately 30km by arrangement." },
+    { q: "What areas do you cover?", a: "We cover all neighborhoods in Varna city and the surrounding region up to approximately 25 km by arrangement." },
     { q: "When is the best time to install an AC?", a: "Best months are March–May and September–October — demand is lower and we can come within 1–3 days. In July and August the wait often reaches 1–2 weeks." },
     { q: "Who pays for installation — tenant or landlord?", a: "Typically the landlord pays, as the AC stays in the property after the tenant moves out. We recommend documenting this in the lease agreement." },
     { q: "What is the maximum pipe length between indoor and outdoor units?", a: "For residential split systems the technical maximum is 15–25 m (varies by model), but for optimal efficiency we recommend up to 7–10 m. Above 10 m usually requires additional refrigerant top-up." },
@@ -89,7 +89,7 @@ const montazhFaq: Record<string, { q: string; a: string }[]> = {
     { q: "Что входит в стандартную установку?", a: "Стандартная установка включает до 3 метров медной трубы, все материалы и фитинги, вакуумирование, электроподключение, монтаж внутреннего и наружного блоков и пусконаладку." },
     { q: "Как быстро вы можете установить?", a: "Мы предлагаем установку в тот же день, если вы свяжетесь с нами до обеда. Типичная установка занимает 2–4 часа." },
     { q: "Даёте ли вы гарантию на монтаж?", a: "Да, мы предоставляем 12 месяцев гарантии на монтажные работы. Любая проблема, связанная с монтажом, устраняется бесплатно." },
-    { q: "Какие районы вы обслуживаете?", a: "Мы обслуживаем все районы Варны и окрестности в радиусе до 30 км по договорённости." },
+    { q: "Какие районы вы обслуживаете?", a: "Мы обслуживаем все районы Варны и окрестности в радиусе до 25 км по договорённости." },
     { q: "Когда лучше всего устанавливать кондиционер?", a: "Лучшие месяцы — март–май и сентябрь–октябрь, когда спрос ниже и мы можем приехать в течение 1–3 дней. В июле и августе ожидание часто достигает 1–2 недель." },
     { q: "Кто платит за установку — арендатор или собственник?", a: "Обычно собственник, так как кондиционер остаётся в квартире после съезда арендатора. Рекомендуем закрепить это в договоре аренды." },
     { q: "Какова максимальная длина трассы между внутренним и наружным блоками?", a: "Технический максимум для бытовых сплит-систем — 15–25 м (зависит от модели), но для оптимальной эффективности рекомендуем до 7–10 м. Свыше 10 м обычно требуется дозаправка фреоном." },
@@ -99,7 +99,7 @@ const montazhFaq: Record<string, { q: string; a: string }[]> = {
     { q: "Що входить у стандартний монтаж?", a: "Стандартний монтаж включає до 3 метрів мідної труби, всі матеріали та фітинги, вакуумування, електропідключення, монтаж внутрішнього та зовнішнього блоків і пусконалагодження." },
     { q: "Як швидко ви можете встановити?", a: "Ми пропонуємо монтаж у той самий день, якщо ви зв'яжетесь до обіду. Типовий монтаж займає 2–4 години." },
     { q: "Чи надаєте гарантію на монтаж?", a: "Так, ми надаємо 12 місяців гарантії на монтажні роботи. Будь-яка проблема, пов'язана з монтажем, усувається безкоштовно." },
-    { q: "Які райони ви обслуговуєте?", a: "Ми обслуговуємо всі райони Варни та околиці в радіусі до 30 км за домовленістю." },
+    { q: "Які райони ви обслуговуєте?", a: "Ми обслуговуємо всі райони Варни та околиці в радіусі до 25 км за домовленістю." },
     { q: "Коли найкраще встановлювати кондиціонер?", a: "Найкращі місяці — березень–травень і вересень–жовтень, коли попит нижчий і ми можемо приїхати протягом 1–3 днів. У липні та серпні очікування часто сягає 1–2 тижнів." },
     { q: "Хто платить за монтаж — орендар чи власник?", a: "Зазвичай власник, оскільки кондиціонер залишається у квартирі після виїзду орендаря. Рекомендуємо зафіксувати це в договорі оренди." },
     { q: "Яка максимальна довжина траси між внутрішнім і зовнішнім блоками?", a: "Технічний максимум для побутових спліт-систем — 15–25 м (залежить від моделі), але для оптимальної ефективності рекомендуємо до 7–10 м. Понад 10 м зазвичай потрібна дозаправка фреоном." },
@@ -593,6 +593,42 @@ export default async function MontazhPage({ params }: PageProps) {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* €99 bundle promo callout — message-match with site-wide PromoBar so
+          paid traffic landing on /montazh sees the same offer. Visible only
+          while promo runs (PromoBar dismiss is independent — callout always
+          renders here). */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+        <a
+          href={`/${locale}/tg`}
+          className="group flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-5 p-4 sm:p-5 rounded-2xl border-2 border-accent/40 bg-gradient-to-r from-accent/10 via-accent/5 to-transparent hover:border-accent/70 transition-colors"
+        >
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-bold uppercase tracking-wide shrink-0">
+            <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
+            {locale === "bg" ? "Промоция до 31.05"
+             : locale === "en" ? "Promo until 31.05"
+             : locale === "ru" ? "Промо до 31.05"
+             : "Промо до 31.05"}
+          </div>
+          <div className="flex-1 text-sm sm:text-base text-foreground">
+            {locale === "bg" ? <>
+              При покупка на климатик от нашия каталог — монтаж <strong className="text-accent-foreground bg-accent/20 px-1.5 rounded">€99</strong> вместо €190 с код <strong>SITE50</strong>.
+            </> : locale === "en" ? <>
+              Buy an AC from our catalog — install <strong className="text-accent-foreground bg-accent/20 px-1.5 rounded">€99</strong> instead of €190 with code <strong>SITE50</strong>.
+            </> : locale === "ru" ? <>
+              При покупке кондиционера из нашего каталога — монтаж <strong className="text-accent-foreground bg-accent/20 px-1.5 rounded">€99</strong> вместо €190 с кодом <strong>SITE50</strong>.
+            </> : <>
+              При купівлі кондиціонера з нашого каталогу — монтаж <strong className="text-accent-foreground bg-accent/20 px-1.5 rounded">€99</strong> замість €190 з кодом <strong>SITE50</strong>.
+            </>}
+          </div>
+          <span className="text-sm font-semibold text-primary group-hover:underline shrink-0">
+            {locale === "bg" ? "Виж промоцията →"
+             : locale === "en" ? "See promo →"
+             : locale === "ru" ? "Смотреть промо →"
+             : "Дивитися промо →"}
+          </span>
+        </a>
       </section>
 
       {/* Neighborhoods — local-intent signal for "монтаж климатик [квартал] варна" */}

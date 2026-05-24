@@ -11,22 +11,22 @@ interface PromoBarProps {
 
 const COPY: Record<string, { text: string; cta: string; ariaClose: string }> = {
   bg: {
-    text: "Промоция: монтаж €50 до 31.05 при покупка от каталога",
+    text: "Промоция: монтаж €99 до 31.05 при покупка от каталога",
     cta: "Подробности",
     ariaClose: "Затвори",
   },
   en: {
-    text: "Promo: €50 install until May 31 with any catalog purchase",
+    text: "Promo: €99 install until May 31 with any catalog purchase",
     cta: "Details",
     ariaClose: "Close",
   },
   ru: {
-    text: "Акция: монтаж €50 до 31.05 при покупке из каталога",
+    text: "Акция: монтаж €99 до 31.05 при покупке из каталога",
     cta: "Подробнее",
     ariaClose: "Закрыть",
   },
   ua: {
-    text: "Акція: монтаж €50 до 31.05 при купівлі з каталогу",
+    text: "Акція: монтаж €99 до 31.05 при купівлі з каталогу",
     cta: "Детальніше",
     ariaClose: "Закрити",
   },

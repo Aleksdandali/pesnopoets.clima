@@ -47,21 +47,33 @@ export default function TrackingPixelsClient({
 
     // Pick up later opt-ins (e.g. user opens preferences and enables a
     // category). We never *remove* a script once loaded, so this is a
-    // one-way latch — false→true only.
+    // one-way latch — false→true only. For gtag we also push a Consent Mode
+    // v2 update so previously-modeled conversions can now write cookies.
     return onConsentChange((state) => {
       if (state?.analytics) setAnalyticsOk(true);
       if (state?.marketing) setMarketingOk(true);
+      const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+      if (gtag && (state?.analytics || state?.marketing)) {
+        gtag("consent", "update", {
+          ad_storage: state?.marketing ? "granted" : "denied",
+          ad_user_data: state?.marketing ? "granted" : "denied",
+          ad_personalization: state?.marketing ? "granted" : "denied",
+          analytics_storage: state?.analytics ? "granted" : "denied",
+        });
+      }
     });
   }, []);
 
   if (!ready) return null;
 
-  // gtag.js: load once with a primary tag id; subsequent gtag('config', ...)
-  // calls register additional tags on the same library instance. Choose the
-  // boot id based on which categories are allowed.
-  const gtagAdsId = marketingOk ? googleAdsId : null;
-  const gtagGa4Id = analyticsOk ? ga4Id : null;
-  const gtagBootId = gtagAdsId ?? gtagGa4Id;
+  // Consent Mode v2: ALWAYS boot gtag if an ID is configured, set defaults to
+  // "denied", then update based on stored consent. This lets Google count
+  // "modeled" conversions for users who deny marketing (~30-50% lift vs the
+  // old all-or-nothing gate) while still respecting their choice — the
+  // browser does not write ad-related cookies until consent is granted.
+  const gtagBootId = googleAdsId ?? ga4Id;
+  const adConsent = marketingOk ? "granted" : "denied";
+  const analyticsConsent = analyticsOk ? "granted" : "denied";
 
   return (
     <>
@@ -75,13 +87,29 @@ export default function TrackingPixelsClient({
             {`
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
+              // Internal-traffic flag — owner appends ?internal=1 once on their
+              // device, we then suppress conversions + tag GA4 hits forever.
+              try {
+                var qs = new URLSearchParams(window.location.search);
+                if (qs.get('internal') === '1') localStorage.setItem('__internal_traffic','1');
+                if (qs.get('internal') === '0') localStorage.removeItem('__internal_traffic');
+              } catch(_) {}
+              var __isInternal = false;
+              try { __isInternal = localStorage.getItem('__internal_traffic') === '1'; } catch(_) {}
+              gtag('consent', 'default', {
+                'ad_storage': '${adConsent}',
+                'ad_user_data': '${adConsent}',
+                'ad_personalization': '${adConsent}',
+                'analytics_storage': '${analyticsConsent}',
+                'wait_for_update': 500
+              });
               gtag('js', new Date());
-              ${gtagAdsId ? `gtag('config', '${gtagAdsId}');` : ""}
-              ${gtagGa4Id ? `gtag('config', '${gtagGa4Id}');` : ""}
-              window.__ANALYTICS = ${JSON.stringify({
-                googleAdsId: gtagAdsId,
-                ga4Id: gtagGa4Id,
-              })};
+              ${googleAdsId ? `gtag('config', '${googleAdsId}');` : ""}
+              ${ga4Id ? `gtag('config', '${ga4Id}', __isInternal ? { traffic_type: 'internal' } : {});` : ""}
+              window.__ANALYTICS = Object.assign(${JSON.stringify({
+                googleAdsId,
+                ga4Id,
+              })}, { internal: __isInternal });
             `}
           </Script>
         </>

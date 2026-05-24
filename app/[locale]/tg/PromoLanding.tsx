@@ -22,7 +22,7 @@ import {
   Unlock,
 } from "lucide-react";
 import { BUSINESS_PHONE_DISPLAY, BUSINESS_PHONE_TEL, WHATSAPP_URL } from "@/lib/constants";
-import { trackInquirySubmit } from "@/lib/gtag";
+import { trackInquirySubmit, trackPhoneClick, trackMessengerClick } from "@/lib/gtag";
 
 export type Locale = "bg" | "en" | "ru" | "ua";
 
@@ -233,7 +233,15 @@ export default function PromoLanding({ locale, copy }: Props) {
       });
       if (!res.ok) throw new Error("submit failed");
       setStatus("success");
-      trackInquirySubmit("tg-promo");
+      // Dedup: if user reached /tg via PromoCodeBanner submit (same lead, just
+      // added name/note), the banner already fired the Ads conversion. Skip
+      // the second fire here to keep one-lead = one-conversion.
+      let alreadyCounted = false;
+      try {
+        alreadyCounted = sessionStorage.getItem("tg_promo_counted") === "1";
+        if (alreadyCounted) sessionStorage.removeItem("tg_promo_counted");
+      } catch (_) {}
+      if (!alreadyCounted) trackInquirySubmit("tg-promo");
       (e.target as HTMLFormElement).reset();
     } catch {
       setStatus("error");
@@ -427,7 +435,7 @@ export default function PromoLanding({ locale, copy }: Props) {
           <a
             href={phoneHref}
             className="inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary-dark transition-colors min-h-[52px] shadow-sm"
-            onClick={() => trackInquirySubmit("tg-promo-call")}
+            onClick={() => trackPhoneClick()}
           >
             <Phone className="w-4 h-4" aria-hidden="true" />
             <span>{copy.ctaCall}</span>
@@ -437,7 +445,7 @@ export default function PromoLanding({ locale, copy }: Props) {
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center gap-2 px-5 py-3.5 bg-[#25D366] text-white font-semibold rounded-xl hover:opacity-90 transition-opacity min-h-[52px] shadow-sm"
-            onClick={() => trackInquirySubmit("tg-promo-whatsapp")}
+            onClick={() => trackMessengerClick("whatsapp")}
           >
             <MessageCircle className="w-4 h-4" aria-hidden="true" />
             <span>{copy.ctaWhatsapp}</span>
@@ -501,6 +509,7 @@ export default function PromoLanding({ locale, copy }: Props) {
             </p>
             <a
               href={phoneHref}
+              onClick={() => trackPhoneClick()}
               className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary-dark"
             >
               <Phone className="w-4 h-4" aria-hidden="true" />
