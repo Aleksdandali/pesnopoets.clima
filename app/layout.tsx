@@ -67,11 +67,19 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://www.bittel.bg" />
         <link rel="dns-prefetch" href="https://www.bittel.bg" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+      </head>
+      <body className="min-h-screen flex flex-col">
+        {/* TrackingPixels was previously inside <head> via Suspense, but
+            Next.js 16 App Router does not execute `next/script` rendered
+            into <head> through a suspended async client component — all
+            tracker scripts (gtag, Meta Pixel, Clarity) were silently
+            dropped from the DOM. Moving it inside <body> lets next/script
+            inject after hydration as documented. */}
         <Suspense fallback={null}>
           <TrackingPixels />
         </Suspense>
-      </head>
-      <body className="min-h-screen flex flex-col">{children}</body>
+        {children}
+      </body>
     </html>
   );
 }
