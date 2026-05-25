@@ -94,9 +94,18 @@ export async function generateMetadata({
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
 
+  // Index only the BG version of product pages while the domain is still
+  // building authority. Non-BG locales remain crawlable (follow) so internal
+  // link equity flows back to /bg, but Google won't queue them in "discovered".
+  // Hreflang is intentionally BG-only to match indexable surface.
+  const isBg = locale === "bg";
+
   return {
     title,
     description,
+    robots: isBg
+      ? undefined
+      : { index: false, follow: true, googleBot: { index: false, follow: true } },
     openGraph: {
       title,
       description,
@@ -108,9 +117,6 @@ export async function generateMetadata({
       canonical: `${siteUrl}/${locale}/klimatici/${slug}`,
       languages: {
         bg: `${siteUrl}/bg/klimatici/${slug}`,
-        en: `${siteUrl}/en/klimatici/${slug}`,
-        ru: `${siteUrl}/ru/klimatici/${slug}`,
-        uk: `${siteUrl}/ua/klimatici/${slug}`,
         "x-default": `${siteUrl}/bg/klimatici/${slug}`,
       },
     },
