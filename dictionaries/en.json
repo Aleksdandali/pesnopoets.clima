@@ -217,7 +217,7 @@
   },
   "about": {
     "title": "About Us",
-    "subtitle": "Pesnopoets Clima is an authorized dealer of leading air conditioning brands in Varna, Bulgaria. We offer a full range of services — from consultation and selection, through delivery, to professional installation and warranty service.",
+    "subtitle": "Pesnopoets Clima — authorised dealer for Daikin, Mitsubishi, Toshiba and Gree in Varna. We help you pick the right AC, deliver it, install with our own crew and handle warranty service.",
     "teamParagraph": "Behind Pesnopoets Clima is a team of specialists with years of experience in HVAC systems. Our priority is to offer every client a solution tailored to their space and budget — honestly, professionally, and without pressure.",
     "stats": [
       {
@@ -633,7 +633,7 @@
   },
   "seo": {
     "titleTemplate": "%s | Clima — Air Conditioners for Your Home",
-    "defaultDescription": "Air conditioners from leading brands — Daikin, Mitsubishi, Toshiba. Delivery and installation across Bulgaria."
+    "defaultDescription": "Daikin, Mitsubishi, Toshiba, Gree air conditioners — sales, delivery and installation in Varna."
   },
   "trustNumbers": [
     { "value": "200+", "label": "installations", "icon": "shield" },

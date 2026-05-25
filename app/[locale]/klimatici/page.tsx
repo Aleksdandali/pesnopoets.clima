@@ -26,24 +26,24 @@ const catalogMeta: Record<string, { title: string; description: string }> = {
     title:
       "Каталог климатици Варна — Daikin, Mitsubishi, Toshiba, Gree | Песнопоец Клима",
     description:
-      "Каталог на инверторни и мулти-сплит климатици във Варна. Daikin, Mitsubishi, Toshiba, Gree — продажба, доставка и монтаж под ключ. Фиксирани цени.",
+      "Каталог на инверторни и мулти-сплит климатици във Варна. Daikin, Mitsubishi, Toshiba, Gree — продажба, доставка и пълен монтаж. Фиксирани цени.",
   },
   en: {
     title: "Air Conditioners Catalog Varna — Daikin, Mitsubishi, Toshiba, Gree",
     description:
-      "Catalog of inverter and multi-split air conditioners in Varna. Daikin, Mitsubishi, Toshiba, Gree — sales, delivery and turnkey installation. Fixed prices.",
+      "Catalog of inverter and multi-split air conditioners in Varna. Daikin, Mitsubishi, Toshiba, Gree — sales, delivery and full installation by our own crew. Fixed prices.",
   },
   ru: {
     title:
       "Каталог кондиционеров Варна — Daikin, Mitsubishi, Toshiba, Gree | Песнопоец Клима",
     description:
-      "Каталог инверторных и мульти-сплит кондиционеров в Варне. Daikin, Mitsubishi, Toshiba, Gree — продажа, доставка и монтаж под ключ. Фиксированные цены.",
+      "Каталог инверторных и мульти-сплит кондиционеров в Варне. Daikin, Mitsubishi, Toshiba, Gree — продажа, доставка и полный монтаж своей бригадой. Фиксированные цены.",
   },
   ua: {
     title:
       "Каталог кондиціонерів Варна — Daikin, Mitsubishi, Toshiba, Gree | Піснопоєць Кліма",
     description:
-      "Каталог інверторних та мульти-спліт кондиціонерів у Варні. Daikin, Mitsubishi, Toshiba, Gree — продаж, доставка та монтаж під ключ. Фіксовані ціни.",
+      "Каталог інверторних та мульти-спліт кондиціонерів у Варні. Daikin, Mitsubishi, Toshiba, Gree — продаж, доставка та повний монтаж власною бригадою. Фіксовані ціни.",
   },
 };
 
