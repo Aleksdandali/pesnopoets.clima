@@ -72,7 +72,7 @@ const montazhFaq: Record<string, { q: string; a: string }[]> = {
     { q: "Какви райони покривате?", a: "Всички квартали на Варна + Девня, Аксаково и околността в радиус до 25 км. Извън града — по договаряне с надценка за транспорт." },
     { q: "Кога е най-добре да се монтира климатик?", a: "Март–май и септември–октомври са най-добрите месеци — търсенето е по-ниско, можем да дойдем в рамките на 1–3 дни. През юли и август изчакването достига 1–2 седмици." },
     { q: "Кой плаща за монтажа — наемателят или собственикът?", a: "Собственикът, в 95% от случаите — климатикът остава в имота след изнасянето на наемателя. Препоръчваме да се запише в договора за наем." },
-    { q: "Каква е максималната дължина на тръбата между вътрешното и външното тяло?", a: "15–25 м технически максимум за битови сплит климатици (зависи от модела), но 7–10 м е оптимално за ефективност. Над 10 м обикновено се изисква дозареждане с фреон." },
+    { q: "Каква е максималната дължина на тръбата между вътрешното и външното тяло?", a: "15–25 м технически максимум за битови сплит климатици (зависи от модела), но на практика държим тръбата до 7–10 м. Над 10 м обикновено се изисква дозареждане с фреон." },
   ],
   en: [
     { q: "How much does AC installation cost?", a: "Standard installation starts from 190 € for units up to 14,000 BTU and 230 € for up to 24,000 BTU. Price includes 3m pipe, materials, vacuum, and commissioning." },
@@ -82,7 +82,7 @@ const montazhFaq: Record<string, { q: string; a: string }[]> = {
     { q: "What areas do you cover?", a: "We cover all neighborhoods in Varna city and the surrounding region up to approximately 25 km by arrangement." },
     { q: "When is the best time to install an AC?", a: "Best months are March–May and September–October — demand is lower and we can come within 1–3 days. In July and August the wait often reaches 1–2 weeks." },
     { q: "Who pays for installation — tenant or landlord?", a: "Typically the landlord pays, as the AC stays in the property after the tenant moves out. We recommend documenting this in the lease agreement." },
-    { q: "What is the maximum pipe length between indoor and outdoor units?", a: "For residential split systems the technical maximum is 15–25 m (varies by model), but for optimal efficiency we recommend up to 7–10 m. Above 10 m usually requires additional refrigerant top-up." },
+    { q: "What is the maximum pipe length between indoor and outdoor units?", a: "For residential split systems the technical maximum is 15–25 m (varies by model), but in practice we keep the run to 7–10 m. Above 10 m usually requires additional refrigerant top-up." },
   ],
   ru: [
     { q: "Сколько стоит установка кондиционера?", a: "Стандартная установка — от 190 € для моделей до 14 000 BTU и 230 € до 24 000 BTU. В цену входят 3 м трубы, материалы, вакуумирование и пусконаладка." },
@@ -92,7 +92,7 @@ const montazhFaq: Record<string, { q: string; a: string }[]> = {
     { q: "Какие районы вы обслуживаете?", a: "Мы обслуживаем все районы Варны и окрестности в радиусе до 25 км по договорённости." },
     { q: "Когда лучше всего устанавливать кондиционер?", a: "Лучшие месяцы — март–май и сентябрь–октябрь, когда спрос ниже и мы можем приехать в течение 1–3 дней. В июле и августе ожидание часто достигает 1–2 недель." },
     { q: "Кто платит за установку — арендатор или собственник?", a: "Обычно собственник, так как кондиционер остаётся в квартире после съезда арендатора. Рекомендуем закрепить это в договоре аренды." },
-    { q: "Какова максимальная длина трассы между внутренним и наружным блоками?", a: "Технический максимум для бытовых сплит-систем — 15–25 м (зависит от модели), но для оптимальной эффективности рекомендуем до 7–10 м. Свыше 10 м обычно требуется дозаправка фреоном." },
+    { q: "Какова максимальная длина трассы между внутренним и наружным блоками?", a: "Технический максимум для бытовых сплит-систем — 15–25 м (зависит от модели), но на практике держим трассу до 7–10 м. Свыше 10 м обычно требуется дозаправка фреоном." },
   ],
   ua: [
     { q: "Скільки коштує монтаж кондиціонера?", a: "Стандартний монтаж — від 190 € для моделей до 14 000 BTU та 230 € до 24 000 BTU. Ціна включає 3 м труби, матеріали, вакуумування та пусконалагодження." },
@@ -102,7 +102,7 @@ const montazhFaq: Record<string, { q: string; a: string }[]> = {
     { q: "Які райони ви обслуговуєте?", a: "Ми обслуговуємо всі райони Варни та околиці в радіусі до 25 км за домовленістю." },
     { q: "Коли найкраще встановлювати кондиціонер?", a: "Найкращі місяці — березень–травень і вересень–жовтень, коли попит нижчий і ми можемо приїхати протягом 1–3 днів. У липні та серпні очікування часто сягає 1–2 тижнів." },
     { q: "Хто платить за монтаж — орендар чи власник?", a: "Зазвичай власник, оскільки кондиціонер залишається у квартирі після виїзду орендаря. Рекомендуємо зафіксувати це в договорі оренди." },
-    { q: "Яка максимальна довжина траси між внутрішнім і зовнішнім блоками?", a: "Технічний максимум для побутових спліт-систем — 15–25 м (залежить від моделі), але для оптимальної ефективності рекомендуємо до 7–10 м. Понад 10 м зазвичай потрібна дозаправка фреоном." },
+    { q: "Яка максимальна довжина траси між внутрішнім і зовнішнім блоками?", a: "Технічний максимум для побутових спліт-систем — 15–25 м (залежить від моделі), але на практиці тримаємо трасу до 7–10 м. Понад 10 м зазвичай потрібна дозаправка фреоном." },
   ],
 };
 
@@ -721,16 +721,16 @@ export default async function MontazhPage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-4">
-                {t.processTitle || (locale === "ru" ? "Качественная установка" : locale === "ua" ? "Якісна установка" : locale === "en" ? "Quality installation" : "Качествен монтаж")}
+                {t.processTitle || (locale === "ru" ? "Что увидите у себя в квартире" : locale === "ua" ? "Що побачите у себе в квартирі" : locale === "en" ? "What you'll see in your apartment" : "Какво ще видите в апартамента си")}
               </h2>
               <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-6">
-                {t.processDesc || (locale === "ru" ? "Чисто в вашей квартире. Аккуратно и по стандартам. Надежно — с заботой о деталях." : locale === "ua" ? "Чисто у вашій квартирі. Акуратно і за стандартами. Надійно — з турботою про деталі." : locale === "en" ? "Clean in your apartment. Neat and to standards. Reliable — with attention to detail." : "Чисто в апартамента ви. Акуратно и по стандарти. Надеждно — с грижа за детайлите.")}
+                {t.processDesc || (locale === "ru" ? "Стелим защитную плёнку, пылесосим за собой после сверления, прокладываем медные трубы ровно по стене. Прячем их в кабель-канал или за плинтус — как выберете." : locale === "ua" ? "Стелимо захисну плівку, пилососимо за собою після свердління, прокладаємо мідні труби рівно по стіні. Ховаємо їх у кабель-канал або за плінтус — як оберете." : locale === "en" ? "We lay down protective film, vacuum after drilling, run copper pipes flat along the wall. We hide them in a cable channel or behind the skirting — whichever you prefer." : "Стелим защитно фолио, изсмукваме праха след пробиване, прокарваме медни тръби равно по стената. Скриваме ги в кабел-канал или зад первазите — както изберете.")}
               </p>
               <ul className="space-y-3">
                 {[
-                  { icon: "clean", text: locale === "ru" ? "Чисто в вашей квартире" : locale === "ua" ? "Чисто у вашій квартирі" : locale === "en" ? "Clean in your apartment" : "Чисто в апартамента ви" },
-                  { icon: "neat", text: locale === "ru" ? "Аккуратно и по стандартам" : locale === "ua" ? "Акуратно і за стандартами" : locale === "en" ? "Neat and to standards" : "Акуратно и по стандарти" },
-                  { icon: "reliable", text: locale === "ru" ? "Надежно — с заботой о деталях" : locale === "ua" ? "Надійно — з турботою про деталі" : locale === "en" ? "Reliable — with attention to detail" : "Надеждно — с грижа за детайлите" },
+                  { icon: "clean", text: locale === "ru" ? "Плёнка на полу, пылесос после сверления" : locale === "ua" ? "Плівка на підлозі, пилосос після свердління" : locale === "en" ? "Protective film on the floor, vacuum after drilling" : "Защитно фолио на пода, прахосмукачка след пробиване" },
+                  { icon: "neat", text: locale === "ru" ? "Медные трубы ровно по стене, в кабель-канал или за плинтус" : locale === "ua" ? "Мідні труби рівно по стіні, у кабель-канал або за плінтус" : locale === "en" ? "Copper pipes flat along the wall, in a channel or behind the skirting" : "Медни тръби равно по стената, в кабел-канал или зад первазите" },
+                  { icon: "reliable", text: locale === "ru" ? "Тест охлаждения и нагрева перед уходом" : locale === "ua" ? "Тест охолодження і нагріву перед тим, як піти" : locale === "en" ? "Cooling and heating test before we leave" : "Тест на охлаждане и отопление преди да си тръгнем" },
                 ].map((item) => (
                   <li key={item.icon} className="flex items-center gap-3 p-3 bg-white border border-border/60 rounded-xl">
                     <CheckCircle2 className="w-5 h-5 text-primary shrink-0" aria-hidden="true" />
