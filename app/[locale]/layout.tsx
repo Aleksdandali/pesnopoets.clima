@@ -77,9 +77,10 @@ export async function generateMetadata({
   const ogAlt = ogAlts[locale] || ogAlts.bg;
 
   return {
-    // Override the root-layout template so child pages render brand in the
-    // active locale's script (EN: "… | Pesnopoets Clima", UA: "Піснопоєць Кліма").
-    title: { default: title, template: `%s | ${siteName}` },
+    // `absolute` bypasses the root layout's "%s | Песнопоец Клима" template
+    // so EN/UA homepages don't get a Cyrillic brand suffix appended. The
+    // `template` here still wraps child page titles in the locale's script.
+    title: { absolute: title, template: `%s | ${siteName}` },
     description,
     keywords: keywords[locale] || keywords.bg,
     alternates: {
