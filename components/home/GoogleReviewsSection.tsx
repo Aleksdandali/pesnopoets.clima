@@ -6,7 +6,6 @@ import { GBP_REVIEW_URL } from "@/lib/constants";
 interface Labels {
   heading: string;
   subheading: string;
-  basedOn: string; // "based on {count} Google reviews"
   viewAll: string;
   leaveReview: string;
   verifiedByGoogle: string;
@@ -60,20 +59,14 @@ export default function GoogleReviewsSection({ data, labels }: Props) {
             {labels.subheading}
           </p>
 
-          {/* Rating summary */}
+          {/* Rating summary — count is intentionally NOT shown because the
+              static fallback in lib/google-reviews.ts is a manual snapshot
+              and may lag the live profile. Stars + rating number stay. */}
           <div className="mt-5 inline-flex items-center gap-3 px-5 py-3 rounded-2xl bg-white shadow-sm border border-border">
             <span className="text-3xl font-extrabold tabular-nums text-foreground">
               {ratingFmt}
             </span>
-            <div className="flex flex-col items-start">
-              <Stars value={data.rating} />
-              <span className="text-xs text-muted-foreground mt-0.5">
-                {labels.basedOn.replace(
-                  "{count}",
-                  String(data.userRatingCount)
-                )}
-              </span>
-            </div>
+            <Stars value={data.rating} />
           </div>
         </div>
 
