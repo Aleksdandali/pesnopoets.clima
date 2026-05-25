@@ -159,12 +159,15 @@ export default function HeroCarousel({
       {/* Content — below image on mobile, overlay on desktop */}
       <div className="relative px-4 py-5 sm:max-w-7xl sm:mx-auto sm:px-6 lg:px-8 sm:h-full sm:flex sm:flex-col sm:justify-center sm:pb-16">
         <div className="max-w-xl lg:max-w-2xl">
-          <h1
+          {/* H2 — banner captions are supporting marketing slogans, not the
+              page topic. The stable <h1> lives in app/[locale]/page.tsx so
+              the page has a single, topic-aligned heading for SEO. */}
+          <h2
             key={`title-${current}`}
             className="text-xl sm:text-3xl lg:text-5xl font-bold text-white leading-tight animate-fade-in-up [text-shadow:0_2px_12px_rgb(10_22_40/0.55)]"
           >
             {title}
-          </h1>
+          </h2>
 
           {subtitle && (
             <p

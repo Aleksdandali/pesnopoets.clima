@@ -369,6 +369,16 @@ export default async function HomePage({ params }: HomePageProps) {
     getHeroBanners(),
   ]);
 
+  // Single stable H1 per locale — banner captions rotate (now h2), so the
+  // page topic anchor lives here. Title matches the SEO title's head term
+  // and reinforces the LocalBusiness entity. Audit 2026-05-25.
+  const homeH1: Record<string, string> = {
+    bg: "Климатици във Варна — продажба, монтаж и профилактика с 5 г. гаранция",
+    en: "Air conditioners in Varna — sales, installation and maintenance with a 5-year warranty",
+    ru: "Кондиционеры в Варне — продажа, монтаж и профилактика с гарантией 5 лет",
+    ua: "Кондиціонери у Варні — продаж, монтаж і профілактика з гарантією 5 років",
+  };
+
   return (
     <>
       {/* Hero Carousel — managed via /admin/banners */}
@@ -382,6 +392,16 @@ export default async function HomePage({ params }: HomePageProps) {
         ctaLink="/klimatici"
         ctaSecondaryLink="tel:+359877998795"
       />
+
+      {/* Topic-defining H1 — compact, immediately under the hero. Acts as
+          page anchor for users from non-branded SERPs and for crawlers. */}
+      <section className="bg-white border-b border-border/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
+          <h1 className="text-base sm:text-lg lg:text-xl font-semibold text-foreground leading-snug tracking-tight">
+            {homeH1[locale] || homeH1.bg}
+          </h1>
+        </div>
+      </section>
 
       {/* Hero Contact Row — above-the-fold messenger access for ad traffic.
           Clarity (2026-05-23): 76% of mobile visitors never scroll past 50%,

@@ -53,21 +53,33 @@ export async function generateMetadata({
     ua: ["кондиціонери Варна", "монтаж кондиціонера Варна", "Daikin Варна", "Mitsubishi Варна", "Gree Варна", "область Варна", "інверторні кондиціонери", "тепловий насос Варна"],
   };
 
-  const ogAlts: Record<string, string> = {
-    bg: "Песнопоец Клима — климатици и монтаж във Варна",
-    en: "Pesnopoets Klima — air conditioners and installation in Varna",
-    ru: "Песнопоец Клима — кондиционеры и монтаж в Варне",
-    ua: "Песнопоец Клима — кондиціонери та монтаж у Варні",
+  // Brand wordmark per locale — keeps title/og:site_name in the same script
+  // as the surrounding copy. Root layout template "%s | Песнопоец Клима" is
+  // overridden below so e.g. EN title doesn't end with a Cyrillic brand.
+  const siteNames: Record<string, string> = {
+    bg: "Песнопоец Клима",
+    en: "Pesnopoets Clima",
+    ru: "Песнопоец Клима",
+    ua: "Піснопоєць Кліма",
   };
 
-  const siteName = "Песнопоец Клима";
+  const ogAlts: Record<string, string> = {
+    bg: "Песнопоец Клима — климатици и монтаж във Варна",
+    en: "Pesnopoets Clima — air conditioners and installation in Varna",
+    ru: "Песнопоец Клима — кондиционеры и монтаж в Варне",
+    ua: "Піснопоєць Кліма — кондиціонери та монтаж у Варні",
+  };
+
+  const siteName = siteNames[locale] || siteNames.bg;
   const title = titles[locale] || titles.bg;
   const description = descriptions[locale] || descriptions.bg;
   const ogImage = `${siteUrl}/og-image.jpg`;
   const ogAlt = ogAlts[locale] || ogAlts.bg;
 
   return {
-    title,
+    // Override the root-layout template so child pages render brand in the
+    // active locale's script (EN: "… | Pesnopoets Clima", UA: "Піснопоєць Кліма").
+    title: { default: title, template: `%s | ${siteName}` },
     description,
     keywords: keywords[locale] || keywords.bg,
     alternates: {
