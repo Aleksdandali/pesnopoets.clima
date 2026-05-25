@@ -52,13 +52,13 @@
   },
   "hero": {
     "title": "Sales & Professional AC Installation in Varna",
-    "subtitle": "Authorized dealer for Daikin, Mitsubishi, Toshiba, Gree. Turnkey installation with warranty up to 5 years.",
+    "subtitle": "Authorized dealer for Daikin, Mitsubishi, Toshiba, Gree. Full installation with up to 5-year warranty.",
     "cta": "Browse Catalog",
     "ctaSecondary": "Call: +359 877 998 795"
   },
   "trust": {
     "delivery": "Same-day dispatch",
-    "installation": "Turnkey installation",
+    "installation": "Full installation",
     "warranty": "Up to 5-yr warranty",
     "consultation": "Free consultation",
     "originalTitle": "Authorized dealer in Varna",
@@ -66,7 +66,7 @@
     "deliveryDesc": "Same-day dispatch for requests before noon. We cover all of Varna and Varna region.",
     "installationDesc": "Clean installation with vacuum by our own crew. Fixed price — no hidden fees.",
     "freeDelivery": "Same-day dispatch",
-    "professionalInstallation": "Turnkey installation",
+    "professionalInstallation": "Full installation",
     "warrantyLong": "Up to 5-year warranty",
     "freeConsultation": "Free consultation"
   },
@@ -265,7 +265,7 @@
       {
         "slug": "montazh",
         "title": "AC Installation",
-        "desc": "Turnkey professional install — from delivery to commissioning. Clean work with a vacuum, fixed price.",
+        "desc": "Professional install — from delivery to commissioning. Clean work with a vacuum, fixed price.",
         "items": [
           "Copper line up to 3 m, insulated",
           "Commissioning and leak test",
@@ -487,7 +487,7 @@
       "Sea Garden", "Devnya", "Aksakovo", "Beloslav", "Ignatievo", "Kichevo"
     ],
     "relatedMontazhTitle": "Need a new AC unit?",
-    "relatedMontazhDesc": "We do turnkey installation by our own team with a 12-month warranty.",
+    "relatedMontazhDesc": "We install with our own crew and a 12-month warranty.",
     "relatedMontazhCta": "AC installation in Varna",
     "ctaTitle": "Request maintenance today",
     "ctaDesc": "Get in touch — we'll suggest a convenient day and arrive with full equipment.",
@@ -645,7 +645,7 @@
   "seasonal": {
     "peak": "Book your installation — season has started",
     "slots": "Installation in 1–3 days · Book before noon — we come today",
-    "heating": "Winter heating? An inverter AC is the perfect solution",
+    "heating": "Winter heating? An inverter AC keeps working even at −15 °C",
     "offSeason": "Best prices before the season starts",
     "cta": "Book now"
   },
@@ -658,8 +658,8 @@
   },
   "aiConsultant": {
     "title": "AI Assistant",
-    "subtitle": "Find your ideal AC in 2 minutes",
-    "desc": "Our AI consultant knows the entire catalog, compares models and finds the best option for your budget and room size.",
+    "subtitle": "Helps you pick the AC that fits your room",
+    "desc": "Our AI assistant knows the full catalogue, compares models and suggests one that fits your budget and room size.",
     "features": [
       "Instant response 24/7",
       "Knows all products and prices",
