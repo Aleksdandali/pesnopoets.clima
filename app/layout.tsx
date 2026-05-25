@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     template: "%s | Песнопоец Клима",
   },
   description:
-    "Климатици от водещи марки — Daikin, Mitsubishi, Toshiba, Gree. Продажба, доставка и монтаж в цяла България.",
+    "Климатици Daikin, Mitsubishi, Toshiba, Gree — продажба, доставка и монтаж във Варна.",
   openGraph: {
     images: ["/hero-bg.jpg"],
   },
