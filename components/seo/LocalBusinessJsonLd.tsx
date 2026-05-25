@@ -10,6 +10,7 @@ import {
   BUSINESS_STREET,
   INSTAGRAM_URL,
 } from "@/lib/constants";
+import { getGoogleReviews } from "@/lib/google-reviews";
 
 interface LocalBusinessJsonLdProps {
   locale: string;
@@ -21,13 +22,34 @@ interface LocalBusinessJsonLdProps {
 /**
  * HVACBusiness + LocalBusiness structured data for the Varna area.
  * Rendered into the document head via a server-component <script> tag.
+ *
+ * If Google Places env vars are configured, we enrich the schema with a live
+ * aggregateRating (rating + review count) and add the canonical Maps URL to
+ * sameAs. Both calls share Next's fetch cache, so duplicate calls on the same
+ * request are deduplicated.
  */
-export default function LocalBusinessJsonLd({
+export default async function LocalBusinessJsonLd({
   locale,
   siteUrl,
   siteName,
   description,
 }: LocalBusinessJsonLdProps) {
+  const place = await getGoogleReviews(locale);
+  const aggregateRating =
+    place && place.userRatingCount > 0
+      ? {
+          "@type": "AggregateRating",
+          ratingValue: place.rating,
+          reviewCount: place.userRatingCount,
+          bestRating: 5,
+          worstRating: 1,
+        }
+      : null;
+  const sameAs = [
+    INSTAGRAM_URL,
+    "https://www.wikidata.org/wiki/Q139819378",
+    ...(place?.googleMapsUrl ? [place.googleMapsUrl] : []),
+  ];
   const data = {
     "@context": "https://schema.org",
     "@type": ["LocalBusiness", "HVACBusiness"],
@@ -74,7 +96,8 @@ export default function LocalBusinessJsonLd({
         closes: "14:00",
       },
     ],
-    sameAs: [INSTAGRAM_URL, "https://www.wikidata.org/wiki/Q139819378"],
+    sameAs,
+    ...(aggregateRating ? { aggregateRating } : {}),
     makesOffer: [
       {
         "@type": "Offer",

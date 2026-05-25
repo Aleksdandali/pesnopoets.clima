@@ -51,3 +51,5 @@ next-env.d.ts
 /HOMEPAGE_PLAN*.md
 /qa-evidence-*/
 /google-ads-*/
+mobile/.credentials/
+gbp-ready-photos/

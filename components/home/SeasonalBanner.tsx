@@ -16,14 +16,14 @@ function getSeasonConfig(month: number) {
   // month is 0-indexed: 0=Jan, 3=Apr, 4=May, 7=Aug
   // Apr-Aug (3-7): peak cooling season — installations booming
   if (month >= 3 && month <= 7) {
-    return { type: "peak" as const, freeDates: 4, icon: Flame };
+    return { type: "peak" as const, icon: Flame };
   }
   // Nov-Feb (10-1): heating season
   if (month >= 10 || month <= 1) {
-    return { type: "heating" as const, freeDates: 8, icon: Snowflake };
+    return { type: "heating" as const, icon: Snowflake };
   }
   // Sep-Oct, Mar: pre/post season
-  return { type: "offSeason" as const, freeDates: 10, icon: CalendarClock };
+  return { type: "offSeason" as const, icon: CalendarClock };
 }
 
 export default function SeasonalBanner({ locale, labels }: SeasonalBannerProps) {
@@ -37,7 +37,7 @@ export default function SeasonalBanner({ locale, labels }: SeasonalBannerProps) 
     ? labels.heating
     : labels.offSeason;
 
-  const slotsText = labels.slots.replace("{count}", String(config.freeDates));
+  const slotsText = labels.slots;
 
   return (
     <div className="relative overflow-hidden bg-gradient-to-r from-[#064e6e] via-primary-dark to-[#064e6e] text-white">

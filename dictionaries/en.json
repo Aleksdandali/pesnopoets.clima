@@ -54,7 +54,7 @@
     "title": "Sales & Professional AC Installation in Varna",
     "subtitle": "Authorized dealer for Daikin, Mitsubishi, Toshiba, Gree. Turnkey installation with warranty up to 5 years.",
     "cta": "Browse Catalog",
-    "ctaSecondary": "Free Consultation"
+    "ctaSecondary": "Call: +359 877 998 795"
   },
   "trust": {
     "delivery": "Same-day dispatch",
@@ -644,10 +644,18 @@
   ],
   "seasonal": {
     "peak": "Book your installation — season has started",
-    "slots": "Only {count} installation dates left this week",
+    "slots": "Installation in 1–3 days · Book before noon — we come today",
     "heating": "Winter heating? An inverter AC is the perfect solution",
     "offSeason": "Best prices before the season starts",
     "cta": "Book now"
+  },
+  "googleReviews": {
+    "verifiedByGoogle": "Verified by Google",
+    "heading": "What our clients say",
+    "subheading": "Real reviews from our Google Business profile — unedited, straight from the source.",
+    "basedOn": "from {count} Google reviews",
+    "viewAll": "Read all on Google",
+    "leaveReview": "Leave a review"
   },
   "aiConsultant": {
     "title": "AI Assistant",

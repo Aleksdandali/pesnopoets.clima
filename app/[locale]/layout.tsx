@@ -53,9 +53,22 @@ export async function generateMetadata({
     ua: ["кондиціонери Варна", "монтаж кондиціонера Варна", "Daikin Варна", "Mitsubishi Варна", "Gree Варна", "область Варна", "інверторні кондиціонери", "тепловий насос Варна"],
   };
 
+  const ogAlts: Record<string, string> = {
+    bg: "Песнопоец Клима — климатици и монтаж във Варна",
+    en: "Pesnopoets Klima — air conditioners and installation in Varna",
+    ru: "Песнопоец Клима — кондиционеры и монтаж в Варне",
+    ua: "Песнопоец Клима — кондиціонери та монтаж у Варні",
+  };
+
+  const siteName = "Песнопоец Клима";
+  const title = titles[locale] || titles.bg;
+  const description = descriptions[locale] || descriptions.bg;
+  const ogImage = `${siteUrl}/og-image.jpg`;
+  const ogAlt = ogAlts[locale] || ogAlts.bg;
+
   return {
-    title: titles[locale] || titles.bg,
-    description: descriptions[locale] || descriptions.bg,
+    title,
+    description,
     keywords: keywords[locale] || keywords.bg,
     alternates: {
       canonical: `${siteUrl}/${locale}`,
@@ -67,8 +80,26 @@ export async function generateMetadata({
       },
     },
     openGraph: {
+      title,
+      description,
+      url: `${siteUrl}/${locale}`,
+      siteName,
       locale: locale === "bg" ? "bg_BG" : locale === "ru" ? "ru_RU" : locale === "ua" ? "uk_UA" : "en_US",
       type: "website",
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: ogAlt,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImage],
     },
   };
 }

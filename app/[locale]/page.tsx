@@ -25,6 +25,8 @@ import HeroContactRow from "@/components/home/HeroContactRow";
 import QuickOrderForm from "@/components/home/QuickOrderForm";
 import PortfolioGallery from "@/components/portfolio/PortfolioGallery";
 import PromoCodeBanner from "@/components/promo/PromoCodeBanner";
+import GoogleReviewsSection from "@/components/home/GoogleReviewsSection";
+import { getGoogleReviews } from "@/lib/google-reviews";
 
 // Revalidate homepage every 5 minutes for fresh product data
 export const revalidate = 300;
@@ -339,6 +341,9 @@ export default async function HomePage({ params }: HomePageProps) {
   const trustNumbers = dictionary.trustNumbers;
   const seasonal = dictionary.seasonal;
   const aiConsultant = dictionary.aiConsultant;
+  const googleReviewsLabels = dictionary.googleReviews;
+  // Live Google Places data — null if env vars missing or fetch failed.
+  const googleReviews = await getGoogleReviews(locale);
   const feats = features[locale] || features.bg;
   const cats = categories[locale] || categories.bg;
   const labels = sectionLabels[locale] || sectionLabels.bg;
@@ -377,7 +382,7 @@ export default async function HomePage({ params }: HomePageProps) {
         ctaLabel={hero.cta}
         ctaSecondaryLabel={hero.ctaSecondary}
         ctaLink="/klimatici"
-        ctaSecondaryLink="/inquiry"
+        ctaSecondaryLink="tel:+359877998795"
       />
 
       {/* Hero Contact Row — above-the-fold messenger access for ad traffic.
@@ -615,6 +620,14 @@ export default async function HomePage({ params }: HomePageProps) {
 
       {/* Portfolio — real work in Varna (AIO citation + social proof) */}
       <PortfolioGallery locale={locale} limit={8} />
+
+      {/* Live Google reviews — only renders if env vars set + reviews present */}
+      {googleReviews && googleReviewsLabels && (
+        <GoogleReviewsSection
+          data={googleReviews}
+          labels={googleReviewsLabels}
+        />
+      )}
 
       {/* AI Consultant Section */}
       {aiConsultant && <AiConsultantSection labels={aiConsultant} />}

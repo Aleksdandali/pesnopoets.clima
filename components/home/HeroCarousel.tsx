@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pause, Play, Phone } from "lucide-react";
+import { trackPhoneClick } from "@/lib/gtag";
 
 interface Banner {
   id: string;
@@ -196,12 +197,23 @@ export default function HeroCarousel({
                 {ctaLabel}
               </Link>
             )}
-            <Link
-              href={`/${locale}${ctaSecondaryLink}`}
-              className={`inline-flex items-center justify-center gap-2 px-5 sm:px-7 py-3 sm:py-3.5 min-h-[44px] bg-white/10 backdrop-blur-md text-white font-semibold rounded-xl border border-white/30 hover:bg-white/20 transition-all duration-200 text-sm ${focusRing}`}
-            >
-              {ctaSecondaryLabel}
-            </Link>
+            {ctaSecondaryLink.startsWith("tel:") ? (
+              <a
+                href={ctaSecondaryLink}
+                onClick={trackPhoneClick}
+                className={`inline-flex items-center justify-center gap-2 px-5 sm:px-7 py-3 sm:py-3.5 min-h-[44px] bg-white/10 backdrop-blur-md text-white font-semibold rounded-xl border border-white/30 hover:bg-white/20 transition-all duration-200 text-sm ${focusRing}`}
+              >
+                <Phone className="w-4 h-4" aria-hidden="true" />
+                {ctaSecondaryLabel}
+              </a>
+            ) : (
+              <Link
+                href={`/${locale}${ctaSecondaryLink}`}
+                className={`inline-flex items-center justify-center gap-2 px-5 sm:px-7 py-3 sm:py-3.5 min-h-[44px] bg-white/10 backdrop-blur-md text-white font-semibold rounded-xl border border-white/30 hover:bg-white/20 transition-all duration-200 text-sm ${focusRing}`}
+              >
+                {ctaSecondaryLabel}
+              </Link>
+            )}
           </div>
         </div>
       </div>
