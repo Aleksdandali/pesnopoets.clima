@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import ProductCard from "@/components/catalog/ProductCard";
-import SeasonalBanner from "@/components/home/SeasonalBanner";
 import AiConsultantSection from "@/components/home/AiConsultantSection";
 import HeroCarousel from "@/components/home/HeroCarousel";
 import HeroContactRow from "@/components/home/HeroContactRow";
@@ -339,7 +338,6 @@ export default async function HomePage({ params }: HomePageProps) {
   const hero = dictionary.hero;
   const trust = dictionary.trust;
   const trustNumbers = dictionary.trustNumbers;
-  const seasonal = dictionary.seasonal;
   const aiConsultant = dictionary.aiConsultant;
   const googleReviewsLabels = dictionary.googleReviews;
   // Live Google Places data — null if env vars missing or fetch failed.
@@ -390,8 +388,14 @@ export default async function HomePage({ params }: HomePageProps) {
           so this row must sit immediately under the carousel. */}
       <HeroContactRow locale={locale} />
 
-      {/* Seasonal Urgency Banner */}
-      {seasonal && <SeasonalBanner locale={locale} labels={seasonal} />}
+      {/* Live Google reviews — placed above-the-fold so trust precedes the ask.
+          Audit 2026-05-25: was at y≈7700 (below 76% scroll-drop), moved up. */}
+      {googleReviews && googleReviewsLabels && (
+        <GoogleReviewsSection
+          data={googleReviews}
+          labels={googleReviewsLabels}
+        />
+      )}
 
       {/* Trust Strip — numbers + social proof */}
       <section className="border-b border-border/60 bg-gradient-to-b from-white to-[#fafbfc]">
@@ -620,14 +624,6 @@ export default async function HomePage({ params }: HomePageProps) {
 
       {/* Portfolio — real work in Varna (AIO citation + social proof) */}
       <PortfolioGallery locale={locale} limit={8} />
-
-      {/* Live Google reviews — only renders if env vars set + reviews present */}
-      {googleReviews && googleReviewsLabels && (
-        <GoogleReviewsSection
-          data={googleReviews}
-          labels={googleReviewsLabels}
-        />
-      )}
 
       {/* AI Consultant Section */}
       {aiConsultant && <AiConsultantSection labels={aiConsultant} />}
