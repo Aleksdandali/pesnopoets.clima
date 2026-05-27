@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import BeforeAfterSlider from "@/components/montazh/BeforeAfterSlider";
 import PortfolioGallery from "@/components/portfolio/PortfolioGallery";
+import InquiryForm from "@/components/forms/InquiryForm";
 import {
   INSTALLATION_TIERS,
   EXTRA_SERVICES_EUR,
@@ -917,6 +918,35 @@ export default async function MontazhPage({ params }: PageProps) {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Inline lead form — placed right after the price table because that's
+          the highest-intent moment on the page (user has just read prices and
+          knows what installation will cost). Replaces phone-only conversion. */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+        <div className="rounded-2xl border border-border bg-white shadow-[0_2px_8px_rgb(0_0_0/0.04)] p-5 sm:p-8">
+          <div className="mb-5 sm:mb-6 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+              {locale === "en"
+                ? "Get a quote for your installation"
+                : locale === "ru"
+                ? "Получите расчёт монтажа"
+                : locale === "ua"
+                ? "Отримайте розрахунок монтажу"
+                : "Получете оферта за монтаж"}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {locale === "en"
+                ? "Leave your phone — we'll reply within working hours Mon–Sat with a price and earliest available date."
+                : locale === "ru"
+                ? "Оставьте телефон — ответим в рабочее время Пн–Сб с ценой и ближайшей датой."
+                : locale === "ua"
+                ? "Залиште телефон — відповімо в робочий час Пн–Сб з ціною та найближчою датою."
+                : "Оставете телефон — ще се чуем в работно време Пон–Съб с цена и най-близка дата."}
+            </p>
+          </div>
+          <InquiryForm locale={locale} dictionary={dict} />
         </div>
       </section>
 

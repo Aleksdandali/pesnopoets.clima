@@ -17,6 +17,7 @@ import { PROFILAKTIKA_BGN, bgnToEur } from "@/lib/pricing";
 import { DISTRICTS, type Locale } from "@/lib/districts";
 import { PROFILAKTIKA_BY_DISTRICT } from "@/lib/profilaktika-districts";
 import PortfolioGallery from "@/components/portfolio/PortfolioGallery";
+import InquiryForm from "@/components/forms/InquiryForm";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -413,6 +414,35 @@ export default async function ProfilaktikaPage({ params }: PageProps) {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Inline lead form — placed right after the price table because that's
+          the highest-intent moment on the page (user has just read prices).
+          Replaces phone-only conversion. */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+        <div className="rounded-2xl border border-border bg-white shadow-[0_2px_8px_rgb(0_0_0/0.04)] p-5 sm:p-8">
+          <div className="mb-5 sm:mb-6 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+              {locale === "en"
+                ? "Book a maintenance visit"
+                : locale === "ru"
+                ? "Заявка на профилактику"
+                : locale === "ua"
+                ? "Заявка на профілактику"
+                : "Заявка за профилактика"}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {locale === "en"
+                ? "Leave your phone — we'll reply within working hours Mon–Sat with a price and earliest available date."
+                : locale === "ru"
+                ? "Оставьте телефон — ответим в рабочее время Пн–Сб с ценой и ближайшей датой."
+                : locale === "ua"
+                ? "Залиште телефон — відповімо в робочий час Пн–Сб з ціною та найближчою датою."
+                : "Оставете телефон — ще се чуем в работно време Пон–Съб с цена и най-близка дата."}
+            </p>
+          </div>
+          <InquiryForm locale={locale} dictionary={dict} />
         </div>
       </section>
 

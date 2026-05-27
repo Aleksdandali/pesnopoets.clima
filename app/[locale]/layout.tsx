@@ -77,10 +77,11 @@ export async function generateMetadata({
   const ogAlt = ogAlts[locale] || ogAlts.bg;
 
   return {
-    // `absolute` bypasses the root layout's "%s | Песнопоец Клима" template
-    // so EN/UA homepages don't get a Cyrillic brand suffix appended. The
-    // `template` here still wraps child page titles in the locale's script.
-    title: { absolute: title, template: `%s | ${siteName}` },
+    // `absolute` sets the homepage title verbatim. `template: '%s'` is an
+    // empty wrap — child routes already include their own ` | <siteName>`
+    // suffix in `generateMetadata`, so a non-empty template would double the
+    // brand on every inner page (regression observed 2026-05-26).
+    title: { absolute: title, template: `%s` },
     description,
     keywords: keywords[locale] || keywords.bg,
     alternates: {

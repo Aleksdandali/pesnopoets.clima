@@ -232,10 +232,12 @@ export default function BtuCalculator({ locale }: Props) {
       {/* Form */}
       <div className="bg-white border border-border/60 rounded-2xl p-5 sm:p-6 space-y-5">
         <div>
-          <label className="block text-sm font-semibold text-foreground mb-1.5">
+          <label htmlFor="btu-area" className="block text-sm font-semibold text-foreground mb-1.5">
             {c.area} <span className="text-muted-foreground font-normal">({c.areaHint})</span>
           </label>
           <input
+            id="btu-area"
+            name="area_m2"
             type="number"
             min={5}
             max={200}
@@ -245,6 +247,9 @@ export default function BtuCalculator({ locale }: Props) {
             className="w-full px-4 py-2.5 border border-border/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
           />
           <input
+            id="btu-area-range"
+            name="area_m2_range"
+            aria-label={c.area}
             type="range"
             min={5}
             max={120}
@@ -256,10 +261,12 @@ export default function BtuCalculator({ locale }: Props) {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-foreground mb-1.5">
+          <label htmlFor="btu-ceiling" className="block text-sm font-semibold text-foreground mb-1.5">
             {c.ceiling} <span className="text-muted-foreground font-normal">({c.ceilingHint})</span>
           </label>
           <input
+            id="btu-ceiling"
+            name="ceiling_h"
             type="number"
             min={2.2}
             max={5}
@@ -270,16 +277,18 @@ export default function BtuCalculator({ locale }: Props) {
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-semibold text-foreground mb-1.5">
+        <div role="radiogroup" aria-labelledby="btu-sun-label">
+          <div id="btu-sun-label" className="block text-sm font-semibold text-foreground mb-1.5">
             <Sun className="inline w-4 h-4 mr-1 text-primary" aria-hidden="true" />
             {c.sun}
-          </label>
+          </div>
           <div className="grid grid-cols-3 gap-2">
             {(["low", "med", "high"] as const).map((v) => (
               <button
                 key={v}
                 type="button"
+                role="radio"
+                aria-checked={sun === v}
                 onClick={() => setSun(v)}
                 className={`px-3 py-2 rounded-xl text-sm border transition ${
                   sun === v
@@ -293,15 +302,17 @@ export default function BtuCalculator({ locale }: Props) {
           </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-semibold text-foreground mb-1.5">
+        <div role="radiogroup" aria-labelledby="btu-insulation-label">
+          <div id="btu-insulation-label" className="block text-sm font-semibold text-foreground mb-1.5">
             {c.insulation}
-          </label>
+          </div>
           <div className="grid grid-cols-3 gap-2">
             {(["good", "avg", "poor"] as const).map((v) => (
               <button
                 key={v}
                 type="button"
+                role="radio"
+                aria-checked={insulation === v}
                 onClick={() => setInsulation(v)}
                 className={`px-3 py-2 rounded-xl text-sm border transition ${
                   insulation === v
@@ -316,10 +327,12 @@ export default function BtuCalculator({ locale }: Props) {
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-foreground mb-1.5">
+          <label htmlFor="btu-occupants" className="block text-sm font-semibold text-foreground mb-1.5">
             {c.occupants}
           </label>
           <input
+            id="btu-occupants"
+            name="occupants"
             type="number"
             min={1}
             max={10}
@@ -333,6 +346,7 @@ export default function BtuCalculator({ locale }: Props) {
         <div className="flex flex-wrap gap-3">
           <label className="inline-flex items-center gap-2 text-sm text-foreground">
             <input
+              name="top_floor"
               type="checkbox"
               checked={topFloor}
               onChange={(e) => setTopFloor(e.target.checked)}
@@ -342,6 +356,7 @@ export default function BtuCalculator({ locale }: Props) {
           </label>
           <label className="inline-flex items-center gap-2 text-sm text-foreground">
             <input
+              name="kitchen"
               type="checkbox"
               checked={kitchen}
               onChange={(e) => setKitchen(e.target.checked)}

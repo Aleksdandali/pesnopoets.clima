@@ -21,6 +21,20 @@ interface CatalogPageProps {
 
 const PRODUCTS_PER_PAGE = 24;
 
+// Minimal shape that satisfies both ProductCard and the ItemList JSON-LD below.
+// We intentionally keep this loose (any-extra) because Supabase row inference
+// here is wider than what we read, and the rest of this file already relies
+// on structural typing.
+type CatalogRow = {
+  id: number;
+  slug: string;
+  title: string;
+  title_override?: string | null;
+  title_en?: string | null;
+  title_ru?: string | null;
+  title_ua?: string | null;
+} & Record<string, unknown>;
+
 const catalogMeta: Record<string, { title: string; description: string }> = {
   bg: {
     title:
@@ -254,8 +268,60 @@ export default async function CatalogPage({
     .replace("{count}", String(products?.length || 0))
     .replace("{total}", String(count || 0));
 
+  // Year stamps in H1 keep the page "fresh" for Google + click-through.
+  // Mirrors the title pattern used on /montazh and /profilaktika.
+  const year = new Date().getFullYear();
+  const h1ByLocale: Record<string, string> = {
+    bg: `Климатици във Варна — каталог ${year}`,
+    en: `Air conditioners in Varna — ${year} catalog`,
+    ru: `Кондиционеры в Варне — каталог ${year}`,
+    ua: `Кондиціонери у Варні — каталог ${year}`,
+  };
+  const h1Default = h1ByLocale[locale] || h1ByLocale.bg;
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
+  // ItemList JSON-LD — unlocks Google product-carousel rich result eligibility.
+  // Only emit when we have products to list AND no facet filters are active
+  // (the latter mirrors the noindex rule on filtered URLs).
+  const filterKeys = ["brand", "btu", "energy", "available", "sort", "category"];
+  const hasFilter = filterKeys.some((k) => (filters as Record<string, unknown>)[k]);
+  const itemListJsonLd =
+    !hasFilter && products && products.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: h1Default,
+          itemListOrder: "https://schema.org/ItemListOrderAscending",
+          numberOfItems: products.length,
+          itemListElement: (products as CatalogRow[]).map((p: CatalogRow, i: number) => {
+            const t =
+              p.title_override ||
+              (locale === "en"
+                ? p.title_en
+                : locale === "ru"
+                  ? p.title_ru
+                  : locale === "ua"
+                    ? p.title_ua
+                    : null) ||
+              p.title;
+            return {
+              "@type": "ListItem",
+              position: i + 1,
+              url: `${siteUrl}/${locale}/klimatici/${p.slug}`,
+              name: t,
+            };
+          }),
+        }
+      : null;
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 overflow-x-hidden">
+      {itemListJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+        />
+      )}
       <CatalogViewTracker />
       {/* Breadcrumb */}
       <nav className="text-xs sm:text-sm text-muted-foreground mb-4 overflow-x-auto scrollbar-hide" role="navigation" aria-label="Breadcrumb">
@@ -279,7 +345,7 @@ export default async function CatalogPage({
       </nav>
 
       <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
-        {activeCategoryName || catalogDict.title}
+        {activeCategoryName || h1Default}
       </h1>
       <p className="text-sm sm:text-base text-muted-foreground mb-6">
         {showingText}
@@ -312,12 +378,15 @@ export default async function CatalogPage({
           {/* Product Grid */}
           {products && products.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-              {products.map((product) => (
+              {products.map((product, i: number) => (
                 <ProductCard
                   key={product.id}
                   product={product}
                   locale={locale}
                   currency="EUR"
+                  // First 3 cards are above the fold on lg (3-column grid) and the
+                  // first card is the LCP candidate on mobile — eager-load them.
+                  priority={i < 3}
                   dictionary={dictionary}
                 />
               ))}

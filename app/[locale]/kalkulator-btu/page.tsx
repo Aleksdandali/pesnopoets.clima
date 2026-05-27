@@ -2,6 +2,40 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ChevronRight, Sparkles } from "lucide-react";
 import BtuCalculator from "@/components/calculator/BtuCalculator";
+import InquiryForm from "@/components/forms/InquiryForm";
+
+async function getDictionary(locale: string) {
+  try {
+    const dict = await import(`@/dictionaries/${locale}.json`);
+    return dict.default;
+  } catch {
+    const dict = await import(`@/dictionaries/bg.json`);
+    return dict.default;
+  }
+}
+
+const FORM_COPY: Record<Locale, { title: string; subtitle: string }> = {
+  bg: {
+    title: "Изпратете ни резултата за оферта",
+    subtitle:
+      "Оставете телефон — ще ви се обадим в работно време Пон–Съб с точна цена за климатик с препоръчаната мощност и монтаж.",
+  },
+  en: {
+    title: "Send us this result for a quote",
+    subtitle:
+      "Leave your phone — we'll reply within working hours Mon–Sat with an exact price for an AC at the recommended size plus installation.",
+  },
+  ru: {
+    title: "Отправьте нам результат для расчёта",
+    subtitle:
+      "Оставьте телефон — ответим в рабочее время Пн–Сб с точной ценой кондиционера рекомендуемой мощности и монтажа.",
+  },
+  ua: {
+    title: "Надішліть нам результат для розрахунку",
+    subtitle:
+      "Залиште телефон — відповімо в робочий час Пн–Сб з точною ціною кондиціонера рекомендованої потужності та монтажу.",
+  },
+};
 
 type Locale = "bg" | "en" | "ru" | "ua";
 
@@ -199,6 +233,8 @@ export default async function Page({ params }: PageProps) {
   const hero = HERO[l];
   const faqItems = FAQ[l];
   const howto = HOWTO[l];
+  const dict = await getDictionary(l);
+  const formCopy = FORM_COPY[l];
 
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -274,6 +310,23 @@ export default async function Page({ params }: PageProps) {
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16">
         <BtuCalculator locale={l} />
+      </section>
+
+      {/* Inline lead form — placed right after the calculator result because
+          that's the highest-intent moment (user knows exactly what BTU they
+          need and wants to know what it costs). Replaces phone-only conversion. */}
+      <section className="border-t border-border/40 bg-white">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+          <div className="rounded-2xl border border-border bg-white shadow-[0_2px_8px_rgb(0_0_0/0.04)] p-5 sm:p-8">
+            <div className="mb-5 sm:mb-6 text-center">
+              <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+                {formCopy.title}
+              </h2>
+              <p className="mt-2 text-sm text-muted-foreground">{formCopy.subtitle}</p>
+            </div>
+            <InquiryForm locale={l} dictionary={dict} />
+          </div>
+        </div>
       </section>
 
       <section className="border-t border-border/40 bg-[#fafbfc]">

@@ -48,7 +48,7 @@ const t: Record<
     requiredPhone: "Въведете телефон",
     legal: "С изпращането се съгласявате с обработка на данните за връзка с вас.",
     perks: [
-      { icon: "clock", text: "Отговор в 10 минути" },
+      { icon: "clock", text: "В работно време Пон–Съб" },
       { icon: "shield", text: "Без ангажимент" },
       { icon: "badge", text: "Безплатна консултация" },
     ],
@@ -70,7 +70,7 @@ const t: Record<
     requiredPhone: "Enter a phone",
     legal: "By submitting you agree to processing of your contact data.",
     perks: [
-      { icon: "clock", text: "10-minute callback" },
+      { icon: "clock", text: "Working hours Mon–Sat" },
       { icon: "shield", text: "No commitment" },
       { icon: "badge", text: "Free consultation" },
     ],
@@ -92,7 +92,7 @@ const t: Record<
     requiredPhone: "Введите телефон",
     legal: "Отправляя заявку, вы соглашаетесь на обработку контактных данных.",
     perks: [
-      { icon: "clock", text: "Ответ за 10 минут" },
+      { icon: "clock", text: "В рабочее время Пн–Сб" },
       { icon: "shield", text: "Без обязательств" },
       { icon: "badge", text: "Бесплатная консультация" },
     ],
@@ -114,7 +114,7 @@ const t: Record<
     requiredPhone: "Введіть телефон",
     legal: "Надсилаючи заявку, ви погоджуєтесь на обробку контактних даних.",
     perks: [
-      { icon: "clock", text: "Відповідь за 10 хвилин" },
+      { icon: "clock", text: "У робочий час Пн–Сб" },
       { icon: "shield", text: "Без зобов'язань" },
       { icon: "badge", text: "Безкоштовна консультація" },
     ],

@@ -36,6 +36,7 @@ interface ProductCardProps {
   };
   locale: string;
   currency: "EUR" | "BGN";
+  priority?: boolean;
   dictionary?: {
     common: {
       currency: { bgn: string; eur: string };
@@ -88,6 +89,7 @@ export default function ProductCard({
   product,
   locale,
   currency,
+  priority = false,
   dictionary,
 }: ProductCardProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -188,7 +190,7 @@ export default function ProductCard({
             fill
             className="object-contain p-3 sm:p-6 group-hover:scale-[1.03] transition-transform duration-500 ease-out"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            loading="lazy"
+            {...(priority ? { priority: true } : { loading: "lazy" as const })}
           />
         ) : (
           <div className="flex items-center justify-center h-full text-muted-foreground/20">
