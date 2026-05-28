@@ -107,7 +107,7 @@ async function getDictionary(locale: string) {
   }
 }
 
-async function getCategoriesWithCounts(supabase: Awaited<ReturnType<typeof createClient>>, locale: string) {
+async function getCategoriesWithCounts(supabase: ReturnType<typeof createPublicClient>, locale: string) {
   // Run both queries in parallel
   const [categoriesResult, productCountsResult] = await Promise.all([
     supabase
