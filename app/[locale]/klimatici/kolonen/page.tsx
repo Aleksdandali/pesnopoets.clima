@@ -12,7 +12,7 @@ import {
   Building,
   Award,
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import ProductCard from "@/components/catalog/ProductCard";
 
 interface PageProps {
@@ -483,7 +483,7 @@ export default async function KolonenCategoryPage({ params }: PageProps) {
   const t = copy[locale] || copy.bg;
   const siteUrl = "https://pesnopoets-clima.com";
 
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data: cats } = await supabase
     .from("categories")
     .select("id")

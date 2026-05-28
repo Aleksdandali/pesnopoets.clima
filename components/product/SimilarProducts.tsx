@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import ProductCard from "@/components/catalog/ProductCard";
 
 interface SimilarProductsProps {
@@ -31,7 +31,7 @@ export default async function SimilarProducts({
   locale,
   dictionary,
 }: SimilarProductsProps) {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const TARGET = 4;
   let products: any[] = [];
 

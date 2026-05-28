@@ -16,7 +16,7 @@ import {
   Star,
   Award,
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import ProductCard from "@/components/catalog/ProductCard";
 import AiConsultantSection from "@/components/home/AiConsultantSection";
 import HeroCarousel from "@/components/home/HeroCarousel";
@@ -24,6 +24,8 @@ import HeroContactRow from "@/components/home/HeroContactRow";
 import QuickOrderForm from "@/components/home/QuickOrderForm";
 import PortfolioGallery from "@/components/portfolio/PortfolioGallery";
 import PromoCodeBanner from "@/components/promo/PromoCodeBanner";
+import ModernVisualBanner from "@/components/promo/ModernVisualBanner";
+import InteractiveACBanner from "@/components/promo/InteractiveACBanner";
 import GoogleReviewsSection from "@/components/home/GoogleReviewsSection";
 import { getGoogleReviews } from "@/lib/google-reviews";
 
@@ -260,7 +262,7 @@ const sectionLabels: Record<string, {
 
 async function getFeaturedProducts() {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data } = await supabase
       .from("products")
       .select("id, slug, title, title_override, title_en, title_ru, title_ua, manufacturer, price_client, price_override, price_promo, is_promo, availability, gallery, btu, energy_class, area_m2, noise_db_indoor")
@@ -277,7 +279,7 @@ async function getFeaturedProducts() {
 
 async function getBrandsWithImages() {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const { data } = await supabase
       .from("products")
       .select("manufacturer, gallery")
@@ -309,7 +311,7 @@ async function getBrandsWithImages() {
 
 async function getCategoryImages() {
   try {
-    const supabase = await createClient();
+    const supabase = createPublicClient();
     const categorySlugs = ["invertorni-klimatici", "multi-split-sistemi", "profesionalni-sistemi", "termopompa"];
 
     // Single query instead of 4 sequential ones
@@ -349,7 +351,7 @@ export default async function HomePage({ params }: HomePageProps) {
   // Fetch hero banners from Supabase
   async function getHeroBanners() {
     try {
-      const supabase = await createClient();
+      const supabase = createPublicClient();
       const { data } = await supabase
         .from("banners")
         .select("id, title, subtitle, image_desktop, image_mobile, link")
@@ -543,6 +545,23 @@ export default async function HomePage({ params }: HomePageProps) {
         </section>
       )}
 
+      {/* Modern Visual Banner — localized branding and value prop */}
+      <ModernVisualBanner
+        locale={locale}
+        title={
+          locale === "bg" ? "Комфорт за 24 часа" :
+          locale === "ru" ? "Комфорт за 24 часа" :
+          "Comfort in 24 Hours"
+        }
+        subtitle={
+          locale === "bg" ? "Официален дилър на Daikin и Mitsubishi във Варна. Професионален подбор и експертен монтаж с 5 години гаранция." :
+          locale === "ru" ? "Официальный дилер Daikin и Mitsubishi в Варне. Профессиональный подбор и экспертный монтаж с гарантией 5 лет." :
+          "Authorized Daikin & Mitsubishi dealer in Varna. Professional selection and expert installation with a 5-year warranty."
+        }
+        ctaText={labels.ctaButton}
+        ctaLink={`/${locale}/inquiry`}
+      />
+
       {/* Features / Why Us */}
       <section className="bg-gradient-to-b from-white via-[#f8fafc] to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20">
@@ -593,7 +612,10 @@ export default async function HomePage({ params }: HomePageProps) {
           <h2 className="text-xl sm:text-2xl font-bold text-foreground text-center mb-8 sm:mb-10">
             {labels.servicesTitle}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+
+          <InteractiveACBanner locale={locale} />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-12">
             <Link
               href={`/${locale}/montazh`}
               className="group block p-6 sm:p-8 bg-primary-light/30 border border-primary/15 rounded-2xl hover:bg-primary-light/50 hover:border-primary/30 transition-colors"

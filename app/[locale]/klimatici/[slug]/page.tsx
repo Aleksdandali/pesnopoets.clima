@@ -1,7 +1,7 @@
 import { notFound, permanentRedirect } from "next/navigation";
 import { cache } from "react";
 import type { Metadata } from "next";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import ProductGallery from "@/components/product/ProductGallery";
 import SpecsTable from "@/components/product/SpecsTable";
 import ProductFaq from "@/components/product/ProductFaq";
@@ -52,7 +52,7 @@ async function getDictionary(locale: string) {
 // Bittel-imported SKUs that are later set is_active=false were generating
 // hundreds of 404s in SerpStat audit and wasting Google crawl budget.
 const getProduct = cache(async (slug: string) => {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data } = await supabase
     .from("products")
     .select("*, categories(slug, group_name, subgroup_name, name_en, name_ru, name_ua)")

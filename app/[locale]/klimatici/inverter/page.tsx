@@ -14,7 +14,7 @@ import {
   Volume2,
   Clock,
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import ProductCard from "@/components/catalog/ProductCard";
 
 interface PageProps {
@@ -481,7 +481,7 @@ export default async function InverterCategoryPage({ params }: PageProps) {
   const siteUrl = "https://pesnopoets-clima.com";
 
   // Fetch top 6 inverter products from Bittel categories with group_code "10_ ИНВЕРТОРНИ.КЛ"
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data: invertCats } = await supabase
     .from("categories")
     .select("id")

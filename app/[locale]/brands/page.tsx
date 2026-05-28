@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 
 // Revalidate brands page every 10 minutes
 export const revalidate = 600;
@@ -45,7 +45,7 @@ export async function generateMetadata({
 export default async function BrandsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const dictionary = await getDictionary(locale);
-  const supabase = await createClient();
+  const supabase = createPublicClient();
 
   const { data } = await supabase
     .from("products")

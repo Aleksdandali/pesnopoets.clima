@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import AiBannerButton from "./AiBannerButton";
 
 interface Banner {
@@ -75,7 +75,7 @@ function BannerContent({
 }
 
 export default async function BannerGrid({ locale }: { locale: string }) {
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const { data: banners } = await supabase
     .from("banners")
     .select("id, title, subtitle, image_desktop, image_mobile, link, sort_order")

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import ProductCard from "@/components/catalog/ProductCard";
 import FilterBar from "@/components/catalog/FilterBar";
 import CategorySidebar from "@/components/catalog/CategorySidebar";
@@ -176,7 +176,7 @@ export default async function CatalogPage({
   const { locale } = await params;
   const filters = await searchParams;
   const dictionary = await getDictionary(locale);
-  const supabase = await createClient();
+  const supabase = createPublicClient();
   const catalogDict = dictionary.catalog;
 
   // Get categories with counts
