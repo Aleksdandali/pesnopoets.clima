@@ -60,9 +60,15 @@ export async function generateMetadata({
   const c = dictionary.about;
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
+  // Trim subtitle to ≤160 chars for meta description (SerpStat 2026-05-28
+  // flagged 166-185 chars). On-page hero still uses the full c.subtitle.
+  const metaDesc =
+    c.subtitle.length > 158
+      ? c.subtitle.slice(0, 157).replace(/[\s,.;:!?]+$/, "") + "…"
+      : c.subtitle;
   return {
     title: `${c.title} | ${dictionary.common.siteName}`,
-    description: c.subtitle,
+    description: metaDesc,
     alternates: {
       canonical: `${siteUrl}/${locale}/za-nas`,
       languages: {

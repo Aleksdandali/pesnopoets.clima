@@ -15,6 +15,15 @@ async function getDictionary(locale: string) {
   try { return (await import(`@/dictionaries/${locale}.json`)).default; } catch { return (await import(`@/dictionaries/bg.json`)).default; }
 }
 
+// SEO descriptions expanded to ~140 chars (SerpStat 2026-05-28 flagged 84-95 chars
+// in `contact.subtitle`, which is also rendered as the on-page hero subtitle).
+const kontaktiMetaDesc: Record<string, string> = {
+  bg: "Свържете се с Песнопоец Клима във Варна — телефон, WhatsApp, Viber, имейл. Безплатна консултация, оглед и оферта за климатик и монтаж в същия ден.",
+  en: "Contact Pesnopoets Clima in Varna — phone, WhatsApp, Viber, email. Free consultation, on-site survey and a same-day quote for AC supply and installation.",
+  ru: "Свяжитесь с Песнопоец Клима в Варне — телефон, WhatsApp, Viber, e-mail. Бесплатная консультация, выезд и расчёт по кондиционеру и монтажу в тот же день.",
+  ua: "Зв'яжіться з Піснопоєць Кліма у Варні — телефон, WhatsApp, Viber, e-mail. Безкоштовна консультація, виїзд і розрахунок по кондиціонеру й монтажу того ж дня.",
+};
+
 export async function generateMetadata({
   params,
 }: {
@@ -27,7 +36,7 @@ export async function generateMetadata({
     process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
   return {
     title: `${c.title} | ${dictionary.common.siteName}`,
-    description: c.subtitle,
+    description: kontaktiMetaDesc[locale] || kontaktiMetaDesc.bg,
     alternates: {
       canonical: `${siteUrl}/${locale}/kontakti`,
       languages: {

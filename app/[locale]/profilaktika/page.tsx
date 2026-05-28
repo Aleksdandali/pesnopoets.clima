@@ -41,7 +41,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const seoTitle = dict.profilaktika.metaTitle || dict.profilaktika.pageTitle;
   const seoDescription = dict.profilaktika.metaDescription || dict.profilaktika.pageSubtitle;
   return {
-    title: `${seoTitle} | ${dict.common.siteName}`,
+    // Brand suffix omitted — concat exceeded 60 chars (SerpStat 2026-05-28).
+    title: seoTitle,
     description: seoDescription,
     alternates: {
       canonical: `${siteUrl}/${locale}/profilaktika`,

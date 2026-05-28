@@ -12,27 +12,31 @@ interface PageProps {
 const meta: Record<string, { title: string; description: string }> = {
   bg: {
     title: "Блог за климатици във Варна | Песнопоец Клима",
-    description: "Полезни статии за климатици, отопление, монтаж и поддръжка. Практични съвети за Варна и област.",
+    description:
+      "Полезни статии за климатици и отопление: как се избира уред, цени за монтаж и профилактика, BTU калкулатор и сметка за ток. Експертен опит от Варна.",
   },
   en: {
     title: "AC Blog — Varna | Pesnopoets Clima",
-    description: "Useful articles about air conditioners, heating, installation and maintenance. Practical tips for Varna and the region.",
+    description:
+      "Useful articles about air conditioners and heating: how to pick a unit, installation and maintenance prices, BTU calculator, real electricity bills. Varna expertise.",
   },
   ru: {
     title: "Блог о кондиционерах в Варне | Песнопоец Клима",
-    description: "Полезные статьи о кондиционерах, отоплении, монтаже и обслуживании. Практические советы для Варны и области.",
+    description:
+      "Полезные статьи о кондиционерах и отоплении: как выбрать модель, цены на монтаж и обслуживание, BTU-калькулятор, реальный счёт за свет. Экспертиза Варны.",
   },
   ua: {
     title: "Блог про кондиціонери у Варні | Піснопоєць Кліма",
-    description: "Корисні статті про кондиціонери, опалення, монтаж та обслуговування. Практичні поради для Варни та області.",
+    description:
+      "Корисні статті про кондиціонери та опалення: як обрати модель, ціни на монтаж і профілактику, BTU-калькулятор, реальний рахунок за світло. Експертиза Варни.",
   },
 };
 
 const labels: Record<string, { heading: string; breadcrumbHome: string; readMore: string }> = {
-  bg: { heading: "Блог", breadcrumbHome: "Начало", readMore: "Прочетете повече" },
-  en: { heading: "Blog", breadcrumbHome: "Home", readMore: "Read more" },
-  ru: { heading: "Блог", breadcrumbHome: "Главная", readMore: "Читать далее" },
-  ua: { heading: "Блог", breadcrumbHome: "Головна", readMore: "Читати далі" },
+  bg: { heading: "Блог за климатици", breadcrumbHome: "Начало", readMore: "Прочетете повече" },
+  en: { heading: "Air Conditioning Blog", breadcrumbHome: "Home", readMore: "Read more" },
+  ru: { heading: "Блог о кондиционерах", breadcrumbHome: "Главная", readMore: "Читать далее" },
+  ua: { heading: "Блог про кондиціонери", breadcrumbHome: "Головна", readMore: "Читати далі" },
 };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

@@ -77,11 +77,19 @@ export async function generateMetadata({
     locale === "ru" ? product.description_ru :
     locale === "ua" ? product.description_ua : null;
 
+  // When `meta_title` is not explicitly set in the DB, append a locale-aware
+  // brand suffix so the resulting <title> always differs from the on-page
+  // <h1> (which uses the bare product title). SerpStat flagged 4 TechPoint
+  // pages where H1 === Title, hurting CTR signals.
+  const brandSuffix: Record<string, string> = {
+    bg: " | Песнопоец Клима",
+    en: " | Pesnopoets Clima",
+    ru: " | Песнопоец Клима",
+    ua: " | Піснопоєць Кліма",
+  };
+  const baseTitle = product.title_override || localeTitle || product.title;
   const title =
-    product.meta_title ||
-    product.title_override ||
-    localeTitle ||
-    product.title;
+    product.meta_title || `${baseTitle}${brandSuffix[locale] || brandSuffix.bg}`;
   const description = (
     product.meta_description ||
     product.description_override ||

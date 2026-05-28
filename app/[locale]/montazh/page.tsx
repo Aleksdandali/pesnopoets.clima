@@ -43,7 +43,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const seoTitle = dict.montazh.metaTitle || dict.montazh.pageTitle;
   const seoDescription = dict.montazh.metaDescription || dict.montazh.pageSubtitle;
   return {
-    title: `${seoTitle} | ${dict.common.siteName}`,
+    // Brand suffix omitted — concat exceeded 60 chars (SerpStat 2026-05-28).
+    // Brand still appears via og:site_name and the LocalBusiness schema.
+    title: seoTitle,
     description: seoDescription,
     alternates: {
       canonical: `${siteUrl}/${locale}/montazh`,

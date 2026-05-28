@@ -562,9 +562,14 @@ export async function generateMetadata({
   const { locale } = await params;
   const loc = pickLocale(locale);
   const c = COPY[loc];
+  // Trim intro to ≤160 chars for meta description (SerpStat 2026-05-28 flagged 168 chars).
+  const metaDesc =
+    c.intro.length > 158
+      ? c.intro.slice(0, 157).replace(/[\s,.;:!?]+$/, "") + "…"
+      : c.intro;
   return {
     title: `${c.title} | ${COMPANY_NAME}`,
-    description: c.intro,
+    description: metaDesc,
     alternates: {
       canonical: `${SITE_URL}/${loc}/privacy`,
       languages: {

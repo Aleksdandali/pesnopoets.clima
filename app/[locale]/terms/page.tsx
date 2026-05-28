@@ -10,6 +10,15 @@ async function getDictionary(locale: string) {
   }
 }
 
+// SEO descriptions expanded to ~140 chars (SerpStat 2026-05-28 flagged 57-75 chars
+// in the dictionary `terms.intro`, which is also used on-page).
+const metaDescriptions: Record<string, string> = {
+  bg: "Общи условия за продажба, монтаж и гаранция на климатици от Песнопоец Клима — фиксирани цени с ДДС, прозрачен договор, права на потребителя.",
+  en: "Sales, installation and warranty terms for ACs from Pesnopoets Clima — fixed VAT-inclusive prices, transparent contract, consumer rights, returns policy.",
+  ru: "Условия продажи, монтажа и гарантии кондиционеров от Песнопоец Клима — фиксированные цены с НДС, прозрачный договор, права потребителя, возвраты.",
+  ua: "Умови продажу, монтажу та гарантії кондиціонерів від Піснопоєць Кліма — фіксовані ціни з ПДВ, прозорий договір, права споживача, повернення.",
+};
+
 export async function generateMetadata({
   params,
 }: {
@@ -22,7 +31,7 @@ export async function generateMetadata({
     process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
   return {
     title: `${t.title} | ${dictionary.common.siteName}`,
-    description: t.intro,
+    description: metaDescriptions[locale] || metaDescriptions.bg,
     alternates: {
       canonical: `${siteUrl}/${locale}/terms`,
       languages: {

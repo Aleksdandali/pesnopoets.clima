@@ -32,18 +32,21 @@ export async function generateMetadata({
   const { locale } = await params;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
 
+  // Titles kept ≤60 chars (SerpStat truncates ~60). Brand suffix shown via
+  // the og:site_name and the schema below, so we don't repeat it here.
   const titles: Record<string, string> = {
-    bg: "Климатици във Варна 2026 — Монтаж от 190 €, гаранция 5 г. | Daikin, Mitsubishi",
-    en: "Air Conditioners in Varna 2026 — Install from €190, 5-yr warranty | Daikin, Mitsubishi",
-    ru: "Кондиционеры в Варне 2026 — Монтаж от 190 €, гарантия 5 лет | Daikin, Mitsubishi",
-    ua: "Кондиціонери у Варні 2026 — Монтаж від 190 €, гарантія 5 років | Daikin, Mitsubishi",
+    bg: "Климатици Варна 2026 — Монтаж от 190 €, гаранция 5 г.",
+    en: "Air Conditioners Varna 2026 — Install €190, 5-yr warranty",
+    ru: "Кондиционеры Варна 2026 — Монтаж 190 €, гарантия 5 лет",
+    ua: "Кондиціонери Варна 2026 — Монтаж 190 €, гарантія 5 років",
   };
 
+  // Descriptions trimmed to ≤160 chars (SerpStat 2026-05-28 flagged 169-179 originals).
   const descriptions: Record<string, string> = {
-    bg: "Официален дилер Daikin, Mitsubishi, Toshiba, Gree във Варна. Монтаж от 190 € с ДДС, собствена бригада, гаранция до 5 г. Същия ден, фиксирани цени, безплатна консултация.",
-    en: "Authorized Daikin, Mitsubishi, Toshiba, Gree dealer in Varna. Installation from €190 incl. VAT, in-house crew, warranty up to 5 years. Same-day service, fixed prices, free advice.",
-    ru: "Официальный дилер Daikin, Mitsubishi, Toshiba, Gree в Варне. Монтаж от 190 € с НДС, своя бригада, гарантия до 5 лет. В день обращения, фиксированные цены, бесплатная консультация.",
-    ua: "Офіційний дилер Daikin, Mitsubishi, Toshiba, Gree у Варні. Монтаж від 190 € з ПДВ, власна бригада, гарантія до 5 років. У день звернення, фіксовані ціни, безкоштовна консультація.",
+    bg: "Официален дилер Daikin, Mitsubishi, Gree във Варна. Монтаж от 190 € с ДДС, собствена бригада, гаранция до 5 г. Същия ден, фиксирани цени.",
+    en: "Authorized Daikin, Mitsubishi, Gree dealer in Varna. Installation from €190 incl. VAT, in-house crew, 5-year warranty. Same-day service, fixed prices.",
+    ru: "Официальный дилер Daikin, Mitsubishi, Gree в Варне. Монтаж от 190 € с НДС, своя бригада, гарантия до 5 лет. В день обращения, фиксированные цены.",
+    ua: "Офіційний дилер Daikin, Mitsubishi, Gree у Варні. Монтаж від 190 € з ПДВ, власна бригада, гарантія 5 років. У день звернення, фіксовані ціни.",
   };
 
   const keywords: Record<string, string[]> = {

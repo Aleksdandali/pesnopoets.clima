@@ -1083,7 +1083,8 @@ export async function generateMetadata({
     process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
 
   return {
-    title: `${c.hero.title} | ${dict.common.siteName}`,
+    // Brand suffix omitted — concat exceeded 60 chars (SerpStat 2026-05-28).
+    title: c.hero.title,
     description: c.hero.subtitle,
     alternates: {
       canonical: `${siteUrl}/${locale}/abonament-biznes`,

@@ -42,6 +42,15 @@ async function getDictionary(locale: string) {
   }
 }
 
+// SEO descriptions expanded to ~140 chars (SerpStat 2026-05-28 flagged 85-97 chars
+// in `uslugi.pageSubtitle`, which is also used as the on-page hero subtitle).
+const usulgiMetaDesc: Record<string, string> = {
+  bg: "Услуги за климатици във Варна: продажба, монтаж от 190 €, профилактика от 42 €, ремонт, гаранция до 5 г. и абонамент за бизнеса.",
+  en: "AC services in Varna: sales, installation from €190, maintenance from €42, repair, warranty up to 5 years, business maintenance contracts.",
+  ru: "Услуги по кондиционерам в Варне: продажа, монтаж от 190 €, профилактика от 42 €, ремонт, гарантия до 5 лет, абонемент для бизнеса.",
+  ua: "Послуги з кондиціонерів у Варні: продаж, монтаж від 190 €, профілактика від 42 €, ремонт, гарантія до 5 років, абонемент для бізнесу.",
+};
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   const dict = await getDictionary(locale);
@@ -49,7 +58,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
   return {
     title: `${dict.uslugi.pageTitle} | ${dict.common.siteName}`,
-    description: dict.uslugi.pageSubtitle,
+    description: usulgiMetaDesc[locale] || usulgiMetaDesc.bg,
     alternates: {
       canonical: `${siteUrl}/${locale}/uslugi`,
       languages: {

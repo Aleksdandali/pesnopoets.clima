@@ -110,7 +110,7 @@ interface PageCopy {
 const COPY: Record<Locale, PageCopy> = {
   bg: {
     metaTitle:
-      "Партньорска програма 10% — Песнопоец Клима Варна | Прораби, риелтори, дизайнери",
+      "Партньорска програма 10% — Песнопоец Клима Варна",
     metaDescription:
       "Препоръчвате нашите климатици и монтаж във Варна — получавате 10% от стойността на всяка поръчка. Прозрачни условия, плащане след монтажа, без таван.",
     badge: "Партньорство",
@@ -305,7 +305,7 @@ const COPY: Record<Locale, PageCopy> = {
 
   en: {
     metaTitle:
-      "Partner Program 10% — Pesnopoets Clima Varna | Foremen, Realtors, Designers",
+      "Partner Program 10% — Pesnopoets Clima Varna",
     metaDescription:
       "Recommend our AC units and installation in Varna — earn 10% of every completed order. Transparent terms, payout within 5 business days, no caps.",
     badge: "Partnership",
@@ -496,7 +496,7 @@ const COPY: Record<Locale, PageCopy> = {
 
   ru: {
     metaTitle:
-      "Партнёрская программа 10% — Песнопоец Клима Варна | Прорабам, риелторам, дизайнерам",
+      "Партнёрская программа 10% — Песнопоец Клима Варна",
     metaDescription:
       "Рекомендуете наши кондиционеры и монтаж в Варне — получаете 10% с каждого выполненного заказа. Прозрачные условия, выплата за 5 дней, без лимитов.",
     badge: "Партнёрство",
@@ -691,7 +691,7 @@ const COPY: Record<Locale, PageCopy> = {
 
   ua: {
     metaTitle:
-      "Партнерська програма 10% — Песнопоец Клима Варна | Прорабам, ріелторам, дизайнерам",
+      "Партнерська програма 10% — Піснопоєць Кліма Варна",
     metaDescription:
       "Рекомендуєте наші кондиціонери та монтаж у Варні — отримуєте 10% з кожного виконаного замовлення. Прозорі умови, виплата за 5 днів, без лімітів.",
     badge: "Партнерство",
