@@ -34,13 +34,14 @@ export function middleware(request: NextRequest) {
   );
 
   if (pathnameLocale) {
-    // Locale present — propagate to RSC via REQUEST header, so the root
-    // layout can read it through `headers()`. Setting it on the response
-    // (the previous behavior) only sent it back to the browser; server
-    // components never saw it, which is why <html lang> stayed "bg".
-    const requestHeaders = new Headers(request.headers);
-    requestHeaders.set("x-locale", pathnameLocale);
-    return NextResponse.next({ request: { headers: requestHeaders } });
+    // Locale present — let the request through unmodified. We used to set
+    // an `x-locale` REQUEST header so the root layout could read it via
+    // `headers()`, but (a) that call put every route into Dynamic SSR
+    // (no-store), and (b) modifying request headers in middleware via
+    // `NextResponse.next({ request })` itself disables response caching.
+    // The root layout no longer reads any request data, and not-found.tsx
+    // falls back to "bg" if the header is missing.
+    return NextResponse.next();
   }
 
   // No locale in path — permanently redirect to default locale (Bulgarian).
