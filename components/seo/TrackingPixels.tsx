@@ -1,5 +1,12 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
+import { unstable_cache } from "next/cache";
 import TrackingPixelsClient from "./TrackingPixelsClient";
+
+// Plain anon client — no cookies, no `next/headers` access. Reading
+// cookies() here used to drag the entire route tree into Dynamic SSR
+// (Vercel responded with `cache-control: no-store` on every page),
+// because TrackingPixels lives in the root layout. Pixel IDs are public
+// site settings, so the cookied SSR client gave us nothing useful.
 
 interface PixelSettings {
   meta_pixel_id?: string;
@@ -34,32 +41,43 @@ function sanitizeClarityId(id: string): string | null {
   return /^[a-z0-9]{8,12}$/.test(trimmed) ? trimmed : null;
 }
 
-async function getPixelSettings(): Promise<PixelSettings> {
-  try {
-    const supabase = await createClient();
-    const { data } = await supabase
-      .from("site_settings")
-      .select("key, value")
-      .in("key", [
-        "meta_pixel_id",
-        "tiktok_pixel_id",
-        "google_ads_id",
-        "ga4_id",
-        "clarity_id",
-        "custom_head_scripts",
-      ]);
+// Cached for 1h with a tag so the admin panel can revalidate on save
+// via `revalidateTag('pixel_settings')`. Falls back silently to {} so
+// a Supabase outage never breaks rendering of the whole site.
+const getPixelSettings = unstable_cache(
+  async (): Promise<PixelSettings> => {
+    try {
+      const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        { auth: { persistSession: false, autoRefreshToken: false } }
+      );
+      const { data } = await supabase
+        .from("site_settings")
+        .select("key, value")
+        .in("key", [
+          "meta_pixel_id",
+          "tiktok_pixel_id",
+          "google_ads_id",
+          "ga4_id",
+          "clarity_id",
+          "custom_head_scripts",
+        ]);
 
-    if (!data) return {};
+      if (!data) return {};
 
-    const settings: Record<string, string> = {};
-    for (const row of data) {
-      if (row.value) settings[row.key] = String(row.value);
+      const settings: Record<string, string> = {};
+      for (const row of data) {
+        if (row.value) settings[row.key] = String(row.value);
+      }
+      return settings;
+    } catch {
+      return {};
     }
-    return settings;
-  } catch {
-    return {};
-  }
-}
+  },
+  ["pixel_settings"],
+  { revalidate: 3600, tags: ["pixel_settings"] }
+);
 
 export default async function TrackingPixels() {
   const settings = await getPixelSettings();
