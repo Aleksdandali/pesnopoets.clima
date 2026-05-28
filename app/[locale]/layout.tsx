@@ -223,6 +223,13 @@ export default async function LocaleLayout({
   const dictionary = await getDictionary(locale as Locale);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
 
+  // Root layout pins <html lang="bg"> statically (so the whole tree stays
+  // cacheable). Update the attribute synchronously here for non-BG locales
+  // before the browser parses <body>. Googlebot evaluates this script, so
+  // the lang signal reaches both crawlers and assistive tech.
+  const htmlLangMap: Record<string, string> = { bg: "bg", en: "en", ru: "ru", ua: "uk" };
+  const htmlLang = htmlLangMap[locale] || "bg";
+
   const seoDescriptions: Record<string, string> = {
     bg: "Официален дилер Daikin, Mitsubishi, Toshiba, Gree във Варна. Пълен монтаж от собствена бригада.",
     en: "Authorized Daikin, Mitsubishi, Toshiba, Gree dealer in Varna, Bulgaria. Full installation by our own crew.",
@@ -242,6 +249,13 @@ export default async function LocaleLayout({
 
   return (
     <>
+      {htmlLang !== "bg" && (
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.documentElement.lang=${JSON.stringify(htmlLang)};`,
+          }}
+        />
+      )}
       <LocalBusinessJsonLd
         locale={locale}
         siteUrl={siteUrl}

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { headers } from "next/headers";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import TrackingPixels from "@/components/seo/TrackingPixels";
@@ -41,23 +40,22 @@ export const metadata: Metadata = {
   ),
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Locale comes from middleware via the `x-locale` request header.
-  // Root layout does NOT receive `params.locale` — that segment belongs
-  // to the child `[locale]/...` layout. Reading params here always
-  // resolved to undefined, which is why every locale rendered <html lang="bg">.
-  const headerStore = await headers();
-  const locale = headerStore.get("x-locale") || "bg";
-  const langMap: Record<string, string> = { bg: "bg", en: "en", ru: "ru", ua: "uk" };
-  const htmlLang = langMap[locale] || "bg";
-
+  // <html lang> is statically "bg" here so the root layout stays fully
+  // static — using `headers()` to set the locale forced every downstream
+  // route into Dynamic SSR (cache-control: no-store), defeating Vercel CDN
+  // caching. The locale layout (`app/[locale]/layout.tsx`) updates this
+  // attribute on the client from `params.locale` before any content paints.
+  // Trade-off: hreflang + URL structure remain the primary locale signals
+  // for search engines; <html lang> is a secondary a11y/SEO hint that
+  // Googlebot still sees correctly thanks to that inline script.
   return (
     <html
-      lang={htmlLang}
+      lang="bg"
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       suppressHydrationWarning
     >
