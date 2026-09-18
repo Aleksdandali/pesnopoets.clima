@@ -138,23 +138,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...localized("/kontakti", { changeFrequency: "monthly", priority: 0.7 })
   );
 
-  // Product pages — primary market only (BG)
-  // RU/EN/UA product pages remain crawlable + indexable via hreflang on /bg pages,
-  // but excluded from sitemap to focus crawl budget on the primary market while
-  // the domain is still building authority. Re-add other locales once BG indexing stabilises.
+  // Product pages — all four locales. EN product URLs are the ones that rank
+  // for model-code queries (GSC, summer 2026); keeping them out of the sitemap
+  // and noindexed cost ~8x impressions, while BG products stayed uncrawled.
   if (products) {
     for (const product of products) {
       const path = `/klimatici/${product.slug}`;
       const lastMod = product.updated_at
         ? new Date(product.updated_at)
         : new Date();
-      entries.push({
-        url: `${siteUrl}/bg${path}`,
-        lastModified: lastMod,
-        changeFrequency: "daily",
-        priority: 0.8,
-        alternates: { languages: buildLanguages(path) },
-      });
+      entries.push(
+        ...localized(path, {
+          lastModified: lastMod,
+          changeFrequency: "weekly",
+          priority: 0.8,
+        })
+      );
     }
   }
 
