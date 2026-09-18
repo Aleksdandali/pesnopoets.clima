@@ -5,6 +5,8 @@ import { electricityCostAcVarna } from "./posts/electricity-cost-ac-varna";
 import { heatingWithAc } from "./posts/heating-with-ac";
 import { howToChooseAc } from "./posts/how-to-choose-ac";
 import { installationCostsVarna } from "./posts/installation-costs-varna";
+import { nastroykaKlimatikZaToplo } from "./posts/nastroyka-klimatik-za-toplo";
+import { tihRezhimKlimatik } from "./posts/tih-rezhim-klimatik";
 
 const allPosts: BlogPost[] = [
   acCorrectSettingsGuide,
@@ -13,6 +15,8 @@ const allPosts: BlogPost[] = [
   heatingWithAc,
   howToChooseAc,
   installationCostsVarna,
+  nastroykaKlimatikZaToplo,
+  tihRezhimKlimatik,
 ];
 
 // Sort by date descending
