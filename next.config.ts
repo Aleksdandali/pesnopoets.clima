@@ -22,6 +22,20 @@ const nextConfig: NextConfig = {
     ],
   },
   async redirects() {
+    // Legacy category URLs (pre-2026 structure, still linked from external
+    // sites and in Google's index as 404s per GSC 2026-09-18) → current
+    // category landing pages. Locale-aware via :locale(bg|en|ru|ua).
+    const locale = ":locale(bg|en|ru|ua)";
+    const legacyCategories: Array<[string, string]> = [
+      ["/klimatici/invertorni-klimatitsi/:rest*", "/klimatici/inverter"],
+      ["/klimatici/invertorni-multisplit-sistemi/:rest*", "/klimatici/multisplit"],
+      ["/klimatici/termopompi/:rest*", "/klimatici/termopompa"],
+      ["/klimatici/profesionalni-sistemi/kanalen-tip", "/klimatici/kanalen"],
+      ["/klimatici/profesionalni-sistemi/kasetachen-tip", "/klimatici/kasetachen"],
+      ["/klimatici/profesionalni-sistemi/kolonni-klimatitsi", "/klimatici/kolonen"],
+      ["/klimatici/profesionalni-sistemi/:rest*", "/klimatici"],
+      ["/klimatici/aksesoari/:rest*", "/klimatici"],
+    ];
     return [
       {
         source: "/:path*",
@@ -29,6 +43,11 @@ const nextConfig: NextConfig = {
         destination: "https://pesnopoets-clima.com/:path*",
         permanent: true,
       },
+      ...legacyCategories.map(([from, to]) => ({
+        source: `/${locale}${from}`,
+        destination: `/:locale${to}`,
+        permanent: true,
+      })),
     ];
   },
   async headers() {

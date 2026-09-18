@@ -33,6 +33,13 @@ import {
 // ISR: revalidate product pages every 10 minutes
 export const revalidate = 600;
 
+// No params are prerendered at build time (455+ SKUs × 4 locales would tie the
+// build to Supabase); an empty list still opts the route into on-demand ISR
+// instead of per-request Dynamic SSR, so Googlebot gets cached HTML.
+export function generateStaticParams() {
+  return [];
+}
+
 interface ProductPageProps {
   params: Promise<{ locale: string; slug: string }>;
 }
@@ -102,31 +109,34 @@ export async function generateMetadata({
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
 
-  // Index only the BG version of product pages while the domain is still
-  // building authority. Non-BG locales remain crawlable (follow) so internal
-  // link equity flows back to /bg, but Google won't queue them in "discovered".
-  // Hreflang is intentionally BG-only to match indexable surface.
-  const isBg = locale === "bg";
+  // All four locales are indexable. The May-2026 noindex on non-BG products
+  // was meant to focus crawl budget on /bg, but GSC showed the opposite:
+  // /en/klimatici/* were the pages actually ranking (model-code queries are
+  // typed in Latin script), and after they dropped out impressions fell ~8x
+  // while BG products stayed uncrawled. Full hreflang set so Google can pick
+  // the right locale per query instead of treating them as duplicates.
+  const productPath = `/klimatici/${slug}`;
+  const languages: Record<string, string> = {
+    bg: `${siteUrl}/bg${productPath}`,
+    en: `${siteUrl}/en${productPath}`,
+    ru: `${siteUrl}/ru${productPath}`,
+    uk: `${siteUrl}/ua${productPath}`,
+    "x-default": `${siteUrl}/bg${productPath}`,
+  };
 
   return {
     title,
     description,
-    robots: isBg
-      ? undefined
-      : { index: false, follow: true, googleBot: { index: false, follow: true } },
     openGraph: {
       title,
       description,
       images: product.gallery?.[0] ? [product.gallery[0]] : [],
-      url: `${siteUrl}/${locale}/klimatici/${slug}`,
+      url: `${siteUrl}/${locale}${productPath}`,
       type: "website",
     },
     alternates: {
-      canonical: `${siteUrl}/${locale}/klimatici/${slug}`,
-      languages: {
-        bg: `${siteUrl}/bg/klimatici/${slug}`,
-        "x-default": `${siteUrl}/bg/klimatici/${slug}`,
-      },
+      canonical: `${siteUrl}/${locale}${productPath}`,
+      languages,
     },
   };
 }
