@@ -18,6 +18,8 @@ import { generateProductJsonLd, generateBreadcrumbJsonLd } from "@/lib/seo/jsonl
 import { generateBadges } from "@/lib/bittel/badges";
 import ProductBadges from "@/components/catalog/ProductBadges";
 import ProductViewTracker from "@/components/product/ProductViewTracker";
+import ModelInsights from "@/components/product/ModelInsights";
+import { buildModelInsights, shortModelName, categoryLandingPath, brandLandingPath } from "@/lib/product/insights";
 import ProductBuyBox from "@/components/product/ProductBuyBox";
 import { InstallProvider } from "@/contexts/InstallContext";
 import { BUSINESS_PHONE_DISPLAY } from "@/lib/constants";
@@ -163,6 +165,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   // Standard installation price in EUR (BTU-tier based).
   const installEur = getInstallationEur(product.btu);
+
+  // Model-specific copy + FAQ from the SKU's own specs (see lib/product/insights).
+  const insights = buildModelInsights(product, locale, shortModelName(displayTitle, product.manufacturer), displayPrice, installEur);
+  const contextLinks: Array<{ href: string; label: string }> = [];
+  {
+    const labels: Record<string, { category: string; brand: string; install: string; maintenance: string }> = {
+      bg: { category: "Всички модели от този тип", brand: `Всички ${product.manufacturer} във Варна`, install: "Монтаж на климатик във Варна", maintenance: "Профилактика на климатик" },
+      en: { category: "All models of this type", brand: `All ${product.manufacturer} in Varna`, install: "AC installation in Varna", maintenance: "AC maintenance" },
+      ru: { category: "Все модели этого типа", brand: `Все ${product.manufacturer} в Варне`, install: "Монтаж кондиционера в Варне", maintenance: "Профилактика кондиционера" },
+      ua: { category: "Усі моделі цього типу", brand: `Усі ${product.manufacturer} у Варні`, install: "Монтаж кондиціонера у Варні", maintenance: "Профілактика кондиціонера" },
+    };
+    const lb = labels[locale] || labels.bg;
+    contextLinks.push({ href: `/${locale}${categoryLandingPath(product.category_id)}`, label: lb.category });
+    const brandPath = brandLandingPath(product.manufacturer);
+    if (brandPath) contextLinks.push({ href: `/${locale}${brandPath}`, label: lb.brand });
+    contextLinks.push({ href: `/${locale}/montazh`, label: lb.install });
+    contextLinks.push({ href: `/${locale}/profilaktika`, label: lb.maintenance });
+  }
 
   // Promo savings — pre-promo "list" price for strikethrough.
   const isPromo = product.is_promo && product.price_promo > 0;
@@ -513,6 +533,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </section>
         )}
 
+        {/* Model-specific verdict + contextual links (unique per SKU) */}
+        <ModelInsights locale={locale} insights={insights} links={contextLinks} />
+
         {/* Why choose this AC — auto-detected benefits from features */}
         <section className="mt-10 sm:mt-12">
           <ProductBenefits locale={locale} product={product} />
@@ -539,7 +562,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
         {/* Product FAQ */}
         {dictionary.productFaq && (
           <section className="mt-10 sm:mt-12">
-            <ProductFaq locale={locale} labels={dictionary.productFaq} productName={displayTitle} />
+            <ProductFaq
+              locale={locale}
+              labels={{ ...dictionary.productFaq, items: [...insights.faq, ...(dictionary.productFaq.items || [])] }}
+              productName={displayTitle}
+            />
           </section>
         )}
 
@@ -569,6 +596,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           currentProductId={product.id}
           categoryId={product.category_id}
           manufacturer={product.manufacturer}
+          btu={product.btu ?? null}
           locale={locale}
           dictionary={dictionary}
         />
