@@ -14,6 +14,13 @@ interface ProductForSchema {
   btu?: number | null;
   energy_class?: string | null;
   barcode?: string | null;
+  bittel_id?: string | null;
+  area_m2?: number | null;
+  noise_db_indoor?: number | null;
+  seer?: number | null;
+  scop?: number | null;
+  refrigerant?: string | null;
+  warranty_months?: number | null;
 }
 
 export function generateProductJsonLd(
@@ -33,6 +40,23 @@ export function generateProductJsonLd(
     Неналичен: "https://schema.org/OutOfStock",
   };
 
+  // priceValidUntil: end of the current year — required for merchant listing
+  // rich results; the sitemap/ISR refreshes the page long before that.
+  const priceValidUntil = `${new Date().getFullYear()}-12-31`;
+
+  const additionalProperty: Array<Record<string, unknown>> = [];
+  const prop = (name: string, value: unknown, unitText?: string) => {
+    if (value === null || value === undefined || value === "") return;
+    additionalProperty.push({ "@type": "PropertyValue", name, value, ...(unitText ? { unitText } : {}) });
+  };
+  prop("BTU", product.btu);
+  prop("Recommended area", product.area_m2, "m²");
+  prop("Indoor noise level", product.noise_db_indoor, "dB");
+  prop("Energy class", product.energy_class);
+  prop("SEER", product.seer);
+  prop("SCOP", product.scop);
+  prop("Refrigerant", product.refrigerant);
+
   const jsonLd: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -43,16 +67,40 @@ export function generateProductJsonLd(
       "@type": "Brand",
       name: product.manufacturer,
     },
+    ...(product.bittel_id ? { sku: product.bittel_id, mpn: product.bittel_id } : {}),
+    ...(additionalProperty.length ? { additionalProperty } : {}),
     offers: {
       "@type": "Offer",
       url,
       priceCurrency: "EUR",
       price: priceEUR,
+      priceValidUntil,
+      itemCondition: "https://schema.org/NewCondition",
       availability: availabilityMap[product.availability] || availabilityMap["Неналичен"],
       seller: {
         "@type": "Organization",
         name: "Песнопоец Клима",
       },
+      // Free delivery in Varna and the region when bought with installation —
+      // matches the trust block on the page and /uslugi.
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingRate: { "@type": "MonetaryAmount", value: "0", currency: "EUR" },
+        shippingDestination: { "@type": "DefinedRegion", addressCountry: "BG" },
+        deliveryTime: {
+          "@type": "ShippingDeliveryTime",
+          handlingTime: { "@type": "QuantitativeValue", minValue: 0, maxValue: 1, unitCode: "DAY" },
+          transitTime: { "@type": "QuantitativeValue", minValue: 0, maxValue: 3, unitCode: "DAY" },
+        },
+      },
+      ...(product.warranty_months
+        ? {
+            warranty: {
+              "@type": "WarrantyPromise",
+              durationOfWarranty: { "@type": "QuantitativeValue", value: product.warranty_months, unitCode: "MON" },
+            },
+          }
+        : {}),
     },
   };
 

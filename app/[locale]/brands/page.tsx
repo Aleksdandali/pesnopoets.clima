@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { brandLandingPath } from "@/lib/product/insights";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { createPublicClient } from "@/lib/supabase/public";
@@ -248,7 +249,7 @@ export default async function BrandsPage({ params }: { params: Promise<{ locale:
         {brands.map((brand) => (
           <Link
             key={brand.name}
-            href={`/${locale}/klimatici?brand=${encodeURIComponent(brand.name)}`}
+            href={brandLandingPath(brand.name) ? `/${locale}${brandLandingPath(brand.name)}` : `/${locale}/klimatici?brand=${encodeURIComponent(brand.name)}`}
             className="group flex flex-col items-center gap-4 p-6 bg-white border border-border/80 rounded-2xl hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0_0_0/0.04)] transition-all duration-300"
           >
             {brand.image ? (

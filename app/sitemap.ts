@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { createClient } from "@supabase/supabase-js";
 import { getAllPosts } from "@/lib/blog/posts";
 import { DISTRICTS } from "@/lib/districts";
+import { BRANDS } from "@/lib/brands";
 
 const locales = ["bg", "en", "ru", "ua"] as const;
 const siteUrl =
@@ -131,6 +132,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   entries.push(
     ...localized("/brands", { changeFrequency: "weekly", priority: 0.8 })
   );
+  for (const brand of BRANDS) {
+    entries.push(
+      ...localized(`/marki/${brand.slug}`, { changeFrequency: "weekly", priority: 0.85 })
+    );
+  }
   entries.push(
     ...localized("/za-nas", { changeFrequency: "monthly", priority: 0.6 })
   );
