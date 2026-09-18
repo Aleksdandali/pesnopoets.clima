@@ -33,6 +33,13 @@ import {
 // ISR: revalidate product pages every 10 minutes
 export const revalidate = 600;
 
+// No params are prerendered at build time (455+ SKUs × 4 locales would tie the
+// build to Supabase); an empty list still opts the route into on-demand ISR
+// instead of per-request Dynamic SSR, so Googlebot gets cached HTML.
+export function generateStaticParams() {
+  return [];
+}
+
 interface ProductPageProps {
   params: Promise<{ locale: string; slug: string }>;
 }
