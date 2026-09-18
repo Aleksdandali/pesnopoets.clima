@@ -5,6 +5,7 @@ import FilterBar from "@/components/catalog/FilterBar";
 import CategorySidebar from "@/components/catalog/CategorySidebar";
 import { translateGroupName } from "@/lib/i18n/feature-names";
 import CatalogViewTracker from "@/components/catalog/CatalogViewTracker";
+import CatalogGuide from "@/components/catalog/CatalogGuide";
 
 interface CatalogPageProps {
   params: Promise<{ locale: string }>;
@@ -507,6 +508,9 @@ export default async function CatalogPage({
           })()}
         </div>
       </div>
+
+      {/* Editorial guide — only on the canonical, unfiltered catalog URL */}
+      {!hasFilter && !filters.page && <CatalogGuide locale={locale} />}
     </div>
   );
 }
