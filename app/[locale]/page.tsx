@@ -17,6 +17,9 @@ import {
   Award,
 } from "lucide-react";
 import { createPublicClient } from "@/lib/supabase/public";
+import { fetchAll } from "@/lib/supabase/fetch-all";
+import BrandLogo from "@/components/brand/BrandLogo";
+import { brandLandingPath } from "@/lib/product/insights";
 import ProductCard from "@/components/catalog/ProductCard";
 import AiConsultantSection from "@/components/home/AiConsultantSection";
 import HeroCarousel from "@/components/home/HeroCarousel";
@@ -280,12 +283,16 @@ async function getFeaturedProducts() {
 async function getBrandsWithImages() {
   try {
     const supabase = createPublicClient();
-    const { data } = await supabase
-      .from("products")
-      .select("manufacturer, gallery")
-      .eq("is_active", true)
-      .not("manufacturer", "is", null);
-    if (!data) return [];
+    const data = await fetchAll((from, to) =>
+      supabase
+        .from("products")
+        .select("manufacturer, gallery")
+        .eq("is_active", true)
+        .not("manufacturer", "is", null)
+        .order("id")
+        .range(from, to)
+    );
+    if (data.length === 0) return [];
 
     const brandMap: Record<string, { count: number; image: string | null }> = {};
     for (const row of data) {
@@ -725,18 +732,22 @@ export default async function HomePage({ params }: HomePageProps) {
             {brands.map((brand) => (
               <Link
                 key={brand.name}
-                href={`/${locale}/klimatici?brand=${encodeURIComponent(brand.name)}`}
-                className="group relative aspect-[5/3] flex flex-col items-center justify-center px-3 py-4 bg-white border border-border/60 rounded-2xl hover:border-primary/40 hover:shadow-[0_12px_40px_rgb(2_132_199/0.08)] transition-all duration-300 hover:-translate-y-0.5 overflow-hidden"
+                href={`/${locale}${brandLandingPath(brand.name) ?? `/klimatici?brand=${encodeURIComponent(brand.name)}`}`}
+                className="group relative aspect-[5/3] flex flex-col items-center justify-center px-4 py-4 bg-white border border-border/60 rounded-2xl hover:border-primary/40 hover:shadow-[0_12px_40px_rgb(2_132_199/0.08)] transition-all duration-300 hover:-translate-y-0.5 overflow-hidden"
               >
                 {/* Subtle brand-coloured top accent on hover */}
                 <span
                   aria-hidden="true"
                   className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-primary to-accent scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300"
                 />
-                <span className="text-sm sm:text-base lg:text-lg font-bold text-foreground/85 tracking-tight uppercase text-center leading-tight group-hover:text-primary transition-colors duration-200 break-words">
-                  {brand.name}
+                <span className="flex h-9 sm:h-10 w-full items-center justify-center">
+                  <BrandLogo
+                    name={brand.name}
+                    className="max-h-7 sm:max-h-8 h-auto"
+                    textClassName="text-sm sm:text-base lg:text-lg font-bold text-foreground/85 tracking-tight uppercase text-center leading-tight group-hover:text-primary transition-colors duration-200 break-words"
+                  />
                 </span>
-                <span className="mt-1.5 text-[10px] sm:text-[11px] text-muted-foreground tracking-wide tabular-nums">
+                <span className="mt-2 text-[10px] sm:text-[11px] text-muted-foreground tracking-wide tabular-nums">
                   {brand.count} {dictionary.common.productsCount}
                 </span>
               </Link>

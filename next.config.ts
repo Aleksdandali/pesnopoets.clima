@@ -19,6 +19,16 @@ const nextConfig: NextConfig = {
         hostname: "gzdcbkrtpbqcugqgrqut.supabase.co",
         pathname: "/storage/**",
       },
+      {
+        protocol: "https",
+        hostname: "bulclima.com",
+        pathname: "/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "www.bulclima.com",
+        pathname: "/uploads/**",
+      },
     ],
   },
   async redirects() {

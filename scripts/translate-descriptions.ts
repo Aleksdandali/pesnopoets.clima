@@ -13,12 +13,16 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY!,
 });
 
-async function translateText(text: string, targetLang: string): Promise<string> {
+async function translateText(text: string, targetLang: string, isHtml = false): Promise<string> {
   const langNames: Record<string, string> = {
     en: "English",
     ru: "Russian",
     ua: "Ukrainian",
   };
+
+  const instructions = isHtml
+    ? `Translate this Bulgarian HVAC product description (HTML) to ${langNames[targetLang]}. Keep every HTML tag exactly as it is and translate only the text between tags. Keep technical terms, model numbers, and brand names unchanged. Output ONLY the translated HTML, no explanations.`
+    : `Translate this Bulgarian HVAC product description to ${langNames[targetLang]}. Keep technical terms, model numbers, and brand names unchanged. Output ONLY the translation, no explanations.`;
 
   const response = await anthropic.messages.create({
     model: "claude-haiku-4-5-20251001",
@@ -26,19 +30,25 @@ async function translateText(text: string, targetLang: string): Promise<string> 
     messages: [
       {
         role: "user",
-        content: `Translate this Bulgarian HVAC product description to ${langNames[targetLang]}. Keep technical terms, model numbers, and brand names unchanged. Output ONLY the translation, no explanations.\n\n${text}`,
+        content: `${instructions}\n\n${text}`,
       },
     ],
   });
 
   const block = response.content[0];
-  if (block.type === "text") return block.text;
+  if (block.type === "text") return isHtml ? block.text.replace(/^```(?:html)?\s*|\s*```$/g, "") : block.text;
   return text;
 }
 
 // Strip HTML for short descriptions, keep HTML for longer ones
 function cleanDescription(html: string): string {
   return html.replace(/<[^>]*>/g, "").trim();
+}
+
+// Bulclima descriptions are <ul><li> bullet lists: stripping the tags would
+// glue the bullets into one run-on line, so those are translated as HTML.
+function isHtmlList(html: string): boolean {
+  return /<li[\s>]/i.test(html);
 }
 
 async function main() {
@@ -80,7 +90,8 @@ async function main() {
   let errors = 0;
 
   for (const product of toTranslate) {
-    const cleanDesc = cleanDescription(product.description);
+    const isHtml = isHtmlList(product.description);
+    const source = isHtml ? product.description : cleanDescription(product.description);
     const updates: Record<string, string> = {};
 
     try {
@@ -88,7 +99,7 @@ async function main() {
       for (const lang of ["en", "ru", "ua"] as const) {
         const field = `description_${lang}` as keyof typeof product;
         if (!product[field]) {
-          const result = await translateText(cleanDesc, lang);
+          const result = await translateText(source, lang, isHtml);
           updates[`description_${lang}`] = result;
         }
       }

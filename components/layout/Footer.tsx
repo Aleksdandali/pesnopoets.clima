@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import ManageCookiesButton from "@/components/privacy/ManageCookiesButton";
+import { brandLandingPath } from "@/lib/product/insights";
 import {
   BUSINESS_ADDRESS_CITY,
   BUSINESS_EMAIL,
@@ -50,6 +51,8 @@ const brands = [
   "Mitsubishi",
   "AUX",
   "Toshiba",
+  "General",
+  "Kaisai",
   "Nippon",
   "HITACHI",
   "LG",
@@ -166,7 +169,7 @@ export default function Footer({ locale, dictionary }: FooterProps) {
               {brands.map((brand) => (
                 <li key={brand}>
                   <Link
-                    href={`/${locale}/klimatici?brand=${encodeURIComponent(brand)}`}
+                    href={`/${locale}${brandLandingPath(brand) ?? `/klimatici?brand=${encodeURIComponent(brand)}`}`}
                     className="block text-sm text-white/50 hover:text-white transition-colors duration-200 py-2"
                   >
                     {brand}

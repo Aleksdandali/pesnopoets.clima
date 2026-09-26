@@ -5,6 +5,7 @@
 
 import type Anthropic from "@anthropic-ai/sdk";
 import { createClient } from "@supabase/supabase-js";
+import { fetchAll } from "@/lib/supabase/fetch-all";
 
 function createAnonClient() {
   return createClient(
@@ -292,17 +293,16 @@ async function getCatalogSummary(
   input: Record<string, unknown>
 ): Promise<unknown> {
   const supabase = createAnonClient();
-  let q = supabase
-    .from("products")
-    .select("manufacturer, price_client, price_override, price_promo, is_promo, btu, energy_class, stock_size")
-    .eq("is_active", true)
-    .eq("is_hidden", false);
-
-  if (input.only_in_stock) q = q.gt("stock_size", 0);
-
-  const { data, error } = await q;
-  if (error) return { error: error.message };
-  if (!data || data.length === 0) return { total: 0, brands: [], note: "Catalog is empty." };
+  const data = await fetchAll((from, to) => {
+    let q = supabase
+      .from("products")
+      .select("manufacturer, price_client, price_override, price_promo, is_promo, btu, energy_class, stock_size")
+      .eq("is_active", true)
+      .eq("is_hidden", false);
+    if (input.only_in_stock) q = q.gt("stock_size", 0);
+    return q.order("id").range(from, to);
+  });
+  if (data.length === 0) return { total: 0, brands: [], note: "Catalog is empty." };
 
   // Aggregate brands with counts
   const brandCounts: Record<string, number> = {};

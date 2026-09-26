@@ -9,6 +9,7 @@ import Link from "next/link";
 interface Product {
   id: number;
   bittel_id: string;
+  supplier: string;
   slug: string;
   title: string;
   title_override: string | null;
@@ -195,7 +196,7 @@ export default function ProductDetailPage() {
         <div className="flex-1 min-w-0">
           <p className="text-xs text-[var(--primary)] font-medium uppercase tracking-wide">{product.manufacturer}</p>
           <h1 className="text-xl font-bold text-[var(--foreground)] leading-tight">{displayTitle}</h1>
-          <p className="text-xs text-[var(--muted-foreground)] mt-1">Bittel ID: {product.bittel_id} · Slug: {product.slug}</p>
+          <p className="text-xs text-[var(--muted-foreground)] mt-1">{product.supplier === "bulclima" ? "Bulclima" : "Bittel"} ID: {product.bittel_id} · Slug: {product.slug}</p>
         </div>
         <a href={`/bg/klimatici/${product.slug}`} target="_blank" rel="noopener"
           className="shrink-0 p-2 rounded-lg border border-[var(--border)] hover:bg-[var(--muted)] transition-colors" title="Открыть на сайте">

@@ -13,6 +13,7 @@
  */
 
 import { EUR_TO_BGN } from "@/lib/pricing";
+import { brandPagePath } from "@/lib/brands";
 
 export type InsightLocale = "bg" | "en" | "ru" | "ua";
 
@@ -300,18 +301,34 @@ export function categoryLandingPath(categoryId: number | null | undefined): stri
   }
 }
 
-/** Manufacturer → brand landing page, when one exists. */
+/** Manufacturer → brand landing page; every manufacturer in the catalog has one. */
 export function brandLandingPath(manufacturer: string): string | null {
-  const m = manufacturer.toLowerCase();
+  const m = manufacturer.trim().toLowerCase();
+  if (!m) return null;
   if (m === "daikin") return "/daikin-varna";
   if (m === "mitsubishi") return "/mitsubishi-varna";
-  if (m === "mitsubishi heavy") return "/marki/mitsubishi-heavy";
-  if (m === "gree") return "/marki/gree";
-  if (m === "toshiba") return "/marki/toshiba";
-  if (m === "aux") return "/marki/aux";
-  if (m === "nippon") return "/marki/nippon";
-  if (m === "hitachi") return "/marki/hitachi";
-  if (m === "lg") return "/marki/lg";
-  if (m === "techpoint") return "/marki/techpoint";
-  return null;
+  return brandPagePath(manufacturer);
+}
+
+const CATEGORY_LABELS: Record<number, Record<InsightLocale, string>> = {
+  1: { bg: "Стенни климатици", en: "Wall-mounted ACs", ru: "Настенные кондиционеры", ua: "Настінні кондиціонери" },
+  2: { bg: "Подови климатици", en: "Floor-standing ACs", ru: "Напольные кондиционеры", ua: "Підлогові кондиціонери" },
+  3: { bg: "Мулти сплит — външни тела", en: "Multi-split outdoor units", ru: "Мульти-сплит — наружные блоки", ua: "Мульти-спліт — зовнішні блоки" },
+  4: { bg: "Колонни климатици", en: "Column ACs", ru: "Колонные кондиционеры", ua: "Колонні кондиціонери" },
+  5: { bg: "Мулти сплит — вътрешни тела", en: "Multi-split indoor units", ru: "Мульти-сплит — внутренние блоки", ua: "Мульти-спліт — внутрішні блоки" },
+  6: { bg: "Канални климатици", en: "Ducted ACs", ru: "Канальные кондиционеры", ua: "Канальні кондиціонери" },
+  7: { bg: "Касетъчни климатици", en: "Cassette ACs", ru: "Кассетные кондиционеры", ua: "Касетні кондиціонери" },
+  8: { bg: "Аксесоари и управление", en: "Accessories & controls", ru: "Аксессуары и управление", ua: "Аксесуари та керування" },
+  9: { bg: "Външни тела за професионални системи", en: "Outdoor units for commercial systems", ru: "Наружные блоки для профессиональных систем", ua: "Зовнішні блоки для професійних систем" },
+  10: { bg: "Таванни климатици", en: "Ceiling ACs", ru: "Потолочные кондиционеры", ua: "Стельові кондиціонери" },
+  11: { bg: "Термопомпи сплит", en: "Split heat pumps", ru: "Тепловые насосы сплит", ua: "Теплові насоси спліт" },
+  12: { bg: "Термопомпи моноблок", en: "Monoblock heat pumps", ru: "Тепловые насосы моноблок", ua: "Теплові насоси моноблок" },
+  13: { bg: "Мобилни климатици", en: "Portable ACs", ru: "Мобильные кондиционеры", ua: "Мобільні кондиціонери" },
+  14: { bg: "Стенни климатици — промо", en: "Wall-mounted ACs — promo", ru: "Настенные кондиционеры — промо", ua: "Настінні кондиціонери — промо" },
+};
+
+/** Readable category name for listings; falls back to the DB subgroup name for new categories. */
+export function categoryLabel(categoryId: number | null | undefined, locale: string, fallback = ""): string {
+  const l: InsightLocale = (["bg", "en", "ru", "ua"] as const).includes(locale as InsightLocale) ? (locale as InsightLocale) : "bg";
+  return (categoryId != null && CATEGORY_LABELS[categoryId]?.[l]) || fallback;
 }

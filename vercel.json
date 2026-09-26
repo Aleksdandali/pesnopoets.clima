@@ -5,6 +5,10 @@
       "schedule": "0 */5 * * *"
     },
     {
+      "path": "/api/sync/bulclima",
+      "schedule": "30 */6 * * *"
+    },
+    {
       "path": "/api/cron/service-reminders",
       "schedule": "0 9 * * *"
     },

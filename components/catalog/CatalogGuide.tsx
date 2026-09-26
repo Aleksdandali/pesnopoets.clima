@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { createPublicClient } from "@/lib/supabase/public";
+import { fetchAll } from "@/lib/supabase/fetch-all";
 import { BRANDS } from "@/lib/brands";
 import { brandLandingPath } from "@/lib/product/insights";
 import { getInstallationEur } from "@/lib/pricing";
@@ -31,12 +32,16 @@ const TIERS: Array<{ btu: number; area: Record<L, string> }> = [
 
 async function getStats(): Promise<{ tiers: TierRow[]; brands: BrandRow[]; total: number }> {
   const supabase = createPublicClient();
-  const { data } = await supabase
-    .from("products")
-    .select("manufacturer, btu, price_client, price_override, category_id")
-    .eq("is_active", true)
-    .eq("is_hidden", false);
-  const rows = (data ?? []).filter((p) => (p.price_override || p.price_client) > 0);
+  const data = await fetchAll((from, to) =>
+    supabase
+      .from("products")
+      .select("manufacturer, btu, price_client, price_override, category_id")
+      .eq("is_active", true)
+      .eq("is_hidden", false)
+      .order("id")
+      .range(from, to)
+  );
+  const rows = data.filter((p) => (p.price_override || p.price_client) > 0);
   const price = (p: { price_client: number; price_override: number | null }) => p.price_override || p.price_client;
 
   const tiers: TierRow[] = [];

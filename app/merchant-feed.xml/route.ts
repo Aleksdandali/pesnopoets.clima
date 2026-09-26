@@ -1,4 +1,5 @@
 import { createPublicClient } from "@/lib/supabase/public";
+import { fetchAll } from "@/lib/supabase/fetch-all";
 
 /**
  * Google Merchant Center product feed (RSS 2.0 + g: namespace).
@@ -21,12 +22,12 @@ const AVAILABILITY: Record<string, string> = {
 };
 
 // Google product taxonomy — full path strings are accepted and safer than
-// numeric ids. Heat pumps (cat 11, 12) sit on the parent node; everything
-// else is an air conditioner.
+// numeric ids. Heat pumps (cat 11, 12) and accessories (cat 8) sit on the
+// parent node; everything else is an air conditioner.
 const AC_CATEGORY = "Home & Garden > Household Appliances > Climate Control Appliances > Air Conditioners";
-const HEAT_PUMP_CATEGORY = "Home & Garden > Household Appliances > Climate Control Appliances";
+const CLIMATE_CONTROL_CATEGORY = "Home & Garden > Household Appliances > Climate Control Appliances";
 const googleCategory = (categoryId: number | null) =>
-  categoryId === 11 || categoryId === 12 ? HEAT_PUMP_CATEGORY : AC_CATEGORY;
+  categoryId === 8 || categoryId === 11 || categoryId === 12 ? CLIMATE_CONTROL_CATEGORY : AC_CATEGORY;
 
 function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -38,15 +39,19 @@ function stripHtml(s: string): string {
 
 export async function GET() {
   const supabase = createPublicClient();
-  const { data: products } = await supabase
-    .from("products")
-    .select(
-      "id, slug, title, title_override, description, description_override, manufacturer, price_client, price_override, price_promo, is_promo, availability, gallery, barcode, bittel_id, category_id, btu, energy_class"
-    )
-    .eq("is_active", true)
-    .eq("is_hidden", false);
+  const products = await fetchAll((from, to) =>
+    supabase
+      .from("products")
+      .select(
+        "id, slug, title, title_override, description, description_override, manufacturer, price_client, price_override, price_promo, is_promo, availability, gallery, barcode, bittel_id, category_id, btu, energy_class"
+      )
+      .eq("is_active", true)
+      .eq("is_hidden", false)
+      .order("id")
+      .range(from, to)
+  );
 
-  const items = (products ?? [])
+  const items = products
     .filter((p) => (p.price_override || p.price_client) > 0 && p.gallery?.[0])
     .map((p) => {
       const title = stripHtml(p.title_override || p.title).slice(0, 150);

@@ -23,7 +23,7 @@ interface SearchDialogProps {
   locale: string;
 }
 
-const BRAND_CHIPS = ["Daikin", "Mitsubishi", "Gree", "Midea", "Bittel", "Hisense"];
+const BRAND_CHIPS = ["Daikin", "Mitsubishi", "Gree", "General", "Kaisai", "Toshiba"];
 const BTU_CHIPS = ["9000", "12000", "18000", "24000"];
 
 function t(locale: string, dict: Record<string, string>): string {
