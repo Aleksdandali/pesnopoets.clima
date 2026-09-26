@@ -318,9 +318,11 @@ function summarize(products: BrandProduct[], locale: BrandLocale, dbNames: Map<n
     })
     .sort((a, b) => b.count - a.count);
 
-  const prices = products.map(displayPrice).filter((n) => n > 0);
   const kinds = { ac: 0, heatpump: 0, accessory: 0 };
   for (const p of products) kinds[productKind(p.category_id)]++;
+  // Price range from the main products, so a Wi-Fi module doesn't read as "AC from 75 €".
+  const priced = kinds.accessory < products.length ? products.filter((p) => productKind(p.category_id) !== "accessory") : products;
+  const prices = priced.map(displayPrice).filter((n) => n > 0);
   const stats: BrandStats = {
     count: products.length,
     minPrice: prices.length ? Math.round(Math.min(...prices)) : 0,
