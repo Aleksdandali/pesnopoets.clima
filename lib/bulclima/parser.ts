@@ -37,10 +37,16 @@ const CATEGORY_MAP: Record<string, CategoryCode | ((title: string) => CategoryCo
     /^агрегат/i.test(title) ? PRO_OUTDOOR : /^външно тяло/i.test(title) ? MULTI_OUTDOOR : MULTI_INDOOR,
   "Мулти сплит системи|Вътрешни тела за мултисплит системи": MULTI_INDOOR,
   "Мулти сплит системи|Външни тела за мултисплит системи": MULTI_OUTDOOR,
-  "Термопомпи|Термопомпи сплит": HP_SPLIT,
-  "Термопомпи|Термопомпи моноблок": HP_MONOBLOCK,
-  "Термопомпи|Професионални термопомпи/ чилъри": HP_MONOBLOCK,
+  // Heat pump sections also hold Atlantic kits and thermostats; every actual
+  // heat pump title starts with "Термопомпа".
+  "Термопомпи|Термопомпи сплит": (title) => (isHeatPump(title) ? HP_SPLIT : ACCESSORIES),
+  "Термопомпи|Термопомпи моноблок": (title) => (isHeatPump(title) ? HP_MONOBLOCK : ACCESSORIES),
+  "Термопомпи|Професионални термопомпи/ чилъри": (title) => (isHeatPump(title) ? HP_MONOBLOCK : ACCESSORIES),
 };
+
+function isHeatPump(title: string): boolean {
+  return /^термопомпа/i.test(title);
+}
 
 /** Known Bulclima groups the catalog does not sell. Anything else unmapped is reported. */
 const OUT_OF_SCOPE_GROUPS = new Set([
