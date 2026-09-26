@@ -1,4 +1,5 @@
 import {
+  BRAND_NAMES,
   BUSINESS_ADDRESS_CITY,
   BUSINESS_ADDRESS_REGION,
   BUSINESS_COUNTRY,
@@ -55,6 +56,7 @@ export default async function LocalBusinessJsonLd({
     "@type": ["LocalBusiness", "HVACBusiness"],
     "@id": `${siteUrl}/#business`,
     name: siteName,
+    alternateName: BRAND_NAMES.filter((n) => n !== siteName),
     description,
     url: `${siteUrl}/${locale}`,
     telephone: BUSINESS_PHONE_TEL,

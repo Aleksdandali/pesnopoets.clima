@@ -23,6 +23,15 @@ export const BUSINESS_LNG = 27.9147;
 export const WHATSAPP_URL = `https://wa.me/${BUSINESS_PHONE_TEL.replace(/^\+/, "")}`;
 export const VIBER_URL = `viber://chat?number=${encodeURIComponent(BUSINESS_PHONE_TEL)}`;
 
+/**
+ * Every spelling of the brand in use: BG/RU copy, the domain and EN copy,
+ * the Instagram/Facebook/TikTok handles, UA copy. Listed as schema
+ * alternateName so a search for any of them resolves to this site —
+ * without it "pesnopoets clima" returned only the social profiles.
+ */
+export const BRAND_NAME_LATIN = "Pesnopoets Clima";
+export const BRAND_NAMES = ["Песнопоец Клима", BRAND_NAME_LATIN, "Pesnopoets Klima", "Піснопоєць Кліма"];
+
 /** Social profiles. */
 export const INSTAGRAM_URL = "https://www.instagram.com/pesnopoets.klima/";
 export const INSTAGRAM_HANDLE = "@pesnopoets.klima";
