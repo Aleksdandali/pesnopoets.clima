@@ -151,10 +151,14 @@ async function processProduct(
   };
 
   if (existing) {
-    // Update — but don't overwrite admin overrides
+    // Update — but don't overwrite admin overrides, and keep the published
+    // slug: a relisted product whose old row still owns the base slug would
+    // otherwise fail every update on the unique constraint.
+    const updateData: Partial<typeof productData> = { ...productData };
+    delete updateData.slug;
     const { error } = await supabase
       .from("products")
-      .update(productData)
+      .update(updateData)
       .eq("bittel_id", product.id);
 
     if (error) {
