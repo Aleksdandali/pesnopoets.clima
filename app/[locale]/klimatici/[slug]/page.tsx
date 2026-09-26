@@ -312,7 +312,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             {/* Product Badges */}
             {(() => {
-              const badges = generateBadges(product, locale, 6, { showInstallBadge: true });
+              const badges = generateBadges(product, locale, 6);
               return badges.length > 0 ? (
                 <div className="mb-2">
                   <ProductBadges badges={badges} max={6} />

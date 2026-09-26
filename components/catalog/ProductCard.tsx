@@ -99,7 +99,7 @@ export default function ProductCard({
   const displayTitle = product.title_override || localeTitle || product.title;
   const displayPrice = product.price_override || product.price_client;
   const installEur = getInstallationEur(product.btu);
-  const badges = generateBadges(product, locale, 3, { showInstallBadge: true });
+  const badges = generateBadges(product, locale, 3);
   const gallery = product.gallery || [];
   const hasMultipleImages = gallery.length > 1;
   const imageUrl = gallery[currentIndex] || gallery[0];
