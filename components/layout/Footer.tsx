@@ -50,6 +50,8 @@ const brands = [
   "Mitsubishi",
   "AUX",
   "Toshiba",
+  "General",
+  "Kaisai",
   "Nippon",
   "HITACHI",
   "LG",

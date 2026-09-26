@@ -21,12 +21,12 @@ const AVAILABILITY: Record<string, string> = {
 };
 
 // Google product taxonomy — full path strings are accepted and safer than
-// numeric ids. Heat pumps (cat 11, 12) sit on the parent node; everything
-// else is an air conditioner.
+// numeric ids. Heat pumps (cat 11, 12) and accessories (cat 8) sit on the
+// parent node; everything else is an air conditioner.
 const AC_CATEGORY = "Home & Garden > Household Appliances > Climate Control Appliances > Air Conditioners";
-const HEAT_PUMP_CATEGORY = "Home & Garden > Household Appliances > Climate Control Appliances";
+const CLIMATE_CONTROL_CATEGORY = "Home & Garden > Household Appliances > Climate Control Appliances";
 const googleCategory = (categoryId: number | null) =>
-  categoryId === 11 || categoryId === 12 ? HEAT_PUMP_CATEGORY : AC_CATEGORY;
+  categoryId === 8 || categoryId === 11 || categoryId === 12 ? CLIMATE_CONTROL_CATEGORY : AC_CATEGORY;
 
 function esc(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");

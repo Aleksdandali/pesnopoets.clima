@@ -147,14 +147,19 @@ export async function sendInquiryNotification(
   await Promise.all(recipients.map((chatId) => sendToChat(token, chatId, text)));
 }
 
-export async function sendSyncReport(report: SyncReport): Promise<void> {
+export async function sendSyncReport(
+  report: SyncReport,
+  options: { supplier?: string; notes?: string[] } = {}
+): Promise<void> {
+  const { supplier = "Bittel", notes = [] } = options;
   const text = [
-    `📊 <b>Синхронизация завърши</b>`,
+    `📊 <b>Синхронизация ${supplier} завърши</b>`,
     ``,
     `📦 Общо продукти: ${report.total}`,
     `✅ Нови: ${report.created}`,
     `🔄 Обновени: ${report.updated}`,
     `❌ Деактивирани: ${report.deactivated}`,
+    ...notes.map(escapeHtml),
     report.errors > 0 ? `⚠️ Грешки: ${report.errors}` : null,
     `⏱ Време: ${(report.duration / 1000).toFixed(1)}s`,
     ``,

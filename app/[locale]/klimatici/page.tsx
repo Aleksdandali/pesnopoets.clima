@@ -234,8 +234,13 @@ export default async function CatalogPage({
     btu_desc: { column: "btu", ascending: false },
     name_asc: { column: "title", ascending: true },
   };
-  const sort = sortMap[filters.sort || ""] || { column: "manufacturer", ascending: true };
-  query = query.order(sort.column, { ascending: sort.ascending });
+  const sort = sortMap[filters.sort || ""];
+  // Default: by category so wall units lead instead of whatever brand sorts
+  // first alphabetically (Aspen condensate pumps), then by brand; id keeps
+  // pagination stable.
+  query = sort
+    ? query.order(sort.column, { ascending: sort.ascending })
+    : query.order("category_id").order("manufacturer").order("id");
 
   // Pagination
   const page = Math.max(1, parseInt(filters.page || "1"));

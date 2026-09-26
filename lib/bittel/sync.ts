@@ -51,11 +51,12 @@ export async function syncProducts(): Promise<SyncReport> {
       }
     }
 
-    // 3. Deactivate products not in current feed
+    // 3. Deactivate products not in current feed (Bittel's own — other suppliers sync separately)
     if (processedBittelIds.length > 0) {
       const { data: activeProducts } = await supabase
         .from("products")
         .select("bittel_id")
+        .eq("supplier", "bittel")
         .eq("is_active", true);
 
       if (activeProducts) {
