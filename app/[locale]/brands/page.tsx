@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { brandLandingPath } from "@/lib/product/insights";
-import Image from "next/image";
+import BrandLogo from "@/components/brand/BrandLogo";
 import type { Metadata } from "next";
 import { createPublicClient } from "@/lib/supabase/public";
 import { fetchAll } from "@/lib/supabase/fetch-all";
@@ -275,21 +275,17 @@ export default async function BrandsPage({ params }: { params: Promise<{ locale:
   const data = await fetchAll((from, to) =>
     supabase
       .from("products")
-      .select("manufacturer, gallery")
+      .select("manufacturer")
       .eq("is_active", true)
       .not("manufacturer", "is", null)
       .order("id")
       .range(from, to)
   );
 
-  const brandMap: Record<string, { count: number; image: string | null }> = {};
-  for (const row of data) {
-    if (!brandMap[row.manufacturer]) brandMap[row.manufacturer] = { count: 0, image: row.gallery?.[0] || null };
-    brandMap[row.manufacturer].count++;
-    if (!brandMap[row.manufacturer].image && row.gallery?.[0]) brandMap[row.manufacturer].image = row.gallery[0];
-  }
+  const brandMap: Record<string, number> = {};
+  for (const row of data) brandMap[row.manufacturer] = (brandMap[row.manufacturer] ?? 0) + 1;
 
-  const brands = Object.entries(brandMap).map(([name, info]) => ({ name, ...info })).sort((a, b) => b.count - a.count);
+  const brands = Object.entries(brandMap).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count);
   const t = dictionary.brands;
   const c = BRANDS_CONTENT[locale] || BRANDS_CONTENT.bg;
 
@@ -305,13 +301,13 @@ export default async function BrandsPage({ params }: { params: Promise<{ locale:
             href={brandLandingPath(brand.name) ? `/${locale}${brandLandingPath(brand.name)}` : `/${locale}/klimatici?brand=${encodeURIComponent(brand.name)}`}
             className="group flex flex-col items-center gap-4 p-6 bg-white border border-border/80 rounded-2xl hover:border-primary/20 hover:shadow-[0_8px_30px_rgb(0_0_0/0.04)] transition-all duration-300"
           >
-            {brand.image ? (
-              <div className="relative w-full h-24 rounded-xl bg-[#fafbfc] overflow-hidden">
-                <Image src={brand.image} alt={brand.name} fill className="object-contain p-3 group-hover:scale-105 transition-transform duration-500" sizes="25vw" loading="lazy" />
-              </div>
-            ) : (
-              <div className="w-full h-24 rounded-xl bg-[#fafbfc] flex items-center justify-center text-2xl font-bold text-muted-foreground/20">{brand.name[0]}</div>
-            )}
+            <div className="w-full h-24 rounded-xl bg-[#fafbfc] flex items-center justify-center px-5 overflow-hidden">
+              <BrandLogo
+                name={brand.name}
+                className="max-h-10 h-auto group-hover:scale-105 transition-transform duration-500"
+                textClassName="text-xl font-bold uppercase tracking-tight text-foreground/70"
+              />
+            </div>
             <div className="text-center">
               <span className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">{brand.name}</span>
               <span className="block text-xs text-muted-foreground mt-1">{brand.count} {t.productsCount}</span>

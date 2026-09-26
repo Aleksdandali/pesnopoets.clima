@@ -6,6 +6,7 @@ import { ArrowRight, CheckCircle2, ChevronRight, ShieldCheck } from "lucide-reac
 import { createPublicClient } from "@/lib/supabase/public";
 import { fetchAll } from "@/lib/supabase/fetch-all";
 import ProductCard from "@/components/catalog/ProductCard";
+import BrandLogo from "@/components/brand/BrandLogo";
 import {
   BRANDS,
   brandSlug,
@@ -468,8 +469,15 @@ export default async function BrandPage({ params }: PageProps) {
             <span className="text-white/80">{brand.name}</span>
           </nav>
           <div className="max-w-3xl">
+            <div className="inline-flex items-center rounded-xl bg-white px-4 py-2.5 mb-5 shadow-sm">
+              <BrandLogo
+                name={brand.manufacturer}
+                className="h-7 sm:h-9"
+                textClassName="text-lg sm:text-xl font-bold uppercase tracking-tight text-[#0a1628]"
+              />
+            </div>
             {showWarranty && commonWarranty && (
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs sm:text-sm font-medium mb-5">
+              <div className="ml-3 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs sm:text-sm font-medium mb-5 align-middle">
                 <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>{ui.warranty(commonWarranty)}</span>
               </div>

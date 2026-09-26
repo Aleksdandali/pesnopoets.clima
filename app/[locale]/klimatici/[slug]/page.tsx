@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { cache } from "react";
 import type { Metadata } from "next";
@@ -21,6 +22,7 @@ import ProductViewTracker from "@/components/product/ProductViewTracker";
 import ModelInsights from "@/components/product/ModelInsights";
 import { buildModelInsights, shortModelName, categoryLandingPath, brandLandingPath } from "@/lib/product/insights";
 import ProductBuyBox from "@/components/product/ProductBuyBox";
+import BrandLogo from "@/components/brand/BrandLogo";
 import { InstallProvider } from "@/contexts/InstallContext";
 import { BUSINESS_PHONE_DISPLAY } from "@/lib/constants";
 import { getInstallationEur } from "@/lib/pricing";
@@ -297,9 +299,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <div className="order-2 flex flex-col">
 
             {/* 1. Manufacturer */}
-            <p className="text-xs sm:text-sm font-medium text-primary uppercase tracking-wider mb-1.5">
-              {product.manufacturer}
-            </p>
+            <Link
+              href={`/${locale}${brandLandingPath(product.manufacturer) ?? "/brands"}`}
+              className="self-start inline-flex items-center mb-2 hover:opacity-80 transition-opacity"
+            >
+              <BrandLogo
+                name={product.manufacturer}
+                className="h-6 sm:h-7"
+                textClassName="text-xs sm:text-sm font-medium text-primary uppercase tracking-wider"
+              />
+            </Link>
 
             {/* Product Badges */}
             {(() => {
