@@ -4,6 +4,7 @@ import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import ManageCookiesButton from "@/components/privacy/ManageCookiesButton";
 import { brandLandingPath } from "@/lib/product/insights";
 import {
+  BRAND_NAME_LATIN,
   BUSINESS_ADDRESS_CITY,
   BUSINESS_EMAIL,
   BUSINESS_PHONE_DISPLAY,
@@ -265,7 +266,8 @@ export default function Footer({ locale, dictionary }: FooterProps) {
         <div className="mt-4 pt-4 border-t border-white/5 flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
           {/* Copyright — left on desktop, centered on mobile */}
           <p className="text-xs text-white/30 text-center sm:text-left">
-            &copy; {year} {t.siteName}. {t.footer.rights}
+            &copy; {year} {t.siteName}
+            {t.siteName !== BRAND_NAME_LATIN && ` (${BRAND_NAME_LATIN})`}. {t.footer.rights}
           </p>
 
           {/* Privacy + Terms — center row */}

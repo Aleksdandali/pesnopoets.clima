@@ -9,6 +9,7 @@ import LocalBusinessJsonLd from "@/components/seo/LocalBusinessJsonLd";
 import { CartProvider } from "@/contexts/CartContext";
 import LazyOverlays from "@/components/layout/LazyOverlays";
 import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
+import { BRAND_NAMES } from "@/lib/constants";
 
 const locales = ["bg", "en", "ru", "ua"] as const;
 type Locale = (typeof locales)[number];
@@ -32,13 +33,13 @@ export async function generateMetadata({
   const { locale } = await params;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
 
-  // Titles kept ≤60 chars (SerpStat truncates ~60). Brand suffix shown via
-  // the og:site_name and the schema below, so we don't repeat it here.
+  // Titles kept ≤60 chars (SerpStat truncates ~60). The home page carries the
+  // brand in its title: without it brand searches had no page to match.
   const titles: Record<string, string> = {
-    bg: "Климатици Варна 2026 — Монтаж от 190 €, гаранция 5 г.",
-    en: "Air Conditioners Varna 2026 — Install €190, 5-yr warranty",
-    ru: "Кондиционеры Варна 2026 — Монтаж 190 €, гарантия 5 лет",
-    ua: "Кондиціонери Варна 2026 — Монтаж 190 €, гарантія 5 років",
+    bg: "Климатици Варна — монтаж от 190 € | Песнопоец Клима",
+    en: "Air Conditioners Varna — Install €190 | Pesnopoets Clima",
+    ru: "Кондиционеры Варна — монтаж от 190 € | Песнопоец Клима",
+    ua: "Кондиціонери Варна — монтаж від 190 € | Піснопоєць Кліма",
   };
 
   // Descriptions trimmed to ≤160 chars (SerpStat 2026-05-28 flagged 169-179 originals).
@@ -246,6 +247,7 @@ export default async function LocaleLayout({
     "@id": `${siteUrl}/#website`,
     url: siteUrl,
     name: dictionary.common.siteName,
+    alternateName: BRAND_NAMES.filter((n) => n !== dictionary.common.siteName),
     inLanguage: locale === "bg" ? "bg-BG" : locale === "en" ? "en-US" : locale === "ru" ? "ru-RU" : "uk-UA",
     publisher: { "@id": `${siteUrl}/#business` },
   };
