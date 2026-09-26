@@ -1,4 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/admin";
+import { fetchAll } from "@/lib/supabase/fetch-all";
 import { fetchAllProducts } from "./client";
 import {
   parseFeatures,
@@ -53,13 +54,17 @@ export async function syncProducts(): Promise<SyncReport> {
 
     // 3. Deactivate products not in current feed (Bittel's own — other suppliers sync separately)
     if (processedBittelIds.length > 0) {
-      const { data: activeProducts } = await supabase
-        .from("products")
-        .select("bittel_id")
-        .eq("supplier", "bittel")
-        .eq("is_active", true);
+      const activeProducts = await fetchAll((from, to) =>
+        supabase
+          .from("products")
+          .select("bittel_id")
+          .eq("supplier", "bittel")
+          .eq("is_active", true)
+          .order("id")
+          .range(from, to)
+      );
 
-      if (activeProducts) {
+      if (activeProducts.length > 0) {
         const toDeactivate = activeProducts
           .filter((p) => !processedBittelIds.includes(p.bittel_id))
           .map((p) => p.bittel_id);

@@ -1,10 +1,23 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
+import { cache, type ComponentProps } from "react";
 import type { Metadata } from "next";
 import { ArrowRight, CheckCircle2, ChevronRight, ShieldCheck } from "lucide-react";
 import { createPublicClient } from "@/lib/supabase/public";
+import { fetchAll } from "@/lib/supabase/fetch-all";
 import ProductCard from "@/components/catalog/ProductCard";
-import { BRANDS, getBrand, type BrandLocale } from "@/lib/brands";
+import {
+  BRANDS,
+  brandSlug,
+  generatedBrandCopy,
+  getBrand,
+  productKind,
+  slavicPlural,
+  type BrandCopy,
+  type BrandLocale,
+  type BrandStats,
+} from "@/lib/brands";
+import { brandLandingPath, categoryLabel } from "@/lib/product/insights";
 import { getInstallationEur } from "@/lib/pricing";
 
 interface PageProps {
@@ -13,6 +26,7 @@ interface PageProps {
 
 export const revalidate = 3600;
 
+// Hand-written brands are prebuilt; any other catalog brand renders on first visit.
 export function generateStaticParams() {
   return BRANDS.map((b) => ({ brand: b.slug }));
 }
@@ -30,6 +44,11 @@ async function getDictionary(locale: string) {
 const PRODUCT_COLUMNS =
   "id, slug, title, title_override, title_en, title_ru, title_ua, manufacturer, price_client, price_override, price_promo, is_promo, availability, gallery, btu, energy_class, area_m2, noise_db_indoor, refrigerant, stock_size, features, category_id, warranty_months";
 
+/** Cards above the fold of the product section; the rest are listed compactly. */
+const GRID_LIMIT = 24;
+/** Categories where the standard 190/230 € wall-unit installation applies. */
+const STANDARD_INSTALL_CATEGORIES = new Set([1, 2, 13, 14]);
+
 const UI: Record<
   BrandLocale,
   {
@@ -38,13 +57,21 @@ const UI: Record<
     stats: (n: number, min: number, max: number, btuMin: number, btuMax: number) => string;
     warranty: (months: number) => string;
     seriesTitle: string;
+    categoriesTitle: string;
     whyTitle: string;
+    whyShopTitle: string;
     productsTitle: (name: string) => string;
     productsSubtitle: (n: number) => string;
+    browseByType: string;
+    allModelsList: (n: number, name: string) => string;
+    viewInCatalog: string;
     allModels: string;
     installTitle: string;
     installDesc: string;
     installCta: string;
+    installTitleHp: string;
+    installDescHp: string;
+    installCtaHp: string;
     maintenanceTitle: string;
     maintenanceDesc: string;
     maintenanceCta: string;
@@ -59,16 +86,25 @@ const UI: Record<
   bg: {
     home: "Начало",
     brands: "Марки",
-    stats: (n, min, max, btuMin, btuMax) => `${n} модела на склад · от ${min} € до ${max} € · ${btuMin / 1000}–${btuMax / 1000}k BTU`,
+    stats: (n, min, max, btuMin, btuMax) =>
+      `${n} ${n === 1 ? "модел" : "модела"} на склад · от ${min} € до ${max} €${btuMax ? ` · ${btuMin / 1000}–${btuMax / 1000}k BTU` : ""}`,
     warranty: (m) => `гаранция ${Math.round(m / 12)} г.`,
     seriesTitle: "Серии, които държим на склад във Варна",
+    categoriesTitle: "Какво предлагаме от марката",
     whyTitle: "Защо клиентите ни избират тази марка",
+    whyShopTitle: "Защо да поръчате от нас",
     productsTitle: (name) => `Всички модели ${name} с цени`,
-    productsSubtitle: (n) => `${n} модела с актуална наличност. Цената с монтаж е на страницата на всеки модел.`,
+    productsSubtitle: (n) => `${n} ${n === 1 ? "модел" : "модела"} с актуална наличност. Цената с монтаж е на страницата на всеки модел.`,
+    browseByType: "Разгледайте по вид",
+    allModelsList: (n, name) => `Всички ${n} модела ${name}`,
+    viewInCatalog: "Виж в каталога с филтри",
     allModels: "Целият каталог",
     installTitle: "Монтаж от 190 € с ДДС",
     installDesc: "Собствен екип, 3 м трасе, всички материали, вакуумиране и пуск. Обикновено до 3 дни след заявка.",
     installCta: "Как протича монтажът",
+    installTitleHp: "Монтаж на термопомпа след оглед",
+    installDescHp: "Оразмеряваме мощността по топлинните загуби на сградата и офертираме монтажа според отоплителната инсталация. Цените в каталога са без монтаж.",
+    installCtaHp: "Как избираме термопомпа",
     maintenanceTitle: "Профилактика от 42 €",
     maintenanceDesc: "Годишното почистване запазва гаранцията на производителя и до 30 % от разхода на ток.",
     maintenanceCta: "Профилактика на климатик",
@@ -82,16 +118,25 @@ const UI: Record<
   en: {
     home: "Home",
     brands: "Brands",
-    stats: (n, min, max, btuMin, btuMax) => `${n} models in stock · €${min} to €${max} · ${btuMin / 1000}–${btuMax / 1000}k BTU`,
+    stats: (n, min, max, btuMin, btuMax) =>
+      `${n} ${n === 1 ? "model" : "models"} in stock · €${min} to €${max}${btuMax ? ` · ${btuMin / 1000}–${btuMax / 1000}k BTU` : ""}`,
     warranty: (m) => `${Math.round(m / 12)}-year warranty`,
     seriesTitle: "Series we keep in stock in Varna",
+    categoriesTitle: "What we carry from this brand",
     whyTitle: "Why our customers pick this brand",
+    whyShopTitle: "Why order from us",
     productsTitle: (name) => `All ${name} models with prices`,
-    productsSubtitle: (n) => `${n} models with live stock. Installed price is on each model's page.`,
+    productsSubtitle: (n) => `${n} ${n === 1 ? "model" : "models"} with live stock. Installed price is on each model's page.`,
+    browseByType: "Browse by type",
+    allModelsList: (n, name) => `All ${n} ${name} models`,
+    viewInCatalog: "View in the catalog with filters",
     allModels: "Full catalog",
     installTitle: "Installation from €190 incl. VAT",
     installDesc: "Own crew, 3 m pipe run, all materials, vacuum and commissioning. Usually within 3 days of the order.",
     installCta: "How installation works",
+    installTitleHp: "Heat pump installation after a site visit",
+    installDescHp: "We size the capacity from the building's heat loss and quote the installation for your heating system. Catalog prices exclude installation.",
+    installCtaHp: "How we choose a heat pump",
     maintenanceTitle: "Maintenance from €42",
     maintenanceDesc: "Annual cleaning keeps the manufacturer warranty and up to 30 % of the electricity bill.",
     maintenanceCta: "AC maintenance",
@@ -105,16 +150,25 @@ const UI: Record<
   ru: {
     home: "Главная",
     brands: "Марки",
-    stats: (n, min, max, btuMin, btuMax) => `${n} моделей на складе · от ${min} € до ${max} € · ${btuMin / 1000}–${btuMax / 1000}k BTU`,
+    stats: (n, min, max, btuMin, btuMax) =>
+      `${n} ${slavicPlural(n, "модель", "модели", "моделей")} на складе · от ${min} € до ${max} €${btuMax ? ` · ${btuMin / 1000}–${btuMax / 1000}k BTU` : ""}`,
     warranty: (m) => `гарантия ${Math.round(m / 12)} г.`,
     seriesTitle: "Серии, которые держим на складе в Варне",
+    categoriesTitle: "Что есть в каталоге",
     whyTitle: "Почему клиенты выбирают эту марку",
+    whyShopTitle: "Почему заказывают у нас",
     productsTitle: (name) => `Все модели ${name} с ценами`,
-    productsSubtitle: (n) => `${n} моделей с актуальным наличием. Цена с монтажом — на странице каждой модели.`,
+    productsSubtitle: (n) => `${n} ${slavicPlural(n, "модель", "модели", "моделей")} с актуальным наличием. Цена с монтажом — на странице каждой модели.`,
+    browseByType: "Смотреть по типу",
+    allModelsList: (n, name) => `Все ${n} ${slavicPlural(n, "модель", "модели", "моделей")} ${name}`,
+    viewInCatalog: "Смотреть в каталоге с фильтрами",
     allModels: "Весь каталог",
     installTitle: "Монтаж от 190 € с НДС",
     installDesc: "Своя бригада, 3 м трассы, все материалы, вакуумирование и запуск. Обычно в течение 3 дней после заявки.",
     installCta: "Как проходит монтаж",
+    installTitleHp: "Монтаж теплового насоса после выезда",
+    installDescHp: "Мощность подбираем по теплопотерям здания, монтаж считаем под вашу систему отопления. Цены в каталоге без монтажа.",
+    installCtaHp: "Как подбираем тепловой насос",
     maintenanceTitle: "Профилактика от 42 €",
     maintenanceDesc: "Ежегодная чистка сохраняет гарантию производителя и до 30 % расхода электричества.",
     maintenanceCta: "Профилактика кондиционера",
@@ -128,16 +182,25 @@ const UI: Record<
   ua: {
     home: "Головна",
     brands: "Марки",
-    stats: (n, min, max, btuMin, btuMax) => `${n} моделей на складі · від ${min} € до ${max} € · ${btuMin / 1000}–${btuMax / 1000}k BTU`,
+    stats: (n, min, max, btuMin, btuMax) =>
+      `${n} ${slavicPlural(n, "модель", "моделі", "моделей")} на складі · від ${min} € до ${max} €${btuMax ? ` · ${btuMin / 1000}–${btuMax / 1000}k BTU` : ""}`,
     warranty: (m) => `гарантія ${Math.round(m / 12)} р.`,
     seriesTitle: "Серії, які тримаємо на складі у Варні",
+    categoriesTitle: "Що є в каталозі",
     whyTitle: "Чому клієнти обирають цю марку",
+    whyShopTitle: "Чому замовляють у нас",
     productsTitle: (name) => `Усі моделі ${name} з цінами`,
-    productsSubtitle: (n) => `${n} моделей з актуальною наявністю. Ціна з монтажем — на сторінці кожної моделі.`,
+    productsSubtitle: (n) => `${n} ${slavicPlural(n, "модель", "моделі", "моделей")} з актуальною наявністю. Ціна з монтажем — на сторінці кожної моделі.`,
+    browseByType: "Дивитися за типом",
+    allModelsList: (n, name) => `Усі ${n} ${slavicPlural(n, "модель", "моделі", "моделей")} ${name}`,
+    viewInCatalog: "Дивитися в каталозі з фільтрами",
     allModels: "Увесь каталог",
     installTitle: "Монтаж від 190 € з ПДВ",
     installDesc: "Власна бригада, 3 м траси, всі матеріали, вакуумування та запуск. Зазвичай протягом 3 днів після заявки.",
     installCta: "Як проходить монтаж",
+    installTitleHp: "Монтаж теплового насоса після виїзду",
+    installDescHp: "Потужність підбираємо за тепловтратами будівлі, монтаж рахуємо під вашу систему опалення. Ціни в каталозі без монтажу.",
+    installCtaHp: "Як підбираємо тепловий насос",
     maintenanceTitle: "Профілактика від 42 €",
     maintenanceDesc: "Щорічне чищення зберігає гарантію виробника та до 30 % витрати електрики.",
     maintenanceCta: "Профілактика кондиціонера",
@@ -154,25 +217,134 @@ function toLocale(locale: string): BrandLocale {
   return (["bg", "en", "ru", "ua"] as const).includes(locale as BrandLocale) ? (locale as BrandLocale) : "bg";
 }
 
-async function getBrandProducts(manufacturer: string) {
+type BrandProduct = ComponentProps<typeof ProductCard>["product"] & {
+  category_id: number | null;
+  warranty_months: number | null;
+};
+
+interface ResolvedBrand {
+  slug: string;
+  manufacturer: string;
+  name: string;
+  /** Hand-written copy; null for brands whose page is generated from catalog numbers. */
+  copy: Record<BrandLocale, BrandCopy> | null;
+}
+
+/** DB names per category, the fallback label for categories without a hand-written one. */
+const getCategoryNames = cache(async () => {
   const supabase = createPublicClient();
-  const { data } = await supabase
-    .from("products")
-    .select(PRODUCT_COLUMNS)
-    .eq("manufacturer", manufacturer)
-    .eq("is_active", true)
-    .eq("is_hidden", false)
-    .order("btu", { ascending: true, nullsFirst: false })
-    .order("price_client", { ascending: true });
-  return data ?? [];
+  const { data } = await supabase.from("categories").select("id, subgroup_name, name_en, name_ru, name_ua");
+  return new Map(
+    (data ?? []).map((c) => [c.id as number, { bg: c.subgroup_name, en: c.name_en, ru: c.name_ru, ua: c.name_ua } as Record<BrandLocale, string | null>])
+  );
+});
+
+/** Every manufacturer with visible products, most models first. */
+const getCatalogBrands = cache(async () => {
+  const supabase = createPublicClient();
+  const rows = await fetchAll<{ manufacturer: string | null }>((from, to) =>
+    supabase
+      .from("products")
+      .select("manufacturer")
+      .eq("is_active", true)
+      .eq("is_hidden", false)
+      .not("manufacturer", "is", null)
+      .order("id")
+      .range(from, to)
+  );
+  const counts = new Map<string, number>();
+  for (const r of rows) if (r.manufacturer) counts.set(r.manufacturer, (counts.get(r.manufacturer) ?? 0) + 1);
+  return [...counts].sort((a, b) => b[1] - a[1]).map(([name, count]) => ({ name, count }));
+});
+
+const getBrandProducts = cache(async (manufacturer: string): Promise<BrandProduct[]> => {
+  const supabase = createPublicClient();
+  return fetchAll<BrandProduct>((from, to) =>
+    supabase
+      .from("products")
+      .select(PRODUCT_COLUMNS)
+      .eq("manufacturer", manufacturer)
+      .eq("is_active", true)
+      .eq("is_hidden", false)
+      .order("btu", { ascending: true, nullsFirst: false })
+      .order("price_client", { ascending: true })
+      .order("id")
+      .range(from, to)
+  );
+});
+
+/**
+ * Hand-written brand, or a catalog manufacturer whose generated page lives at
+ * this slug. A manufacturer that has its page elsewhere (/daikin-varna, a
+ * BRANDS slug) redirects there instead of getting a duplicate.
+ */
+const resolveBrand = cache(async (slug: string, locale: string): Promise<ResolvedBrand | null> => {
+  const known = getBrand(slug);
+  if (known) return known;
+  const match = (await getCatalogBrands()).find((b) => brandSlug(b.name) === slug);
+  if (!match) return null;
+  const canonical = brandLandingPath(match.name);
+  if (canonical && canonical !== `/marki/${slug}`) permanentRedirect(`/${locale}${canonical}`);
+  return { slug, manufacturer: match.name, name: match.name, copy: null };
+});
+
+function displayPrice(p: BrandProduct): number {
+  return Number(p.price_override || p.price_client) || 0;
+}
+
+function localTitle(p: BrandProduct, locale: string): string {
+  const t = locale === "en" ? p.title_en : locale === "ru" ? p.title_ru : locale === "ua" ? p.title_ua : null;
+  return p.title_override || t || p.title;
+}
+
+/** Products grouped by category (largest first) plus the numbers the generated copy uses. */
+function summarize(products: BrandProduct[], locale: BrandLocale, dbNames: Map<number, Record<BrandLocale, string | null>>) {
+  const groups = new Map<number, BrandProduct[]>();
+  for (const p of products) {
+    const id = p.category_id ?? 0;
+    groups.set(id, [...(groups.get(id) ?? []), p]);
+  }
+  const categories = [...groups]
+    .map(([id, items]) => {
+      const prices = items.map(displayPrice).filter((n) => n > 0);
+      return {
+        id,
+        name: categoryLabel(id, locale, dbNames.get(id)?.[locale] || dbNames.get(id)?.bg || "—"),
+        count: items.length,
+        minPrice: prices.length ? Math.round(Math.min(...prices)) : 0,
+        items,
+      };
+    })
+    .sort((a, b) => b.count - a.count);
+
+  const prices = products.map(displayPrice).filter((n) => n > 0);
+  const kinds = { ac: 0, heatpump: 0, accessory: 0 };
+  for (const p of products) kinds[productKind(p.category_id)]++;
+  const stats: BrandStats = {
+    count: products.length,
+    minPrice: prices.length ? Math.round(Math.min(...prices)) : 0,
+    maxPrice: prices.length ? Math.round(Math.max(...prices)) : 0,
+    kinds,
+    categories: categories.map(({ name, count, minPrice }) => ({ name, count, minPrice })),
+  };
+  return { categories, stats };
+}
+
+async function loadPage(slug: string, locale: string) {
+  const brand = await resolveBrand(slug, locale);
+  if (!brand) return null;
+  const l = toLocale(locale);
+  const [products, dbNames] = await Promise.all([getBrandProducts(brand.manufacturer), getCategoryNames()]);
+  const { categories, stats } = summarize(products, l, dbNames);
+  const copy = brand.copy?.[l] ?? generatedBrandCopy(brand.name, stats, l);
+  return { brand, l, products, categories, stats, copy };
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, brand: slug } = await params;
-  const brand = getBrand(slug);
-  if (!brand) return {};
-  const l = toLocale(locale);
-  const t = brand.copy[l];
+  const page = await loadPage(slug, locale);
+  if (!page) return {};
+  const t = page.copy;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
   const path = `/marki/${slug}`;
   return {
@@ -200,26 +372,33 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BrandPage({ params }: PageProps) {
   const { locale, brand: slug } = await params;
-  const brand = getBrand(slug);
-  if (!brand) notFound();
+  const page = await loadPage(slug, locale);
+  if (!page) notFound();
+  const { brand, l, products, categories, stats, copy: t } = page;
 
-  const l = toLocale(locale);
-  const t = brand.copy[l];
   const ui = UI[l];
   const dict = await getDictionary(locale);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
-  const products = await getBrandProducts(brand.manufacturer);
+  const catalogBrands = await getCatalogBrands();
 
-  const prices = products.map((p) => p.price_override || p.price_client).filter((n): n is number => typeof n === "number" && n > 0);
+  const { minPrice, maxPrice } = stats;
   const btus = products.map((p) => p.btu).filter((n): n is number => typeof n === "number" && n > 0);
-  const minPrice = prices.length ? Math.round(Math.min(...prices)) : 0;
-  const maxPrice = prices.length ? Math.round(Math.max(...prices)) : 0;
   const btuMin = btus.length ? Math.min(...btus) : 0;
   const btuMax = btus.length ? Math.max(...btus) : 0;
+
+  // Warranty badge only when it holds for most of the range, not a handful of models.
   const warrantyCounts = new Map<number, number>();
   for (const p of products) if (p.warranty_months) warrantyCounts.set(p.warranty_months, (warrantyCounts.get(p.warranty_months) || 0) + 1);
-  const commonWarranty = [...warrantyCounts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
-  const cheapestInstalled = minPrice ? minPrice + getInstallationEur(btuMin || 9000) : 0;
+  const [commonWarranty, warrantyCount] = [...warrantyCounts.entries()].sort((a, b) => b[1] - a[1])[0] ?? [null, 0];
+  const showWarranty = commonWarranty !== null && warrantyCount >= products.length / 2;
+
+  // "Installed from" uses wall/floor units, where the standard installation price applies.
+  const installedPrices = products
+    .filter((p) => p.category_id !== null && STANDARD_INSTALL_CATEGORIES.has(p.category_id) && displayPrice(p) > 0)
+    .map((p) => displayPrice(p) + getInstallationEur(p.btu));
+  const cheapestInstalled = installedPrices.length ? Math.round(Math.min(...installedPrices)) : 0;
+  const heatPumpBrand = stats.kinds.heatpump > stats.kinds.ac;
+  const brandFilter = `/${locale}/klimatici?brand=${encodeURIComponent(brand.manufacturer)}`;
 
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -237,7 +416,7 @@ export default async function BrandPage({ params }: PageProps) {
     brand: { "@type": "Brand", name: brand.name },
     description: t.description,
     url: `${siteUrl}/${locale}/marki/${slug}`,
-    ...(prices.length
+    ...(minPrice
       ? {
           offers: {
             "@type": "AggregateOffer",
@@ -261,7 +440,15 @@ export default async function BrandPage({ params }: PageProps) {
     ],
   };
 
-  const otherBrands = BRANDS.filter((b) => b.slug !== slug);
+  const otherBrands = catalogBrands
+    .filter((b) => b.name !== brand.manufacturer)
+    .map((b) => ({
+      name:
+        BRANDS.find((x) => x.manufacturer.toLowerCase() === b.name.toLowerCase())?.name ??
+        (b.name.toLowerCase() === "mitsubishi" ? "Mitsubishi Electric" : b.name),
+      href: brandLandingPath(b.name),
+    }))
+    .filter((b): b is { name: string; href: string } => b.href !== null);
 
   return (
     <>
@@ -281,7 +468,7 @@ export default async function BrandPage({ params }: PageProps) {
             <span className="text-white/80">{brand.name}</span>
           </nav>
           <div className="max-w-3xl">
-            {commonWarranty && (
+            {showWarranty && commonWarranty && (
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs sm:text-sm font-medium mb-5">
                 <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>{ui.warranty(commonWarranty)}</span>
@@ -315,7 +502,7 @@ export default async function BrandPage({ params }: PageProps) {
       <section className="py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-5">{ui.seriesTitle}</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-5">{brand.copy ? ui.seriesTitle : ui.categoriesTitle}</h2>
             <ul role="list" className="space-y-3">
               {t.series.map((line) => (
                 <li key={line} className="flex items-start gap-3 text-sm sm:text-base text-foreground/90 leading-relaxed">
@@ -326,7 +513,7 @@ export default async function BrandPage({ params }: PageProps) {
             </ul>
           </div>
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-5">{ui.whyTitle}</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-5">{brand.copy ? ui.whyTitle : ui.whyShopTitle}</h2>
             <div className="space-y-4">
               {t.why.map((item) => (
                 <div key={item.title} className="rounded-xl border border-border bg-white p-5">
@@ -344,12 +531,72 @@ export default async function BrandPage({ params }: PageProps) {
         <section id="products" className="bg-muted/30 py-12 sm:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-3">{ui.productsTitle(brand.name)}</h2>
-            <p className="text-sm sm:text-base text-muted-foreground mb-8 max-w-3xl">{ui.productsSubtitle(products.length)}</p>
+            <p className="text-sm sm:text-base text-muted-foreground mb-6 max-w-3xl">{ui.productsSubtitle(products.length)}</p>
+
+            {categories.length > 1 && (
+              <nav aria-label={ui.browseByType} className="mb-8">
+                <ul role="list" className="flex flex-wrap gap-2">
+                  {categories.map((c) => (
+                    <li key={c.id}>
+                      <Link
+                        href={c.id ? `${brandFilter}&category=${c.id}` : brandFilter}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-white text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors"
+                      >
+                        {c.name}
+                        <span className="text-xs text-muted-foreground">{c.count}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            )}
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-              {products.map((product) => (
+              {products.slice(0, GRID_LIMIT).map((product) => (
                 <ProductCard key={product.id} product={product} locale={locale} currency="EUR" dictionary={dict} />
               ))}
             </div>
+
+            {products.length > GRID_LIMIT && (
+              <div className="mt-12">
+                <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-6">{ui.allModelsList(products.length, brand.name)}</h3>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-3 items-start">
+                  {categories.map((c) => (
+                    <details key={c.id} className="group rounded-xl border border-border bg-white [&_summary::-webkit-details-marker]:hidden">
+                      <summary className="flex items-center justify-between gap-4 cursor-pointer px-4 py-3">
+                        <h4 className="font-semibold text-foreground">
+                          {c.name} <span className="text-sm font-normal text-muted-foreground">({c.count})</span>
+                        </h4>
+                        <ChevronRight className="w-5 h-5 text-muted-foreground shrink-0 transition-transform group-open:rotate-90" aria-hidden="true" />
+                      </summary>
+                      <ul role="list" className="divide-y divide-border/70 border-t border-border">
+                        {c.items.map((p) => (
+                          <li key={p.id}>
+                            <Link
+                              href={`/${locale}/klimatici/${p.slug}`}
+                              className="flex items-baseline justify-between gap-4 px-4 py-2.5 text-sm hover:bg-muted/50 transition-colors"
+                            >
+                              <span className="text-foreground/90 min-w-0">{localTitle(p, locale)}</span>
+                              {displayPrice(p) > 0 && (
+                                <span className="shrink-0 font-semibold text-foreground tabular-nums">{Math.round(displayPrice(p))} €</span>
+                              )}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                      <Link
+                        href={c.id ? `${brandFilter}&category=${c.id}` : brandFilter}
+                        className="flex items-center gap-1.5 border-t border-border px-4 py-2.5 text-sm font-semibold text-primary hover:underline"
+                      >
+                        {ui.viewInCatalog}
+                        <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                      </Link>
+                    </details>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="flex justify-center mt-8">
               <Link
                 href={`/${locale}/klimatici`}
@@ -366,25 +613,38 @@ export default async function BrandPage({ params }: PageProps) {
       {/* Install + Maintenance */}
       <section className="py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-5">
-          <div className="rounded-2xl border border-border bg-white p-6 sm:p-8">
-            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">{ui.installTitle}</h2>
-            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-5">
-              {ui.installDesc}
-              {cheapestInstalled ? ` ${brand.name}: ${cheapestInstalled} €+` : ""}
-            </p>
-            <Link href={`/${locale}/montazh`} className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
-              {ui.installCta}
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-          <div className="rounded-2xl border border-border bg-white p-6 sm:p-8">
-            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">{ui.maintenanceTitle}</h2>
-            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-5">{ui.maintenanceDesc}</p>
-            <Link href={`/${locale}/profilaktika`} className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
-              {ui.maintenanceCta}
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
+          {heatPumpBrand ? (
+            <div className="rounded-2xl border border-border bg-white p-6 sm:p-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">{ui.installTitleHp}</h2>
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-5">{ui.installDescHp}</p>
+              <Link href={`/${locale}/klimatici/termopompa`} className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
+                {ui.installCtaHp}
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-border bg-white p-6 sm:p-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">{ui.installTitle}</h2>
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-5">
+                {ui.installDesc}
+                {cheapestInstalled ? ` ${brand.name}: ${cheapestInstalled} €+` : ""}
+              </p>
+              <Link href={`/${locale}/montazh`} className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
+                {ui.installCta}
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          )}
+          {stats.kinds.ac > 0 && (
+            <div className="rounded-2xl border border-border bg-white p-6 sm:p-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-2">{ui.maintenanceTitle}</h2>
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed mb-5">{ui.maintenanceDesc}</p>
+              <Link href={`/${locale}/profilaktika`} className="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
+                {ui.maintenanceCta}
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
@@ -407,24 +667,20 @@ export default async function BrandPage({ params }: PageProps) {
       </section>
 
       {/* Other brands */}
-      <section className="py-12 sm:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-5">{ui.otherBrands}</h2>
-          <ul role="list" className="flex flex-wrap gap-2">
-            <li>
-              <Link href={`/${locale}/daikin-varna`} className="inline-flex px-3 py-1.5 rounded-full border border-border bg-muted text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Daikin</Link>
-            </li>
-            <li>
-              <Link href={`/${locale}/mitsubishi-varna`} className="inline-flex px-3 py-1.5 rounded-full border border-border bg-muted text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">Mitsubishi Electric</Link>
-            </li>
-            {otherBrands.map((b) => (
-              <li key={b.slug}>
-                <Link href={`/${locale}/marki/${b.slug}`} className="inline-flex px-3 py-1.5 rounded-full border border-border bg-muted text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">{b.name}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      {otherBrands.length > 0 && (
+        <section className="py-12 sm:py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-5">{ui.otherBrands}</h2>
+            <ul role="list" className="flex flex-wrap gap-2">
+              {otherBrands.map((b) => (
+                <li key={b.href}>
+                  <Link href={`/${locale}${b.href}`} className="inline-flex px-3 py-1.5 rounded-full border border-border bg-muted text-sm font-medium text-foreground hover:border-primary hover:text-primary transition-colors">{b.name}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
 
       {/* CTA */}
       <section className="pb-12 sm:pb-16">

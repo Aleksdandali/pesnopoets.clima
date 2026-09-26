@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { createPublicClient } from "@/lib/supabase/public";
+import { fetchAll } from "@/lib/supabase/fetch-all";
 import ProductCard from "@/components/catalog/ProductCard";
 import FilterBar from "@/components/catalog/FilterBar";
 import CategorySidebar from "@/components/catalog/CategorySidebar";
@@ -109,27 +110,30 @@ async function getDictionary(locale: string) {
 
 async function getCategoriesWithCounts(supabase: ReturnType<typeof createPublicClient>, locale: string) {
   // Run both queries in parallel
-  const [categoriesResult, productCountsResult] = await Promise.all([
+  const [categoriesResult, productCounts] = await Promise.all([
     supabase
       .from("categories")
       .select("id, group_name, subgroup_name, slug, name_en, name_ru, name_ua")
       .order("group_name")
       .order("subgroup_name"),
-    supabase
-      .from("products")
-      .select("category_id")
-      .eq("is_active", true)
-      .eq("is_hidden", false),
+    fetchAll((from, to) =>
+      supabase
+        .from("products")
+        .select("category_id")
+        .eq("is_active", true)
+        .eq("is_hidden", false)
+        .order("id")
+        .range(from, to)
+    ),
   ]);
 
   const { data: categories } = categoriesResult;
-  const { data: productCounts } = productCountsResult;
 
   if (!categories) return { groups: [], total: 0 };
 
   const countMap: Record<number, number> = {};
   let total = 0;
-  for (const p of productCounts || []) {
+  for (const p of productCounts) {
     if (p.category_id) {
       countMap[p.category_id] = (countMap[p.category_id] || 0) + 1;
       total++;
@@ -248,22 +252,25 @@ export default async function CatalogPage({
   query = query.range(from, from + PRODUCTS_PER_PAGE - 1);
 
   // Run product query and manufacturer query in parallel
-  const [productResult, manufacturerResult] = await Promise.all([
+  const [productResult, manufacturerRows] = await Promise.all([
     query,
-    supabase
-      .from("products")
-      .select("manufacturer")
-      .eq("is_active", true)
-      .eq("is_hidden", false)
-      .not("manufacturer", "is", null),
+    fetchAll((from, to) =>
+      supabase
+        .from("products")
+        .select("manufacturer")
+        .eq("is_active", true)
+        .eq("is_hidden", false)
+        .not("manufacturer", "is", null)
+        .order("id")
+        .range(from, to)
+    ),
   ]);
 
   const { data: products, count } = productResult;
-  const { data: manufacturerRows } = manufacturerResult;
 
   const manufacturers = [
     ...new Set(
-      (manufacturerRows || []).map((r: { manufacturer: string }) => r.manufacturer).filter(Boolean)
+      manufacturerRows.map((r: { manufacturer: string }) => r.manufacturer).filter(Boolean)
     ),
   ].sort() as string[];
 

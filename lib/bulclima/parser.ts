@@ -87,26 +87,35 @@ const LATIN_TO_CYRILLIC: Record<string, string> = {
   a: "а", c: "с", e: "е", o: "о", p: "р", x: "х", y: "у", k: "к", "ĸ": "к",
   A: "А", B: "В", C: "С", E: "Е", H: "Н", K: "К", M: "М", O: "О", P: "Р", T: "Т", X: "Х", Y: "У",
 };
-const CYRILLIC_TO_LATIN: Record<string, string> = Object.fromEntries(
-  Object.entries(LATIN_TO_CYRILLIC)
-    .filter(([latin]) => latin !== "ĸ")
-    .map(([latin, cyrillic]) => [cyrillic, latin])
-);
+const CYRILLIC_TO_LATIN: Record<string, string> = {
+  ...Object.fromEntries(
+    Object.entries(LATIN_TO_CYRILLIC)
+      .filter(([latin]) => latin !== "ĸ")
+      .map(([latin, cyrillic]) => [cyrillic, latin])
+  ),
+  Ѕ: "S", ѕ: "s", І: "I", і: "i", Ј: "J", ј: "j",
+};
 const CYRILLIC_ONLY = /[бвгджзийлмнптфцчшщъьюяБГДЖЗИЙЛПФЦЧШЩЪЬЮЯ]/;
 const LATIN_ONLY = /[bdfghijlmnqrstuvwzDFGIJLNQRSUVWZ0-9]/;
+// Not Bulgarian letters: a word containing one is Latin in disguise ("ЅЕЕR", "ЅСОР").
+const NON_BULGARIAN = /[ЅѕІіЈј]/;
+
+const toLatin = (word: string) => [...word].map((ch) => CYRILLIC_TO_LATIN[ch] ?? ch).join("");
+const toCyrillic = (word: string) => [...word].map((ch) => LATIN_TO_CYRILLIC[ch] ?? ch).join("");
 
 /**
  * Bulclima text mixes scripts inside words ("Инверторeн" with a Latin "e",
- * "K2ОE-18…" with a Cyrillic "О"). Each word is pulled toward the script it
- * clearly belongs to, so search, slugs and badge checks see clean text.
+ * "K2ОE-18…" with a Cyrillic "О", "ЅЕЕR"). Each word is pulled toward the
+ * script it clearly belongs to, so search, slugs and badge checks see clean text.
  */
 export function normalizeScripts(text: string): string {
   return text.replace(/[\p{L}\p{N}]+/gu, (word) => {
+    if (NON_BULGARIAN.test(word)) return toLatin(word);
     if (!/[Ѐ-ӿ]/.test(word) || !/[A-Za-zĸ]/.test(word)) return word;
     const cyrillic = CYRILLIC_ONLY.test(word);
     const latin = LATIN_ONLY.test(word);
-    if (cyrillic && !latin) return [...word].map((ch) => LATIN_TO_CYRILLIC[ch] ?? ch).join("");
-    if (latin && !cyrillic) return [...word].map((ch) => CYRILLIC_TO_LATIN[ch] ?? ch).join("");
+    if (cyrillic && !latin) return toCyrillic(word);
+    if (latin && !cyrillic) return toLatin(word);
     return word;
   });
 }
@@ -205,9 +214,12 @@ interface DescriptionSpecs {
 export function parseDescriptionSpecs(bullets: string[]): DescriptionSpecs {
   // Cyrillic "А" is used for energy classes ("А++"), normalize it for matching only.
   const text = bullets.join(" | ").replace(/А/g, "A");
+  // Latin tokens (SEER, SCOP, dB, R32, °C) are often typed with Cyrillic
+  // look-alikes ("ЅЕЕR", "Вtu"); match those on an all-Latin copy.
+  const latin = toLatin(text);
 
-  const seer = text.match(SEER);
-  const scop = text.match(SCOP);
+  const seer = latin.match(SEER);
+  const scop = latin.match(SCOP);
   const explicit = text.match(EXPLICIT_CLASS);
   let energy: string | null = null;
   if (explicit) {
@@ -216,13 +228,13 @@ export function parseDescriptionSpecs(bullets: string[]): DescriptionSpecs {
     energy = `${energyClass(seer?.[2]) ?? "-"} / ${energyClass(scop?.[2]) ?? "-"}`;
   }
 
-  const noises = [...text.matchAll(/(\d{2})\s*d\s?B/gi)]
+  const noises = [...latin.matchAll(/(\d{2})\s*(?:d\s?B|дБ)/gi)]
     .map((m) => parseInt(m[1], 10))
     .filter((n) => n >= 10 && n <= 70);
 
-  const refrigerant = text.match(/\bR\s?-?\s?(32|290|410\s?A?)(?!\d)/i);
+  const refrigerant = latin.match(/\bR\s?-?\s?(32|290|410\s?A?)(?!\d)/i);
   const warranty = text.match(/гаранция\s*[:\-–]?\s*(\d{2,3})\s*месец/i);
-  const temps = [...text.matchAll(/-\s?(\d{2})\s*°?\s*C\b/gi)].map((m) => -parseInt(m[1], 10));
+  const temps = [...latin.matchAll(/-\s?(\d{2})\s*[°⁰º]?\s*C\b/gi)].map((m) => -parseInt(m[1], 10));
 
   return {
     energy_class: energy,
@@ -234,7 +246,7 @@ export function parseDescriptionSpecs(bullets: string[]): DescriptionSpecs {
     min_outdoor_temp: temps.length ? Math.min(...temps) : null,
     // "Wi-Fi модул (опция)" or "чрез WiFi адаптер" is not an included module.
     wifi_included: bullets.some(
-      (b) => /wi-?\s?fi/i.test(b) && !/опци/i.test(b) && (!/адапт/i.test(b) || /вграден/i.test(b))
+      (b) => /wi\s*-?\s*fi/i.test(toLatin(b)) && !/опци/i.test(b) && (!/адапт/i.test(b) || /вграден/i.test(b))
     ),
   };
 }

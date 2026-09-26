@@ -3,6 +3,11 @@ import { createClient } from "@supabase/supabase-js";
 import { getAllPosts } from "@/lib/blog/posts";
 import { DISTRICTS } from "@/lib/districts";
 import { BRANDS } from "@/lib/brands";
+import { brandLandingPath } from "@/lib/product/insights";
+import { fetchAll } from "@/lib/supabase/fetch-all";
+
+// Rebuilt hourly: supplier syncs add products between deploys.
+export const revalidate = 3600;
 
 const locales = ["bg", "en", "ru", "ua"] as const;
 const siteUrl =
@@ -52,11 +57,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
 
   // Fetch all active products
-  const { data: products } = await supabase
-    .from("products")
-    .select("slug, updated_at")
-    .eq("is_active", true)
-    .eq("is_hidden", false);
+  const products = await fetchAll<{ slug: string; updated_at: string | null; manufacturer: string | null }>((from, to) =>
+    supabase
+      .from("products")
+      .select("slug, updated_at, manufacturer")
+      .eq("is_active", true)
+      .eq("is_hidden", false)
+      .order("id")
+      .range(from, to)
+  );
 
   const entries: MetadataRoute.Sitemap = [];
 
@@ -132,10 +141,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   entries.push(
     ...localized("/brands", { changeFrequency: "weekly", priority: 0.8 })
   );
-  for (const brand of BRANDS) {
-    entries.push(
-      ...localized(`/marki/${brand.slug}`, { changeFrequency: "weekly", priority: 0.85 })
-    );
+  // Hand-written brand pages plus the generated page of every other catalog brand
+  const brandPaths = new Set(BRANDS.map((b) => `/marki/${b.slug}`));
+  for (const p of products) {
+    const path = p.manufacturer ? brandLandingPath(p.manufacturer) : null;
+    if (path?.startsWith("/marki/")) brandPaths.add(path);
+  }
+  for (const path of brandPaths) {
+    entries.push(...localized(path, { changeFrequency: "weekly", priority: 0.85 }));
   }
   entries.push(
     ...localized("/za-nas", { changeFrequency: "monthly", priority: 0.6 })
@@ -147,7 +160,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Product pages — all four locales. EN product URLs are the ones that rank
   // for model-code queries (GSC, summer 2026); keeping them out of the sitemap
   // and noindexed cost ~8x impressions, while BG products stayed uncrawled.
-  if (products) {
+  if (products.length > 0) {
     for (const product of products) {
       const path = `/klimatici/${product.slug}`;
       const lastMod = product.updated_at

@@ -17,6 +17,7 @@ import {
   Award,
 } from "lucide-react";
 import { createPublicClient } from "@/lib/supabase/public";
+import { fetchAll } from "@/lib/supabase/fetch-all";
 import ProductCard from "@/components/catalog/ProductCard";
 import AiConsultantSection from "@/components/home/AiConsultantSection";
 import HeroCarousel from "@/components/home/HeroCarousel";
@@ -280,12 +281,16 @@ async function getFeaturedProducts() {
 async function getBrandsWithImages() {
   try {
     const supabase = createPublicClient();
-    const { data } = await supabase
-      .from("products")
-      .select("manufacturer, gallery")
-      .eq("is_active", true)
-      .not("manufacturer", "is", null);
-    if (!data) return [];
+    const data = await fetchAll((from, to) =>
+      supabase
+        .from("products")
+        .select("manufacturer, gallery")
+        .eq("is_active", true)
+        .not("manufacturer", "is", null)
+        .order("id")
+        .range(from, to)
+    );
+    if (data.length === 0) return [];
 
     const brandMap: Record<string, { count: number; image: string | null }> = {};
     for (const row of data) {

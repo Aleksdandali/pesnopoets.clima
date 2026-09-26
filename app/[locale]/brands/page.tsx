@@ -3,6 +3,7 @@ import { brandLandingPath } from "@/lib/product/insights";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { createPublicClient } from "@/lib/supabase/public";
+import { fetchAll } from "@/lib/supabase/fetch-all";
 
 // Revalidate brands page every 10 minutes
 export const revalidate = 600;
@@ -50,7 +51,19 @@ const BRANDS_CONTENT: Record<string, BrandsContent> = {
         body: "Най-големият производител на климатична техника в света по обем. Gree предлагат отлична надеждност в средния ценови сегмент — серии Bora, Lomo и Amber. Препоръчваме ги за обекти, където бюджетът е приоритет, но клиентът иска официална гаранция и сервиз в България.",
       },
       {
-        name: "TechPoint, AUX, Nippon и други",
+        name: "General (Fujitsu General)",
+        body: "Японската марка, позната у нас като Fujitsu General — от 2026 г. производителят работи като GENERAL Inc. Предлагаме пълната гама: стенни модели от 7 000 BTU, хиперинверторната серия KGTG с 19 dB, касетъчни, канални и таванни системи и мулти сплит за 2 до 5 стаи.",
+      },
+      {
+        name: "Kaisai и Auratsu",
+        body: "Две марки на полската група Klima-Therm. Kaisai (от 2011 г.) е в средния ценови клас — инвертор с R32, Wi-Fi при много модели и 5 години гаранция при сериите ICE, ART, Nordic и PRO HEAT+. Auratsu (от 2019 г.) е по-кратка и по-достъпна гама — стенни Osaka и Tokyo и мулти сплит за 2–3 стаи.",
+      },
+      {
+        name: "Atlantic и Samsung — термопомпи",
+        body: "За отопление с термопомпа въздух-вода предлагаме френската Atlantic (Loria и Alfea с външни тела Fujitsu General, версии DUO с вграден бойлер 190 л) и Samsung EHS — моноблок с R290 и високотемпературни HT Quiet с вода до 70 °C за къщи с радиатори.",
+      },
+      {
+        name: "TechPoint, AUX, Nippon, Williams и други",
         body: "Допълваме каталога с по-достъпни марки за бюджетни проекти и втори климатик в спалня/детска. Всички модели минават през същия стандарт на монтаж и поддръжка — фиксирани цени и 12-месечна гаранция върху монтажа независимо от марката на уреда.",
       },
     ],
@@ -88,7 +101,19 @@ const BRANDS_CONTENT: Record<string, BrandsContent> = {
         body: "The world's largest AC manufacturer by volume. Gree delivers excellent reliability in the mid-price segment — Bora, Lomo and Amber series. We recommend Gree when budget matters but the client still wants an official warranty and Bulgarian service.",
       },
       {
-        name: "TechPoint, AUX, Nippon and others",
+        name: "General (Fujitsu General)",
+        body: "The Japanese brand known here as Fujitsu General — since 2026 the manufacturer trades as GENERAL Inc. We carry the full range: wall units from 7,000 BTU, the KGTG hyper-inverter series at 19 dB, cassette, ducted and ceiling systems, and multi-split for 2 to 5 rooms.",
+      },
+      {
+        name: "Kaisai and Auratsu",
+        body: "Two brands of the Polish Klima-Therm group. Kaisai (since 2011) is mid-priced — inverter with R32, Wi-Fi on many models and a 5-year warranty on the ICE, ART, Nordic and PRO HEAT+ series. Auratsu (since 2019) is a shorter, more affordable range — Osaka and Tokyo wall units and multi-split for 2–3 rooms.",
+      },
+      {
+        name: "Atlantic and Samsung — heat pumps",
+        body: "For air-to-water heating we offer France's Atlantic (Loria and Alfea with Fujitsu General outdoor units, DUO versions with a built-in 190 l tank) and Samsung EHS — R290 monoblocks and high-temperature HT Quiet units with water up to 70 °C for houses with radiators.",
+      },
+      {
+        name: "TechPoint, AUX, Nippon, Williams and others",
         body: "We round out the catalog with more affordable brands for budget projects and second-bedroom installs. Every unit goes through the same install and service standard — fixed pricing and a 12-month installation warranty regardless of the brand on the box.",
       },
     ],
@@ -126,7 +151,19 @@ const BRANDS_CONTENT: Record<string, BrandsContent> = {
         body: "Крупнейший в мире производитель кондиционеров по объёму. Gree предлагает отличную надёжность в среднем ценовом сегменте — серии Bora, Lomo и Amber. Рекомендуем, когда важен бюджет, но клиент хочет официальную гарантию и сервис в Болгарии.",
       },
       {
-        name: "TechPoint, AUX, Nippon и другие",
+        name: "General (Fujitsu General)",
+        body: "Японская марка, известная у нас как Fujitsu General — с 2026 г. производитель работает как GENERAL Inc. Предлагаем всю линейку: настенные модели от 7 000 BTU, гиперинверторную серию KGTG с 19 дБ, кассетные, канальные и потолочные системы и мульти-сплит на 2–5 комнат.",
+      },
+      {
+        name: "Kaisai и Auratsu",
+        body: "Две марки польской группы Klima-Therm. Kaisai (с 2011 г.) — средний ценовой класс: инвертор на R32, Wi-Fi у многих моделей и 5 лет гарантии у серий ICE, ART, Nordic и PRO HEAT+. Auratsu (с 2019 г.) — более короткая и доступная линейка: настенные Osaka и Tokyo и мульти-сплит на 2–3 комнаты.",
+      },
+      {
+        name: "Atlantic и Samsung — тепловые насосы",
+        body: "Для отопления тепловым насосом воздух-вода предлагаем французскую Atlantic (Loria и Alfea с наружными блоками Fujitsu General, версии DUO со встроенным бойлером 190 л) и Samsung EHS — моноблоки на R290 и высокотемпературные HT Quiet с водой до 70 °C для домов с радиаторами.",
+      },
+      {
+        name: "TechPoint, AUX, Nippon, Williams и другие",
         body: "Дополняем каталог более доступными брендами для бюджетных проектов и второго кондиционера в спальне или детской. Все модели проходят тот же стандарт монтажа и обслуживания — фиксированные цены и 12-месячная гарантия на монтаж независимо от бренда устройства.",
       },
     ],
@@ -164,7 +201,19 @@ const BRANDS_CONTENT: Record<string, BrandsContent> = {
         body: "Найбільший у світі виробник кондиціонерів за обсягом. Gree пропонує чудову надійність у середньому ціновому сегменті — серії Bora, Lomo та Amber. Рекомендуємо, коли важливий бюджет, але клієнт хоче офіційну гарантію та сервіс у Болгарії.",
       },
       {
-        name: "TechPoint, AUX, Nippon та інші",
+        name: "General (Fujitsu General)",
+        body: "Японська марка, відома в нас як Fujitsu General — з 2026 р. виробник працює як GENERAL Inc. Пропонуємо всю лінійку: настінні моделі від 7 000 BTU, гіперінверторну серію KGTG з 19 дБ, касетні, канальні та стельові системи й мульти-спліт на 2–5 кімнат.",
+      },
+      {
+        name: "Kaisai та Auratsu",
+        body: "Дві марки польської групи Klima-Therm. Kaisai (з 2011 р.) — середній ціновий клас: інвертор на R32, Wi-Fi у багатьох моделей і 5 років гарантії в серій ICE, ART, Nordic і PRO HEAT+. Auratsu (з 2019 р.) — коротша й доступніша лінійка: настінні Osaka і Tokyo та мульти-спліт на 2–3 кімнати.",
+      },
+      {
+        name: "Atlantic і Samsung — теплові насоси",
+        body: "Для опалення тепловим насосом повітря-вода пропонуємо французьку Atlantic (Loria і Alfea із зовнішніми блоками Fujitsu General, версії DUO з вбудованим бойлером 190 л) і Samsung EHS — моноблоки на R290 та високотемпературні HT Quiet з водою до 70 °C для будинків з радіаторами.",
+      },
+      {
+        name: "TechPoint, AUX, Nippon, Williams та інші",
         body: "Доповнюємо каталог доступнішими брендами для бюджетних проєктів і другого кондиціонера у спальні чи дитячій. Усі моделі проходять той самий стандарт монтажу та обслуговування — фіксовані ціни та 12-місячна гарантія на монтаж незалежно від бренду пристрою.",
       },
     ],
@@ -223,14 +272,18 @@ export default async function BrandsPage({ params }: { params: Promise<{ locale:
   const dictionary = await getDictionary(locale);
   const supabase = createPublicClient();
 
-  const { data } = await supabase
-    .from("products")
-    .select("manufacturer, gallery")
-    .eq("is_active", true)
-    .not("manufacturer", "is", null);
+  const data = await fetchAll((from, to) =>
+    supabase
+      .from("products")
+      .select("manufacturer, gallery")
+      .eq("is_active", true)
+      .not("manufacturer", "is", null)
+      .order("id")
+      .range(from, to)
+  );
 
   const brandMap: Record<string, { count: number; image: string | null }> = {};
-  for (const row of data || []) {
+  for (const row of data) {
     if (!brandMap[row.manufacturer]) brandMap[row.manufacturer] = { count: 0, image: row.gallery?.[0] || null };
     brandMap[row.manufacturer].count++;
     if (!brandMap[row.manufacturer].image && row.gallery?.[0]) brandMap[row.manufacturer].image = row.gallery[0];
