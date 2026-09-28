@@ -5,8 +5,9 @@ import { useAdmin } from "./layout";
 import Link from "next/link";
 import {
   Inbox, TrendingUp, TrendingDown, AlertTriangle, Bot, Users, Package,
-  Phone, Loader2, ArrowRight, Minus, Activity,
+  Phone, Loader2, ArrowRight, Minus, Activity, QrCode, Copy, Check, ExternalLink,
 } from "lucide-react";
+import { GBP_REVIEW_URL } from "@/lib/constants";
 
 /* ─── Types ─── */
 interface KPI {
@@ -270,6 +271,50 @@ function RealtimeWidget({ fetchApi }: { fetchApi: (path: string, init?: RequestI
   );
 }
 
+/* ─── QR review card ─── */
+// The QR encodes GBP_REVIEW_URL directly (no shortener/service), generated
+// locally 2026-09-28; files live in /public and are versioned in git.
+function QrReviewCard() {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(GBP_REVIEW_URL);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch { /* clipboard unavailable — the buttons below still work */ }
+  };
+  const btn = "inline-flex items-center gap-1 text-xs px-2.5 py-1.5 rounded-lg border border-[var(--border)] text-[var(--foreground)] hover:bg-[var(--muted)] transition-colors";
+  return (
+    <div className="bg-[var(--background)] rounded-xl border border-[var(--border)] p-4 shadow-sm flex items-center gap-4">
+      <a href="/qr-google-review.png" target="_blank" rel="noopener noreferrer" className="shrink-0" title="Открыть PNG в полном размере">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/qr-google-review.png" alt="QR-код — форма отзыва Google" className="w-24 h-24 rounded-lg border border-[var(--border)] bg-white" />
+      </a>
+      <div className="min-w-0 flex-1">
+        <h2 className="text-sm font-semibold text-[var(--foreground)] flex items-center gap-1.5">
+          <QrCode className="w-4 h-4 text-[var(--primary)]" />
+          QR на отзывы Google
+        </h2>
+        <p className="text-xs text-[var(--muted-foreground)] mt-1">
+          Клиент сканирует — открывается форма отзыва «Песнопоец Клима». Ссылка зашита в код напрямую, без сервисов.
+        </p>
+        <div className="flex flex-wrap gap-2 mt-2.5">
+          <a href="/qr-google-review.png" download className={btn}>Скачать PNG</a>
+          <a href="/qr-google-review.svg" download className={btn}>SVG для печати</a>
+          <a href="/qr-google-review-blue.png" download className={btn}>Синий PNG</a>
+          <button type="button" onClick={copy} className={btn}>
+            {copied ? <Check className="w-3 h-3 text-[var(--success)]" /> : <Copy className="w-3 h-3" />}
+            {copied ? "Скопировано" : "Ссылка"}
+          </button>
+          <a href={GBP_REVIEW_URL} target="_blank" rel="noopener noreferrer" className={btn}>
+            <ExternalLink className="w-3 h-3" />Форма отзыва
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Main Dashboard ─── */
 export default function DashboardPage() {
   const { fetchApi } = useAdmin();
@@ -346,6 +391,9 @@ export default function DashboardPage() {
           <p className="text-xs text-[var(--muted-foreground)]">AI сессий за неделю</p>
         </div>
       </div>
+
+      {/* QR — always at hand for review requests */}
+      <QrReviewCard />
 
       {/* Second row: clients + products */}
       <div className="grid grid-cols-2 gap-3">
