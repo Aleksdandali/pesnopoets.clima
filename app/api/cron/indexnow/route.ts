@@ -20,7 +20,7 @@
 
 import { NextResponse } from "next/server";
 import { verifyCronSecret } from "@/lib/security";
-import sitemap from "@/app/sitemap";
+import { sitemapEntries } from "@/lib/seo/sitemap";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -39,7 +39,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const entries = await sitemap();
+  const entries = await sitemapEntries();
   const urlList = Array.from(
     new Set(
       entries
