@@ -97,6 +97,8 @@ export async function syncBulclimaProducts(options: { dryRun?: boolean } = {}): 
         continue;
       }
 
+      // Still in the feed: an error below must not deactivate the published product.
+      seen.add(p.bittel_id);
       const categoryId = categoryIds.get(`${p.category.group_code}|${p.category.subgroup_code}`);
       if (!categoryId) {
         console.error(`[Bulclima sync] Missing category ${p.category.group_code}/${p.category.subgroup_code} for ${p.bittel_id}`);
@@ -104,7 +106,6 @@ export async function syncBulclimaProducts(options: { dryRun?: boolean } = {}): 
         continue;
       }
 
-      seen.add(p.bittel_id);
       const row = {
         bittel_id: p.bittel_id,
         supplier: SUPPLIER,

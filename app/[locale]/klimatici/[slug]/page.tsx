@@ -21,6 +21,7 @@ import ProductBadges from "@/components/catalog/ProductBadges";
 import ProductViewTracker from "@/components/product/ProductViewTracker";
 import ModelInsights from "@/components/product/ModelInsights";
 import { buildModelInsights, shortModelName, categoryLandingPath, brandLandingPath } from "@/lib/product/insights";
+import { retiredProductRedirect } from "@/lib/product/retired";
 import ProductBuyBox from "@/components/product/ProductBuyBox";
 import BrandLogo from "@/components/brand/BrandLogo";
 import { InstallProvider } from "@/contexts/InstallContext";
@@ -58,8 +59,9 @@ async function getDictionary(locale: string) {
   }
 }
 
-// Fetch by slug WITHOUT filtering by is_active so we can distinguish
-// "deactivated product" (→ 301 to /klimatici) from "never existed" (→ 404).
+// Fetch by slug. The anon RLS policy only returns active, non-hidden rows, so
+// a deactivated product comes back null; ProductPage resolves those via
+// retiredProductRedirect (308) and leaves 404 for slugs that never existed.
 // Bittel-imported SKUs that are later set is_active=false were generating
 // hundreds of 404s in SerpStat audit and wasting Google crawl budget.
 const getProduct = cache(async (slug: string) => {
@@ -148,9 +150,14 @@ export async function generateMetadata({
 export default async function ProductPage({ params }: ProductPageProps) {
   const { locale, slug } = await params;
   const product = await getProduct(slug);
-  if (!product) notFound();
-  // Deactivated product (no longer sold) — 308-redirect to catalog so
-  // Google can drop the stale URL cleanly instead of accumulating 404s.
+  // RLS hides deactivated and hidden products from the anon client, so they
+  // land here too. Once-published URLs 308 (relisted product, else its brand
+  // page) so Google drops them cleanly instead of accumulating 404s.
+  if (!product) {
+    const target = await retiredProductRedirect(slug);
+    if (target) permanentRedirect(`/${locale}${target}`);
+    notFound();
+  }
   if (!product.is_active) permanentRedirect(`/${locale}/klimatici`);
 
   const dictionary = await getDictionary(locale);

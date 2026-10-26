@@ -52,7 +52,10 @@ export async function syncProducts(): Promise<SyncReport> {
       }
     }
 
-    // 3. Deactivate products not in current feed (Bittel's own — other suppliers sync separately)
+    // 3. Deactivate products not in current feed (Bittel's own — other suppliers sync separately).
+    //    A product that is in the feed but failed to process keeps its row as is:
+    //    deactivating it turned a data error into a 404 for a URL Google had indexed.
+    const feedIds = new Set(products.map((p) => p.id));
     if (processedBittelIds.length > 0) {
       const activeProducts = await fetchAll((from, to) =>
         supabase
@@ -66,7 +69,7 @@ export async function syncProducts(): Promise<SyncReport> {
 
       if (activeProducts.length > 0) {
         const toDeactivate = activeProducts
-          .filter((p) => !processedBittelIds.includes(p.bittel_id))
+          .filter((p) => !feedIds.has(p.bittel_id))
           .map((p) => p.bittel_id);
 
         if (toDeactivate.length > 0) {
@@ -227,11 +230,6 @@ async function upsertCategory(
     return categoryCache.get(cacheKey)!;
   }
 
-  const slug = generateCategorySlug(
-    product.group_description,
-    product.subgroup_description
-  );
-
   // Try to find existing
   const { data: existing } = await supabase
     .from("categories")
@@ -245,7 +243,13 @@ async function upsertCategory(
     return existing.id;
   }
 
-  // Insert new category
+  // Insert new category. The slug is built only here: the feed sends some
+  // products with a null group/subgroup description, and building it up front
+  // threw for them even when their category already exists.
+  const slug = generateCategorySlug(
+    product.group_description,
+    product.subgroup_description
+  );
   const { data: created, error } = await supabase
     .from("categories")
     .insert({
