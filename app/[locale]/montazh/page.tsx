@@ -1,3 +1,5 @@
+import { retailEnabled } from "@/lib/storefront/catalogue";
+import RetailService from "@/design-system/ui/retail/RetailService";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -40,8 +42,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const dict = await getDictionary(locale);
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || "https://pesnopoets-clima.com";
-  const seoTitle = dict.montazh.metaTitle || dict.montazh.pageTitle;
-  const seoDescription = dict.montazh.metaDescription || dict.montazh.pageSubtitle;
+  const seoTitle = retailEnabled(locale) ? "Монтаж на климатици във Варна | Песнопоец Клима" : dict.montazh.metaTitle || dict.montazh.pageTitle;
+  const seoDescription = retailEnabled(locale) ? "Стандартен монтаж на стенни климатици във Варна и региона. Вижте включените дейности, цените според мощността и условията за Вашия обект." : dict.montazh.metaDescription || dict.montazh.pageSubtitle;
   return {
     // Brand suffix omitted — concat exceeded 60 chars (SerpStat 2026-05-28).
     // Brand still appears via og:site_name and the LocalBusiness schema.
@@ -125,6 +127,7 @@ const includedLead: Record<string, string> = {
 
 export default async function MontazhPage({ params }: PageProps) {
   const { locale } = await params;
+  if (retailEnabled(locale)) return <RetailService />;
   const dict = await getDictionary(locale);
   const t = dict.montazh;
   const common = dict.common;

@@ -1,5 +1,7 @@
 "use client";
 
+import { useOptionalStore } from "@/design-system/ui/retail/StoreProvider";
+import { useRetailRuntime } from "@/design-system/ui/retail/RetailRuntime";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ShoppingCart, Check, ArrowRight } from "lucide-react";
@@ -24,8 +26,11 @@ export default function AddToCartButton({
   variant = "icon",
 }: AddToCartButtonProps) {
   const { addItem, items } = useCart();
+  const retail = useOptionalStore();
+  const runtime = useRetailRuntime();
+  const retailProduct = runtime.products.find(p=>p.databaseId===item.id);
   const router = useRouter();
-  const isInCart = items.some((i) => i.id === item.id);
+  const isInCart = retail ? retail.cart.some(i=>i.id===String(item.id)) : items.some((i) => i.id === item.id);
   const [justAdded, setJustAdded] = useState(false);
 
   function handleClick(e: React.MouseEvent) {
@@ -37,9 +42,10 @@ export default function AddToCartButton({
       return;
     }
 
-    addItem(item, 1);
+    if (retail && retailProduct) retail.add(retailProduct, !!item.withInstallation);
+    else addItem(item, 1);
     setJustAdded(true);
-    trackAddToCart(item.id, item.title, item.priceEur);
+    if (!retail) trackAddToCart(item.id, item.title, item.priceEur);
   }
 
   const showGoToCart = isInCart || justAdded;

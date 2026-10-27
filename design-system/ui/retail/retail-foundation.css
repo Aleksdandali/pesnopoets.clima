@@ -1,0 +1,55 @@
+/* Shared retail chrome. Content modules own the individual page composition. */
+.rt.rt .rt-container {max-width:1380px}
+.rt.rt .rt-top > .rt-container {min-height:30px;font-size:12px;color:var(--pc-muted)}
+.rt.rt .rt-header-row {grid-template-columns:240px minmax(220px,1fr) 240px;min-height:78px;gap:36px}
+.rt.rt .rt-logo > small {display:none}
+.rt.rt .rt-logo .pc-brand {font-size:25px}
+.rt.rt .rt-logo .pc-brand img {width:43px;height:43px}
+.rt.rt .rt-search {height:46px;border-color:var(--pc-border);background:var(--pc-canvas)}
+.rt.rt .rt-search input {font-size:15px;caret-color:var(--pc-blue)}
+.rt.rt .rt-search input::placeholder {color:var(--pc-muted);opacity:1}
+.rt.rt .rt-header-actions {gap:26px}
+.rt.rt .rt-header-actions > button {gap:9px}
+.rt.rt .rt-header-actions > button > span {font-size:13px;font-weight:500}
+.rt.rt .rt-header-actions > button > svg {width:25px;height:25px;stroke-width:1.75;color:var(--pc-ink)}
+.rt.rt .rt-header-actions b {top:0;left:17px;font-size:10px}
+.rt.rt .rt-nav-row {min-height:48px}
+.rt.rt .rt-menu-wrap {width:225px}
+.rt.rt .rt-menu-button {border-radius:6px 6px 0 0;font-size:15px;font-weight:500}
+.rt.rt .rt-navigation nav {gap:32px;padding-left:30px}
+.rt.rt .rt-navigation nav a {font-size:14px;min-height:44px;display:flex;align-items:center}
+.rt.rt .rt-cart-button {width:140px}
+.rt.rt .rt-cart-button i {background:var(--pc-blue-soft);color:var(--pc-blue);border-radius:6px}
+.rt.rt .rt-card-purchase > button {width:100%}
+.rt.rt .rt-preview > .rt-container {min-height:22px;font-size:10px}
+.rt.rt .rt-preview {background:var(--pc-canvas);color:var(--pc-muted)}
+.rt.rt :is(button,a,input,select) {touch-action:manipulation}
+.rt.rt :is(input,select) {caret-color:var(--pc-blue)}
+.rt.rt .rt-footer {margin-top:0}
+@media(max-width:1100px) and (min-width:761px){
+ .rt.rt .rt-header-row{grid-template-columns:220px minmax(200px,1fr) 112px;gap:22px}
+ .rt.rt .rt-header-actions>button>span{display:none}
+ .rt.rt .rt-header-actions{gap:22px}
+ .rt.rt .rt-menu-wrap{width:180px}
+ .rt.rt .rt-navigation nav{gap:20px;padding-left:22px}
+ .rt.rt .rt-navigation nav a{font-size:13px}
+ .rt.rt .rt-navigation nav a:nth-child(4){display:none}
+}
+@media(max-width:760px){
+ .rt.rt .rt-container{padding-inline:16px}
+ .rt.rt .rt-top > .rt-container{min-height:24px;font-size:11px}
+ .rt.rt .rt-header-row{grid-template-columns:40px minmax(0,1fr) 80px;gap:6px 8px;min-height:0;padding:6px 16px 10px}
+ .rt.rt .rt-logo .pc-brand{font-size:19px;gap:5px}
+ .rt.rt .rt-logo .pc-brand img{width:31px;height:31px}
+ .rt.rt .rt-logo .pc-brand-sub{font-size:8px;letter-spacing:.2em}
+ .rt.rt .rt-mobile-menu{width:40px;height:44px;background:transparent}
+ .rt.rt .rt-header-actions{gap:0}
+ .rt.rt .rt-header-actions>button{width:40px;min-height:44px}
+ .rt.rt .rt-header-actions>button>svg{width:23px;height:23px;stroke-width:1.75}
+ .rt.rt .rt-header-actions b{left:auto;right:-1px;top:1px}
+ .rt.rt .rt-search{height:44px;background:var(--pc-canvas);border-color:var(--pc-border)}
+ .rt.rt .rt-search input{font-size:16px;padding-inline:12px}
+ .rt.rt .rt-search button{width:46px}
+ .rt.rt .rt-preview>.rt-container{min-height:20px;font-size:9px}
+}
+@media(max-width:359px){.rt.rt .rt-header-row{gap:6px;grid-template-columns:36px minmax(0,1fr) 72px}.rt.rt .rt-logo .pc-brand{font-size:17px}.rt.rt .rt-logo .pc-brand img{width:26px;height:26px}.rt.rt .rt-header-actions>button{width:36px}.rt.rt .rt-mobile-menu{width:36px}}

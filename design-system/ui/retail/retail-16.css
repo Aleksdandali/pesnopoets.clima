@@ -1,0 +1,117 @@
+/* The same retail rhythm for catalogue, product, service and checkout. */
+.rt {--pc-blue:#0866d9;--pc-blue-hover:#0755b5;color:#172536}
+.rt .rt-header-row {min-height:82px}
+.rt .rt-product-overview {padding-top:28px;column-gap:36px;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr)}
+.rt .rt-product-heading h1 {font-size:28px;line-height:1.25;letter-spacing:-.025em;margin:6px 0 10px}
+.rt .rt-product-heading .rt-model-code {overflow-wrap:anywhere}
+.rt .rt-offer-summary {padding:12px 0 14px}
+.rt .rt-offer-summary .rt-pdp-price>strong {font-size:38px}
+.rt .rt-installation-choice {padding:0}
+.rt .rt-installation-choice>p {display:none}
+.r16-variants {border:0;padding:0;margin:0;min-width:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.r16-variants legend {font-weight:600;font-size:13px;margin-bottom:9px}
+.r16-variants label {display:grid;grid-template-columns:18px 1fr;column-gap:9px;row-gap:7px;padding:12px;border:1px solid #ccd5df;border-radius:6px;cursor:pointer;background:#fff;align-items:start}
+.r16-variants label[data-selected=true] {border-color:#0866d9;box-shadow:inset 0 0 0 1px #0866d9;background:#f4f8ff}
+.r16-variants input {accent-color:#0866d9;width:17px;height:17px;margin:1px 0 0}
+.r16-variants strong {font-size:13px;display:block;font-weight:600;line-height:1.3}
+.r16-variants small {display:block;font-size:11px;color:#596575;margin-top:5px;line-height:1.35}
+.r16-variants b {grid-column:2;font-size:16px;line-height:1.3}
+.rt .rt-buy-box {margin-top:12px;padding:14px;border-radius:6px;background:#f3f6fa;border:1px solid #e0e6ed}
+.rt .rt-installation-details {margin:8px 0 0;border:0}
+.rt .rt-installation-details summary {font-size:12px;min-height:32px}
+.rt .rt-pdp-highlights {font-size:12px;gap:12px;padding:0;border:0}
+.rt .rt-pdp-facts {margin-top:16px;padding:16px 0}
+.rt .pd-conditions summary {min-height:58px;padding:9px 0}
+.rt .pd-main-image>img {height:330px}
+.rt .pd-main-image {padding-top:32px}
+.rt .pd-gallery-column {position:sticky;top:20px}
+.rt .pd-documents-compact {margin-top:18px;padding:14px 20px}
+.rt .pd-documents-compact .pd-document-list {grid-template-columns:1fr 1fr;gap:16px}
+.rt .pd-documents-compact .pd-document-list>button+button {border-top:0}
+.rt .pd-documents-compact .pd-document-list>button {min-height:54px}
+.rt .pd-documents-compact .pd-document-list>button>svg:last-child {display:none}
+.rt .rt-pdp-tabs {margin-top:30px;border-bottom:2px solid #e0e6ed;gap:20px;scroll-margin-top:12px}
+.rt .rt-pdp-tabs>button {font-size:15px;padding:17px 12px}
+.rt .rt-product-information {padding-top:28px}
+.rt .r16-original-description {max-width:1050px;margin:0 auto 28px;font-size:15px;line-height:1.8}
+.rt .r16-original-description img {max-width:100%;height:auto}
+.rt .r16-original-description h2 {font-size:26px;margin:20px 0 16px}
+.rt .r16-stock {font-size:12px;color:#596575;margin:12px 0 0;min-height:18px}
+.rt .r16-stock[data-available=true] {color:#187344}
+.rt .r16-stock[data-available=true]:before {content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:#187344;margin-right:6px;vertical-align:2px}
+.rt .rt-btn:disabled {background:#edf0f4;color:#596575;cursor:not-allowed;border-color:#dfe4eb;box-shadow:none}
+.rt .rt-card-image img {object-fit:contain}
+.rt .rt-card-specs {min-height:54px}
+.rt .rt-product-card h3 {overflow-wrap:anywhere}
+.rt .r16-category-filter {display:grid;gap:8px;font-size:13px;font-weight:600}
+.rt .r16-category-filter select {width:100%;min-height:44px;border:1px solid #bbc6d3;border-radius:5px;padding:8px;font-size:13px;background:#fff}
+.rt .r16-pagination {grid-column:2;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin-top:28px}
+.rt .r16-pagination a {min-width:42px;min-height:42px;display:grid;place-items:center;border:1px solid #d3dce7;border-radius:5px;font-size:14px;padding:0 10px}
+.rt .r16-pagination a[aria-current=page] {color:white;background:#0866d9;border-color:#0866d9}
+.rt .r16-submit-error {color:#b42332;background:#fff3f2;border:1px solid #f1c8c5;border-radius:6px;padding:16px;margin:18px 0;font-size:14px;line-height:1.6}
+.rt .r16-review-actions {display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.rt .r14-enquiry-review dl {overflow-wrap:anywhere}
+.rt .r16-service-page {padding-bottom:50px}
+.rt .r16-service-hero {display:grid;grid-template-columns:1fr 1fr;background:#f2f5f8;border-radius:10px;overflow:hidden;margin:24px 0 36px}
+.rt .r16-service-hero>div {padding:42px;align-self:center}
+.rt .r16-service-hero h1 {font-size:38px;line-height:1.18;letter-spacing:-.03em;margin:14px 0 18px}
+.rt .r16-service-hero p {font-size:15px;line-height:1.7;color:#596575;margin-bottom:22px}
+.rt .r16-service-hero>img {height:410px;width:100%;object-fit:cover;object-position:center 40%}
+.rt .r16-service-grid {display:grid;grid-template-columns:1.2fr 1fr;gap:50px;margin:36px 0}
+.rt .r16-service-grid h2 {font-size:26px;margin:0 0 20px;line-height:1.25}
+.rt .r16-service-grid p,.rt .r16-service-grid li {font-size:15px;line-height:1.7;color:#596575}
+.rt .r16-service-grid ul {padding-left:20px;display:grid;gap:12px}
+.rt .r16-service-price {border:1px solid #dfe4eb;border-radius:8px;padding:24px}
+.rt .r16-service-price dl {margin:16px 0}
+.rt .r16-service-price dl>div {display:flex;justify-content:space-between;gap:20px;padding:15px 0;border-bottom:1px solid #e0e6ed;font-size:14px}
+.rt .r16-service-price dd {font-size:21px;font-weight:700;white-space:nowrap;margin:0}
+.rt .r16-service-price p {font-size:12px;line-height:1.7}
+@media(max-width:1000px) and (min-width:761px){
+ .rt .rt-product-overview {gap:24px;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+ .rt .pd-main-image>img {height:260px}
+ .rt .r16-variants {grid-template-columns:1fr}
+ .rt .r16-variants label {grid-template-columns:18px 1fr auto}
+ .rt .r16-variants b {grid-column:3;grid-row:1}
+ .rt .pd-documents-compact .pd-document-list {grid-template-columns:1fr;gap:0}
+}
+@media(max-width:760px){
+ .rt .rt-header-row {min-height:58px}
+ .rt .rt-product-overview {padding-top:18px;gap:0}
+ .rt .rt-product-heading h1 {font-size:23px;line-height:1.25}
+ .rt .pd-gallery-column {position:static}
+ .rt .pd-main-image {padding:15px 12px 6px}
+ .rt .pd-main-image>img {height:190px}
+ .rt .rt-offer-summary .rt-pdp-price>strong {font-size:32px}
+ .rt .r16-variants label {padding:11px 9px;gap:6px;grid-template-columns:17px 1fr}
+ .rt .r16-variants strong {font-size:12px}
+ .rt .r16-variants small {font-size:11px}
+ .rt .r16-variants b {font-size:15px}
+ .rt .rt-buy-box {padding:12px}
+ .rt .pd-documents-compact .pd-document-list {grid-template-columns:1fr;gap:0}
+ .rt .rt-pdp-tabs {gap:4px}
+ .rt .rt-pdp-tabs>button {font-size:13px;padding:15px 12px;white-space:nowrap}
+ .rt .r16-pagination {grid-column:1}
+ .rt .r16-service-hero {grid-template-columns:1fr}
+ .rt .r16-service-hero>div {padding:26px 22px}
+ .rt .r16-service-hero h1 {font-size:30px}
+ .rt .r16-service-hero>img {height:240px}
+ .rt .r16-service-grid {grid-template-columns:1fr;gap:24px}
+ .rt .r16-service-price {padding:20px}
+}
+@media(prefers-reduced-motion:reduce){.rt *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+.rt .r16-quoted-lines article {padding:16px 0;border-bottom:1px solid #dfe4eb;display:grid;grid-template-columns:1fr auto;gap:8px 20px}
+.rt .r16-quoted-lines h3 {font-size:15px;line-height:1.5;overflow-wrap:anywhere;margin:0}
+.rt .r16-quoted-lines p {font-size:13px;color:#596575;line-height:1.6;grid-column:1}
+.rt .r16-quoted-lines strong {grid-column:2;grid-row:1/3;align-self:center;font-size:18px;white-space:nowrap}
+@media(max-width:480px){.rt .r16-quoted-lines article{grid-template-columns:1fr}.rt .r16-quoted-lines strong{grid-column:1;grid-row:auto}}
+
+/* Purchase controls stay fully visible while navigating between retail pages. */
+.rt main{animation:none}
+.r16-languages{display:flex;gap:14px;font-size:12px}
+.r16-languages [aria-current]{font-weight:700;color:var(--pc-blue)}
+.r14-legal button{color:inherit;background:none;border:0;padding:0;font:inherit;text-decoration:underline;cursor:pointer}
+
+.r16-energy-filter{display:grid;gap:6px;font-size:13px;font-weight:600}
+.rt-selection-fields select{min-height:42px;border:1px solid #cbd5e1;border-radius:6px;padding:8px 28px 8px 10px;background-color:white;color:#182b42;max-width:100%}
+
+.r16-loading{min-height:60vh;padding-block:60px}

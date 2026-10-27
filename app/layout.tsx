@@ -74,7 +74,7 @@ export default function RootLayout({
             dropped from the DOM. Moving it inside <body> lets next/script
             inject after hydration as documented. */}
         <Suspense fallback={null}>
-          <TrackingPixels />
+          {process.env.RETAIL_READ_ONLY !== "1" && <TrackingPixels />}
         </Suspense>
         {children}
       </body>

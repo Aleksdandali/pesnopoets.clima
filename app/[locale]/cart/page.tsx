@@ -1,3 +1,5 @@
+import { retailEnabled } from "@/lib/storefront/catalogue";
+import RetailCart from "@/design-system/ui/retail/RetailCart";
 import type { Metadata } from "next";
 import CartView from "@/components/cart/CartView";
 
@@ -24,6 +26,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function CartPage({ params }: PageProps) {
   const { locale } = await params;
+  if (retailEnabled(locale)) return <RetailCart />;
   const dict = await getDictionary(locale);
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">

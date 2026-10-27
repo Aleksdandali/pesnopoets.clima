@@ -3,16 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "design:dev": "next dev design-system --webpack --hostname 127.0.0.1 --port 3100",
+    "design:build": "next build design-system --webpack",
+    "design:check": "tsc --noEmit -p design-system/tsconfig.json && eslint design-system/app design-system/ui design-system/data",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "@base-ui/react": "^1.9.0",
     "@google-analytics/data": "^6.0.0",
     "@react-pdf/renderer": "^4.5.1",
     "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.103.0",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "fast-xml-parser": "^5.11.1",
     "grammy": "^1.42.0",

@@ -1,5 +1,8 @@
 "use client";
 
+import RetailProductCard from "@/design-system/ui/retail/ProductCard";
+import { useRetailRuntime } from "@/design-system/ui/retail/RetailRuntime";
+import { useOptionalStore } from "@/design-system/ui/retail/StoreProvider";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useCallback, useRef } from "react";
@@ -92,6 +95,8 @@ export default function ProductCard({
   priority = false,
   dictionary,
 }: ProductCardProps) {
+  const runtime = useRetailRuntime();
+  const retailStore = useOptionalStore();
   const [currentIndex, setCurrentIndex] = useState(0);
   const touchStartX = useRef<number | null>(null);
 
@@ -164,6 +169,9 @@ export default function ProductCard({
     },
     [gallery.length]
   );
+
+  const retailProduct = runtime.live && retailStore && runtime.products.find(p=>p.databaseId===product.id);
+  if (retailProduct) return <RetailProductCard product={retailProduct} />;
 
   // Localized aria-labels for carousel controls
   const prevImgLabel = locale === "en" ? "Previous image" : locale === "ua" ? "Попереднє зображення" : locale === "ru" ? "Предыдущее изображение" : "Предишно изображение";

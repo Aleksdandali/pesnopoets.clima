@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+/design-system/.next/
+/design-system/out/
+/design-system/next-env.d.ts
 /.pnp
 .pnp.*
 .yarn/*

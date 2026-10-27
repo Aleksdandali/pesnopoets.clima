@@ -1,3 +1,6 @@
+import { retailEnabled, adaptProduct } from "@/lib/storefront/catalogue";
+import RetailProductPage from "@/design-system/ui/retail/RetailProductPage";
+import { productPrice } from "@/lib/storefront/offer";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { cache } from "react";
@@ -79,7 +82,7 @@ export async function generateMetadata({
 }: ProductPageProps): Promise<Metadata> {
   const { locale, slug } = await params;
   const product = await getProduct(slug);
-  if (!product || !product.is_active) return {};
+  if (!product || !product.is_active || product.is_hidden) return {};
 
   const localeTitle =
     locale === "en" ? product.title_en :
@@ -158,6 +161,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     if (target) permanentRedirect(`/${locale}${target}`);
     notFound();
   }
+  if (product.is_hidden) notFound();
   if (!product.is_active) permanentRedirect(`/${locale}/klimatici`);
 
   const dictionary = await getDictionary(locale);
@@ -210,7 +214,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const bcHome = dictionary.common.nav.home;
   const bcCatalog = dictionary.common.nav.catalog;
 
-  const jsonLd = generateProductJsonLd(product, locale, siteUrl);
+  const jsonLd = generateProductJsonLd(retailEnabled(locale) ? {...product, price_override:productPrice(product)} : product, locale, siteUrl);
+  if (retailEnabled(locale) && (product.is_ask || !productPrice(product))) delete jsonLd.offers;
   const breadcrumbItems = [
     { name: bcHome, url: `/${locale}` },
     { name: bcCatalog, url: `/${locale}/klimatici` },
@@ -247,6 +252,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
     outOfStock: "bg-danger",
   };
 
+  if (retailEnabled(locale)) return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(jsonLd).replace(/</g,"\\u003c")}} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(breadcrumbJsonLd).replace(/</g,"\\u003c")}} />
+    {process.env.RETAIL_READ_ONLY !== "1" && <ProductViewTracker productId={product.id} title={displayTitle} priceEur={productPrice(product)} />}
+    <RetailProductPage product={adaptProduct(product)} originalDescription={displayDescription ? <section className="r16-original-description"><h2>За този модел</h2><ProductDescription html={displayDescription} title={displayTitle} readMoreLabel="Прочетете повече" readLessLabel="Покажи по-малко" /></section> : <section className="r16-original-description"><h2>{displayTitle}</h2><p>{product.manufacturer}{product.btu ? ` · ${product.btu.toLocaleString("bg-BG")} BTU` : ""}{product.area_m2 ? ` · Препоръчителна площ до ${product.area_m2} m².` : "."} Подробните параметри са в раздел „Технически характеристики“. За избор според Вашето помещение се свържете с нас.</p></section>} originalSpecs={<SpecsTable features={product.features ?? {}} locale="bg" />} />
+  </>;
   return (
     <>
       <script

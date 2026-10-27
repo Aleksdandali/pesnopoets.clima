@@ -1,3 +1,5 @@
+import { retailEnabled } from "@/lib/storefront/catalogue";
+import RetailHome from "@/design-system/ui/retail/RetailHome";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -343,6 +345,7 @@ async function getCategoryImages() {
 
 export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params;
+  if (retailEnabled(locale)) return <RetailHome />;
   const dictionary = await getDictionary(locale);
   const hero = dictionary.hero;
   const trust = dictionary.trust;
