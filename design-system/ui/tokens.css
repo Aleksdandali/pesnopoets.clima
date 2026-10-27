@@ -1,0 +1,105 @@
+/* v0.1: opt-in theme. Do not apply to the storefront until approved. */
+@font-face {
+  font-family: "PC Roboto";
+  src: url("/fonts/Roboto-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "PC Roboto";
+  src: url("/fonts/Roboto-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "PC Roboto";
+  src: url("/fonts/Roboto-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+.pc-theme {
+  --pc-blue: #0866d9;
+  --pc-blue-hover: #0755b5;
+  --pc-blue-soft: #edf4ff;
+  --pc-ink: #172536;
+  --pc-muted: #596575;
+  --pc-paper: #ffffff;
+  --pc-canvas: #f5f7fa;
+  --pc-border: #dfe4eb;
+  --pc-input-border: #7d8897;
+  --pc-orange: #f47732;
+  --pc-orange-ink: #9a3b08;
+  --pc-orange-soft: #fff1e7;
+  --pc-success: #187344;
+  --pc-success-soft: #eaf6ef;
+  --pc-warning: #8c5a08;
+  --pc-warning-soft: #fff5db;
+  --pc-danger: #b42332;
+  --pc-danger-soft: #fff0f1;
+  --pc-font: "PC Roboto", Arial, sans-serif;
+  --pc-font-xs: 12px;
+  --pc-font-sm: 14px;
+  --pc-font-md: 16px;
+  --pc-font-lg: 20px;
+  --pc-font-xl: 28px;
+  --pc-font-2xl: 36px;
+  --pc-font-display: clamp(36px, 4.3vw, 60px);
+  --pc-space-1: 4px;
+  --pc-space-2: 8px;
+  --pc-space-3: 12px;
+  --pc-space-4: 16px;
+  --pc-space-6: 24px;
+  --pc-space-8: 32px;
+  --pc-space-12: 48px;
+  --pc-space-16: 64px;
+  --pc-radius-sm: 6px;
+  --pc-radius-md: 10px;
+  --pc-radius-lg: 16px;
+  --pc-control-height: 48px;
+  --pc-transition: 160ms ease;
+  --pc-shadow: 0 8px 30px rgb(23 37 54 / 8%);
+  color: var(--pc-ink);
+  background: var(--pc-paper);
+  font: 400 var(--pc-font-md) / 1.5 var(--pc-font);
+}
+.pc-theme *,
+.pc-theme *::before,
+.pc-theme *::after {
+  box-sizing: border-box;
+}
+.pc-theme :focus-visible {
+  outline: 3px solid var(--pc-blue);
+  outline-offset: 4px;
+}
+.pc-theme :where(button, input, select, textarea) {
+  font-family: inherit;
+}
+.pc-theme button,
+.pc-theme a {
+  -webkit-tap-highlight-color: transparent;
+}
+.pc-theme button {
+  cursor: pointer;
+}
+.pc-theme button:disabled {
+  cursor: not-allowed;
+}
+:where(.pc-theme) a {
+  color: inherit;
+}
+.pc-theme svg {
+  flex-shrink: 0;
+}
+.pc-theme ::selection {
+  background: #d5e6ff;
+  color: var(--pc-ink);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pc-theme *,
+  .pc-theme *::before,
+  .pc-theme *::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}

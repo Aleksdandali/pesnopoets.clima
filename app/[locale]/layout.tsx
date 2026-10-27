@@ -1,3 +1,6 @@
+import PublicRetailLayout from "@/components/storefront/PublicRetailLayout";
+import { retailEnabled } from "@/lib/storefront/catalogue";
+import ConsentManager from "@/components/privacy/ConsentManager";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import type { Metadata } from "next";
@@ -75,8 +78,8 @@ export async function generateMetadata({
   };
 
   const siteName = siteNames[locale] || siteNames.bg;
-  const title = titles[locale] || titles.bg;
-  const description = descriptions[locale] || descriptions.bg;
+  const title = retailEnabled(locale) ? "Климатици и монтаж във Варна | Песнопоец Клима" : titles[locale] || titles.bg;
+  const description = retailEnabled(locale) ? "Климатици Gree, Daikin, Mitsubishi и други марки. Сравнете цени и характеристики. Изберете уред със стандартен монтаж във Варна и региона." : descriptions[locale] || descriptions.bg;
   const ogImage = `${siteUrl}/og-image.jpg`;
   const ogAlt = ogAlts[locale] || ogAlts.bg;
 
@@ -278,6 +281,7 @@ export default async function LocaleLayout({
         <Suspense fallback={null}>
           <PageProgress />
         </Suspense>
+        {retailEnabled(locale) ? <><PublicRetailLayout>{children}</PublicRetailLayout><ConsentManager locale="bg" copy={dictionary.cookie} /></> : <>
         <PromoBar locale={locale} />
         <Header locale={locale} dictionary={dictionary} />
         <main id="main" tabIndex={-1} className="flex-1">{children}</main>
@@ -289,8 +293,9 @@ export default async function LocaleLayout({
           viberLabel={dictionary.contact?.viber || "Viber"}
           consentCopy={dictionary.cookie}
         />
+        </>}
         <Suspense fallback={null}>
-          <AnalyticsProvider locale={locale as "bg" | "en" | "ru" | "ua"} />
+          {process.env.RETAIL_READ_ONLY !== "1" && <AnalyticsProvider locale={locale as "bg" | "en" | "ru" | "ua"} />}
         </Suspense>
       </CartProvider>
     </>

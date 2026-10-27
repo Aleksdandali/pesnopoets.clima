@@ -1,3 +1,6 @@
+import { Suspense } from "react";
+import { retailEnabled } from "@/lib/storefront/catalogue";
+import RetailCatalog from "@/design-system/ui/retail/RetailCatalog";
 import type { Metadata } from "next";
 import { createPublicClient } from "@/lib/supabase/public";
 import { fetchAll } from "@/lib/supabase/fetch-all";
@@ -77,7 +80,7 @@ export async function generateMetadata({
 
   // Faceted-nav SEO hygiene: any filter combination → noindex,follow.
   // page=1 is the same as no page param, so don't penalise it.
-  const filterKeys = ["brand", "btu", "energy", "available", "sort", "category"];
+  const filterKeys = ["brand", "btu", "energy", "available", "sort", "category", "q", "quiet", "saved"];
   const hasFilter =
     filterKeys.some((k) => sp[k]) || (sp.page && sp.page !== "1");
 
@@ -178,6 +181,7 @@ export default async function CatalogPage({
   searchParams,
 }: CatalogPageProps) {
   const { locale } = await params;
+  if (retailEnabled(locale)) return <Suspense fallback={<main id="rt-content" className="rt-container r16-loading" aria-busy="true"><h1>Каталог климатици</h1><p role="status">Зареждане на продуктите…</p></main>}><RetailCatalog /></Suspense>;
   const filters = await searchParams;
   const dictionary = await getDictionary(locale);
   const supabase = createPublicClient();
@@ -295,7 +299,7 @@ export default async function CatalogPage({
   // ItemList JSON-LD — unlocks Google product-carousel rich result eligibility.
   // Only emit when we have products to list AND no facet filters are active
   // (the latter mirrors the noindex rule on filtered URLs).
-  const filterKeys = ["brand", "btu", "energy", "available", "sort", "category"];
+  const filterKeys = ["brand", "btu", "energy", "available", "sort", "category", "q", "quiet", "saved"];
   const hasFilter = filterKeys.some((k) => (filters as Record<string, unknown>)[k]);
   const itemListJsonLd =
     !hasFilter && products && products.length > 0

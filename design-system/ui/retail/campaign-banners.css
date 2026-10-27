@@ -1,0 +1,805 @@
+@font-face {
+  font-family: "PC Campaign";
+  src: url("/design-system/campaign-07/RobotoCondensed-Black.ttf")
+    format("truetype");
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+}
+/* Campaign artwork is full bleed; all commercial text and actions remain live HTML. */
+.rt .pc-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.rt .pc-campaign,
+.rt .pc-ad {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-width: 0;
+  border-radius: 4px;
+  color: #fff;
+  background: #12314e;
+}
+.rt .pc-art {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.rt .pc-eyebrow {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.065em;
+  line-height: 1.4;
+}
+.rt .pc-campaign h2,
+.rt .pc-ad h2 {
+  font-family: "PC Campaign", "PC Roboto", sans-serif;
+  font-weight: 900;
+  color: inherit;
+  margin: 0;
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+}
+.rt .pc-campaign h2 em,
+.rt .pc-ad h2 em {
+  font-style: normal;
+  color: #ffac73;
+}
+.rt .pc-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  min-height: 48px;
+  padding: 0 22px;
+  background: #fff;
+  color: #103a68;
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 700;
+  border-radius: 4px;
+  transition:
+    background 0.15s,
+    transform 0.15s;
+}
+.rt a.pc-action:hover,
+.rt a:hover .pc-action {
+  background: #eaf3ff;
+  transform: translateY(-1px);
+}
+.rt .pc-action svg {
+  flex: none;
+}
+.rt .pc-price {
+  font-family: "PC Campaign", "PC Roboto", sans-serif;
+  font-weight: 900;
+  font-size: 60px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+.rt .pc-price small {
+  font-size: 0.45em;
+  letter-spacing: 0;
+}
+.rt .pc-terms,
+.rt .pc-breakdown {
+  display: block;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.rt .pc-terms {
+  font-weight: 500;
+}
+.rt .pc-breakdown {
+  margin-top: 3px;
+}
+
+.rt .pc-campaign {
+  height: 490px;
+  container-type: inline-size;
+}
+.rt .pc-campaign .pc-art {
+  object-position: 50% 0;
+}
+.rt .pc-hero-copy {
+  padding: 32px 38px;
+  position: static;
+  height: 100%;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.rt .pc-hero-copy .pc-eyebrow {
+  margin-bottom: 18px;
+  font-size: 12px;
+}
+.rt .pc-campaign h2 {
+  font-size: clamp(55px, 7cqw, 88px);
+  text-shadow: 0 2px 16px #07182725;
+}
+.rt .pc-hero-copy p {
+  font-size: 15px;
+  line-height: 1.4;
+  color: inherit;
+  margin: 18px 0 22px;
+  max-width: 330px;
+}
+.rt .pc-hero-footer {
+  margin-top: auto;
+}
+.rt .pc-hero-offer {
+  position: absolute;
+  left: 45%;
+  bottom: 34px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 20px 18px;
+  background: #f47732;
+  color: #132b43;
+  border: 2px solid #ffd0a8;
+  box-shadow: 0 5px 25px #081d3320;
+  transform: rotate(-3deg);
+  border-radius: 5px;
+}
+.rt .pc-hero-offer > span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.rt .pc-hero-offer > small {
+  font-size: 12px;
+  line-height: 1.4;
+}
+.rt .pc-hero-offer .pc-price {
+  font-size: 58px;
+}
+.rt .pc-campaign-quiet .pc-hero-copy {
+  width: 48%;
+  padding-top: 45px;
+}
+.rt .pc-campaign-quiet h2 {
+  font-size: clamp(50px, 6.5cqw, 78px);
+}
+.rt .pc-campaign-quiet .pc-hero-offer {
+  left: auto;
+  right: 30px;
+  bottom: 68px;
+  transform: rotate(0);
+  border: 0;
+  background: #ffffffed;
+  color: #153c66;
+}
+.rt .pc-campaign-quiet .pc-hero-offer > span {
+  display: none;
+}
+.rt .pc-campaign-pagination {
+  position: absolute;
+  bottom: 17px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 5px;
+  color: #fff;
+  background: #092340b8;
+  border-radius: 30px;
+}
+.rt .pc-campaign-pagination button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  border-radius: 50%;
+}
+.rt .pc-campaign-pagination button:hover {
+  background: #ffffff25;
+}
+.rt .pc-campaign-pagination span {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.rt .pc-campaign-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 26px 0 40px;
+}
+.rt .pc-campaign-grid .pc-ad {
+  height: 470px;
+  container-type: inline-size;
+}
+.rt .pc-ad-heading {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  right: 20px;
+}
+.rt .pc-ad-heading .pc-eyebrow {
+  margin-bottom: 10px;
+}
+.rt .pc-ad h2 {
+  font-size: clamp(36px, 10cqw, 48px);
+}
+.rt .pc-ad-bottom {
+  position: absolute;
+  left: 25px;
+  bottom: 24px;
+  right: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.rt .pc-ad-bottom .pc-action {
+  margin-top: 16px;
+}
+.rt .pc-ad-install .pc-art {
+  object-position: 50% 50%;
+}
+.rt .pc-ad-install .pc-ad-heading {
+  right: auto;
+  width: 60%;
+}
+.rt .pc-ad-install h2 {
+  font-size: clamp(34px, 9.3cqw, 44px);
+}
+.rt .pc-ad-install .pc-ad-bottom {
+  right: auto;
+}
+.rt .pc-ad-install .pc-price {
+  font-size: 56px;
+}
+.rt .pc-ad-install::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, #0b284355, transparent 60%);
+}
+.rt .pc-ad-airy .pc-art {
+  object-position: 50% 50%;
+}
+.rt .pc-ad-airy h2 {
+  font-size: clamp(42px, 11cqw, 52px);
+}
+.rt .pc-ad-airy h2 em {
+  color: #fff;
+}
+.rt .pc-energy {
+  position: absolute;
+  top: 160px;
+  left: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+.rt .pc-energy strong {
+  font-family: "PC Campaign", sans-serif;
+  font-size: 32px;
+  line-height: 1;
+  padding: 5px 8px;
+  background: #fff;
+  color: #0a5a4b;
+}
+.rt .pc-energy span {
+  font-size: 10px;
+  text-shadow: 0 1px 3px #082649;
+}
+.rt .pc-ad-budget {
+  color: #102f50;
+}
+.rt .pc-ad-budget .pc-art {
+  object-position: 100% 50%;
+}
+.rt .pc-ad.pc-ad-budget h2 {
+  font-size: clamp(24px, 7cqw, 30px);
+}
+.rt .pc-ad-budget .pc-ad-heading {
+  top: 14px;
+}
+.rt .pc-ad-budget .pc-eyebrow {
+  margin-bottom: 4px;
+}
+.rt .pc-ad-budget h2 em {
+  color: #102f50;
+}
+.rt .pc-ad-budget .pc-action {
+  background: #0866d9;
+  color: #fff;
+}
+.rt .pc-ad-budget:hover .pc-action {
+  background: #054eaa;
+}
+.rt .pc-ad-budget .pc-price {
+  font-size: 72px;
+}
+
+.rt .pc-service-campaigns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin: 32px 0 40px;
+}
+.rt .pc-service-campaigns .pc-ad {
+  min-height: 330px;
+  container-type: inline-size;
+}
+.rt .pc-service-copy {
+  position: relative;
+  padding: 28px;
+  width: 60%;
+}
+.rt .pc-service-copy .pc-eyebrow {
+  margin-bottom: 16px;
+  font-size: 11px;
+}
+.rt .pc-service-campaigns h2 {
+  font-size: clamp(32px, 6.8cqw, 45px);
+}
+.rt .pc-service-copy p {
+  color: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 16px 0 20px;
+  max-width: 220px;
+}
+.rt .pc-service-phone {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 12px;
+}
+.rt .pc-ad-maintenance {
+  color: #143c67;
+  background: #e9e9e6;
+}
+.rt .pc-ad-maintenance h2 em {
+  color: #0866d9;
+}
+.rt .pc-ad-maintenance .pc-service-copy {
+  width: 58%;
+}
+.rt .pc-ad-maintenance .pc-action {
+  color: #fff;
+  background: #0866d9;
+}
+.rt .pc-ad-maintenance:hover .pc-action {
+  background: #054eaa;
+}
+.rt .pc-ad-guidance .pc-service-copy {
+  width: 59%;
+}
+.rt .pc-ad-guidance .pc-art {
+  object-position: 65% 50%;
+}
+.rt .pc-ad-guidance::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, #13243570, transparent 70%);
+}
+
+.rt .pc-campaign-board {
+  padding: 30px 30px 50px;
+  max-width: 1440px;
+  margin: auto;
+}
+.rt .pc-campaign-board > h1 {
+  font-size: 30px;
+  margin: 0 0 8px;
+}
+.rt .pc-campaign-board > p {
+  margin: 0 0 24px;
+  color: #5a6877;
+}
+.rt .pc-campaign-board .pc-campaign {
+  margin-top: 18px;
+}
+@media (max-width: 1100px) and (min-width: 761px) {
+  .rt .pc-hero-copy {
+    padding: 30px;
+  }
+  .rt .pc-hero-offer {
+    left: 44%;
+  }
+  .rt .pc-campaign-grid {
+    gap: 12px;
+    grid-template-columns: repeat(3, minmax(310px, 1fr));
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 8px;
+  }
+  .rt .pc-campaign-grid .pc-ad {
+    scroll-snap-align: start;
+  }
+  .rt .pc-service-campaigns {
+    grid-template-columns: 1fr;
+  }
+  .rt .pc-campaign-grid .pc-ad {
+    height: 420px;
+  }
+  .rt .pc-ad-heading {
+    top: 20px;
+    left: 18px;
+  }
+  .rt .pc-ad-bottom {
+    left: 18px;
+    right: 18px;
+    bottom: 20px;
+  }
+  .rt .pc-ad .pc-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.02em;
+  }
+  .rt .pc-ad-install h2 {
+    font-size: 31px;
+  }
+  .rt .pc-ad-install .pc-ad-heading {
+    width: 65%;
+  }
+  .rt .pc-energy {
+    left: 18px;
+    top: 140px;
+  }
+  .rt .pc-energy strong {
+    font-size: 26px;
+  }
+  .rt .pc-energy span {
+    max-width: 66px;
+  }
+  .rt .pc-service-copy {
+    padding: 22px;
+  }
+  .rt .pc-service-campaigns h2 {
+    font-size: 31px;
+  }
+}
+@media (max-width: 900px) {
+  .rt .pc-campaign {
+    height: 650px;
+    background: #092c50;
+  }
+  .rt .pc-campaign-quiet {
+    height: 600px;
+  }
+  .rt .pc-campaign .pc-art {
+    object-position: 85% 0;
+    height: 340px;
+  }
+  .rt .pc-campaign::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      0deg,
+      #092c50 0%,
+      #092c50 50%,
+      transparent 65%
+    );
+  }
+  .rt .pc-hero-copy,
+  .rt .pc-campaign-quiet .pc-hero-copy {
+    position: absolute;
+    inset: auto 0 0;
+    padding: 24px;
+    width: 100%;
+    height: auto;
+  }
+  .rt .pc-campaign h2,
+  .rt .pc-campaign-quiet h2 {
+    font-size: 46px;
+  }
+  .rt .pc-hero-copy .pc-eyebrow {
+    margin-bottom: 12px;
+    font-size: 11px;
+  }
+  .rt .pc-hero-copy p {
+    max-width: 100%;
+    margin: 12px 0 18px;
+    font-size: 13px;
+  }
+  .rt .pc-hero-copy .pc-action {
+    min-height: 46px;
+    padding: 0 16px;
+  }
+  .rt .pc-hero-footer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 14px;
+    width: 100%;
+  }
+  .rt .pc-hero-footer .pc-action {
+    gap: 10px;
+    padding-inline: 12px;
+    font-size: 13px;
+    min-width: 0;
+  }
+  .rt .pc-hero-offer,
+  .rt .pc-campaign-quiet .pc-hero-offer {
+    position: static;
+    transform: none;
+    padding: 12px 10px;
+  }
+  .rt .pc-hero-offer .pc-price {
+    font-size: 42px;
+  }
+  .rt .pc-hero-offer > span {
+    display: none;
+  }
+  .rt .pc-hero-offer > small {
+    font-size: 10px;
+    max-width: 110px;
+    text-align: center;
+  }
+  .rt .pc-campaign-quiet .pc-art {
+    object-position: 75% 0;
+  }
+  .rt .pc-campaign-quiet .pc-hero-offer {
+    right: 18px;
+    bottom: 110px;
+  }
+  .rt .pc-campaign-quiet .pc-hero-offer > small:last-child {
+    display: none;
+  }
+  .rt .pc-campaign-pagination {
+    top: 12px;
+    bottom: auto;
+    right: 12px;
+  }
+  .rt .pc-campaign-grid {
+    gap: 14px;
+    grid-template-columns: repeat(3, minmax(310px, 1fr));
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 8px;
+  }
+  .rt .pc-campaign-grid .pc-ad {
+    scroll-snap-align: start;
+    height: 420px;
+  }
+  .rt .pc-ad-install {
+    grid-column: auto;
+  }
+  .rt .pc-ad-install .pc-art {
+    object-position: 50% 35%;
+  }
+  .rt .pc-ad-install .pc-ad-heading {
+    width: 65%;
+  }
+  .rt .pc-ad-install h2 {
+    font-size: 34px;
+  }
+  .rt .pc-ad-install .pc-ad-bottom {
+    right: auto;
+  }
+  .rt .pc-energy {
+    top: 140px;
+  }
+  .rt .pc-service-campaigns {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .rt .pc-service-campaigns .pc-ad {
+    min-height: 320px;
+  }
+  .rt .pc-service-campaigns h2 {
+    font-size: 39px;
+  }
+  .rt .pc-campaign-board {
+    padding-inline: 16px;
+  }
+  .rt .pc-campaign-board > h1 {
+    font-size: 25px;
+  }
+}
+@media (max-width: 600px) {
+  .rt .pc-campaign-grid {
+    grid-template-columns: 1fr;
+    margin: 18px 0 30px;
+  }
+  .rt .pc-campaign-grid .pc-ad {
+    height: auto;
+    aspect-ratio: 0.9;
+  }
+  .rt .pc-ad-heading {
+    top: 24px;
+    left: 24px;
+  }
+  .rt .pc-ad-bottom {
+    left: 24px;
+    right: 24px;
+    bottom: 24px;
+  }
+  .rt .pc-ad-install .pc-ad-heading {
+    width: 58%;
+  }
+  .rt .pc-ad-install h2 {
+    font-size: clamp(33px, 10cqw, 42px);
+  }
+  .rt .pc-ad-install .pc-art {
+    object-position: 50% 50%;
+  }
+  .rt .pc-ad h2 {
+    font-size: clamp(34px, 10cqw, 42px);
+  }
+  .rt .pc-ad-airy h2 {
+    font-size: 44px;
+  }
+  .rt .pc-ad.pc-ad-budget h2 {
+    font-size: 27px;
+  }
+  .rt .pc-energy {
+    left: 24px;
+    top: 145px;
+  }
+  .rt .pc-energy strong {
+    font-size: 27px;
+  }
+  .rt .pc-energy span {
+    font-size: 10px;
+  }
+  .rt .pc-price {
+    font-size: 58px;
+  }
+  .rt .pc-ad-budget .pc-price {
+    font-size: 68px;
+  }
+  .rt .pc-terms,
+  .rt .pc-breakdown {
+    font-size: 12px;
+  }
+  .rt .pc-service-campaigns .pc-ad {
+    min-height: 480px;
+  }
+  .rt .pc-service-copy,
+  .rt .pc-ad-maintenance .pc-service-copy,
+  .rt .pc-ad-guidance .pc-service-copy {
+    position: absolute;
+    inset: auto 0 0;
+    width: 100%;
+    padding: 24px;
+  }
+  .rt .pc-service-campaigns h2 {
+    font-size: 39px;
+  }
+  .rt .pc-service-campaigns .pc-art {
+    object-position: 100% 0;
+    height: 260px;
+  }
+  .rt .pc-ad-maintenance {
+    background: #f7f8fa;
+  }
+  .rt .pc-ad-guidance {
+    background: #132c45;
+  }
+  .rt .pc-ad-maintenance::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      0deg,
+      #f7f8fa 0%,
+      #f7f8fa 50%,
+      transparent 58%
+    );
+  }
+  .rt .pc-ad-guidance::after {
+    background: linear-gradient(
+      0deg,
+      #132c45 0%,
+      #132c45 50%,
+      transparent 58%
+    );
+  }
+  .rt .pc-service-copy p {
+    margin: 12px 0 18px;
+  }
+}
+@media (max-width: 360px) {
+  .rt .pc-campaign-grid .pc-ad {
+    aspect-ratio: 0.8;
+  }
+  .rt .pc-hero-copy,
+  .rt .pc-campaign-quiet .pc-hero-copy {
+    padding: 22px 20px;
+  }
+  .rt .pc-campaign h2,
+  .rt .pc-campaign-quiet h2 {
+    font-size: 43px;
+  }
+  .rt .pc-hero-offer {
+    right: 13px;
+    bottom: 123px;
+    padding: 12px 9px;
+  }
+  .rt .pc-hero-offer .pc-price {
+    font-size: 36px;
+  }
+  .rt .pc-hero-offer > small {
+    max-width: 86px;
+  }
+  .rt .pc-hero-copy p {
+    max-width: 100%;
+  }
+  .rt .pc-ad-heading {
+    left: 20px;
+    top: 20px;
+  }
+  .rt .pc-ad-bottom {
+    left: 20px;
+    bottom: 20px;
+  }
+  .rt .pc-ad .pc-eyebrow {
+    font-size: 10px;
+  }
+  .rt .pc-ad-install h2 {
+    font-size: 32px;
+  }
+  .rt .pc-ad h2 {
+    font-size: 32px;
+  }
+  .rt .pc-ad-airy h2 {
+    font-size: 38px;
+  }
+  .rt .pc-ad.pc-ad-budget h2 {
+    font-size: 24px;
+  }
+  .rt .pc-hero-footer {
+    gap: 10px;
+  }
+  .rt .pc-hero-footer .pc-action {
+    font-size: 12px;
+    padding-inline: 9px;
+    gap: 6px;
+  }
+  .rt .pc-energy {
+    left: 20px;
+    top: 120px;
+  }
+  .rt .pc-energy strong {
+    font-size: 23px;
+  }
+  .rt .pc-energy span {
+    width: 65px;
+  }
+  .rt .pc-price,
+  .rt .pc-ad-budget .pc-price {
+    font-size: 54px;
+  }
+  .rt .pc-ad-bottom .pc-action {
+    margin-top: 10px;
+  }
+  .rt .pc-service-campaigns h2 {
+    font-size: 35px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rt .pc-action {
+    transition: none;
+  }
+}

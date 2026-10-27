@@ -1,0 +1,9 @@
+.git
+.env*
+node_modules
+docs
+mobile
+design-system/.next
+design-system/out
+design-system/node_modules
+*.tsbuildinfo

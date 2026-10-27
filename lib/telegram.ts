@@ -21,7 +21,7 @@ interface SyncReport {
   duration: number;
 }
 
-async function sendToChat(token: string, chatId: string | number, text: string): Promise<void> {
+async function sendToChat(token: string, chatId: string | number, text: string): Promise<boolean> {
   try {
     const res = await fetch(`${TELEGRAM_API}${token}/sendMessage`, {
       method: "POST",
@@ -37,9 +37,13 @@ async function sendToChat(token: string, chatId: string | number, text: string):
     if (!res.ok) {
       const body = await res.text();
       console.error(`Telegram API error (chat ${chatId}):`, res.status, body);
+      return false;
     }
+    const result = await res.json();
+    return result.ok === true;
   } catch (err) {
     console.error(`Failed to send Telegram message (chat ${chatId}):`, err);
+    return false;
   }
 }
 
@@ -106,7 +110,7 @@ async function resolveInquiryRecipients(): Promise<string[]> {
 
 export async function sendInquiryNotification(
   inquiry: InquiryData
-): Promise<void> {
+): Promise<{ sent: number; failed: number }> {
   const priceLine =
     inquiry.productPrice != null
       ? `\n💰 Цена: ${inquiry.productPrice.toFixed(0)} €`
@@ -135,16 +139,17 @@ export async function sendInquiryNotification(
   const token = (process.env.TELEGRAM_BOT_TOKEN || "").trim();
   if (!token) {
     console.warn("TELEGRAM_BOT_TOKEN not set, skipping inquiry notification");
-    return;
+    return { sent: 0, failed: 0 };
   }
 
   const recipients = await resolveInquiryRecipients();
   if (recipients.length === 0) {
     console.warn("No Telegram recipients configured for inquiry notification");
-    return;
+    return { sent: 0, failed: 0 };
   }
 
-  await Promise.all(recipients.map((chatId) => sendToChat(token, chatId, text)));
+  const results = await Promise.all(recipients.map((chatId) => sendToChat(token, chatId, text)));
+  return { sent: results.filter(Boolean).length, failed: results.filter(result => !result).length };
 }
 
 export async function sendSyncReport(
